@@ -380,18 +380,99 @@
     "Convidado da Empresa",
   ];
 
-  function selectMenu(selected) {
-    var html = '<div class="hf-select-menu" role="listbox">';
+  var selectRadioSeq = 0;
+
+  function selectSearch() {
+    return '<div class="hf-select-menu__search">' + searchField() + "</div>";
+  }
+
+  function selectSep() {
+    return '<hr class="hf-select-menu__sep">';
+  }
+
+  function selectItemText(label, selected) {
+    return (
+      '<div class="hf-select-menu__item' +
+      (selected ? " is-active" : "") +
+      '" role="option" tabindex="-1" data-label="' +
+      label +
+      '" aria-selected="' +
+      (selected ? "true" : "false") +
+      '">' +
+      label +
+      "</div>"
+    );
+  }
+
+  function selectItemCheck(label, selected) {
+    return (
+      '<div class="hf-select-menu__item hf-select-menu__item--check' +
+      (selected ? " is-active" : "") +
+      '" role="option" tabindex="-1" data-label="' +
+      label +
+      '" aria-selected="' +
+      (selected ? "true" : "false") +
+      '"><span class="hf-check"><input type="checkbox"' +
+      (selected ? " checked" : "") +
+      '><span class="hf-check-box"><img class="hf-check-box__mark" src="assets/icons/cb-check.svg" width="10" height="8" alt=""></span></span><span class="hf-select-menu__text">' +
+      label +
+      "</span></div>"
+    );
+  }
+
+  function selectItemRadio(label, selected, name) {
+    return (
+      '<div class="hf-select-menu__item hf-select-menu__item--radio' +
+      (selected ? " is-active" : "") +
+      '" role="option" tabindex="-1" data-label="' +
+      label +
+      '" aria-selected="' +
+      (selected ? "true" : "false") +
+      '"><span class="hf-radio"><input type="radio" name="' +
+      name +
+      '"' +
+      (selected ? " checked" : "") +
+      '><span class="hf-radio-box"></span></span><span class="hf-select-menu__text">' +
+      label +
+      "</span></div>"
+    );
+  }
+
+  function selectMenu(opts) {
+    opts = typeof opts === "string" ? { selected: opts } : opts || {};
+    var type = opts.type || "default";
+    var selected = opts.selected || "";
+    var html =
+      '<div class="hf-select-menu' +
+      (type === "dropdown" ? " hf-select-menu--static" : "") +
+      '" role="listbox">' +
+      selectSearch();
+    if (type === "dropdown") {
+      return (
+        html +
+        selectItemText("Opção", false) +
+        selectItemText("Opção", false) +
+        selectItemText("Opção", false) +
+        selectSep() +
+        selectItemCheck("Opção", true) +
+        selectItemCheck("Opção", false) +
+        selectSep() +
+        selectItemRadio("Opção", true, "dd-radio") +
+        selectItemRadio("Opção", false, "dd-radio") +
+        "</div>"
+      );
+    }
+    var name = "sel-" + type + "-" + ++selectRadioSeq;
     for (var i = 0; i < SELECT_OPTIONS.length; i++) {
-      var on = SELECT_OPTIONS[i] === selected || (!selected && i === 0);
-      html +=
-        '<div class="hf-select-menu__item' +
-        (on ? " is-active" : "") +
-        '" role="option" tabindex="-1" aria-selected="' +
-        (SELECT_OPTIONS[i] === selected ? "true" : "false") +
-        '">' +
-        SELECT_OPTIONS[i] +
-        "</div>";
+      var isOn =
+        type === "checkbox"
+          ? !!opts.filled && i === 0
+          : selected
+            ? SELECT_OPTIONS[i] === selected
+            : type === "default" && i === 0;
+      if (type === "checkbox") html += selectItemCheck(SELECT_OPTIONS[i], isOn);
+      else if (type === "radio") html += selectItemRadio(SELECT_OPTIONS[i], isOn, name);
+      else html += selectItemText(SELECT_OPTIONS[i], isOn);
     }
     return html + "</div>";
   }
@@ -401,6 +482,7 @@
   // lista no fluxo, exatamente como o frame de spec.
   function selectField(opts) {
     opts = opts || {};
+    var type = opts.type || "default";
     var cls = "hf-field hf-field--select" + (opts.mod ? " " + opts.mod : "");
     var value = opts.filled ? "Estado Civil" : "Selecione";
     var valueCls = "hf-field__value" + (opts.filled ? "" : " hf-field__value--placeholder");
@@ -409,7 +491,9 @@
       cls +
       '"' +
       (opts.open || opts.frozen ? "" : " data-select") +
-      '><div class="hf-field__header"><span class="hf-field__label">' +
+      ' data-select-type="' +
+      type +
+      '"><div class="hf-field__header"><span class="hf-field__label">' +
       (opts.label || "Label inicial") +
       '</span><span class="hf-field__req">*</span></div>' +
       '<button class="hf-field__control" type="button" role="combobox" aria-haspopup="listbox" aria-expanded="' +
@@ -422,8 +506,27 @@
       value +
       '</span><span class="hf-field__chevron"><img src="assets/icons/select-chevron.svg" alt=""></span></button>' +
       (opts.error ? '<p class="hf-field__error">Campo obrigatório</p>' : "") +
-      selectMenu(opts.filled ? "Estado Civil" : "") +
+      selectMenu({
+        type: type,
+        selected: opts.filled && type === "default" ? "Estado Civil" : "",
+        filled: opts.filled,
+      }) +
       "</div>"
+    );
+  }
+
+  function textArea(opts) {
+    opts = opts || {};
+    return (
+      '<div class="hf-field hf-field--area' +
+      (opts.disabled ? " hf-field--disabled" : "") +
+      '"><div class="hf-field__header"><span class="hf-field__label">' +
+      (opts.label || "Label") +
+      '</span></div><div class="hf-field__control hf-field__control--area"><textarea class="hf-field__area" placeholder="Digite um texto..."' +
+      (opts.disabled ? " disabled" : "") +
+      ">" +
+      (opts.value || "") +
+      "</textarea></div></div>"
     );
   }
 
@@ -1118,86 +1221,85 @@
     },
     input: {
       title: "Input",
-      lead: "Campo de texto com label. Default (obrigatório), populated, disabled, error, selected e hover. Campo 38px, radius 8.",
+      lead: "Campo de texto com label. Default, populated, disabled e error. Selected e hover com anel teal. Campo 38px.",
       node: "5-508",
       html: function () {
-        var variants =
+        var parts =
           cell("Default", field({ req: true, placeholder: "Placeholder" })) +
           cell("populated", field({ value: "value" })) +
           cell("disabled", field({ value: "value", disabled: true, mod: "hf-field--disabled" })) +
           cell("error", field({ value: "value", mod: "hf-field--error", error: "Texto informando erro" })) +
           cell("selected", field({ value: "value", ring: true })) +
           cell("hover", field({ value: "value", ring: true }));
-        var options =
-          cell("Padrão", field({ req: true, placeholder: "Placeholder" })) +
-          cell("showBadge", field({ req: true, placeholder: "Placeholder", badge: "Badge" })) +
-          cell("showInfo", field({ req: true, placeholder: "Placeholder", info: true })) +
-          cell("showSuffix", field({ placeholder: "Placeholder", suffix: ".hubfi.com.br" })) +
-          cell("showCopy", field({ value: "value", copy: true })) +
-          cell("obrigatorio=false", field({ placeholder: "Placeholder" }));
+        var variants =
+          cell("Default", field({ req: true, placeholder: "Placeholder" })) +
+          cell("populated", field({ value: "value" })) +
+          cell("disabled", field({ value: "value", disabled: true, mod: "hf-field--disabled" })) +
+          cell("error", field({ value: "value", mod: "hf-field--error", error: "Texto informando erro" }));
         return (
-          card("Partes de componentes", "Átomos de Input Text", preview(variants)) +
-          card("Variantes", "Selected e hover ganham o anel de foco em primary/400.", preview(variants)) +
+          card("Partes de componentes", "Átomos de Input Text.", preview(parts)) +
+          card("Variantes", "As quatro variantes do componente completo.", preview(variants)) +
           card(
             "Opções de visibilidade",
-            "Propriedades booleanas do componente: badge ao lado do rótulo, ícone de informação, sufixo e botão de copiar dentro do campo, e o asterisco de obrigatório.",
-            preview(options)
+            "Padrão com asterisco de obrigatório. Sem info esconde o ícone ao lado do rótulo.",
+            preview(
+              cell("Padrão", field({ req: true, placeholder: "Placeholder" })) +
+              cell("Sem info", field({ req: true, placeholder: "Placeholder" }))
+            )
           ) +
-          card("Exemplo de uso", "Campo obrigatório em formulário.", preview(field({ req: true, placeholder: "Placeholder", label: "Razão social" }), "docs-preview--stack"))
+          card("Exemplo de uso", "Input Text em contexto.", preview(field({ req: true, placeholder: "Placeholder" }), "docs-preview--stack"))
         );
       },
     },
     textarea: {
       title: "Textarea",
-      lead: "Campo multilinha. 415×131 no Figma.",
+      lead: "Campo multilinha. 415×131, placeholder Digite um texto...",
       node: "272-265",
       html: function () {
-        var area = function (val, dis) {
-          return (
-            '<div class="hf-field' + (dis ? " hf-field--disabled" : "") + '" style="width:415px"><div class="hf-field__header"><span class="hf-field__label">Label</span></div><div class="hf-field__control hf-field__control--area"><textarea class="hf-field__area" placeholder="Placeholder"' +
-            (dis ? " disabled" : "") +
-            ">" +
-            (val || "") +
-            "</textarea></div></div>"
-          );
-        };
         return (
-          card("Partes de componentes", "Átomo de Textarea", preview(area(), "docs-preview--stack")) +
-          card("Variantes", "", preview(cell("Default", area()) + cell("populated", area("Observações do cliente.")) + cell("disabled", area("value", true)))) +
-          card("Exemplo de uso", "Campo de observações em um formulário.", preview(area(), "docs-preview--stack"))
+          card("Partes de componentes", "Átomo de Textarea.", preview(textArea(), "docs-preview--stack")) +
+          card("Componente", "Campo de texto multilinha para entrada de texto longo.", preview(textArea(), "docs-preview--stack")) +
+          card("Exemplo de uso", "Textarea em contexto.", preview(textArea(), "docs-preview--stack"))
         );
       },
     },
     select: {
       title: "Select",
-      lead: "State Default / Hover / Focus / Disabled / Error / Open × Filled False / True. Largura 330px.",
+      lead: "Tipos default, checkbox e radiobutton. Estados Default / Hover / Focus / Disabled / Error / Open × filled. Largura 330px.",
       node: "5-511",
       html: function () {
-        var states = function (filled) {
+        var states = function (filled, type) {
           return (
-            cell("Default", selectField({ filled: filled })) +
-            cell("Hover", selectField({ filled: filled, mod: "hf-field--hover" })) +
-            cell("Focus", selectField({ filled: filled, mod: "hf-field--focus" })) +
-            cell("Disabled", selectField({ filled: filled, disabled: true, mod: "hf-field--disabled" })) +
-            cell("Error", selectField({ filled: filled, mod: "hf-field--error", error: true })) +
-            cell("Open", selectField({ filled: filled, open: true, mod: "hf-field--open" }))
+            cell("Default", selectField({ filled: filled, type: type })) +
+            cell("Hover", selectField({ filled: filled, type: type, mod: "hf-field--hover" })) +
+            cell("Focus", selectField({ filled: filled, type: type, mod: "hf-field--focus" })) +
+            cell("Disabled", selectField({ filled: filled, type: type, disabled: true, mod: "hf-field--disabled" })) +
+            cell("Error", selectField({ filled: filled, type: type, mod: "hf-field--error", error: true })) +
+            cell("Open", selectField({ filled: filled, type: type, open: true, mod: "hf-field--open" }))
           );
         };
         return (
-          card("Partes de componentes", "Átomos de Select", preview(
+          card("Partes de componentes", "Átomos de Select.", preview(
             cell("Label", '<span class="hf-select-label">Label<span class="hf-select-label__req">*</span></span>') +
             cell(
               "Select Box",
               '<div class="hf-select-box">Selecione<img src="assets/icons/select-chevron-16.svg" width="16" height="16" alt=""></div>'
             ) +
-            cell("Helper Text", '<p class="hf-select-helper">Campo obrigatório</p>')
+            cell("Helper Text", '<p class="hf-select-helper">Campo obrigatório</p>') +
+            cell("Dropdown Item", '<div style="width:298px">' + selectItemText("Opção", false) + selectItemText("Opção", true) + "</div>") +
+            cell("Checkbox Item", '<div style="width:298px">' + selectItemCheck("Opção", false) + selectItemCheck("Opção", true) + "</div>") +
+            cell("Radio Item", '<div style="width:298px">' + selectItemRadio("Opção", false, "atom-radio") + selectItemRadio("Opção", true, "atom-radio") + "</div>") +
+            cell("Separator", '<div style="width:298px">' + selectSep() + "</div>") +
+            cell("Search", '<div class="hf-select-menu__search" style="width:298px">' + searchField() + "</div>") +
+            cell("Dropdown", selectMenu({ type: "dropdown" }))
           )) +
-          card("Componente montado", "Os três átomos juntos, com e sem valor.", preview(
-            cell("filled=false", selectField()) + cell("filled=true", selectField({ filled: true }))
-          )) +
-          card("Estados × filled=false", "Hover, focus e open usam o anel primary/400.", preview(states(false))) +
-          card("Estados × filled=true", "", preview(states(true))) +
-          card("Exemplo de uso", "Seleção de status em um filtro.", preview(selectField({ filled: true }), "docs-preview--stack"))
+          card("Type default · filled=false", "Lista com busca e itens de texto.", preview(states(false, "default"))) +
+          card("Type default · filled=true", "", preview(states(true, "default"))) +
+          card("Type checkbox · filled=false", "Lista com busca e seleção múltipla.", preview(states(false, "checkbox"))) +
+          card("Type checkbox · filled=true", "", preview(states(true, "checkbox"))) +
+          card("Type radiobutton · filled=false", "Lista com busca e seleção única.", preview(states(false, "radio"))) +
+          card("Type radiobutton · filled=true", "", preview(states(true, "radio"))) +
+          card("Exemplo de uso", "Select em contexto, aberto.", preview(selectField({ open: true, mod: "hf-field--open" }), "docs-preview--stack"))
         );
       },
     },
@@ -2006,7 +2108,7 @@
       pagination: '<div class="hf-pager"><button type="button">‹</button><button class="is-current" type="button">1</button><button type="button">2</button><button type="button">›</button></div>',
       accordion: accordion(false),
       input: field({ placeholder: "Placeholder" }),
-      textarea: '<div class="hf-field" style="width:240px"><div class="hf-field__control hf-field__control--area"><textarea class="hf-field__area" placeholder="Placeholder"></textarea></div></div>',
+      textarea: '<div class="hf-field hf-field--area" style="width:240px"><div class="hf-field__control hf-field__control--area"><textarea class="hf-field__area" placeholder="Digite um texto..."></textarea></div></div>',
       select: selectField({ frozen: true }),
       radio: radioBtn("home-radio", "Label", true),
       switch: '<button class="hf-switch is-on" type="button"></button>',

@@ -381,8 +381,14 @@
     var value = field.querySelector(".hf-field__value");
     var menu = field.querySelector(".hf-select-menu");
     if (!trigger || !menu || !value) return;
+    var type = field.getAttribute("data-select-type") || "default";
     var items = Array.prototype.slice.call(menu.querySelectorAll(".hf-select-menu__item"));
+    var search = menu.querySelector(".hf-search__field");
     var box = field.closest(".docs-preview");
+
+    function itemLabel(item) {
+      return item.getAttribute("data-label") || item.textContent.trim();
+    }
 
     function open() {
       closeSelects(field);
@@ -392,8 +398,11 @@
       if (box) box.classList.add("is-select-open");
       field.classList.add("is-open");
       trigger.setAttribute("aria-expanded", "true");
-      var current = menu.querySelector(".hf-select-menu__item.is-active") || items[0];
-      if (current) current.focus();
+      if (search) search.focus();
+      else {
+        var current = menu.querySelector(".hf-select-menu__item.is-active") || items[0];
+        if (current) current.focus();
+      }
     }
 
     function close(refocus) {
@@ -403,15 +412,37 @@
       if (refocus) trigger.focus();
     }
 
+    function setValue(text, filled) {
+      value.textContent = text;
+      value.classList.toggle("hf-field__value--placeholder", !filled);
+    }
+
+    function syncChecks() {
+      var picked = items
+        .filter(function (item) {
+          var input = item.querySelector("input[type='checkbox']");
+          return input && input.checked;
+        })
+        .map(itemLabel);
+      items.forEach(function (item) {
+        var input = item.querySelector("input[type='checkbox']");
+        var on = !!(input && input.checked);
+        item.classList.toggle("is-active", on);
+        item.setAttribute("aria-selected", on ? "true" : "false");
+      });
+      setValue(picked.length ? picked.join(", ") : "Selecione", picked.length > 0);
+    }
+
     function choose(item) {
       items.forEach(function (other) {
         other.classList.remove("is-active");
         other.setAttribute("aria-selected", "false");
+        var radio = other.querySelector("input[type='radio']");
+        if (radio) radio.checked = other === item;
       });
       item.classList.add("is-active");
       item.setAttribute("aria-selected", "true");
-      value.textContent = item.textContent;
-      value.classList.remove("hf-field__value--placeholder");
+      setValue(itemLabel(item), true);
       close(true);
     }
 
@@ -433,14 +464,47 @@
       }
     });
 
+    menu.addEventListener("click", function (event) {
+      event.stopPropagation();
+    });
+
+    if (search) {
+      search.addEventListener("click", function (event) {
+        event.stopPropagation();
+      });
+      search.addEventListener("input", function () {
+        var q = search.value.toLowerCase();
+        items.forEach(function (item) {
+          var text = itemLabel(item).toLowerCase();
+          item.hidden = !!(q && text.indexOf(q) === -1);
+        });
+      });
+    }
+
     items.forEach(function (item) {
       item.addEventListener("click", function (event) {
         event.stopPropagation();
+        if (type === "checkbox") {
+          var check = item.querySelector("input[type='checkbox']");
+          if (check && event.target !== check) check.checked = !check.checked;
+          syncChecks();
+          return;
+        }
+        if (type === "radio") {
+          var radio = item.querySelector("input[type='radio']");
+          if (radio) radio.checked = true;
+        }
         choose(item);
       });
       item.addEventListener("keydown", function (event) {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
+          if (type === "checkbox") {
+            var check = item.querySelector("input[type='checkbox']");
+            if (check) check.checked = !check.checked;
+            syncChecks();
+            return;
+          }
           choose(item);
         } else if (event.key === "ArrowDown") {
           event.preventDefault();

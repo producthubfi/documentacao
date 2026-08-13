@@ -319,6 +319,32 @@
 }
 .hf-field.is-open > .hf-select-menu { display: flex; }
 .hf-field--open > .hf-select-menu { display: flex; position: static; }
+.hf-select-menu--static { display: flex; position: static; width: 330px; }
+.hf-select-menu__search {
+  width: 100%;
+  padding: 4px 8px;
+  box-sizing: border-box;
+}
+.hf-select-menu__search .hf-search { width: 100%; }
+.hf-select-menu__sep {
+  display: block;
+  width: 100%;
+  height: 9px;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  position: relative;
+}
+.hf-select-menu__sep::after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  top: 4px;
+  height: 1px;
+  background: var(--border-default);
+}
 /* Átomos isolados do Select — Figma 606:161 / 606:164 / 606:168. O box avulso
    tem 40px de altura e chevron de 16, medidas próprias do átomo. */
 .hf-select-label {
@@ -345,7 +371,22 @@
   color: var(--text-primary); cursor: pointer;
 }
 .hf-select-menu__item:hover, .hf-select-menu__item.is-active { background: #f5f7f7; }
+.hf-select-menu__item--check,
+.hf-select-menu__item--radio {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 36px;
+}
+.hf-select-menu__item--check .hf-check,
+.hf-select-menu__item--radio .hf-radio { pointer-events: none; }
+.hf-select-menu__text { flex: 1; min-width: 0; }
+.hf-select-menu__item--check.is-active .hf-select-menu__text,
+.hf-select-menu__item--check:has(input:checked) .hf-select-menu__text {
+  font-weight: 500;
+}
 /* Textarea — Figma 272:280. Campo 415×107 com padding 9. */
+.hf-field--area { width: 415px; }
 .hf-field__area { height: 100%; min-height: 0; padding: 0; resize: none; }
 .hf-field__control--area { height: 107px; align-items: flex-start; padding: 9px; }
 
