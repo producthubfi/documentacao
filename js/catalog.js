@@ -412,9 +412,9 @@
       label +
       '" aria-selected="' +
       (selected ? "true" : "false") +
-      '"><span class="hf-check"><input type="checkbox"' +
+      '"><input type="checkbox"' +
       (selected ? " checked" : "") +
-      '><span class="hf-check-box"><img class="hf-check-box__mark" src="assets/icons/cb-check.svg" width="10" height="8" alt=""></span></span><span class="hf-select-menu__text">' +
+      '><span class="hf-select-menu__box" aria-hidden="true"><img src="assets/icons/select-check.svg" width="10" height="8" alt=""></span><span class="hf-select-menu__text">' +
       label +
       "</span></div>"
     );
@@ -428,11 +428,11 @@
       label +
       '" aria-selected="' +
       (selected ? "true" : "false") +
-      '"><span class="hf-radio"><input type="radio" name="' +
+      '"><input type="radio" name="' +
       name +
       '"' +
       (selected ? " checked" : "") +
-      '><span class="hf-radio-box"></span></span><span class="hf-select-menu__text">' +
+      '><span class="hf-select-menu__dot" aria-hidden="true"><img class="hf-select-menu__dot-off" src="assets/icons/select-radio.svg" width="18" height="18" alt=""><img class="hf-select-menu__dot-on" src="assets/icons/select-radio-on.svg" width="18" height="18" alt=""></span><span class="hf-select-menu__text">' +
       label +
       "</span></div>"
     );

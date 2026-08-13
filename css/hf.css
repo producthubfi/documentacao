@@ -327,23 +327,22 @@
 }
 .hf-select-menu__search .hf-search { width: 100%; }
 .hf-select-menu__sep {
-  display: block;
+  display: flex;
+  align-items: flex-start;
   width: 100%;
   height: 9px;
   margin: 0;
+  padding: 4px 8px;
   border: 0;
   background: transparent;
-  position: relative;
+  box-sizing: border-box;
 }
 .hf-select-menu__sep::after {
   content: "";
-  display: block;
-  position: absolute;
-  left: 16px;
-  right: 16px;
-  top: 4px;
+  flex: 1 0 0;
+  min-width: 1px;
   height: 1px;
-  background: var(--border-default);
+  background: var(--border-subtle);
 }
 /* Átomos isolados do Select — Figma 606:161 / 606:164 / 606:168. O box avulso
    tem 40px de altura e chevron de 16, medidas próprias do átomo. */
@@ -366,24 +365,64 @@
   color: var(--alert-error-main);
 }
 .hf-select-menu__item {
-  width: 100%; padding: 8px 16px; box-sizing: border-box; border-radius: var(--radius-sm);
-  font-family: var(--hf-font); font-size: 14px; line-height: normal;
+  position: relative;
+  width: 100%; padding: 8px 16px; box-sizing: border-box; border-radius: 4px;
+  font-family: var(--hf-font); font-size: 14px; font-weight: 400; line-height: 1.45;
   color: var(--text-primary); cursor: pointer;
 }
-.hf-select-menu__item:hover, .hf-select-menu__item.is-active { background: #f5f7f7; }
+.hf-select-menu__item:hover:not(.hf-select-menu__item--check):not(.hf-select-menu__item--radio) {
+  background: var(--primary-50);
+}
+.hf-select-menu__item.is-active:not(.hf-select-menu__item--check):not(.hf-select-menu__item--radio) {
+  background: var(--primary-50);
+  color: var(--primary-default);
+  font-weight: 600;
+}
 .hf-select-menu__item--check,
 .hf-select-menu__item--radio {
   display: flex;
   align-items: center;
-  gap: 12px;
   min-height: 36px;
 }
-.hf-select-menu__item--check .hf-check,
-.hf-select-menu__item--radio .hf-radio { pointer-events: none; }
+.hf-select-menu__item--check { gap: 12px; }
+.hf-select-menu__item--radio { gap: 8px; }
+.hf-select-menu__item--check input,
+.hf-select-menu__item--radio input {
+  position: absolute; opacity: 0; width: 0; height: 0;
+}
+.hf-select-menu__box {
+  display: grid; place-items: center;
+  width: 18px; height: 18px; flex-shrink: 0;
+  border: 1px solid var(--border-default); border-radius: 4px;
+  background: #fff; box-sizing: border-box;
+}
+.hf-select-menu__box img { display: none; width: 10px; height: 8px; }
+.hf-select-menu__item--check.is-active .hf-select-menu__box,
+.hf-select-menu__item--check:has(input:checked) .hf-select-menu__box {
+  background: var(--primary-default);
+  border-color: var(--primary-default);
+}
+.hf-select-menu__item--check.is-active .hf-select-menu__box img,
+.hf-select-menu__item--check:has(input:checked) .hf-select-menu__box img {
+  display: block;
+}
+.hf-select-menu__dot {
+  position: relative;
+  width: 18px; height: 18px; flex-shrink: 0;
+}
+.hf-select-menu__dot img {
+  display: block; width: 18px; height: 18px;
+  position: absolute; inset: 0;
+}
+.hf-select-menu__dot-on { opacity: 0; }
+.hf-select-menu__item--radio.is-active .hf-select-menu__dot-off,
+.hf-select-menu__item--radio:has(input:checked) .hf-select-menu__dot-off { opacity: 0; }
+.hf-select-menu__item--radio.is-active .hf-select-menu__dot-on,
+.hf-select-menu__item--radio:has(input:checked) .hf-select-menu__dot-on { opacity: 1; }
 .hf-select-menu__text { flex: 1; min-width: 0; }
 .hf-select-menu__item--check.is-active .hf-select-menu__text,
 .hf-select-menu__item--check:has(input:checked) .hf-select-menu__text {
-  font-weight: 500;
+  font-weight: 600;
 }
 /* Textarea — Figma 272:280. Campo 415×107 com padding 9. */
 .hf-field--area { width: 415px; }
