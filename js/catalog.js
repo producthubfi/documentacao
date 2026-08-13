@@ -805,6 +805,42 @@
     );
   }
 
+  function stepSimple(status, label) {
+    return (
+      '<div class="hf-step-s is-' +
+      status +
+      '"><span class="hf-step-s__track"><i class="hf-step-s__line hf-step-s__line--before"></i>' +
+      '<span class="hf-step-s__dot"></span>' +
+      '<i class="hf-step-s__line hf-step-s__line--after"></i></span>' +
+      '<span class="hf-step-s__label">' +
+      label +
+      "</span></div>"
+    );
+  }
+
+  function stepperSimple(activeIndex) {
+    var items = [
+      "Perfil do cliente",
+      "Mapa de Operações",
+      "Produto",
+      "Comunicação",
+      "Informações",
+    ];
+    var active = activeIndex === undefined ? 0 : activeIndex;
+    return (
+      '<div class="hf-stepper-s">' +
+      items
+        .map(function (label, i) {
+          return stepSimple(
+            i === active ? "current" : i < active ? "done" : "todo",
+            label
+          );
+        })
+        .join("") +
+      "</div>"
+    );
+  }
+
   function stepperV2() {
     return (
       '<div class="hf-stepper">' +
@@ -1519,22 +1555,27 @@
     },
     stepper: {
       title: "Stepper",
-      lead: "V2 — Concluído / Atual / Não iniciado. Passo 108×68, trilha de 12 etapas.",
-      node: "294-2097",
+      lead: "Trilha simples (5 passos, 120px) e V2 com tempo (12 etapas, 108px).",
+      node: "463-1820",
       html: function () {
         return (
-          card("Partes de componentes", "Átomo step-v2: tempo, trilha e rótulo em 108×68.", preview(
+          card("Componente", "Passo ativo em teal, demais em cinza. 120px por etapa.", preview(stepperSimple(0), "docs-preview--wide")) +
+          card("Estados", "Atual e não iniciado.", preview(
+            cell("Atual", stepSimple("current", "Perfil do cliente")) +
+            cell("Não iniciado", stepSimple("todo", "Mapa de Operações"))
+          )) +
+          card("Exemplo de uso", "Onboarding da empresa, no primeiro passo.", preview(
+            '<div class="docs-scene"><h3>Cadastro de Minha Empresa LTDA</h3>' +
+              stepperSimple(0) +
+              "</div>",
+            "docs-preview--wide"
+          )) +
+          card("Stepper V2", "Átomo step-v2: tempo, trilha e rótulo em 108×68.", preview(
             cell("Concluído", step("done", "Simulação de Crédito", { time: "<1m" })) +
             cell("Atual", step("current", "Escolha da Instituição", { time: "21h 54m" })) +
             cell("Não iniciado", step("todo", "Documentação das Partes", { time: "99d 99h" }))
           )) +
-          card("Componente", "Trilha stepper-v2 com 12 passos de 108px.", preview(stepperV2(), "docs-preview--wide")) +
-          card("Exemplo de uso", "Progresso do onboarding de um cliente, com o terceiro passo em andamento.", preview(
-            '<div class="docs-scene"><h3>Cadastro de Minha Empresa LTDA</h3>' +
-              stepper(2) +
-              "</div>",
-            "docs-preview--wide"
-          ))
+          card("Trilha V2", "12 passos de operação com tempo decorrido.", preview(stepperV2(), "docs-preview--wide"))
         );
       },
     },
@@ -1979,7 +2020,7 @@
       skeleton: '<div class="hf-skel hf-skel--text"></div>',
       header: '<header class="hf-header" style="width:240px"><h1 class="hf-header__title" style="font-size:16px">Usuarios</h1></header>',
       sidebar: appSidebar("operacoes"),
-      stepper: stepper(),
+      stepper: stepperSimple(0),
       "dropdown-menu": dropdownMenu(),
       modal: modalBox(),
       dialog: dialogBox(),
@@ -2054,6 +2095,7 @@
       cardComments: cardComments,
       badge: badge,
       stepper: stepper,
+      stepperSimple: stepperSimple,
       step: step,
       toast: toastBox,
     },
