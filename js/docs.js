@@ -11,10 +11,25 @@
     return hash || "home";
   }
 
+  function iconBox(name) {
+    return window.hfIconBox ? window.hfIconBox(name) : "";
+  }
+
+  function navGroup(label, icon, links) {
+    return (
+      '<div class="docs-nav-group"><p class="docs-nav-label">' +
+      iconBox(icon) +
+      "<span>" +
+      label +
+      "</span></p>" +
+      links +
+      "</div>"
+    );
+  }
+
   function renderNav() {
     var q = filter && filter.value ? filter.value.toLowerCase().trim() : "";
-    var html = '<p class="docs-nav-label">Documentação</p>';
-    html += '<a href="#/" data-slug="home">Visão geral</a>';
+    var html = navGroup("Documentação", "book-open", '<a href="#/" data-slug="home">Visão geral</a>');
     if (catalog.foundations && catalog.foundations.length) {
       var fLinks = "";
       var fVisible = 0;
@@ -32,7 +47,7 @@
           item[1] +
           "</a>";
       });
-      if (!q || fVisible) html += '<p class="docs-nav-label">Foundations</p>' + fLinks;
+      if (!q || fVisible) html += navGroup("Foundations", "swatch-book", fLinks);
     }
     catalog.groups.forEach(function (group) {
       var links = "";
@@ -51,9 +66,7 @@
           item[1] +
           "</a>";
       });
-      if (!q || visible) {
-        html += '<p class="docs-nav-label">' + group.label + "</p>" + links;
-      }
+      if (!q || visible) html += navGroup(group.label, group.icon, links);
     });
     nav.innerHTML = html;
     highlight();
@@ -72,28 +85,30 @@
     var current = slug();
     var isHome = current === "home" || !catalog.pages[current];
     var page = isHome ? catalog.home : catalog.pages[current];
+    var isScreen = page.section === "Telas" || current === "detalhes-operacao";
     var isFoundation = !!(catalog.foundations || []).some(function (item) {
       return item[0] === current;
     });
     var crumb = isHome
       ? '<nav class="docs-crumb"><span>Documentação</span></nav>'
       : '<nav class="docs-crumb"><a href="#/">Documentação</a><span aria-hidden="true">/</span><span>' +
-        (isFoundation ? "Foundations" : "Componentes") +
+        (isFoundation ? "Foundations" : isScreen ? "Telas" : "Componentes") +
         '</span><span aria-hidden="true">/</span><span>' +
         page.title +
         "</span></nav>";
 
+    stage.classList.toggle("docs-stage--wide", !!(page.wide && !isHome));
     stage.innerHTML =
       '<div class="docs-page-head' +
       (isHome ? " docs-page-head--home" : "") +
+      (page.wide ? " docs-page-head--wide" : "") +
       '">' +
       crumb +
       '<h1 class="docs-h1">' +
       page.title +
       "</h1>" +
-      '<p class="docs-lead">' +
-      page.lead +
-      "</p></div>" +
+      (page.leadHtml || '<p class="docs-lead">' + page.lead + "</p>") +
+      "</div>" +
       page.html();
 
     document.title = isHome ? "HubFi DS · Documentação" : page.title + " · HubFi DS";
@@ -343,6 +358,9 @@
     });
 
     stage.querySelectorAll("[data-select]").forEach(wireSelect);
+    if (window.HF_SCREENS && typeof window.HF_SCREENS.bind === "function") {
+      window.HF_SCREENS.bind(stage);
+    }
   }
 
   function closeSelects(except) {

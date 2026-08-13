@@ -2,6 +2,10 @@
   var ICON = "assets/icons/search.svg";
   var FIGMA = "https://www.figma.com/design/XGEdsV9rlBKYZLz3UwoqYV?node-id=";
 
+  function ico(name, size) {
+    return window.hfIcon ? window.hfIcon(name, size || 20) : "";
+  }
+
   function card(title, desc, inner) {
     if (title === "Especificação") return "";
     var usage = title === "Exemplo de uso";
@@ -546,6 +550,46 @@
     );
   }
 
+  function cardComments(opts) {
+    opts = opts || {};
+    var variant = opts.variant || "public";
+    var populated = variant === "populated" || !!opts.value;
+    var value = opts.value || (populated ? "Olá! Preciso revisar este ponto antes de publicar." : "");
+    var channel = variant === "hubfi" ? "lock" : "globe";
+    var hoverIcon = variant === "hover-icon";
+    var visIcon = hoverIcon
+      ? '<span class="hf-card-comments__vis-slot" aria-hidden="true"></span>'
+      : ico(channel, variant === "hubfi" ? 16 : 18);
+    return (
+      '<div class="hf-card-comments hf-card-comments--' +
+      variant +
+      (populated ? " is-filled" : "") +
+      '">' +
+      '<button class="hf-card-comments__help" type="button" aria-label="Como formatar comentários">' +
+      ico("circle-question-mark", 20) +
+      "</button>" +
+      '<div class="hf-card-comments__box">' +
+      '<span class="hf-card-comments__msg" aria-hidden="true">' +
+      ico("message-square", 20) +
+      "</span>" +
+      '<input class="hf-card-comments__field" type="text" placeholder="Adicionar novo comentário"' +
+      (value ? ' value="' + value + '"' : "") +
+      ' aria-label="Comentário">' +
+      '<button class="hf-card-comments__vis" type="button" aria-label="Visibilidade">' +
+      visIcon +
+      ico("chevron-down", 16) +
+      "</button>" +
+      '<button class="hf-card-comments__send" type="button" aria-label="Enviar" disabled>' +
+      ico("send", 16) +
+      "</button></div>" +
+      '<div class="hf-card-comments__privacy">' +
+      ico("message-square", 16) +
+      '<button class="hf-switch" type="button" data-switch aria-pressed="false" aria-label="Comentário interno"></button>' +
+      ico("lock", 16) +
+      "</div></div>"
+    );
+  }
+
   function navIco(name) {
     return '<img src="assets/icons/' + name + '.svg" width="18" height="18" alt="">';
   }
@@ -697,25 +741,49 @@
     );
   }
 
-  // Só o passo "Iniciado" mostra o tempo; os outros mantêm o slot vazio.
   function step(status, label, opts) {
     opts = opts || {};
-    var timed = "time" in opts;
+    var time =
+      opts.time != null
+        ? opts.time
+        : status === "current"
+          ? "21h 54m"
+          : status === "done"
+            ? "<1m"
+            : "99d 99h";
+    var mark =
+      status === "done"
+        ? '<img class="hf-step__check" src="assets/icons/step-check.svg" width="18" height="18" alt="">'
+        : '<span class="hf-step__dot"></span>';
     return (
-      '<div class="hf-step' +
-      (timed ? " hf-step--timed" : "") +
-      " is-" +
+      '<div class="hf-step is-' +
       status +
       '"><span class="hf-step__time">' +
-      (status === "current" ? opts.time || "" : "") +
-      '</span><img class="hf-step__ind" src="assets/icons/step-ind-' +
-      status +
-      '.svg" width="120" height="16" alt="">' +
+      time +
+      '</span><span class="hf-step__track"><i class="hf-step__line hf-step__line--before"></i>' +
+      '<span class="hf-step__mark">' +
+      mark +
+      '</span><i class="hf-step__line hf-step__line--after"></i></span>' +
       '<span class="hf-step__label">' +
       label +
       "</span></div>"
     );
   }
+
+  var STEPPER_V2 = [
+    ["Simulação de Crédito", "done", "<1m"],
+    ["Formulário Proposta", "done", "2m"],
+    ["Análise de Crédito", "done", "41d 6h"],
+    ["Proposta de Crédito", "done", "99d 99h"],
+    ["Escolha da Instituição", "current", "21h 54m"],
+    ["Documentação das Partes", "todo", "99d 99h"],
+    ["Avaliação do Imóvel", "todo", "99d 99h"],
+    ["Análise Jurídica", "todo", "99d 99h"],
+    ["Elaboração Contrato", "todo", "99d 99h"],
+    ["Assinatura Contrato", "todo", "99d 99h"],
+    ["Registro Cartório", "todo", "99d 99h"],
+    ["Liberação Recurso", "todo", "99d 99h"],
+  ];
 
   function stepper(activeIndex, labels) {
     var items = labels || [
@@ -733,6 +801,16 @@
           return step(i === active ? "current" : i < active ? "done" : "todo", label);
         })
         .join("") +
+      "</div>"
+    );
+  }
+
+  function stepperV2() {
+    return (
+      '<div class="hf-stepper">' +
+      STEPPER_V2.map(function (row) {
+        return step(row[1], row[0], { time: row[2] });
+      }).join("") +
       "</div>"
     );
   }
@@ -836,6 +914,7 @@
     {
       id: "form",
       label: "Formulário",
+      icon: "text-cursor-input",
       blurb: "Campos, seleção e upload — a base dos fluxos HubFi.",
       items: [
         ["search", "Search"],
@@ -852,6 +931,7 @@
     {
       id: "actions",
       label: "Ações",
+      icon: "mouse-pointer-click",
       blurb: "Botões e seletores para disparar e confirmar ações.",
       items: [
         ["button", "Button"],
@@ -862,6 +942,7 @@
     {
       id: "feedback",
       label: "Feedback",
+      icon: "message-square",
       blurb: "Alertas, badges e estados para comunicar o que aconteceu.",
       items: [
         ["alert", "Alert"],
@@ -875,6 +956,7 @@
     {
       id: "nav",
       label: "Navegação",
+      icon: "panel-left",
       blurb: "Estrutura da aplicação: header, tabs, sidebar e paginação.",
       items: [
         ["accordion", "Accordion"],
@@ -890,6 +972,7 @@
     {
       id: "overlay",
       label: "Overlay",
+      icon: "layers-2",
       blurb: "Modais, dialogs e painéis que ficam acima da página.",
       items: [
         ["modal", "Modal"],
@@ -901,12 +984,14 @@
     {
       id: "data",
       label: "Dados e layout",
+      icon: "table-2",
       blurb: "Cards, tabelas e blocos para organizar conteúdo.",
       items: [
         ["avatar", "Avatar"],
         ["card", "Card"],
         ["card-select", "Card Select"],
         ["card-file", "Card File"],
+        ["card-comments", "Card Comments"],
         ["table", "Table"],
         ["list-item", "List Item"],
         ["separator", "Separator"],
@@ -1439,16 +1524,16 @@
     },
     stepper: {
       title: "Stepper",
-      lead: "Passos Iniciado / Concluído / Não iniciado. 600×50.",
+      lead: "V2 — Concluído / Atual / Não iniciado. Passo 108×68, trilha de 12 etapas.",
       node: "294-2097",
       html: function () {
         return (
-          card("Partes de componentes", "Passo isolado com slot de tempo (120×68). O tempo aparece só em Iniciado.", preview(
-            cell("Iniciado", step("current", "Label", { time: "4h 12m" })) +
-            cell("Concluído", step("done", "Label", { time: "" })) +
-            cell("Não iniciado", step("todo", "Label", { time: "" }))
+          card("Partes de componentes", "Átomo step-v2: tempo, trilha e rótulo em 108×68.", preview(
+            cell("Concluído", step("done", "Simulação de Crédito", { time: "<1m" })) +
+            cell("Atual", step("current", "Escolha da Instituição", { time: "21h 54m" })) +
+            cell("Não iniciado", step("todo", "Documentação das Partes", { time: "99d 99h" }))
           )) +
-          card("Componente", "Trilha de 600px com 5 passos de 120px.", preview(stepper(), "docs-preview--wide")) +
+          card("Componente", "Trilha stepper-v2 com 12 passos de 108px.", preview(stepperV2(), "docs-preview--wide")) +
           card("Exemplo de uso", "Progresso do onboarding de um cliente, com o terceiro passo em andamento.", preview(
             '<div class="docs-scene"><h3>Cadastro de Minha Empresa LTDA</h3>' +
               stepper(2) +
@@ -1669,6 +1754,32 @@
         );
       },
     },
+    "card-comments": {
+      title: "Card Comments",
+      lead: "Composer de comentário no rodapé da operação. 700×58. Variantes public, hubfi, hover-icon, hover-componente e populated.",
+      node: "748-107",
+      html: function () {
+        return (
+          card(
+            "Variantes",
+            "Public (globo), HubFi (cadeado), hover do ícone de visibilidade, hover do componente e campo preenchido.",
+            preview(
+              cell("public", cardComments({ variant: "public" })) +
+              cell("hubfi", cardComments({ variant: "hubfi" })) +
+              cell("hover-icon", cardComments({ variant: "hover-icon" })) +
+              cell("hover-componente", cardComments({ variant: "hover-componente" })) +
+              cell("populated", cardComments({ variant: "populated" })),
+              "docs-preview--wide"
+            )
+          ) +
+          card(
+            "Exemplo de uso",
+            "Rodapé da tela de detalhes da operação.",
+            preview(cardComments({ variant: "populated" }), "docs-preview--wide")
+          )
+        );
+      },
+    },
     table: {
       title: "Table",
       lead: "Células Avatar, Text, Contact, Header, Action Button, Status Badge. Tabela completa com busca e paginação.",
@@ -1883,6 +1994,7 @@
       card: '<article class="hf-card" style="max-width:220px;padding:16px"><h3 class="hf-card__title">Título</h3><p class="hf-card__body">Descrição</p></article>',
       "card-select": '<button class="hf-card-select is-selected" type="button" style="width:160px;min-height:80px"><strong>Plano B</strong><span>Ilimitado</span></button>',
       "card-file": cardFile("success", "contrato.pdf"),
+      "card-comments": cardComments({ variant: "public" }),
       table: '<table class="hf-table" style="width:220px"><thead><tr><th>Cliente</th><th>Status</th></tr></thead><tbody><tr><td>Caloi</td><td>' + badge("success", "Ativo") + "</td></tr></tbody></table>",
       "list-item": '<div class="hf-list-item" style="width:240px"><img src="assets/icons/list-cube.svg" width="20" height="20" alt=""><span>Label</span><span class="hf-list-item__chev"><img src="assets/icons/crumb-chevron.svg" alt=""></span></div>',
       separator: '<hr class="hf-sep" style="width:180px">',
@@ -1890,6 +2002,7 @@
       operations: opCard("finalizado"),
       section: '<div class="hf-section"><h3>INFORMAÇÕES</h3><p>Conteúdo da seção</p></div>',
       "rich-text": '<div class="hf-rte" style="height:100px;max-width:240px"><div class="hf-rte__bar"><span class="hf-rte__style">Normal</span></div><div class="hf-rte__body">Notas…</div></div>',
+      "detalhes-operacao": '<div class="docs-screen-thumb"><strong>OP-000000</strong><span>Nome cliente</span></div>',
     };
     return map[slug] || "";
   }
@@ -1915,11 +2028,13 @@
           })
           .join("");
         return (
-          '<section class="docs-gallery"><div class="docs-gallery__head"><h2 class="docs-h2">' +
+          '<section class="docs-gallery"><div class="docs-gallery__head">' +
+          (window.hfIconBox ? window.hfIconBox(g.icon) : "") +
+          '<div class="docs-gallery__copy"><h2 class="docs-h2">' +
           g.label +
           "</h2>" +
           (g.blurb ? '<p class="docs-section-copy">' + g.blurb + "</p>" : "") +
-          '</div><div class="docs-grid">' +
+          '</div></div><div class="docs-grid">' +
           tiles +
           "</div></section>"
         );
@@ -1938,5 +2053,13 @@
       html: homeHtml,
     },
     figmaBase: FIGMA,
+    ui: {
+      appSidebar: appSidebar,
+      cardFile: cardFile,
+      cardComments: cardComments,
+      badge: badge,
+      stepper: stepper,
+      step: step,
+    },
   };
 })(window);

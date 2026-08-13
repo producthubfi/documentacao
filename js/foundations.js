@@ -51,10 +51,10 @@
   }
 
   catalog.foundations = [
-    ["cores", "Cores"],
-    ["tipografia", "Tipografia"],
-    ["icones", "Ícones"],
-    ["logos", "Logos"],
+    ["cores", "Cores", "palette"],
+    ["tipografia", "Tipografia", "type"],
+    ["icones", "Ícones", "smile"],
+    ["logos", "Logos", "hexagon"],
   ];
 
   catalog.pages.cores = {

@@ -20,6 +20,11 @@
     );
   };
 
+  window.hfIconBox = function (name) {
+    if (!name || !window.hfIcon) return "";
+    return '<span class="docs-ico" aria-hidden="true">' + window.hfIcon(name, 20) + "</span>";
+  };
+
   var catalog = window.HF_CATALOG;
   if (!catalog) return;
 
