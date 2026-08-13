@@ -443,7 +443,7 @@
       document.body.appendChild(host);
     }
     host.innerHTML = ui.toast
-      ? ui.toast("success", "Dados salvos com sucesso.")
+      ? ui.toast("Dados salvos com sucesso.")
       : "";
     var toast = host.querySelector(".hf-toast");
     if (!toast) return;

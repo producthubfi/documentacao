@@ -270,11 +270,9 @@
 
   // Cada variante tem o check numa cor: branco sobre o círculo cheio do default,
   // teal escuro no sucesso e vermelho no erro.
-  function toastBox(mod, msg) {
+  function toastBox(msg) {
     return (
-      '<div class="hf-toast' +
-      (mod ? " hf-toast--" + mod : "") +
-      '"><span class="hf-toast__ico">' +
+      '<div class="hf-toast"><span class="hf-toast__ico">' +
       (window.hfIcon ? window.hfIcon("check", 16) : "") +
       '</span><span class="hf-toast__msg">' +
       (msg || "Toast message here.") +
@@ -1368,17 +1366,12 @@
     },
     toast: {
       title: "Toast",
-      lead: "default / success / error. 400×52 (default) e 400×54 (success e error).",
+      lead: "Fundo branco, 400×52. Ícone de check e fechar no canto.",
       node: "294-2431",
       html: function () {
         return (
-          card("Variantes", "", preview(
-            cell("default", toastBox("")) +
-            cell("success", toastBox("success")) +
-            cell("error", toastBox("error")),
-            "docs-preview--stack"
-          )) +
-          card("Exemplo de uso", "Confirmação depois de salvar um cliente.", preview(toastBox("success")))
+          card("Componente", "", preview(toastBox("Toast message here."))) +
+          card("Exemplo de uso", "Confirmação depois de salvar um cliente.", preview(toastBox("Dados salvos com sucesso.")))
         );
       },
     },
@@ -1966,7 +1959,7 @@
       button: btn("lg", "primary", "Label", "both") + btn("lg", "ghost", "Label"),
       checkbox: checkBox("checked", "Label"),
       chip: chip("Label", false) + chip("Label", true),
-      toast: toastBox("success"),
+      toast: toastBox("Dados salvos com sucesso."),
       breadcrumb: crumb(),
       tabs: '<div class="hf-tabs">' + tabBtn("Tab 1", true) + tabBtn("Tab 2", false) + "</div>",
       pagination: '<div class="hf-pager"><button type="button">‹</button><button class="is-current" type="button">1</button><button type="button">2</button><button type="button">›</button></div>',
