@@ -1568,6 +1568,11 @@ textarea {
     padding-right: 24px;
   }
 }
+
+@media (min-width: 1921px) {
+  .docs-screen__body {
+    padding: 24px 240px 16px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
