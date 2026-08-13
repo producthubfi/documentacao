@@ -475,6 +475,13 @@
   box-shadow: 0 1px 1.5px rgba(0, 0, 0, 0.08);
 }
 
+.hf-icon {
+  display: block;
+  flex-shrink: 0;
+  color: inherit;
+  overflow: visible;
+}
+
 .hf-toast {
   position: relative;
   display: flex; align-items: center; gap: 16px;
@@ -497,11 +504,11 @@
 }
 .hf-toast__ico {
   display: grid; place-items: center; width: 20px; height: 20px; border-radius: 11px;
-  background: var(--primary-default); flex-shrink: 0;
+  background: var(--primary-default); flex-shrink: 0; color: #fff;
 }
-.hf-toast--success .hf-toast__ico { width: 22px; height: 22px; background: #99ebe0; }
-.hf-toast--error .hf-toast__ico { width: 22px; height: 22px; background: var(--error-200); }
-.hf-toast__ico img { width: 16px; height: 16px; display: block; }
+.hf-toast--success .hf-toast__ico { width: 22px; height: 22px; background: #99ebe0; color: var(--primary-hover); }
+.hf-toast--error .hf-toast__ico { width: 22px; height: 22px; background: var(--error-200); color: var(--error); }
+.hf-toast__ico .hf-icon { width: 16px; height: 16px; display: block; }
 .hf-toast__msg { flex: 1; min-width: 0; }
 /* No variante default o Figma solta o botão fora do canto superior esquerdo;
    nos de sucesso e erro ele fica em linha, à direita. */
@@ -509,11 +516,11 @@
   position: absolute; left: -8px; top: -8px;
   width: 20px; height: 20px; border-radius: 10px; border: 1px solid var(--border-default);
   background: var(--background-subtle); padding: 0; cursor: pointer; flex-shrink: 0;
-  display: grid; place-items: center;
+  display: grid; place-items: center; color: var(--text-primary);
 }
 .hf-toast--success .hf-toast__close,
 .hf-toast--error .hf-toast__close { position: static; }
-.hf-toast__close img { width: 10px; height: 10px; display: block; }
+.hf-toast__close .hf-icon { width: 10px; height: 10px; display: block; }
 
 /* Tooltip — Figma 200:12. Largura fixa 212, padding 8, texto 12/1.5. */
 .hf-tooltip {
@@ -720,7 +727,7 @@
 
 .hf-app-nav__brand { display: flex; flex-direction: column; gap: 8px; padding: 8px; }
 .hf-app-nav__logo { display: flex; padding: 24px 12px; }
-.hf-app-nav__logo img { display: block; width: 109px; height: 27px; }
+.hf-app-nav__logo img { display: block; width: 109px; height: 27px; object-fit: contain; }
 
 .hf-app-nav__ctx {
   display: flex; align-items: center; gap: 8px;

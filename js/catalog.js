@@ -267,14 +267,15 @@
   // Cada variante tem o check numa cor: branco sobre o círculo cheio do default,
   // teal escuro no sucesso e vermelho no erro.
   function toastBox(mod) {
-    var ico = { success: "toast-check", error: "toast-check-error" }[mod] || "toast-check-on";
     return (
       '<div class="hf-toast' +
       (mod ? " hf-toast--" + mod : "") +
-      '"><span class="hf-toast__ico"><img src="assets/icons/' +
-      ico +
-      '.svg" width="16" height="16" alt=""></span><span class="hf-toast__msg">Toast message here.</span>' +
-      '<button class="hf-toast__close" type="button" data-alert-close aria-label="Fechar"><img src="assets/icons/toast-x.svg" alt=""></button></div>'
+      '"><span class="hf-toast__ico">' +
+      (window.hfIcon ? window.hfIcon("check", 16) : "") +
+      '</span><span class="hf-toast__msg">Toast message here.</span>' +
+      '<button class="hf-toast__close" type="button" data-alert-close aria-label="Fechar">' +
+      (window.hfIcon ? window.hfIcon("x", 10) : "") +
+      "</button></div>"
     );
   }
 
@@ -583,7 +584,7 @@
       (mod ? " hf-app-nav--" + mod : "") +
       '"><nav class="hf-app-nav__panel">' +
       '<div class="hf-app-nav__brand">' +
-      '<div class="hf-app-nav__logo"><img src="assets/icons/hubfi-logo.svg" width="109" height="27" alt="hubfi"></div>' +
+      '<div class="hf-app-nav__logo"><img src="assets/logos/h-color-light.svg" width="109" height="27" alt="hubfi"></div>' +
       '<div class="hf-app-nav__ctx">' +
       '<span class="hf-app-nav__ctx-ico"><img src="assets/icons/nav-company.svg" width="20" height="20" alt=""></span>' +
       '<span class="hf-app-nav__ctx-text"><small>Contexto da Empresa</small><strong>Todas as empresas</strong></span>' +

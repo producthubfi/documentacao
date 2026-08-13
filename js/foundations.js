@@ -53,6 +53,7 @@
   catalog.foundations = [
     ["cores", "Cores"],
     ["tipografia", "Tipografia"],
+    ["icones", "Ícones"],
     ["logos", "Logos"],
   ];
 
@@ -127,31 +128,46 @@
     },
   };
 
+  function logoCard(file, kind, dark, title, props) {
+    var size = kind === "h" ? [193, 48] : [129, 104];
+    return (
+      '<figure class="docs-logo-board' +
+      (dark ? " docs-logo-board--dark" : "") +
+      '"><div class="docs-logo-board__stage"><img class="docs-logo--' +
+      kind +
+      '" src="assets/logos/' +
+      file +
+      '" width="' +
+      size[0] +
+      '" height="' +
+      size[1] +
+      '" alt="hubfi"></div><figcaption class="docs-logo-board__label"><strong>' +
+      title +
+      "</strong><span>" +
+      props +
+      "</span></figcaption></figure>"
+    );
+  }
+
   catalog.pages.logos = {
     title: "Logos",
-    lead: "Wordmark HubFi. Teal no i, grafite no restante. Não esticar, não recolorir fora destas versões.",
-    node: "2-8349",
+    lead: "Componente hubfi-logo do Foundations. Oito variantes oficiais: mono ou colorida, fundo claro ou escuro, horizontal ou vertical. Não esticar e não recolorir fora destas versões.",
+    node: "2-1569",
     figmaFile: FIGMA_F,
     html: function () {
-      var word =
-        '<img src="assets/icons/hubfi-logo.svg" width="218" height="54" alt="hubfi">';
-      var mark =
-        '<span class="docs-brandmark" aria-hidden="true"><img src="assets/icons/hubfi-logo.svg" alt=""></span>';
       return (
-        '<section class="docs-board"><div class="docs-board__copy"><h2 class="docs-h2">Wordmark</h2><p class="docs-board__desc">Versão padrão sobre fundo claro. Largura de referência 109×27.</p></div><div class="docs-logo-board">' +
-        word +
+        '<section class="docs-board"><div class="docs-board__copy"><h2 class="docs-h2">Horizontal</h2><p class="docs-board__desc">193×48. Símbolo à esquerda do wordmark.</p></div><div class="docs-logo-grid">' +
+        logoCard("h-mono-light.svg", "h", false, "Mono · claro", "Colorful=No · Background=Light") +
+        logoCard("h-mono-dark.svg", "h", true, "Mono · escuro", "Colorful=No · Background=Dark") +
+        logoCard("h-color-light.svg", "h", false, "Colorida · claro", "Colorful=Yes · Background=Light") +
+        logoCard("h-color-dark.svg", "h", true, "Colorida · escuro", "Colorful=Yes · Background=Dark") +
         "</div></section>" +
-        '<section class="docs-board"><div class="docs-board__copy"><h2 class="docs-h2">Inverso</h2><p class="docs-board__desc">Sobre primary/900, como no rodapé das covers do Foundations.</p></div><div class="docs-logo-board docs-logo-board--dark">' +
-        word +
-        "</div></section>" +
-        '<section class="docs-board"><div class="docs-board__copy"><h2 class="docs-h2">Sobre a marca</h2><p class="docs-board__desc">Fundo primary/500. O wordmark vai para branco.</p></div><div class="docs-logo-board docs-logo-board--brand">' +
-        word +
-        "</div></section>" +
-        '<section class="docs-board"><div class="docs-board__copy"><h2 class="docs-h2">Símbolo</h2><p class="docs-board__desc">O h do blob, quando o espaço não cabe o nome inteiro — favicon, avatar, app.</p></div><div class="docs-logo-row"><div class="docs-logo-board docs-logo-board--mark">' +
-        mark +
-        '</div><div class="docs-logo-board docs-logo-board--dark docs-logo-board--mark">' +
-        mark +
-        "</div></div></section>"
+        '<section class="docs-board"><div class="docs-board__copy"><h2 class="docs-h2">Vertical</h2><p class="docs-board__desc">129×104. Símbolo acima do wordmark.</p></div><div class="docs-logo-grid">' +
+        logoCard("v-mono-light.svg", "v", false, "Mono · claro", "Colorful=No · Background=Light") +
+        logoCard("v-mono-dark.svg", "v", true, "Mono · escuro", "Colorful=No · Background=Dark") +
+        logoCard("v-color-light.svg", "v", false, "Colorida · claro", "Colorful=Yes · Background=Light") +
+        logoCard("v-color-dark.svg", "v", true, "Colorida · escuro", "Colorful=Yes · Background=Dark") +
+        "</div></section>"
       );
     },
   };
@@ -172,7 +188,10 @@
       '<div class="docs-doors">' +
       '<a class="docs-door" href="#/cores"><span class="docs-door__swatches" aria-hidden="true"><i style="background:#00a396"></i><i style="background:#008a7e"></i><i style="background:#005c54"></i></span><strong>Cores</strong><span>Primitivas, semânticos e feedback</span></a>' +
       '<a class="docs-door" href="#/tipografia"><span class="docs-door__letter">Aa</span><strong>Tipografia</strong><span>Outfit, escala e pesos</span></a>' +
-      '<a class="docs-door" href="#/logos"><img src="assets/icons/hubfi-logo.svg" width="88" height="22" alt=""><strong>Logos</strong><span>Wordmark, inverso e símbolo</span></a>' +
+      '<a class="docs-door" href="#/icones"><span class="docs-door__letter">' +
+      (window.hfIcon ? window.hfIcon("check", 28) : "✓") +
+      '</span><strong>Ícones</strong><span>Biblioteca ICONS · Lucide</span></a>' +
+      '<a class="docs-door" href="#/logos"><img src="assets/logos/h-color-light.svg" width="88" height="22" alt=""><strong>Logos</strong><span>Mono, colorida, horizontal e vertical</span></a>' +
       "</div></section>" +
       galleries()
     );

@@ -216,6 +216,25 @@
       });
     });
 
+    var iconSearch = stage.querySelector("#docs-icon-search");
+    var iconGrid = stage.querySelector("#docs-icon-grid");
+    var iconCount = stage.querySelector("#docs-icon-count");
+    if (iconSearch && iconGrid) {
+      var tiles = iconGrid.querySelectorAll(".docs-icon");
+      function filterIcons() {
+        var q = iconSearch.value.toLowerCase().trim();
+        var visible = 0;
+        tiles.forEach(function (tile) {
+          var match = !q || (tile.getAttribute("data-icon") || "").indexOf(q) !== -1;
+          tile.classList.toggle("is-hidden", !match);
+          if (match) visible += 1;
+        });
+        if (iconCount) iconCount.textContent = visible + " de " + tiles.length;
+      }
+      iconSearch.addEventListener("input", filterIcons);
+      filterIcons();
+    }
+
     stage.querySelectorAll("[data-accordion]").forEach(function (root) {
       root.querySelectorAll(".hf-accordion__trigger").forEach(function (btn) {
         btn.addEventListener("click", function () {
