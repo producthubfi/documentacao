@@ -15,6 +15,25 @@
     var q = filter && filter.value ? filter.value.toLowerCase().trim() : "";
     var html = '<p class="docs-nav-label">Documentação</p>';
     html += '<a href="#/" data-slug="home">Visão geral</a>';
+    if (catalog.foundations && catalog.foundations.length) {
+      var fLinks = "";
+      var fVisible = 0;
+      catalog.foundations.forEach(function (item) {
+        var match = !q || item[0].indexOf(q) !== -1 || item[1].toLowerCase().indexOf(q) !== -1;
+        if (match) fVisible += 1;
+        fLinks +=
+          '<a href="#/' +
+          item[0] +
+          '" data-slug="' +
+          item[0] +
+          '"' +
+          (match ? "" : ' class="is-hidden"') +
+          ">" +
+          item[1] +
+          "</a>";
+      });
+      if (!q || fVisible) html += '<p class="docs-nav-label">Foundations</p>' + fLinks;
+    }
     catalog.groups.forEach(function (group) {
       var links = "";
       var visible = 0;
@@ -53,14 +72,21 @@
     var current = slug();
     var isHome = current === "home" || !catalog.pages[current];
     var page = isHome ? catalog.home : catalog.pages[current];
+    var isFoundation = !!(catalog.foundations || []).some(function (item) {
+      return item[0] === current;
+    });
     var crumb = isHome
-      ? '<nav class="docs-crumb"><span>Componentes</span></nav>'
-      : '<nav class="docs-crumb"><a href="#/">Componentes</a><span aria-hidden="true">/</span><span>' +
+      ? '<nav class="docs-crumb"><span>Documentação</span></nav>'
+      : '<nav class="docs-crumb"><a href="#/">Documentação</a><span aria-hidden="true">/</span><span>' +
+        (isFoundation ? "Foundations" : "Componentes") +
+        '</span><span aria-hidden="true">/</span><span>' +
         page.title +
         "</span></nav>";
 
     stage.innerHTML =
-      '<div class="docs-page-head">' +
+      '<div class="docs-page-head' +
+      (isHome ? " docs-page-head--home" : "") +
+      '">' +
       crumb +
       '<h1 class="docs-h1">' +
       page.title +
@@ -70,7 +96,7 @@
       "</p></div>" +
       page.html();
 
-    document.title = isHome ? "HubFi DS · Componentes" : page.title + " · HubFi DS";
+    document.title = isHome ? "HubFi DS · Documentação" : page.title + " · HubFi DS";
     highlight();
     bind();
     window.scrollTo(0, 0);
@@ -176,6 +202,19 @@
 
   function bind() {
     tabifyVariants();
+
+    stage.querySelectorAll("[data-copy]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var value = btn.getAttribute("data-copy");
+        if (!value || !navigator.clipboard) return;
+        navigator.clipboard.writeText(value).then(function () {
+          btn.classList.add("is-copied");
+          window.setTimeout(function () {
+            btn.classList.remove("is-copied");
+          }, 1200);
+        });
+      });
+    });
 
     stage.querySelectorAll("[data-accordion]").forEach(function (root) {
       root.querySelectorAll(".hf-accordion__trigger").forEach(function (btn) {
