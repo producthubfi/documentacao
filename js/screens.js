@@ -23,11 +23,13 @@
     );
   }
 
-  function kv(label, value) {
+  function kv(label, value, empty) {
     return (
       '<div class="hf-kv"><span class="hf-kv__label">' +
       label +
-      '</span><span class="hf-kv__value">' +
+      '</span><span class="hf-kv__value' +
+      (empty ? " hf-kv__value--empty" : "") +
+      '">' +
       value +
       "</span></div>"
     );
@@ -172,67 +174,72 @@
       '<button class="hf-tab" type="button">Financiamento</button></div>' +
       '<div class="hf-opage__block"><h3>Dados do(a) Comprador(a)</h3>' +
       '<p class="hf-opage__sub">Dados</p>' +
-      '<div class="hf-kv-row">' +
-      kv("Tipo de identificação", "CNH") +
-      kv("Estado civil", "Casado(a)") +
-      kv("Regime de casamento", "Comunhão parcial de bens") +
+      '<div class="hf-kv-row hf-kv-row--4">' +
+      kv("Tipo de identificação", "Não informado", true) +
+      kv("Estado civil", "Não informado", true) +
       "</div>" +
       '<p class="hf-opage__sub">Documentos</p>' +
-      '<div class="hf-filegrid">' +
-      fileSlot("CNH") +
-      fileSlot("RG com CPF") +
-      fileSlot("Comprovante de endereço") +
+      '<div class="hf-kv-row">' +
+      kv(
+        "Comprovante de endereço emitido nos últimos 60 dias",
+        "Não informado",
+        true
+      ) +
       "</div></div>" +
       '<hr class="hf-sep">' +
       '<div class="hf-opage__block"><h3>Dados de Renda do(a) Comprador(a)</h3>' +
-      '<div class="hf-kv-row">' +
-      kv("Tipo de renda", "CLT") +
-      kv("Profissão / Cargo", "Analista de Sistemas") +
-      kv("Declarou IRPF?", "Sim") +
-      "</div>" +
-      '<p class="hf-opage__sub">Documentos</p>' +
-      '<div class="hf-filegrid">' +
-      fileSlot("Declaração de IRPF") +
-      fileSlot("Holerite") +
-      fileSlot("Extrato bancário") +
-      "</div></div>" +
-      '<hr class="hf-sep">' +
-      '<div class="hf-opage__block"><h3>Extratos bancários</h3>' +
-      '<div class="hf-filegrid">' +
-      fileSlot("Extrato") +
+      '<div class="hf-kv-row hf-kv-row--4">' +
+      kv("Tipo de renda", "Não informado", true) +
+      kv("Profissão / Cargo", "Não informado", true) +
+      kv("Declarou IRPF?", "Não informado", true) +
       "</div></div>";
 
     var nested =
       '<article class="hf-formcard">' +
       '<div class="hf-formcard__head">' +
       ibox("clipboard-list") +
-      '<div class="hf-formcard__copy"><strong>Formulário dados</strong>' +
-      "<span>Concluído em 21/05/2026 | 11:40</span></div>" +
-      badge("information", "Extraindo dados") +
-      iconBtn("git-pull-request", "Sincronizar") +
-      iconBtn("eye", "Visualizar") +
+      '<div class="hf-formcard__copy"><strong>Formulário de Coleta de Dados</strong>' +
+      "<span>Criado em 02/07/2026 | 10:03</span></div>" +
+      badge("alert", "Dados pendentes", true) +
+      iconBtn("list", "Lista") +
+      iconBtn("link", "Link") +
       iconBtn("chevron-up", "Recolher") +
       "</div>" +
       '<div class="hf-formcard__body">' +
       formBody +
       "</div></article>";
 
+    var etapaTime =
+      '<span class="hf-etapa__time">' +
+      ico("clock", 12) +
+      "<small>02/07/2026, 10:03</small></span>";
+
     var etapa =
       '<section class="hf-etapa is-open" data-accordion>' +
+      '<p class="hf-etapa__log">' +
+      ico("clock", 16) +
+      "<span>Operação aberta</span>" +
+      etapaTime +
+      "</p>" +
       '<div class="hf-etapa__bar">' +
       ibox("layers") +
-      '<div class="hf-formcard__copy"><strong class="hf-etapa__title">Coleta de dados</strong>' +
-      "<span>Etapa iniciada em 21/05/2026 | 11:30</span></div>" +
-      badge("alert", "Pendente") +
-      iconBtn("file-plus", "Adicionar") +
+      '<div class="hf-formcard__copy"><strong class="hf-etapa__title">Simulação de Crédito</strong>' +
+      '<span class="hf-etapa__moved">Movido por <b>Maurício Lima</b> em <b>02/07/2026 | 10:03</b></span></div>' +
+      '<i class="hf-etapa__rule" aria-hidden="true"></i>' +
+      '<span class="hf-etapa__dur">' +
+      ico("clock", 12) +
+      "&lt;1m</span>" +
+      badge("success", "Concluída") +
+      iconBtn("message-circle", "Follow-ups") +
       iconBtn("chevron-up", "Recolher") +
       "</div>" +
-      '<p class="hf-etapa__log">' +
-      ico("chevron-down", 20) +
-      "<span>Operação criada no sistema</span>" +
-      "<small>13/04/2026 14:20</small></p>" +
+      '<div class="hf-etapa__nest">' +
       nested +
-      "</section>";
+      '<p class="hf-etapa__log hf-etapa__log--sys">' +
+      ico("clock", 16) +
+      "<span><b>Sistema</b> Probabilidade de Fechamento definida como Baixa (padrão de criação)</span>" +
+      etapaTime +
+      "</p></div></section>";
 
     var chat =
       '<div class="hf-card-comments-wrap">' +
@@ -398,9 +405,10 @@
       ico("file-text", 20) +
       "<strong>irpf-2025.pdf</strong></div>" +
       '<div class="hf-ocr__iframe">IFRAME ARQUIVO</div>' +
+      '<div class="hf-ocr__actions">' +
       '<button class="hf-btn hf-btn--sm hf-btn--ghost" type="button">' +
       ico("download", 16) +
-      "Baixar</button></section>";
+      "Baixar</button></div></section>";
 
     var panel =
       '<aside class="hf-ocr__panel">' +
