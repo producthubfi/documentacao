@@ -270,13 +270,15 @@
 
   // Cada variante tem o check numa cor: branco sobre o círculo cheio do default,
   // teal escuro no sucesso e vermelho no erro.
-  function toastBox(mod) {
+  function toastBox(mod, msg) {
     return (
       '<div class="hf-toast' +
       (mod ? " hf-toast--" + mod : "") +
       '"><span class="hf-toast__ico">' +
       (window.hfIcon ? window.hfIcon("check", 16) : "") +
-      '</span><span class="hf-toast__msg">Toast message here.</span>' +
+      '</span><span class="hf-toast__msg">' +
+      (msg || "Toast message here.") +
+      "</span>" +
       '<button class="hf-toast__close" type="button" data-alert-close aria-label="Fechar">' +
       (window.hfIcon ? window.hfIcon("x", 10) : "") +
       "</button></div>"
@@ -2060,6 +2062,7 @@
       badge: badge,
       stepper: stepper,
       step: step,
+      toast: toastBox,
     },
   };
 })(window);

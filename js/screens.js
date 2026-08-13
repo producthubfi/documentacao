@@ -434,6 +434,27 @@
     );
   }
 
+  function showSuccessToast() {
+    var host = document.querySelector("[data-toast-host]");
+    if (!host) {
+      host = document.createElement("div");
+      host.className = "docs-toast-host";
+      host.setAttribute("data-toast-host", "");
+      document.body.appendChild(host);
+    }
+    host.innerHTML = ui.toast
+      ? ui.toast("success", "Dados salvos com sucesso.")
+      : "";
+    var toast = host.querySelector(".hf-toast");
+    if (!toast) return;
+    function hide() {
+      if (toast && toast.parentNode) toast.parentNode.removeChild(toast);
+    }
+    var closeBtn = toast.querySelector("[data-alert-close]");
+    if (closeBtn) closeBtn.addEventListener("click", hide);
+    window.setTimeout(hide, 4000);
+  }
+
   function bindOcr(root) {
     var overlay = root.querySelector("[data-ocr-overlay]");
     if (!overlay) return;
@@ -515,6 +536,7 @@
           if (err) err.remove();
         });
         close();
+        showSuccessToast();
       });
     }
   }
@@ -531,17 +553,12 @@
     title: "Detalhes da operação",
     lead: "Tela composta da Nova operação.",
     leadHtml:
-      '<div class="docs-brief">' +
-      '<p class="docs-lead">Tela composta da Nova operação, montada com componentes do DS.</p>' +
-      '<ol class="docs-steps">' +
-      "<li>Clique em um <strong>Card File</strong> para abrir o drawer OCR.</li>" +
-      "<li>Confira o documento à esquerda e os dados extraídos à direita.</li>" +
-      "<li>Filtre pela busca ou pelas badges de dados não identificados.</li>" +
-      "<li>Preencha o que faltar e salve.</li>" +
-      "</ol>" +
-      '<p class="docs-brief__meta"><strong>Do DS:</strong> Search, Input, Badge, Button e Card.</p>' +
-      '<p class="docs-brief__warn"><strong>Borda vermelha:</strong> peça que ainda não existe no DS (drawer OCR e viewer do arquivo).</p>' +
-      "</div>",
+      '<ol class="docs-howto">' +
+      "<li><em>1</em><div><strong>Abrir o OCR</strong><span>Clique em um Card File do formulário</span></div></li>" +
+      "<li><em>2</em><div><strong>Conferir os dados</strong><span>Documento à esquerda, extração à direita</span></div></li>" +
+      "<li><em>3</em><div><strong>Filtrar pendências</strong><span>Use a busca ou as badges em vermelho</span></div></li>" +
+      "<li><em>4</em><div><strong>Completar e salvar</strong><span>Preencha o que faltar e confirme</span></div></li>" +
+      "</ol>",
     node: "8332-123243",
     figmaFile: FIGMA_OP,
     wide: true,

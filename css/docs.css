@@ -251,8 +251,10 @@ textarea {
 
 .docs-page-head--wide {
   max-width: none;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
+.docs-page-head--wide .docs-crumb { margin-bottom: 8px; }
+.docs-page-head--wide .docs-h1 { margin-bottom: 8px; }
 
 .docs-page-head {
   text-align: left;
@@ -312,8 +314,63 @@ textarea {
   gap: 16px;
   max-width: 640px;
 }
-
 .docs-brief .docs-lead { max-width: none; }
+
+.docs-howto {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: #f7f8f8;
+  border: 1px solid #eceeee;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.docs-howto li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 0;
+  padding: 12px 16px;
+  box-sizing: border-box;
+}
+.docs-howto li + li {
+  border-left: 1px solid #e6e8e8;
+}
+.docs-howto em {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  border-radius: 999px;
+  background: #0daf9f;
+  color: #fff;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 1;
+}
+.docs-howto div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.docs-howto strong {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #141515;
+}
+.docs-howto span {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: #787e7e;
+}
 
 .docs-steps {
   margin: 0;
@@ -1497,6 +1554,13 @@ textarea {
   color: #141515;
 }
 
+.docs-toast-host {
+  position: fixed;
+  top: 80px;
+  right: 24px;
+  z-index: 80;
+}
+
 .docs-overlay {
   position: fixed;
   inset: 0;
@@ -1539,6 +1603,17 @@ textarea {
 
   .docs-h1 {
     font-size: 28px;
+  }
+
+  .docs-howto {
+    grid-template-columns: 1fr 1fr;
+  }
+  .docs-howto li:nth-child(3) {
+    border-left: 0;
+    border-top: 1px solid #e6e8e8;
+  }
+  .docs-howto li:nth-child(4) {
+    border-top: 1px solid #e6e8e8;
   }
 
   .docs-board,
