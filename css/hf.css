@@ -1,0 +1,1295 @@
+/* HubFi DS — componentes. Tokens do Figma. */
+
+.hf-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  background: var(--text-inverse);
+  border: 1px solid var(--border-field);
+  border-radius: var(--radius-md);
+  width: 198px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+.hf-search:hover,
+.hf-search:focus-within { border-color: var(--primary-brand); }
+.hf-search__icon {
+  position: relative;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+.hf-search__icon img {
+  position: absolute;
+  inset: 8.33%;
+  width: 13.3333px;
+  height: 13.3333px;
+  display: block;
+  max-width: none;
+}
+.hf-search__field {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  font-family: var(--hf-font);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.45;
+  color: var(--neutral-900);
+  outline: none;
+}
+.hf-search__field::placeholder { color: var(--neutral-400); }
+
+.hf-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  font-family: var(--hf-font);
+  font-weight: 600;
+  line-height: 1.45;
+  cursor: pointer;
+  white-space: nowrap;
+  box-sizing: border-box;
+  text-decoration: none;
+}
+.hf-btn:focus-visible { outline: 2px solid var(--primary-brand); outline-offset: 2px; }
+.hf-btn--lg { height: 36px; padding: 8px 16px; font-size: 14px; }
+.hf-btn--sm { height: 34px; padding: 8px; font-size: 12px; line-height: 1.5; }
+.hf-btn--xs { height: 24px; padding: 0 10px; font-size: 12px; }
+.hf-btn--icon { width: 40px; height: 40px; padding: 0; }
+.hf-btn--icon.hf-btn--sm { width: 32px; height: 32px; }
+.hf-btn--primary { background: var(--primary-brand); color: var(--text-inverse); }
+.hf-btn--primary:hover:not(:disabled) { background: var(--primary-hover); }
+.hf-btn--secondary { background: var(--primary-subtle); border-color: var(--primary-hover); color: var(--primary-hover); }
+.hf-btn--secondary:hover:not(:disabled) {
+  background: var(--primary-default); border-color: var(--primary-default); color: #fff;
+}
+.hf-btn--secondary:hover:not(:disabled) .hf-btn__ico img { filter: brightness(0) invert(1); }
+.hf-btn--ghost, .hf-btn--outline { background: var(--neutral-0); border-color: var(--neutral-100); color: var(--neutral-800); }
+.hf-btn--ghost:hover:not(:disabled), .hf-btn--outline:hover:not(:disabled) { background: var(--background-subtle); }
+.hf-btn--dark { background: var(--neutral-900); color: var(--primary-default); }
+.hf-btn:disabled { opacity: 0.24; cursor: not-allowed; }
+.hf-btn__ico {
+  position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+  width: 16px;
+  height: 16px;
+}
+.hf-btn--lg .hf-btn__ico { width: 20px; height: 20px; }
+.hf-btn__ico img {
+  position: absolute;
+  inset: 20.83% 33.33%;
+  width: 33.34%;
+  height: 58.34%;
+  max-width: none;
+  display: block;
+}
+.hf-btn__glyph {
+  position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+  width: 16px;
+  height: 16px;
+}
+.hf-btn--lg .hf-btn__glyph { width: 20px; height: 20px; }
+.hf-btn__glyph img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.hf-btn__plus {
+  position: relative;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+}
+.hf-btn__plus img {
+  position: absolute;
+  display: block;
+  max-width: none;
+}
+.hf-btn__plus img:first-child {
+  left: 20.83%;
+  right: 20.83%;
+  top: 50%;
+  width: 58.34%;
+  height: 8.4%;
+  margin-top: -4.2%;
+}
+.hf-btn__plus img:last-child {
+  top: 20.83%;
+  bottom: 20.83%;
+  left: 50%;
+  width: 8.4%;
+  height: 58.34%;
+  margin-left: -4.2%;
+}
+
+/* Accordion — Figma 294:2393 (closed 420×53) e 294:2399 (open 420×101). */
+.hf-accordion { width: 420px; max-width: 100%; }
+.hf-accordion__item { display: flex; flex-direction: column; align-items: stretch; }
+.hf-accordion__trigger {
+  display: flex; align-items: center; gap: 8px; width: 100%;
+  padding: 16px 0; border: 0; background: transparent;
+  font-family: var(--hf-font); font-size: 14px; font-weight: 500;
+  line-height: 1.45; color: var(--text-primary); cursor: pointer; text-align: left;
+}
+.hf-accordion__spacer { flex: 1; height: 1px; min-width: 0; }
+/* No Figma o indicador é o caractere ▼/▲ em 12px, não um chevron. */
+.hf-accordion__caret {
+  flex-shrink: 0; font-size: 12px; font-weight: 400; line-height: 1.5;
+  color: var(--text-secondary);
+}
+.hf-accordion__caret::before { content: "\25BC"; }
+.hf-accordion__item.is-open .hf-accordion__caret::before { content: "\25B2"; }
+.hf-accordion__item .hf-accordion__trigger { border-bottom: 1px solid var(--border-default); }
+.hf-accordion__panel { display: none; padding: 12px 0 16px; }
+.hf-accordion__item.is-open .hf-accordion__panel { display: block; }
+.hf-accordion__body {
+  margin: 0; font-size: 14px; font-weight: 400; line-height: 1.45; color: var(--text-secondary);
+}
+
+/* Input Text — Figma 112:24. 252 de largura, gap 8, campo 38px.
+   O Select usa a mesma anatomia com 330 de largura e gap 4 (Figma 606:78). */
+/* Largura fixa, não 100% com teto: em prévias que encolhem para o conteúdo o
+   percentual virava a largura do texto e o campo saía menor que no Figma. */
+.hf-field {
+  display: flex; flex-direction: column; gap: 8px;
+  width: 252px; max-width: 100%; font-family: var(--hf-font);
+}
+.hf-field--select { gap: 4px; width: 330px; }
+.hf-field__header { display: flex; align-items: center; gap: 8px; }
+/* A linha do rótulo tem 16px fixos no Figma; é o asterisco de obrigatório que
+   estica o cabeçalho para 20px. */
+.hf-field__label {
+  display: flex; align-items: center; height: 16px;
+  font-size: 14px; line-height: 1.45; color: var(--text-primary);
+}
+.hf-field--select .hf-field__label { height: auto; }
+.hf-field__req { font-size: 14px; line-height: 1.45; color: var(--text-required); font-weight: 500; }
+/* Peças opcionais do cabeçalho e do campo — showBadge, showInfo, showSuffix e
+   showCopy no componente do Figma. */
+.hf-field__labelrow { display: flex; align-items: center; gap: 4px; }
+.hf-field__badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  min-width: 20px; min-height: 20px; padding: 4px 10px; box-sizing: border-box;
+  background: var(--primary-default); border-radius: 32px;
+  font-size: 12px; font-weight: 500; line-height: 1.5; color: var(--text-inverse);
+}
+.hf-field__info { display: block; width: 16px; height: 16px; flex-shrink: 0; }
+.hf-field__suffix {
+  flex-shrink: 0; font-size: 16px; line-height: 1.5; color: var(--text-muted);
+}
+.hf-field__copy {
+  display: grid; place-items: center; width: 18px; height: 18px; flex-shrink: 0;
+  padding: 0; border: 0; background: transparent; cursor: pointer;
+}
+.hf-field__control {
+  display: flex; align-items: center; gap: 8px; height: 38px; padding: 0 17px;
+  background: var(--neutral-0); border: 1px solid var(--border-field);
+  border-radius: var(--radius-sm); box-sizing: border-box;
+}
+.hf-field--select { position: relative; }
+.hf-field--select .hf-field__control {
+  width: 100%; padding: 0 16px; justify-content: space-between;
+  font-family: inherit; text-align: left; cursor: pointer; appearance: none;
+}
+.hf-field--select .hf-field__control:disabled { cursor: default; }
+.hf-field__input, .hf-field__area {
+  flex: 1; min-width: 0; border: 0; background: transparent;
+  font-family: var(--hf-font); font-size: 14px; color: var(--neutral-900); outline: none;
+}
+.hf-field__input::placeholder, .hf-field__area::placeholder { color: var(--neutral-300); }
+.hf-field--disabled .hf-field__control { background: var(--neutral-100); }
+.hf-field--disabled .hf-field__input { color: var(--neutral-400); }
+.hf-field--error .hf-field__control { border-color: var(--alert-error-light); }
+.hf-field__error { margin: 0; font-size: 12px; line-height: 1.5; color: var(--alert-error-main); }
+.hf-field__helper { margin: 0; font-size: 12px; line-height: 1.5; color: var(--text-secondary); }
+/* Anel de foco do Input — Figma 695:3402. Moldura de 1px primary/400 com 2px de
+   respiro; ela entra no layout e leva o bloco do campo de 38 para 42px. */
+.hf-field__ring {
+  display: flex; flex-direction: column; align-items: flex-start;
+  width: 100%; padding: 2px; border-radius: var(--radius-md); box-sizing: border-box;
+  box-shadow: inset 0 0 0 1px var(--primary-400);
+}
+.hf-field__ring .hf-field__control { width: 100%; }
+/* Mesmo anel para hover e foco reais, aqui como sombra para não
+   empurrar o layout enquanto o usuário passa o mouse ou digita. */
+.hf-field:not(.hf-field--select):not(.hf-field--disabled):not(.hf-field--error) .hf-field__control:hover,
+.hf-field:not(.hf-field--select):not(.hf-field--disabled):not(.hf-field--error) .hf-field__control:focus-within {
+  box-shadow: 0 0 0 2px var(--neutral-0), 0 0 0 3px var(--primary-400);
+}
+
+/* Select — Figma 606:82. O anel de hover/foco/aberto é sombra (1px branco +
+   2px primary/400), então o campo continua com 38px em todos os estados. */
+.hf-field--select.hf-field--hover .hf-field__control,
+.hf-field--select.hf-field--focus .hf-field__control,
+.hf-field--select.hf-field--open .hf-field__control,
+.hf-field--select:not(.hf-field--disabled) .hf-field__control:hover,
+.hf-field--select:not(.hf-field--disabled) .hf-field__control:focus-within {
+  box-shadow: 0 0 0 1px var(--neutral-0), 0 0 0 2px var(--primary-400);
+}
+.hf-field--select.hf-field--error .hf-field__control { border-color: var(--alert-error-main); }
+/* No select desabilitado o fundo continua branco; só os textos ficam mudos. */
+.hf-field--select.hf-field--disabled .hf-field__control { background: var(--background-default); }
+.hf-field--select.hf-field--disabled .hf-field__label,
+.hf-field--select.hf-field--disabled .hf-field__req,
+.hf-field--select.hf-field--disabled .hf-field__value { color: var(--text-muted); }
+.hf-field__value {
+  flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-size: 16px; line-height: 1.5; color: var(--text-primary);
+}
+.hf-field__value--placeholder { color: var(--text-muted); }
+/* Lista do estado aberto — Figma 684:3404. Flutua sobre a página; a variante
+   estática da documentação a mantém no fluxo, como no frame de spec. */
+.hf-select-menu {
+  display: none; position: absolute; left: 0; right: 0; z-index: 30;
+  flex-direction: column; align-items: flex-start;
+  width: 100%; padding: 4px; box-sizing: border-box;
+  background: var(--neutral-0); border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+.hf-field.is-open > .hf-select-menu { display: flex; }
+.hf-field--open > .hf-select-menu { display: flex; position: static; }
+/* Átomos isolados do Select — Figma 606:161 / 606:164 / 606:168. O box avulso
+   tem 40px de altura e chevron de 16, medidas próprias do átomo. */
+.hf-select-label {
+  display: inline-flex; align-items: flex-start; gap: 2px;
+  font-family: var(--hf-font); font-size: 14px; font-weight: 500; line-height: 1.45;
+  color: var(--text-primary);
+}
+.hf-select-label__req { color: var(--alert-error-main); }
+.hf-select-box {
+  display: flex; align-items: center; justify-content: space-between;
+  width: 330px; max-width: 100%; height: 40px; padding: 10px 16px; box-sizing: border-box;
+  background: var(--background-default); border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  font-family: var(--hf-font); font-size: 16px; line-height: 1.5; color: var(--text-muted);
+}
+.hf-select-box img { display: block; width: 16px; height: 16px; }
+.hf-select-helper {
+  margin: 0; font-family: var(--hf-font); font-size: 12px; line-height: 1.5;
+  color: var(--alert-error-main);
+}
+.hf-select-menu__item {
+  width: 100%; padding: 8px 16px; box-sizing: border-box; border-radius: var(--radius-sm);
+  font-family: var(--hf-font); font-size: 14px; line-height: normal;
+  color: var(--text-primary); cursor: pointer;
+}
+.hf-select-menu__item:hover, .hf-select-menu__item.is-active { background: #f5f7f7; }
+/* Textarea — Figma 272:280. Campo 415×107 com padding 9. */
+.hf-field__area { height: 100%; min-height: 0; padding: 0; resize: none; }
+.hf-field__control--area { height: 107px; align-items: flex-start; padding: 9px; }
+
+.hf-alert {
+  display: flex; gap: 12px; align-items: flex-start;
+  width: 100%; max-width: 500px;
+  padding: 12px 16px; border-radius: var(--radius-sm);
+  border-left: 3px solid;
+  box-sizing: border-box;
+}
+.hf-alert--info { background: var(--info-subtle); border-color: var(--info); }
+.hf-alert--success { background: var(--success-subtle); border-color: var(--success); }
+.hf-alert--warning { background: var(--warning-subtle); border-color: var(--warning); }
+.hf-alert--error { background: var(--error-subtle); border-color: var(--error); }
+.hf-alert__icon { width: 20px; height: 20px; flex-shrink: 0; display: block; }
+.hf-alert__body { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; }
+.hf-alert__title {
+  margin: 0; font-size: 14px; font-weight: 600; line-height: 1.45; color: var(--text-primary);
+}
+.hf-alert__desc {
+  margin: 0; font-size: 14px; font-weight: 400; line-height: 1.45; color: var(--text-secondary);
+}
+.hf-alert__close {
+  border: 0; background: none; color: var(--text-secondary); cursor: pointer;
+  font-family: var(--hf-font); font-size: 14px; font-weight: 400; line-height: 1.45;
+  padding: 0; width: 13px; height: 18px;
+}
+
+.hf-avatar {
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 50%; background: var(--primary-50); color: var(--primary-hover);
+  font-weight: 600; overflow: hidden; flex-shrink: 0;
+}
+.hf-avatar--sm { width: 32px; height: 32px; font-size: 12px; }
+.hf-avatar--md { width: 40px; height: 40px; font-size: 14px; }
+.hf-avatar--lg { width: 48px; height: 48px; font-size: 16px; }
+
+.hf-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  height: 26px; padding: 4px 10px; border-radius: 32px;
+  font-size: 12px; font-weight: 500; line-height: 1.5; white-space: nowrap;
+  box-sizing: border-box;
+}
+.hf-badge__ico {
+  position: relative; width: 12px; height: 12px; overflow: hidden; flex-shrink: 0;
+}
+.hf-badge__ico img {
+  position: absolute; inset: 4.17%; width: 91.66%; height: 91.66%;
+  max-width: none; display: block;
+}
+.hf-badge--dot { width: 20px; height: 20px; padding: 0; min-width: 20px; min-height: 20px; border-radius: 999px; }
+.hf-badge--primary { background: var(--primary-default); color: #fff; }
+.hf-badge--secondary { background: var(--background-subtle); color: var(--text-primary); }
+.hf-badge--warning { background: var(--error-50); border: 1px solid var(--error-200); color: var(--error); }
+.hf-badge--alert { background: var(--warning-subtle); border: 1px solid var(--warning-200); color: var(--warning); }
+.hf-badge--success { background: var(--primary-50); border: 1px solid var(--primary-400); color: var(--primary-brand); }
+.hf-badge--outline { border: 1px solid var(--border-default); color: var(--text-primary); }
+.hf-badge--information { background: var(--info-50); border: 1px solid var(--info-200); color: var(--info); }
+
+.hf-crumb {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--hf-font); font-size: 14px; font-weight: 400; line-height: 1.45;
+  color: var(--text-primary);
+}
+.hf-crumb a { color: var(--text-primary); }
+.hf-crumb a:hover { color: var(--primary-hover); }
+.hf-crumb__home { display: block; width: 20px; height: 20px; border-radius: 8px; flex-shrink: 0; }
+.hf-crumb__home img { display: block; width: 20px; height: 20px; }
+.hf-crumb__div { width: 1px; height: 16px; background: var(--border-subtle); flex-shrink: 0; }
+.hf-crumb__chev {
+  position: relative; width: 16px; height: 16px; overflow: hidden; flex-shrink: 0;
+}
+.hf-crumb__chev img {
+  position: absolute; inset: 20.83% 33.33%; width: 33.34%; height: 58.34%; max-width: none; display: block;
+}
+
+/* Card — Figma 294:2371. 380×204, padding 24, gap 16, com slot de conteúdo. */
+.hf-card {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 16px;
+  width: 380px; max-width: 100%; padding: 24px; box-sizing: border-box;
+  background: var(--background-default); border: 0; border-radius: 12px;
+  box-shadow: inset 0 0 0 1px var(--border-field);
+  font-family: var(--hf-font);
+  filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.05));
+}
+.hf-card__title {
+  margin: 0; font-size: 16px; font-weight: 600; line-height: 1.5; color: var(--text-primary);
+}
+.hf-card__body {
+  margin: 0; font-size: 14px; font-weight: 400; line-height: 1.45; color: var(--text-secondary);
+}
+.hf-card__slot {
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; height: 80px; border-radius: 8px; background: var(--border-subtle);
+  font-size: 12px; font-weight: 400; line-height: 1.5; color: var(--text-secondary);
+}
+
+.hf-card-select {
+  width: 200px; min-height: 126px; padding: 16px;
+  background: #fff; border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg); cursor: pointer; text-align: left;
+  font-family: var(--hf-font); box-sizing: border-box;
+}
+.hf-card-select:hover:not(.is-selected) { border-color: var(--primary-400); }
+.hf-card-select.is-selected { border-color: var(--primary-brand); box-shadow: 0 0 0 1px var(--primary-brand); }
+.hf-card-select strong { display: block; font-size: 14px; margin-bottom: 6px; }
+.hf-card-select span { font-size: 12px; color: var(--text-secondary); }
+
+.hf-check, .hf-radio {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--hf-font); font-size: 14px; line-height: 1.45;
+  color: var(--text-primary); cursor: pointer;
+}
+.hf-check input, .hf-radio input { position: absolute; opacity: 0; width: 0; height: 0; }
+.hf-check-box, .hf-radio-box {
+  width: 18px; height: 18px; border-radius: 4px; box-sizing: border-box;
+  border: 1px solid var(--border-default); background: #fff; flex-shrink: 0;
+  display: grid; place-items: center;
+}
+.hf-check-box .hf-check-box__mark { display: none; width: 10px; height: 8px; }
+.hf-check:hover .hf-check-box,
+.hf-radio:hover .hf-radio-box { border-color: var(--primary-default); }
+.hf-check input:checked + .hf-check-box,
+.hf-check input:indeterminate + .hf-check-box {
+  background: var(--primary-subtle); border-color: var(--primary-default);
+}
+.hf-check input:checked + .hf-check-box .hf-check-box__mark { display: block; }
+.hf-check input:indeterminate + .hf-check-box::after {
+  content: ""; width: 10px; height: 2px; border-radius: 1px; background: var(--primary-default);
+}
+.hf-radio-box { border-radius: 50%; }
+.hf-radio input:checked + .hf-radio-box {
+  border-color: var(--primary-default); background: var(--primary-subtle);
+}
+.hf-radio input:checked + .hf-radio-box::after {
+  content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--primary-default);
+}
+
+/* Borda por inset shadow: no Figma o stroke é interno e não empurra a largura. */
+.hf-chip {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: 40px; padding: 10px 16px; border: 0; border-radius: 8px;
+  font-size: 14px; font-weight: 500; line-height: 1.45; cursor: pointer;
+  background: var(--background-default); color: var(--text-primary);
+  box-shadow: inset 0 0 0 1px var(--border-default);
+  font-family: var(--hf-font); box-sizing: border-box;
+}
+.hf-chip:hover:not(.hf-chip--selected) { box-shadow: inset 0 0 0 1px var(--primary-400); }
+.hf-chip--selected { background: var(--primary-default); box-shadow: none; color: #fff; }
+.hf-chip__x {
+  position: relative; width: 16px; height: 16px; flex-shrink: 0; overflow: hidden;
+}
+.hf-chip__x img {
+  position: absolute; inset: 25%; width: 50%; height: 50%; max-width: none; display: block;
+}
+.hf-chip--selected .hf-chip__x img { filter: brightness(0) invert(1); }
+
+.hf-switch {
+  position: relative; width: 44px; height: 24px; border-radius: 12px;
+  background: var(--neutral-150); border: 0; cursor: pointer; padding: 0;
+}
+.hf-switch.is-on { background: var(--primary-default); }
+.hf-switch::after {
+  content: ""; position: absolute; top: 2px; left: 2px;
+  width: 20px; height: 20px; border-radius: 50%; background: #fff;
+  box-shadow: 0 1px 3px rgba(20, 21, 21, 0.16);
+  transition: left 0.16s ease;
+}
+.hf-switch.is-on::after { left: 22px; }
+
+.hf-tabs {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 8px; background: #eaecec; border-radius: 8px;
+}
+.hf-tab {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 6px 12px; border: 0; background: none; border-radius: 4px;
+  font-family: var(--hf-font); font-size: 14px; font-weight: 600; line-height: 1.45;
+  color: var(--text-primary); cursor: pointer;
+}
+.hf-tab__ico {
+  position: relative; width: 18px; height: 18px; overflow: hidden; flex-shrink: 0;
+}
+.hf-tab__ico img {
+  position: absolute; inset: 8.33%; width: 83.34%; height: 83.34%;
+  max-width: none; display: block;
+}
+.hf-tab:hover:not(.is-active) { background: rgba(255, 255, 255, 0.55); }
+.hf-tab.is-active {
+  background: #fff; color: var(--primary-default);
+  box-shadow: 0 1px 1.5px rgba(0, 0, 0, 0.08);
+}
+
+.hf-toast {
+  position: relative;
+  display: flex; align-items: center; gap: 16px;
+  width: 400px; max-width: 100%; padding: 16px;
+  background: var(--background-default); border: 0; border-radius: 8px;
+  box-shadow: inset 0 0 0 1px var(--border-default),
+    0 10px 8px rgba(0, 0, 0, 0.1), 0 4px 3px rgba(0, 0, 0, 0.1);
+  font-size: 14px; font-weight: 500; line-height: 1.45; color: var(--text-primary);
+  box-sizing: border-box;
+}
+.hf-toast--success {
+  background: var(--success-subtle); font-weight: 400; color: var(--success);
+  box-shadow: inset 0 0 0 1px var(--success),
+    0 10px 8px rgba(0, 0, 0, 0.1), 0 4px 3px rgba(0, 0, 0, 0.1);
+}
+.hf-toast--error {
+  background: var(--error-subtle); font-weight: 400; color: var(--error-dark);
+  box-shadow: inset 0 0 0 1px var(--error),
+    0 10px 8px rgba(0, 0, 0, 0.1), 0 4px 3px rgba(0, 0, 0, 0.1);
+}
+.hf-toast__ico {
+  display: grid; place-items: center; width: 20px; height: 20px; border-radius: 11px;
+  background: var(--primary-default); flex-shrink: 0;
+}
+.hf-toast--success .hf-toast__ico { width: 22px; height: 22px; background: #99ebe0; }
+.hf-toast--error .hf-toast__ico { width: 22px; height: 22px; background: var(--error-200); }
+.hf-toast__ico img { width: 16px; height: 16px; display: block; }
+.hf-toast__msg { flex: 1; min-width: 0; }
+/* No variante default o Figma solta o botão fora do canto superior esquerdo;
+   nos de sucesso e erro ele fica em linha, à direita. */
+.hf-toast__close {
+  position: absolute; left: -8px; top: -8px;
+  width: 20px; height: 20px; border-radius: 10px; border: 1px solid var(--border-default);
+  background: var(--background-subtle); padding: 0; cursor: pointer; flex-shrink: 0;
+  display: grid; place-items: center;
+}
+.hf-toast--success .hf-toast__close,
+.hf-toast--error .hf-toast__close { position: static; }
+.hf-toast__close img { width: 10px; height: 10px; display: block; }
+
+/* Tooltip — Figma 200:12. Largura fixa 212, padding 8, texto 12/1.5. */
+.hf-tooltip {
+  display: block; box-sizing: border-box; width: 212px; max-width: 100%; padding: 8px;
+  background: var(--neutral-900); color: var(--text-inverse);
+  border-radius: 8px; font-family: var(--hf-font);
+  font-size: 12px; font-weight: 400; line-height: 1.5;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.25));
+}
+
+.hf-progress { width: 300px; max-width: 100%; height: 6px; background: var(--background-subtle); border-radius: 99px; overflow: hidden; }
+.hf-progress span { display: block; height: 100%; background: var(--primary-brand); border-radius: 99px; }
+
+.hf-skel { background: linear-gradient(90deg, #eee 0%, #f7f7f7 50%, #eee 100%); background-size: 200% 100%; animation: hf-shimmer 1.2s infinite; }
+.hf-skel--text { width: 200px; height: 16px; border-radius: 4px; }
+.hf-skel--circle { width: 40px; height: 40px; border-radius: 50%; }
+.hf-skel--rect { width: 300px; height: 120px; border-radius: 8px; }
+@keyframes hf-shimmer { to { background-position: -200% 0; } }
+
+.hf-sep { width: 300px; max-width: 100%; height: 1px; background: var(--border-default); border: 0; }
+
+.hf-label { font-size: 14px; color: var(--text-primary); }
+
+.hf-pager { display: flex; align-items: center; gap: 4px; }
+.hf-pager button {
+  width: 32px; height: 32px; min-width: 32px; padding: 0;
+  border: 1px solid var(--border-default);
+  background: #fff; border-radius: 8px; font-family: var(--hf-font);
+  font-size: 14px; font-weight: 500; cursor: pointer; color: var(--text-primary);
+}
+.hf-pager button.is-current { background: var(--primary-default); border-color: var(--primary-default); color: #fff; }
+/* Paginação só com setas, usada no rodapé da Table. */
+.hf-pager--arrows button { border: 0; background: none; color: var(--text-secondary); }
+.hf-pager--arrows button:hover:not(:disabled) { background: var(--background-subtle); }
+.hf-pager--arrows button:disabled { opacity: 0.4; cursor: default; }
+
+/* Dropdown Menu — Figma 294:2376. 200×209. */
+.hf-dropdown {
+  width: 200px; background: #fff; border-radius: 8px; padding: 4px 0;
+  box-shadow: inset 0 0 0 1px var(--border-default), 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex; flex-direction: column; gap: 2px;
+}
+.hf-dropdown button {
+  display: block; width: 100%; padding: 12px 16px; border: 0; background: none;
+  text-align: left; font-family: var(--hf-font); font-size: 16px; font-weight: 400;
+  line-height: 1.5; cursor: pointer; color: var(--text-primary); border-radius: 4px;
+}
+.hf-dropdown button:hover { background: var(--background-subtle); }
+.hf-dropdown__sep { height: 1px; background: var(--border-default); margin: 0; border: 0; }
+.hf-dropdown__danger { color: var(--error) !important; }
+
+/* Modal — Figma 294:2656. Palco 1283×816, conteúdo 521 (large 849). */
+.hf-modal-stage {
+  width: 100%; max-width: 1283px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 64px 40px; background: rgba(20, 20, 20, 0.5); border-radius: 12px;
+  box-sizing: border-box;
+}
+.hf-modal {
+  width: 521px; max-width: 100%; box-sizing: border-box;
+  display: flex; flex-direction: column; gap: 16px;
+  padding: 24px; background: var(--background-default);
+  border-radius: 12px; overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+}
+.hf-modal--lg { width: 849px; }
+.hf-modal__head { display: flex; align-items: flex-start; gap: 8px; width: 100%; }
+.hf-modal__icon {
+  display: grid; place-items: center; flex-shrink: 0;
+  width: 48px; height: 48px; border-radius: 8px; background: var(--primary-subtle);
+}
+.hf-modal__icon img { display: block; width: 24px; height: 24px; }
+.hf-modal__text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.hf-modal__row { display: flex; align-items: center; width: 100%; }
+.hf-modal__title {
+  flex: 1; min-width: 0; margin: 0;
+  font-size: 18px; font-weight: 600; line-height: 1.32; color: var(--text-primary);
+}
+.hf-modal__desc {
+  margin: 0; font-size: 14px; font-weight: 400; line-height: 1.45; color: var(--text-muted);
+}
+.hf-modal__div { width: 100%; height: 1px; background: var(--background-subtle); border: 0; margin: 0; }
+.hf-modal__body {
+  width: 100%; height: 100px; border-radius: 8px; background: var(--background-default);
+}
+.hf-modal__foot { display: flex; gap: 12px; align-items: flex-start; width: 100%; }
+.hf-modal__foot--end { justify-content: flex-end; }
+.hf-modal__close,
+.hf-dialog__close,
+.hf-sheet__close {
+  flex-shrink: 0; border: 0; background: none; padding: 0; cursor: pointer;
+  font-family: var(--hf-font); font-size: 16px; font-weight: 400;
+  line-height: 1.5; color: var(--text-muted);
+}
+.hf-dialog__close, .hf-sheet__close { color: var(--text-secondary); }
+
+/* Sheet — Figma 294:2408. 400×600, sem raio, sombra lateral. */
+.hf-sheet {
+  width: 400px; height: 600px; max-width: 100%; box-sizing: border-box;
+  display: flex; flex-direction: column; gap: 16px; align-items: flex-start;
+  padding: 24px; background: var(--background-default);
+}
+.hf-sheet--right { box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15); }
+.hf-sheet--left { box-shadow: 4px 0 12px rgba(0, 0, 0, 0.15); }
+.hf-sheet__head { display: flex; align-items: center; width: 100%; overflow: hidden; }
+.hf-sheet h3 {
+  margin: 0; font-size: 18px; font-weight: 600; line-height: 1.32; color: var(--text-primary);
+}
+.hf-sheet__spacer { flex: 1; min-width: 0; }
+.hf-sheet p {
+  margin: 0; font-size: 14px; font-weight: 400; line-height: 1.45; color: var(--text-secondary);
+}
+.hf-sheet__slot {
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; height: 200px; flex-shrink: 0; border-radius: 8px;
+  background: var(--border-subtle); overflow: hidden;
+  font-size: 12px; font-weight: 400; line-height: 1.5; color: var(--text-secondary);
+}
+
+/* Popover — Figma 294:2386. Largura por conteúdo (396 com o texto padrão). */
+/* Popover — Figma 294:2386. Hug de conteúdo em linha única (396×84 no Figma). */
+.hf-popover {
+  display: inline-flex; flex-direction: column; align-items: flex-start; gap: 12px;
+  max-width: 100%; padding: 16px; background: var(--background-default); border-radius: 8px;
+  box-shadow: inset 0 0 0 1px var(--border-default), 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-size: 14px; line-height: 1.45; box-sizing: border-box; white-space: nowrap;
+}
+.hf-popover strong { margin: 0; font-weight: 600; color: var(--text-primary); }
+.hf-popover p { margin: 0; font-weight: 400; color: var(--text-secondary); }
+
+/* Header — Figma 89:910 (default 1123×52) e 89:1055 (internas 1123×120). */
+.hf-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 16px; width: 100%; max-width: 1123px; background: transparent;
+  border: 0; padding: 0; box-sizing: border-box;
+}
+.hf-header__titles { display: flex; flex-direction: column; gap: 4px; min-width: 0; overflow: hidden; }
+.hf-header__title {
+  display: flex; align-items: center; height: 32px; margin: 0;
+  font-size: 24px; font-weight: 600; line-height: 1.32; color: var(--primary-brand);
+}
+.hf-header__sub {
+  display: flex; align-items: center; height: 16px; margin: 0;
+  font-size: 12px; font-weight: 400; line-height: 1.5; color: var(--neutral-900);
+}
+.hf-header__actions { display: flex; gap: 12px; align-items: center; flex-shrink: 0; }
+
+.hf-header--tall { flex-direction: column; align-items: stretch; gap: 12px; }
+.hf-header__line { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.hf-header__op { display: flex; align-items: center; gap: 12px; }
+.hf-header__op-kind { font-size: 14px; font-weight: 600; line-height: 1.45; color: var(--text-secondary); }
+.hf-header__op-id { font-size: 14px; font-weight: 400; line-height: 1.45; color: var(--neutral-400); }
+.hf-header__op img { display: block; width: 16px; height: 16px; }
+.hf-header__rule { width: 1px; flex-shrink: 0; background: var(--border-default); }
+.hf-header__group {
+  display: flex; align-items: center; border-radius: 8px;
+  background: var(--background-default); box-shadow: inset 0 0 0 1px var(--border-default);
+}
+.hf-header__chips { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.hf-header__meta { display: flex; align-items: center; gap: 8px; }
+.hf-header__meta span {
+  font-size: 14px; font-weight: 500; line-height: 1.45; color: var(--neutral-900);
+}
+.hf-header__meta span.is-value { font-weight: 600; color: var(--primary-default); }
+.hf-header__ico {
+  display: grid; place-items: center; flex-shrink: 0;
+  padding: 4px; border-radius: 8px; background: var(--background-subtle);
+}
+.hf-header__ico img { display: block; width: 20px; height: 20px; }
+
+/* Stepper — Figma 463:1820. 600px, 5 passos de 120×36. */
+.hf-stepper { display: flex; align-items: flex-start; width: 600px; max-width: 100%; }
+.hf-step {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  width: 120px; flex-shrink: 0; text-align: center; font-family: var(--hf-font);
+}
+/* O slot de tempo some no stepper completo (600×50) e reaparece com 18px no
+   passo isolado (120×68); o gap de 8px continua nos dois casos. */
+.hf-step__time {
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; height: 0; overflow: hidden;
+  font-size: 12px; font-weight: 600; line-height: 1.5; color: var(--primary-default);
+}
+.hf-step--timed .hf-step__time { height: 18px; }
+.hf-step__ind { display: block; width: 120px; height: 16px; }
+.hf-step__label {
+  font-size: 12px; font-weight: 500; line-height: 1.5;
+  color: var(--text-primary); white-space: nowrap;
+}
+.hf-step.is-todo .hf-step__label { color: var(--text-muted); }
+
+.hf-app-nav {
+  width: 256px; height: 1134px; padding: 8px;
+  display: flex; align-items: stretch; justify-content: center;
+  box-sizing: border-box; font-family: var(--hf-font);
+}
+.hf-app-nav__panel {
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column;
+  background: var(--background-subtle);
+}
+/* Altura livre para encaixar o sidebar em um shell de aplicação */
+.hf-app-nav--fit { height: auto; align-self: stretch; flex-shrink: 0; }
+
+.hf-app-nav__brand { display: flex; flex-direction: column; gap: 8px; padding: 8px; }
+.hf-app-nav__logo { display: flex; padding: 24px 12px; }
+.hf-app-nav__logo img { display: block; width: 109px; height: 27px; }
+
+.hf-app-nav__ctx {
+  display: flex; align-items: center; gap: 8px;
+  height: 48px; padding: 8px; border-radius: 8px; box-sizing: border-box;
+}
+.hf-app-nav__ctx-ico {
+  display: grid; place-items: center; flex-shrink: 0;
+  width: 36px; height: 36px; padding: 8px; box-sizing: border-box;
+  background: var(--text-primary); border-radius: 8px;
+}
+.hf-app-nav__ctx-ico img { display: block; width: 20px; height: 20px; }
+.hf-app-nav__ctx-text { flex: 1; min-width: 0; }
+.hf-app-nav__ctx-text small {
+  display: block; font-size: 12px; font-weight: 400; line-height: 1.5;
+  color: var(--text-primary);
+}
+.hf-app-nav__ctx-text strong {
+  display: block; font-size: 14px; font-weight: 600; line-height: 1.45;
+  color: var(--primary-default);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.hf-app-nav__ctx > img { display: block; width: 16px; height: 16px; flex-shrink: 0; }
+
+.hf-app-nav__scroll {
+  flex: 1; min-height: 0; overflow: auto;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.hf-app-nav__group { padding: 8px; }
+.hf-app-nav__group-label {
+  display: flex; align-items: center; box-sizing: border-box;
+  height: 32px; margin: 0; padding: 8px 8px 9px; border-radius: 8px;
+  font-size: 12px; font-weight: 500; line-height: 1.5; color: var(--text-primary);
+}
+.hf-app-nav__list { display: flex; flex-direction: column; gap: 4px; }
+.hf-app-nav__item {
+  position: relative; box-sizing: border-box;
+  display: flex; align-items: center; gap: 8px;
+  height: 32px; padding: 8px; border-radius: 8px;
+  font-size: 14px; font-weight: 400; line-height: 1.45; color: var(--text-primary);
+  text-decoration: none;
+}
+.hf-app-nav__item > img { display: block; width: 18px; height: 18px; flex-shrink: 0; }
+.hf-app-nav__item:hover { background: #eeefef; }
+.hf-app-nav__item.is-active { background: var(--neutral-150); font-weight: 500; }
+.hf-app-nav__more {
+  position: absolute; top: 6px; right: 4px;
+  display: grid; place-items: center;
+  width: 20px; height: 20px; border-radius: 8px;
+}
+.hf-app-nav__more img { display: block; width: 18px; height: 18px; }
+
+.hf-app-nav__promo-wrap { margin-top: auto; padding: 8px; }
+.hf-app-nav__promo {
+  position: relative; overflow: hidden;
+  height: 80px; border-radius: 8px;
+  background: linear-gradient(90deg, #191a1a 20%, #0daf9f 100%);
+}
+.hf-app-nav__promo p {
+  position: absolute; left: 26px; top: 21px; width: 110px; margin: 0;
+  font-size: 14px; font-weight: 600; line-height: 1.45; color: #fff;
+}
+
+.hf-app-nav__foot { padding: 8px; }
+.hf-app-nav__user { position: relative; height: 48px; border-radius: 8px; }
+.hf-app-nav__avatar {
+  position: absolute; left: 8px; top: 50%; transform: translateY(-50%);
+  display: flex; width: 32px; height: 32px; padding: 1px; box-sizing: border-box;
+  background: #fff; border-radius: 9999px; box-shadow: 0 0 0 2px #0daf9f;
+}
+.hf-app-nav__avatar span {
+  flex: 1; display: grid; place-items: center;
+  background: var(--background-subtle); border-radius: 9999px;
+  font-size: 14px; font-weight: 400; line-height: 1.45; color: var(--text-primary);
+}
+.hf-app-nav__who {
+  position: absolute; left: 48px; right: 32px; top: 50%; transform: translateY(-50%);
+}
+.hf-app-nav__who strong {
+  display: block; font-size: 14px; font-weight: 600; line-height: 1.45;
+  color: var(--text-primary);
+}
+.hf-app-nav__who span {
+  display: block; font-size: 12px; font-weight: 400; line-height: 1.5;
+  color: var(--text-primary);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.hf-app-nav__user > img {
+  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+  display: block; width: 16px; height: 16px;
+}
+
+/* Dialog — Figma 303:2786. 520×293. */
+.hf-dialog {
+  width: 520px; max-width: 100%; box-sizing: border-box;
+  display: flex; flex-direction: column; gap: 16px; align-items: flex-start;
+  padding: 24px; background: var(--background-default); border-radius: 12px;
+  /* Stroke por inset para que a borda não some à altura, como no Figma. */
+  box-shadow: inset 0 0 0 1px var(--border-default), 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.hf-dialog__head { display: flex; align-items: center; width: 100%; overflow: hidden; }
+.hf-dialog__title {
+  flex: 1; min-width: 0; margin: 0;
+  font-size: 18px; font-weight: 600; line-height: 1.32; color: var(--text-primary);
+}
+.hf-dialog__desc {
+  margin: 0; font-size: 14px; font-weight: 400; line-height: 1.45; color: var(--text-secondary);
+}
+.hf-dialog__slot {
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; height: 100px; flex-shrink: 0; border-radius: 8px;
+  background: var(--background-subtle); overflow: hidden;
+  font-size: 12px; font-weight: 400; line-height: 1.5; color: var(--text-muted);
+}
+.hf-dialog__div { width: 100%; height: 1px; background: var(--border-subtle); border: 0; margin: 0; }
+.hf-dialog__foot { display: flex; justify-content: flex-end; gap: 12px; width: 100%; }
+
+.hf-sidebar {
+  width: 220px; padding: 16px 8px; background: #fff;
+  border: 1px solid var(--border-default); border-radius: 12px;
+}
+.hf-sidebar a {
+  display: block; padding: 8px 12px; border-radius: 8px;
+  color: var(--text-primary); font-size: 13px; font-weight: 500;
+}
+.hf-sidebar a.is-active { background: #e6f6f5; color: var(--primary-hover); }
+
+/* Slider — Figma 294:2389. 300×20, trilho 6px raio 3, thumb 20 branco com anel teal. */
+.hf-slider {
+  -webkit-appearance: none; appearance: none;
+  width: 300px; max-width: 100%; height: 20px; margin: 0;
+  background: transparent; cursor: pointer;
+}
+.hf-slider::-webkit-slider-runnable-track {
+  height: 6px; border-radius: 3px;
+  background: linear-gradient(var(--primary-default), var(--primary-default)) 0 / var(--hf-slider-fill, 50%) 100% no-repeat,
+    var(--border-default);
+}
+.hf-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 20px; height: 20px; margin-top: -7px;
+  border-radius: 50%; background: var(--background-default);
+  box-shadow: inset 0 0 0 2px var(--primary-default);
+}
+.hf-slider::-moz-range-track {
+  height: 6px; border-radius: 3px; background: var(--border-default);
+}
+.hf-slider::-moz-range-progress {
+  height: 6px; border-radius: 3px; background: var(--primary-default);
+}
+.hf-slider::-moz-range-thumb {
+  width: 20px; height: 20px; border: 2px solid var(--primary-default);
+  border-radius: 50%; background: var(--background-default);
+}
+
+/* Table — Figma 607:541. Header 48px, linha de dados 69px, padding lateral 16. */
+.hf-table { width: 100%; border-collapse: collapse; background: var(--background-default); }
+.hf-table th, .hf-table td {
+  padding: 0 16px; text-align: left; vertical-align: middle;
+  border-bottom: 1px solid var(--border-default);
+}
+.hf-table th { height: 48px; font-weight: 500; }
+.hf-table td { height: 69px; }
+.hf-table tbody tr:last-child td { border-bottom: 0; }
+.hf-table tbody tr:hover td { background: var(--background-subtle); }
+
+/* file-upload-dropzone — Figma 394:597 a 394:655. 480×150, padding 28/24, gap 12. */
+.hf-dropzone {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 12px; width: 480px; max-width: 100%; height: 150px;
+  padding: 28px 24px; box-sizing: border-box;
+  border: 1.5px dashed var(--border-default); border-radius: 12px;
+  background: transparent; font-family: var(--hf-font); text-align: center; cursor: pointer;
+}
+.hf-dropzone__icon {
+  display: grid; place-items: center; width: 40px; height: 40px; flex-shrink: 0;
+  border-radius: 999px; overflow: hidden;
+}
+.hf-dropzone__icon img { display: block; width: 20px; height: 20px; }
+.hf-dropzone__icon .hf-dropzone__ico-on { display: none; }
+.hf-dropzone__text { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.hf-dropzone__title {
+  margin: 0; font-size: 14px; font-weight: 600; line-height: 1.45; color: var(--text-primary);
+}
+.hf-dropzone__hint {
+  margin: 0; font-size: 12px; font-weight: 400; line-height: 1.5; color: var(--text-muted);
+}
+
+/* O hover vale tanto no estado estático da doc quanto no ponteiro sobre a área. */
+.hf-dropzone[data-state="hover"],
+.hf-dropzone[data-state="default"]:hover {
+  border-color: var(--primary-default); background: var(--primary-subtle);
+}
+.hf-dropzone[data-state="hover"] .hf-dropzone__icon,
+.hf-dropzone[data-state="default"]:hover .hf-dropzone__icon,
+.hf-dropzone[data-state="dragover"] .hf-dropzone__icon {
+  background: var(--primary-default);
+}
+.hf-dropzone[data-state="hover"] .hf-dropzone__ico-off,
+.hf-dropzone[data-state="default"]:hover .hf-dropzone__ico-off,
+.hf-dropzone[data-state="dragover"] .hf-dropzone__ico-off { display: none; }
+.hf-dropzone[data-state="hover"] .hf-dropzone__ico-on,
+.hf-dropzone[data-state="default"]:hover .hf-dropzone__ico-on,
+.hf-dropzone[data-state="dragover"] .hf-dropzone__ico-on { display: block; }
+
+.hf-dropzone[data-state="dragover"] {
+  border: 1px solid var(--primary-default); background: var(--primary-subtle);
+}
+.hf-dropzone[data-state="dragover"] .hf-dropzone__title { color: var(--primary-default); }
+
+.hf-dropzone[data-state="uploading"] {
+  border: 1px solid var(--primary-default); background: var(--background-default);
+}
+.hf-dropzone[data-state="uploading"] .hf-dropzone__icon { background: var(--primary-subtle); }
+
+.hf-dropzone[data-state="success"] {
+  border: 1px solid var(--success); background: var(--success-subtle);
+}
+.hf-dropzone[data-state="success"] .hf-dropzone__icon { background: var(--success); }
+.hf-dropzone[data-state="success"] .hf-dropzone__title { color: var(--success); }
+
+.hf-dropzone[data-state="error"] {
+  border: 1px solid var(--error); background: var(--error-subtle);
+}
+.hf-dropzone[data-state="error"] .hf-dropzone__icon { background: var(--error); }
+.hf-dropzone[data-state="error"] .hf-dropzone__title { color: var(--error-dark); }
+
+.hf-dropzone[data-state="disabled"] {
+  background: var(--background-subtle); opacity: 0.7; cursor: not-allowed;
+}
+.hf-dropzone[data-state="disabled"] .hf-dropzone__icon { background: var(--background-subtle); }
+.hf-dropzone[data-state="disabled"] .hf-dropzone__title,
+.hf-dropzone[data-state="disabled"] .hf-dropzone__hint { color: var(--text-muted); }
+
+/* file-upload-item — Figma 396:665 a 490:627. Alturas fixas por estado, como no
+   Figma; nome e metadados são sempre de uma linha só. */
+.hf-file {
+  display: flex; align-items: center; gap: 12px;
+  width: 480px; max-width: 100%; height: 80px; padding: 12px; box-sizing: border-box;
+  border: 1px solid var(--border-default); border-radius: 8px;
+  background: var(--background-default); font-family: var(--hf-font);
+}
+.hf-file__icon {
+  display: grid; place-items: center; width: 40px; height: 40px; flex-shrink: 0;
+  border-radius: 8px; overflow: hidden; background: var(--primary-subtle);
+}
+.hf-file__icon img { display: block; width: 20px; height: 20px; }
+.hf-file__info {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 6px;
+  flex: 1; min-width: 0; text-align: left;
+}
+.hf-file__name {
+  margin: 0; width: 100%; font-size: 14px; font-weight: 500; line-height: 1.45;
+  color: var(--text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.hf-file__meta {
+  margin: 0; width: 100%; font-size: 12px; font-weight: 400; line-height: 1.5;
+  color: var(--text-secondary);
+}
+.hf-file__bar {
+  width: 100%; height: 6px; border-radius: 4px; overflow: hidden;
+  background: var(--background-subtle);
+}
+.hf-file__bar span { display: block; height: 6px; border-radius: 4px; background: var(--primary-default); }
+.hf-file__act {
+  display: grid; place-items: center; width: 32px; height: 32px; flex-shrink: 0;
+  padding: 0; border: 0; border-radius: 6px; background: none; cursor: pointer;
+}
+.hf-file__act img { display: block; width: 16px; height: 16px; }
+
+.hf-file[data-state="success"] { height: 60px; gap: 8px; padding: 8px; opacity: 0.8; }
+.hf-file[data-state="success"] .hf-file__icon { background: var(--success-subtle); }
+
+.hf-file[data-state="error"],
+.hf-file[data-state="upload"] { height: 68px; }
+.hf-file[data-state="error"] { background: var(--error-subtle); border-color: var(--error); }
+.hf-file[data-state="error"] .hf-file__icon { background: var(--error); }
+.hf-file[data-state="error"] .hf-file__name,
+.hf-file[data-state="error"] .hf-file__meta { color: var(--error-dark); }
+
+.hf-file[data-state="upload"] { border-style: dashed; cursor: pointer; }
+.hf-file[data-state="upload"]:hover {
+  border-color: var(--primary-default); background: var(--primary-subtle);
+}
+.hf-file[data-state="upload"] .hf-file__icon {
+  background: var(--background-subtle); box-shadow: inset 0 0 0 1px var(--border-subtle);
+}
+
+/* List Item — Figma 585:2761. 330×52, padding 14/16, gap 12. */
+.hf-list-item {
+  display: flex; align-items: center; gap: 12px;
+  width: 330px; height: 52px; padding: 14px 16px;
+  border-radius: 8px; background: var(--background-default);
+  box-sizing: border-box; font-family: var(--hf-font); cursor: pointer;
+}
+.hf-list-item__ico { display: block; width: 20px; height: 20px; flex-shrink: 0; }
+.hf-list-item__label {
+  flex: 1; min-width: 0;
+  font-size: 16px; font-weight: 400; line-height: 1.5; color: var(--text-primary);
+}
+.hf-list-item__chev {
+  display: grid; place-items: center; width: 20px; height: 20px; flex-shrink: 0;
+}
+.hf-list-item__chev img { display: block; width: 6.67px; height: 11.67px; }
+.hf-list-item:hover,
+.hf-list-item--hover { background: var(--background-subtle); }
+.hf-list-item--active { background: var(--background-subtle); }
+.hf-list-item--active .hf-list-item__label { font-weight: 500; }
+
+.hf-select-btn {
+  display: inline-flex; align-items: center; gap: 12px;
+  min-width: 141px; height: 64px; padding: 12px 20px 12px 12px;
+  border: 1px solid var(--border-default); border-radius: 8px;
+  background: #fff; font-family: var(--hf-font); font-size: 16px; font-weight: 600;
+  color: var(--text-primary); cursor: pointer;
+}
+.hf-select-btn:hover:not(.is-selected) { border-color: var(--primary-400); }
+.hf-select-btn.is-selected {
+  background: var(--primary-subtle); border-color: var(--primary-default); color: var(--primary-default);
+}
+.hf-select-btn__icon {
+  display: flex; align-items: center; justify-content: center;
+  width: 38px; height: 38px; padding: 8px; box-sizing: border-box;
+  border-radius: 4px; flex-shrink: 0;
+}
+.hf-select-btn__glyph {
+  position: relative; width: 22px; height: 22px; overflow: hidden; flex-shrink: 0;
+}
+.hf-select-btn__p1 {
+  position: absolute; inset: 8.33%; width: 83.34%; height: 83.34%; max-width: none; display: block;
+}
+.hf-select-btn__p2 {
+  position: absolute; inset: 33.33%; width: 33.34%; height: 33.34%; max-width: none; display: block;
+}
+.hf-select-btn__p3 {
+  position: absolute; top: 25%; bottom: 25%; left: calc(50% - 1px);
+  width: 2px; height: 50%; max-width: none; display: block;
+}
+
+/* Rich Text Editor — Figma 587:2874. 520×180. */
+.hf-rte {
+  width: 520px; max-width: 100%; height: 180px; box-sizing: border-box;
+  border: 1px solid var(--border-default); border-radius: 8px; overflow: hidden;
+  background: var(--background-default); display: flex; flex-direction: column;
+}
+.hf-rte__bar {
+  display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+  padding: 8px 12px; background: var(--background-subtle);
+}
+.hf-rte__btn {
+  display: grid; place-items: center; width: 20px; height: 20px; flex-shrink: 0;
+  border: 0; background: none; padding: 0; cursor: pointer;
+}
+.hf-rte__btn img { display: block; width: 20px; height: 20px; }
+.hf-rte__style {
+  display: flex; align-items: center; gap: 6px; flex-shrink: 0;
+  border: 0; background: none; padding: 0; cursor: pointer;
+  font-family: var(--hf-font); font-size: 12px; font-weight: 500;
+  line-height: 1.5; color: var(--text-primary);
+}
+.hf-rte__style img { display: block; width: 20px; height: 20px; }
+.hf-rte__div { width: 1px; height: 18px; flex-shrink: 0; background: var(--border-default); }
+.hf-rte__group { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.hf-rte__body {
+  flex: 1; min-height: 0; padding: 12px 16px; outline: none;
+  font-size: 16px; font-weight: 400; line-height: 1.5; color: var(--text-primary);
+}
+.hf-rte__body:empty::before {
+  content: attr(data-placeholder); color: var(--text-muted);
+}
+
+/* Section — Figma 584:2716. 520 de largura, gap 20. */
+.hf-section { width: 520px; max-width: 100%; display: flex; flex-direction: column; gap: 20px; align-items: flex-start; }
+.hf-section h3 { margin: 0; font-size: 18px; font-weight: 600; line-height: 1.32; color: var(--primary-default); }
+.hf-section p { margin: 0; font-size: 16px; font-weight: 400; line-height: 1.5; color: var(--text-muted); }
+
+/* Operations — Figma 582:289 (card 280×120) e 582:306 (column-header 280×60). */
+.hf-op {
+  display: flex; flex-direction: column; gap: 8px; align-items: flex-start;
+  width: 280px; height: 120px; padding: 12px; overflow: hidden;
+  border-radius: 8px; background: var(--background-default);
+  box-shadow: inset 0 0 0 1px var(--border-default);
+  box-sizing: border-box;
+}
+.hf-op__top, .hf-op__foot { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+.hf-op__id { display: flex; align-items: center; gap: 4px; font-size: 12px; line-height: 1.5; color: var(--text-secondary); }
+.hf-op__dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+.hf-op-col {
+  display: flex; flex-direction: column; gap: 4px; align-items: flex-start;
+  width: 280px; height: 60px; box-sizing: border-box;
+}
+.hf-op-col__top { display: flex; align-items: center; gap: 8px; }
+.hf-op-col__name { font-size: 14px; font-weight: 600; line-height: 1.45; color: var(--text-primary); }
+.hf-op-col__count {
+  display: flex; align-items: center; padding: 2px 8px; border-radius: var(--radius-full);
+  background: var(--background-subtle);
+  font-size: 12px; font-weight: 500; line-height: 1.5; color: var(--text-secondary);
+}
+.hf-op-col__sum { margin: 0; width: 100%; font-size: 12px; font-weight: 400; line-height: 1.5; color: var(--text-secondary); }
+/* Cores amostradas dos 5 status no Figma (583:2234). */
+.hf-op--finalizado { --hf-op-status: #0daf9f; }
+.hf-op--pre { --hf-op-status: #3672e2; }
+.hf-op--analise { --hf-op-status: #e7b008; }
+.hf-op--proposta { --hf-op-status: #1a4fb2; }
+.hf-op--formalizacao { --hf-op-status: #86481d; }
+.hf-op__dot { background: var(--hf-op-status); }
+/* Máscara para o ícone de tendência assumir a cor do status. */
+.hf-op__trend {
+  display: block; width: 16px; height: 16px; flex-shrink: 0;
+  background: var(--hf-op-status);
+  -webkit-mask: url(../assets/icons/op-trend.svg) center / contain no-repeat;
+  mask: url(../assets/icons/op-trend.svg) center / contain no-repeat;
+}
+.hf-op__cat { margin: 0; width: 100%; font-size: 12px; line-height: 1.5; color: var(--text-secondary); }
+.hf-op__title { margin: 0; width: 100%; font-size: 14px; font-weight: 600; line-height: 1.45; color: var(--text-primary); }
+.hf-op__value { margin: 0; font-size: 12px; line-height: 1.5; color: var(--text-secondary); }
+.hf-op__meta { display: flex; align-items: center; gap: 4px; font-size: 12px; line-height: 1.5; color: var(--text-muted); }
+.hf-tag {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 10px 16px; border-radius: 8px; background: var(--background-default);
+  box-shadow: inset 0 0 0 1px var(--border-default);
+  font-size: 14px; font-weight: 500; line-height: 1.45; color: var(--text-primary);
+  box-sizing: border-box;
+}
+.hf-tag img { display: block; width: 16px; height: 16px; }
+.hf-col-header {
+  width: 280px; height: 60px; display: flex; align-items: center; justify-content: space-between;
+  padding: 0 12px; font-size: 14px; font-weight: 600;
+}
+
+.hf-table-wrap {
+  width: 100%; background: var(--background-default);
+  box-shadow: inset 0 0 0 1px var(--border-default);
+  border-radius: 12px; overflow: hidden;
+}
+.hf-table-toolbar {
+  display: flex; align-items: center; gap: 16px; padding: 12px 16px;
+  border-bottom: 1px solid var(--border-default);
+}
+.hf-table-toolbar .hf-search { flex: 1; min-width: 0; }
+.hf-table-toolbar__filter {
+  display: grid; place-items: center; width: 40px; height: 40px; flex-shrink: 0;
+  padding: 0; border: 0; border-radius: 8px; background: none; cursor: pointer;
+}
+.hf-table-toolbar__filter:hover { background: var(--background-subtle); }
+
+/* Células */
+.hf-cell { display: flex; align-items: center; gap: 8px; }
+.hf-cell__stack { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.hf-cell__name {
+  font-size: 14px; font-weight: 500; line-height: 1.45; color: var(--text-primary);
+}
+.hf-cell__sub { display: block; font-size: 12px; font-weight: 400; line-height: 1.5; color: var(--text-primary); }
+.hf-cell__text { font-size: 14px; font-weight: 400; line-height: 1.45; color: var(--text-primary); }
+.hf-cell--contact { flex-direction: column; align-items: flex-start; gap: 6px; }
+.hf-cell__line {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 400; line-height: 1.5; color: var(--text-primary);
+}
+.hf-cell__line i {
+  width: 16px; height: 16px; flex-shrink: 0;
+  border-radius: 4px; background: var(--text-secondary);
+}
+.hf-sort {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 0; border: 0; background: none; cursor: pointer;
+  font-family: var(--hf-font); font-size: 14px; font-weight: 500;
+  line-height: 1.45; color: var(--text-primary);
+}
+.hf-sort img { display: block; width: 16px; height: 16px; }
+.hf-table__act {
+  display: grid; place-items: center; width: 32px; height: 32px; margin-left: auto;
+  padding: 0; border: 0; border-radius: 8px; background: none; cursor: pointer;
+}
+.hf-table__act:hover { background: var(--background-subtle); }
+.hf-table__act img { display: block; width: 4px; height: 16px; }
+.hf-table__actions { text-align: right; }
+
+/* Rodapé com itens por página e paginação */
+.hf-table-foot {
+  display: flex; align-items: center; gap: 24px;
+  padding: 12px 16px; border-top: 1px solid var(--border-default);
+  font-size: 12px; font-weight: 400; color: var(--text-primary);
+}
+.hf-table-foot__group { display: flex; align-items: center; gap: 8px; }
+.hf-table-foot__select {
+  display: inline-flex; align-items: center; gap: 8px;
+  height: 32px; padding: 0 8px; border-radius: 8px;
+  box-shadow: inset 0 0 0 1px var(--border-default);
+}
+.hf-table-foot__select img { display: block; width: 12px; height: 7px; }
+
+/* Card File — Figma 571:737. 284×50, padding 9. O cartão é branco; o estado
+   vive no selo de 24px. Ícones pintados via máscara para herdar os tokens. */
+.hf-card-file {
+  display: flex; align-items: center; gap: 8px;
+  width: 284px; max-width: 100%; height: 50px; padding: 9px;
+  border-radius: 8px; background: var(--neutral-0);
+  border: 1px solid var(--border-default);
+  box-sizing: border-box; font-family: var(--hf-font);
+}
+.hf-card-file__ico {
+  display: block; width: 20px; height: 20px; flex-shrink: 0;
+  background: var(--text-secondary);
+  -webkit-mask: url("../assets/icons/cf-download.svg") center / contain no-repeat;
+  mask: url("../assets/icons/cf-download.svg") center / contain no-repeat;
+}
+.hf-card-file__info { flex: 1; min-width: 0; }
+.hf-card-file__name { display: block; font-size: 12px; font-weight: 500; color: var(--text-primary); line-height: 1.5; }
+.hf-card-file__meta { display: block; font-size: 10px; font-weight: 400; color: var(--text-secondary); line-height: 14px; }
+.hf-card-file__act {
+  display: grid; place-items: center; width: 24px; height: 24px; flex-shrink: 0;
+  padding: 4px; box-sizing: border-box; background: var(--neutral-0);
+  border: 1px solid var(--border-default); border-radius: var(--radius-sm); cursor: pointer;
+}
+.hf-card-file__act-ico {
+  display: block; width: 12px; height: 12px;
+  background: var(--neutral-900);
+  -webkit-mask: url("../assets/icons/cf-chevron.svg") center / contain no-repeat;
+  mask: url("../assets/icons/cf-chevron.svg") center / contain no-repeat;
+}
+.hf-card-file__badge {
+  display: grid; place-items: center; width: 24px; height: 24px; flex-shrink: 0;
+  border-radius: 32px; background: var(--info-50);
+  border: 1px solid var(--info-200); box-sizing: border-box;
+}
+.hf-card-file__mark {
+  display: block; width: 12px; height: 12px;
+  background: var(--info);
+  -webkit-mask: url("../assets/icons/cf-refresh.svg") center / contain no-repeat;
+  mask: url("../assets/icons/cf-refresh.svg") center / contain no-repeat;
+}
+.hf-card-file--hover,
+.hf-card-file:hover { border-color: var(--primary-400); }
+.hf-card-file--parcial .hf-card-file__badge {
+  background: var(--warning-subtle); border-color: var(--warning-200);
+}
+.hf-card-file--parcial .hf-card-file__mark {
+  background: var(--warning);
+  -webkit-mask-image: url("../assets/icons/cf-info.svg");
+  mask-image: url("../assets/icons/cf-info.svg");
+}
+.hf-card-file--error .hf-card-file__badge {
+  background: var(--error-50); border-color: var(--error-200);
+}
+.hf-card-file--error .hf-card-file__mark {
+  background: var(--error);
+  -webkit-mask-image: url("../assets/icons/cf-x.svg");
+  mask-image: url("../assets/icons/cf-x.svg");
+}
+.hf-card-file--success .hf-card-file__badge,
+.hf-card-file--hover .hf-card-file__badge {
+  background: var(--primary-50); border-color: var(--primary-400);
+}
+.hf-card-file--success .hf-card-file__mark,
+.hf-card-file--hover .hf-card-file__mark {
+  background: var(--primary-default);
+  -webkit-mask-image: url("../assets/icons/cf-check.svg");
+  mask-image: url("../assets/icons/cf-check.svg");
+}
+
+.hf-field__chevron {
+  position: relative; width: 20px; height: 20px; overflow: hidden; flex-shrink: 0;
+  pointer-events: none;
+}
+.hf-field__chevron img {
+  position: absolute; left: 4px; top: 6.5px; width: 12px; height: 7px;
+  max-width: none; display: block;
+}
+/* O anel de foco vive nas regras do bloco .hf-field, mais acima. */
+
+.hf-check input[type="checkbox"]:indeterminate { accent-color: var(--primary-brand); }

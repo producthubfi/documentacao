@@ -1,0 +1,6 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Trend Icon">
+<path id="Trend Line" d="M2 11L6 7L9 9L14 4" stroke="#0DAF9F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Trend Arrowhead" d="M10.5 4H14V7.5" stroke="#0DAF9F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</svg>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HubFi DS · Componentes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/tokens.css?v=26">
+  <link rel="stylesheet" href="css/hf.css?v=26">
+  <link rel="stylesheet" href="css/docs.css?v=26">
+</head>
+<body>
+  <div class="docs-app">
+    <header class="docs-top">
+      <a class="docs-logo" href="#/">
+        <img src="assets/icons/hubfi-logo.svg" width="109" height="27" alt="hubfi">
+      </a>
+      <span class="docs-top__sep"></span>
+      <span class="docs-top__product">Design System</span>
+      <span class="docs-top__spacer"></span>
+      <a class="docs-top__link" href="https://www.figma.com/design/XGEdsV9rlBKYZLz3UwoqYV" target="_blank" rel="noreferrer">Abrir no Figma</a>
+    </header>
+    <div class="docs-shell">
+      <aside class="docs-side">
+        <div class="docs-filter">
+          <input id="docs-filter-input" type="search" placeholder="Buscar" aria-label="Buscar componentes">
+        </div>
+        <nav class="docs-nav" id="docs-nav"></nav>
+      </aside>
+      <main class="docs-main">
+        <div class="docs-stage" id="docs-stage"></div>
+      </main>
+    </div>
+  </div>
+  <script src="js/catalog.js?v=26"></script>
+  <script src="js/docs.js?v=26"></script>
+</body>
+</html>
