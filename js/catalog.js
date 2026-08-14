@@ -270,12 +270,22 @@
 
   // Cada variante tem o check numa cor: branco sobre o círculo cheio do default,
   // teal escuro no sucesso e vermelho no erro.
-  function toastBox(msg) {
+  function toastBox(mod, msg) {
+    var variant = "";
+    var text = "Toast message here.";
+    if (mod === "success" || mod === "error" || mod === "default") {
+      variant = mod === "default" ? "" : mod;
+      if (msg) text = msg;
+    } else if (mod) {
+      text = mod;
+    }
     return (
-      '<div class="hf-toast"><span class="hf-toast__ico">' +
+      '<div class="hf-toast' +
+      (variant ? " hf-toast--" + variant : "") +
+      '"><span class="hf-toast__ico">' +
       (window.hfIcon ? window.hfIcon("check", 16) : "") +
       '</span><span class="hf-toast__msg">' +
-      (msg || "Toast message here.") +
+      text +
       "</span>" +
       '<button class="hf-toast__close" type="button" data-alert-close aria-label="Fechar">' +
       (window.hfIcon ? window.hfIcon("x", 10) : "") +
@@ -290,7 +300,7 @@
     var box =
       '<input type="checkbox"' +
       native +
-      '><span class="hf-check-box"><img class="hf-check-box__mark" src="assets/icons/cb-check.svg" width="10" height="8" alt=""></span>';
+      '><span class="hf-check-box"><img class="hf-check-box__mark" src="assets/icons/select-check.svg" width="10" height="8" alt=""></span>';
     return label
       ? '<label class="hf-check">' + box + "<span>" + label + "</span></label>"
       : '<label class="hf-check" aria-label="' + state + '">' + box + "</label>";
@@ -302,7 +312,7 @@
       name +
       '"' +
       (selected ? " checked" : "") +
-      '><span class="hf-radio-box"></span><span>' +
+      '><span class="hf-radio-box"><img class="hf-radio-box__off" src="assets/icons/select-radio.svg" width="18" height="18" alt=""><img class="hf-radio-box__on" src="assets/icons/select-radio-on.svg" width="18" height="18" alt=""></span><span>' +
       label +
       "</span></label>"
     );
@@ -1504,12 +1514,18 @@
     },
     toast: {
       title: "Toast",
-      lead: "Fundo branco, 400×52. Ícone de check e fechar no canto.",
+      lead: "default / success / error. 400×52 (default) e 400×54 (success e error).",
       node: "294-2431",
       html: function () {
         return (
-          card("Componente", "", preview(toastBox("Toast message here."))) +
-          card("Exemplo de uso", "Confirmação depois de salvar um cliente.", preview(toastBox("Dados salvos com sucesso.")))
+          card("Partes de componentes", "Átomo default, com o fechar no canto.", preview(toastBox())) +
+          card("Variantes", "Notificação temporária de feedback. 3 variantes.", preview(
+            cell("default", toastBox("default")) +
+            cell("success", toastBox("success")) +
+            cell("error", toastBox("error")),
+            "docs-preview--stack"
+          )) +
+          card("Exemplo de uso", "Confirmação depois de salvar um cliente.", preview(toastBox("success", "Dados salvos com sucesso.")))
         );
       },
     },

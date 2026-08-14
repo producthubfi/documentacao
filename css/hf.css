@@ -539,28 +539,33 @@
   color: var(--text-primary); cursor: pointer;
 }
 .hf-check input, .hf-radio input { position: absolute; opacity: 0; width: 0; height: 0; }
-.hf-check-box, .hf-radio-box {
+.hf-check-box {
   width: 18px; height: 18px; border-radius: 4px; box-sizing: border-box;
   border: 1px solid var(--border-default); background: #fff; flex-shrink: 0;
   display: grid; place-items: center;
 }
 .hf-check-box .hf-check-box__mark { display: none; width: 10px; height: 8px; }
-.hf-check:hover .hf-check-box,
-.hf-radio:hover .hf-radio-box { border-color: var(--primary-default); }
-.hf-check input:checked + .hf-check-box,
+.hf-check:hover .hf-check-box { border-color: var(--primary-default); }
+.hf-radio-box {
+  position: relative; width: 18px; height: 18px; flex-shrink: 0;
+  border: 0; background: transparent; border-radius: 0;
+}
+.hf-radio-box img {
+  display: block; width: 18px; height: 18px;
+  position: absolute; inset: 0;
+}
+.hf-radio-box__on { opacity: 0; }
+.hf-radio input:checked + .hf-radio-box .hf-radio-box__off { opacity: 0; }
+.hf-radio input:checked + .hf-radio-box .hf-radio-box__on { opacity: 1; }
+.hf-check input:checked + .hf-check-box {
+  background: var(--primary-default); border-color: var(--primary-default);
+}
+.hf-check input:checked + .hf-check-box .hf-check-box__mark { display: block; }
 .hf-check input:indeterminate + .hf-check-box {
   background: var(--primary-subtle); border-color: var(--primary-default);
 }
-.hf-check input:checked + .hf-check-box .hf-check-box__mark { display: block; }
 .hf-check input:indeterminate + .hf-check-box::after {
   content: ""; width: 10px; height: 2px; border-radius: 1px; background: var(--primary-default);
-}
-.hf-radio-box { border-radius: 50%; }
-.hf-radio input:checked + .hf-radio-box {
-  border-color: var(--primary-default); background: var(--primary-subtle);
-}
-.hf-radio input:checked + .hf-radio-box::after {
-  content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--primary-default);
 }
 
 /* Borda por inset shadow: no Figma o stroke é interno e não empurra a largura. */
@@ -638,10 +643,22 @@
   font-size: 14px; font-weight: 500; line-height: 1.45; color: var(--text-primary);
   box-sizing: border-box;
 }
+.hf-toast--success {
+  background: var(--success-subtle); font-weight: 400; color: var(--success);
+  box-shadow: inset 0 0 0 1px var(--success),
+    0 10px 8px rgba(0, 0, 0, 0.1), 0 4px 3px rgba(0, 0, 0, 0.1);
+}
+.hf-toast--error {
+  background: var(--error-subtle); font-weight: 400; color: var(--error-dark);
+  box-shadow: inset 0 0 0 1px var(--error),
+    0 10px 8px rgba(0, 0, 0, 0.1), 0 4px 3px rgba(0, 0, 0, 0.1);
+}
 .hf-toast__ico {
   display: grid; place-items: center; width: 20px; height: 20px; border-radius: 11px;
   background: var(--primary-default); flex-shrink: 0; color: #fff;
 }
+.hf-toast--success .hf-toast__ico { width: 22px; height: 22px; background: #99ebe0; color: var(--primary-hover); }
+.hf-toast--error .hf-toast__ico { width: 22px; height: 22px; background: var(--error-200); color: var(--error); }
 .hf-toast__ico .hf-icon { width: 16px; height: 16px; display: block; }
 .hf-toast__msg { flex: 1; min-width: 0; }
 .hf-toast__close {
@@ -650,6 +667,8 @@
   background: var(--background-subtle); padding: 0; cursor: pointer; flex-shrink: 0;
   display: grid; place-items: center; color: var(--text-primary);
 }
+.hf-toast--success .hf-toast__close,
+.hf-toast--error .hf-toast__close { position: static; }
 .hf-toast__close .hf-icon { width: 10px; height: 10px; display: block; }
 
 /* Tooltip — Figma 200:12. Largura fixa 212, padding 8, texto 12/1.5. */
