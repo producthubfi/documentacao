@@ -67,11 +67,36 @@
     );
   }
 
-  function tblSort(label) {
+  function tblSort(label, sortable) {
+    if (sortable === false) {
+      return '<span class="hf-sort hf-sort--plain">' + label + "</span>";
+    }
     return (
       '<button class="hf-sort" type="button">' +
       label +
       '<img src="assets/icons/tbl-sort.svg" alt=""></button>'
+    );
+  }
+
+  function tblText(text, withIcon) {
+    if (withIcon) {
+      return (
+        '<span class="hf-cell hf-cell--text"><i class="hf-cell__ico" aria-hidden="true"></i>' +
+        '<span class="hf-cell__text">' +
+        text +
+        "</span></span>"
+      );
+    }
+    return '<span class="hf-cell__text">' + text + "</span>";
+  }
+
+  function tblStatus(variant, label) {
+    return (
+      '<span class="hf-tbl-status hf-tbl-status--' +
+      variant +
+      '"><i class="hf-tbl-status__dot" aria-hidden="true"></i>' +
+      label +
+      "</span>"
     );
   }
 
@@ -87,12 +112,20 @@
   }
 
   function tblContact(phone, email) {
+    var lines = "";
+    if (phone) {
+      lines += '<span class="hf-cell__line"><i></i>' + phone + "</span>";
+    }
+    if (email) {
+      lines += '<span class="hf-cell__line"><i></i>' + email + "</span>";
+    }
+    var one = !(phone && email);
     return (
-      '<div class="hf-cell hf-cell--contact"><span class="hf-cell__line"><i></i>' +
-      phone +
-      '</span><span class="hf-cell__line"><i></i>' +
-      email +
-      "</span></div>"
+      '<div class="hf-cell hf-cell--contact' +
+      (one ? " hf-cell--contact-one" : "") +
+      '">' +
+      lines +
+      "</div>"
     );
   }
 
@@ -193,18 +226,19 @@
       tblSort("Último acesso") +
       "</th><th>" +
       tblSort("Coluna") +
-      "</th></tr></thead>"
+      '</th><th class="hf-table__act-col"></th></tr></thead>'
     );
   }
 
   function usersTable() {
     var rows = [
       ["testinhonildo@gmail.com QA", "Convidado da Empresa", "11999998888", "testinhonildo@gmail.com", "Tech Finance", "21/07/2026 17:51", "Nunca acessou"],
+      ["T", "Convidado da Empresa", "+5511999999999", "t@t.com", "Tech Finance", "21/07/2026 17:50", "Nunca acessou"],
       ["Marina Spíndola", "Administrador da Empresa", "(81) 99115-6938", "marinaspindola@gmail.com", "Barão Select", "20/07/2026 14:29", "Nunca acessou"],
       ["Teste 2", "Personal Finance", "(81) 99999-9999", "teste2@email.com", "Tech Finance", "02/07/2026 10:15", "Nunca acessou"],
       ["João Victor", "Administrador da Empresa", "(81) 99757-1429", "joao.leao@empreenderdinheiro.com.br", "Tech Finance", "25/06/2026 15:24", "21/07/2026 17:35"],
       ["Lucas Andrade", "Administrador da Empresa", "(81) 99815-4710", "lab@empreenderdinheiro.com.br", "Tech Finance", "25/06/2026 15:24", "25/06/2026 15:28"],
-      ["Maurício Personal", "Personal Finance", "(81) 98593-9388", "jmauricolim39@gmail.com", "Tech Finance", "20/04/2026 14:58", "23/07/2026 15:22"],
+      ["Maurício Personal", "Personal Finance", "(81) 98593-9388", "jmauriciolm38@gmail.com", "Tech Finance", "20/04/2026 14:58", "23/07/2026 15:22"],
     ];
     var body = rows
       .map(function (r) {
@@ -214,12 +248,14 @@
           "</td><td>" +
           tblContact(r[2], r[3]) +
           "</td><td>" +
-          tblCompany(r[4], "Subtítulo") +
-          '</td><td><span class="hf-cell__text">' +
-          r[5] +
-          '</span></td><td><span class="hf-cell__text">' +
-          r[6] +
-          "</span></td><td>" +
+          tblText(r[4]) +
+          "</td><td>" +
+          tblText(r[5]) +
+          "</td><td>" +
+          tblText(r[6]) +
+          "</td><td>" +
+          tblText("Conteúdo") +
+          '</td><td class="hf-table__act-col">' +
           tblAct() +
           "</td></tr>"
         );
@@ -2049,25 +2085,35 @@
     },
     table: {
       title: "Table",
-      lead: "Células Avatar, Text, Contact, Header, Action, Status, Empresa, Tendência e Banco. Tabela completa com busca, empty state e paginação.",
+      lead: "Células Avatar, Text, Contact, Header, Action e Status Badge. Tabela completa com busca, empty state e paginação. Empresa, Tendência e Banco são células extras.",
       node: "119-709",
       html: function () {
         return (
-          card("Células", "Átomos da Table, inclusive Empresa, Tendência e Banco.", preview(
-            cell("Avatar + subtítulo", tblUser("Marina Spíndola", "Administrador da Empresa")) +
-            cell("Avatar", tblUser("Newart", "")) +
-            cell("Text", '<span class="hf-cell__text">Tech Finance</span>') +
-            cell("Contact", tblContact("(81) 99115-6938", "marinaspindola@gmail.com")) +
-            cell("Header sortable", tblSort("Usuário")) +
+          card("Partes de componentes", "Átomos da Table no Figma: Avatar, Text, Contact, Header, Action e Status Badge.", preview(
+            cell("Avatar + subtítulo", tblUser("Nome do Usuário", "Cargo ou função")) +
+            cell("Avatar", tblUser("Nome do Usuário", "")) +
+            cell("Text", tblText("Conteúdo da célula")) +
+            cell("Text + ícone", tblText("Conteúdo da célula", true)) +
+            cell("Contact 2 linhas", tblContact("(00) 00000-0000", "email@exemplo.com")) +
+            cell("Contact 1 linha", tblContact("", "email@exemplo.com")) +
+            cell("Header sortable", tblSort("Coluna")) +
+            cell("Header", tblSort("Coluna", false)) +
             cell("Action icon", tblAct()) +
             cell("Action text", tblAct("text")) +
             cell("Action icon+text", tblAct("icon-text")) +
-            cell("Status", badge("primary", "Pendente") + badge("success", "Ativo") + badge("warning", "Erro") + badge("alert", "Atenção") + badge("secondary", "Neutro")) +
+            cell("Status Badge", '<div class="hf-tbl-status-row">' +
+              tblStatus("neutral", "Pendente") +
+              tblStatus("success", "Ativo") +
+              tblStatus("error", "Inativo") +
+              tblStatus("warning", "Alerta") +
+              "</div>")
+          )) +
+          card("Células extras", "Empresa, Tendência e Banco — não entram na tabela Default de usuários.", preview(
             cell("Empresa", tblCompany("Nome da Empresa", "Subtítulo")) +
             cell("Tendência", tblTrend("3.742", "+8%", "Descrição")) +
             cell("Banco", tblBank("Nome do Banco", "Descrição"))
           )) +
-          card("Componente completo", "Busca fora da tabela, cabeçalho, linhas e paginação.", preview(usersTable(), "docs-preview--stack")) +
+          card("Componente completo", "Busca fora da tabela, 6 colunas ordenáveis, texto na Empresa, coluna Conteúdo e ação sem header.", preview(usersTable(), "docs-preview--stack")) +
           card("Empty state", "Nenhum resultado encontrado, com ação para limpar filtros.", preview(tableEmpty(), "docs-preview--stack")) +
           card("Exemplo de uso", "Listagem de usuários da plataforma.", preview(usersTable(), "docs-preview--stack"))
         );

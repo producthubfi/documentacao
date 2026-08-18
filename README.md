@@ -21,7 +21,7 @@ Tokens em `css/tokens.css`. Componentes em `css/hf.css`. Docs em `css/docs.css` 
 ### Sync recente (Figma → código)
 
 - **Badge** — tamanho `small` (20px, 10px Medium) além do default 26px. Cores de success e alert nos tokens (`--primary-50` / `--warning-subtle`).
-- **Table** — empty state (“Nenhum resultado encontrado”), células Empresa, Tendência e Banco, ação em ícone / texto / ícone+texto, busca fora da tabela e paginação com ícones.
+- **Table** — átomos alinhados ao Figma (Avatar, Text ± ícone, Contact 1/2 linhas, Header ± sort, Action, Status Badge). Tabela Default com 6 colunas + ação, Empresa como texto, coluna “Conteúdo”, empty state e paginação.
 
 Ver `/#/badge` e `/#/table`.
 

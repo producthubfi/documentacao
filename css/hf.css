@@ -1438,6 +1438,9 @@
   width: 576px; max-width: calc(100% - 66px); min-width: 250px;
   border-radius: 8px;
 }
+.hf-table-toolbar .hf-search__field {
+  font-size: 16px; line-height: 1.5; height: auto;
+}
 .hf-table-toolbar__filter {
   display: grid; place-items: center; width: 50px; height: 40px; flex-shrink: 0;
   padding: 8px 16px; box-sizing: border-box;
@@ -1448,7 +1451,7 @@
 .hf-table-toolbar__filter img { display: block; width: 16px; height: 16px; }
 .hf-table-body {
   width: 100%; background: var(--background-default);
-  border: 1px solid var(--border-default); border-radius: 8px; overflow: hidden;
+  border: 1px solid var(--border-default); border-radius: 8px; overflow-x: auto;
 }
 
 /* Células */
@@ -1459,15 +1462,19 @@
 }
 .hf-cell__sub { display: block; font-size: 12px; font-weight: 400; line-height: 1.5; color: var(--text-primary); }
 .hf-cell__hint { display: block; font-size: 12px; font-weight: 400; line-height: 1.5; color: var(--text-secondary); }
-.hf-cell__text { font-size: 14px; font-weight: 400; line-height: 1.45; color: var(--text-primary); }
+.hf-cell__text { font-size: 14px; font-weight: 400; line-height: 1.45; color: var(--text-primary); white-space: nowrap; }
+.hf-cell--text { gap: 6px; }
+.hf-cell__ico,
+.hf-cell__line i {
+  display: block; width: 16px; height: 16px; flex-shrink: 0;
+  border-radius: 4px; background: var(--text-secondary);
+}
 .hf-cell--contact { flex-direction: column; align-items: flex-start; gap: 4px; }
+.hf-cell--contact-one { flex-direction: row; align-items: center; }
 .hf-cell__line {
   display: flex; align-items: center; gap: 4px;
   font-size: 12px; font-weight: 400; line-height: 1.5; color: var(--text-primary);
-}
-.hf-cell__line i {
-  width: 16px; height: 16px; flex-shrink: 0;
-  border-radius: 4px; background: var(--text-secondary);
+  white-space: nowrap;
 }
 .hf-cell--company { flex-direction: column; align-items: flex-start; gap: 2px; }
 .hf-cell--trend { flex-direction: column; align-items: flex-start; gap: 4px; }
@@ -1481,10 +1488,14 @@
   font-family: var(--hf-font); font-size: 14px; font-weight: 500;
   line-height: 1.45; color: var(--neutral-600); border-radius: 8px;
 }
+.hf-sort--plain { cursor: default; }
 .hf-sort img { display: block; width: 16px; height: 16px; }
+.hf-table__act-col {
+  width: 32px; padding-left: 0; padding-right: 16px; text-align: center;
+}
 .hf-table__act {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 32px; height: 32px; margin-left: auto;
+  width: 32px; height: 32px;
   padding: 0; border: 0; border-radius: 8px; background: none; cursor: pointer;
   font-family: var(--hf-font); font-size: 14px; font-weight: 500;
   line-height: 1.45; color: var(--text-primary);
@@ -1502,6 +1513,24 @@
   background: var(--text-secondary);
 }
 .hf-table__actions { text-align: right; }
+
+/* Table/Cell/Status Badge — Figma 609:3055. Fundo sempre subtle; cor no dot e no texto. */
+.hf-tbl-status {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px; border-radius: 100px;
+  background: var(--background-subtle);
+  font-size: 12px; font-weight: 600; line-height: 1.5;
+  color: var(--text-muted); white-space: nowrap;
+}
+.hf-tbl-status__dot {
+  width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+  background: currentColor;
+}
+.hf-tbl-status--neutral { color: var(--text-muted); }
+.hf-tbl-status--success { color: var(--success); }
+.hf-tbl-status--error { color: var(--error); }
+.hf-tbl-status--warning { color: var(--warning); }
+.hf-tbl-status-row { display: flex; flex-wrap: wrap; align-items: center; gap: 24px; }
 
 .hf-table-empty {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
