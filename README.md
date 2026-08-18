@@ -18,6 +18,13 @@ Search, Input, Textarea, Select, Checkbox, Radio, Switch, Label, Upload, Button,
 
 Tokens em `css/tokens.css`. Componentes em `css/hf.css`. Docs em `css/docs.css` + `js/catalog.js`.
 
+### Sync recente (Figma → código)
+
+- **Badge** — tamanho `small` (20px, 10px Medium) além do default 26px. Cores de success e alert nos tokens (`--primary-50` / `--warning-subtle`).
+- **Table** — empty state (“Nenhum resultado encontrado”), células Empresa, Tendência e Banco, ação em ícone / texto / ícone+texto, busca fora da tabela e paginação com ícones.
+
+Ver `/#/badge` e `/#/table`.
+
 ## Conta Figma usada
 
 `lucasaugusto@hubfi.com.br` (time Hubfi, seat Full).
