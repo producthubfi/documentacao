@@ -791,6 +791,28 @@
       pctCell("Máximo", "200 dias") +
       "</div></div></section>";
 
+    function pieSeg(file, inset) {
+      return (
+        '<img class="docs-dash-pie__seg" src="assets/screen/dash/' +
+        file +
+        '" alt="" style="inset:' +
+        inset +
+        '">'
+      );
+    }
+
+    function pieChart(mod, segs, inner) {
+      return (
+        '<div class="docs-dash-pie' +
+        (mod ? " " + mod : "") +
+        '">' +
+        segs +
+        '<div class="docs-dash-pie__label">' +
+        inner +
+        "</div></div>"
+      );
+    }
+
     function legendRow(color, label, pct) {
       return (
         '<div class="docs-dash-legend-list__row">' +
@@ -806,12 +828,19 @@
     }
 
     var perda =
-      '<section class="docs-dash-card">' +
+      '<section class="docs-dash-card docs-dash-card--chart">' +
       '<div class="docs-dash-card__copy"><h2 class="docs-dash-card__title">Motivos de perda</h2>' +
       '<p class="docs-dash-card__hint">Top 5 · % sobre o total de operações perdidas no período</p></div>' +
       '<div class="docs-dash-chart">' +
-      '<div class="docs-dash-donut" style="--p1:34%;--p2:61%;--p3:79%;--p4:92%">' +
-      '<div class="docs-dash-donut__label"><strong>848</strong><span>perdidas</span></div></div>' +
+      pieChart(
+        "",
+        pieSeg("perda-1.svg", "0.17% 0 25.6% 51.34%") +
+          pieSeg("perda-2.svg", "71.29% 9.7% 0 20.48%") +
+          pieSeg("perda-3.svg", "39.73% 74.9% 13.62% 0") +
+          pieSeg("perda-4.svg", "7.97% 69.34% 60.75% 2.65%") +
+          pieSeg("perda-5.svg", "0.17% 51.34% 82.95% 28.29%"),
+        "<strong>848</strong><span>perdidas</span>"
+      ) +
       '<div class="docs-dash-legend-list">' +
       legendRow("#de3535", "Renda insuficiente", "34%") +
       legendRow("#e7b008", "Desistência do cliente", "27%") +
@@ -836,21 +865,26 @@
     }
 
     var probabilidade =
-      '<section class="docs-dash-card">' +
+      '<section class="docs-dash-card docs-dash-card--chart">' +
       '<div class="docs-dash-card__copy"><h2 class="docs-dash-card__title">Probabilidade de fechamento</h2>' +
       '<p class="docs-dash-card__hint">Distribuição por faixa · sem ponderação</p></div>' +
       '<div class="docs-dash-chart">' +
-      '<div class="docs-dash-donut docs-dash-donut--prob">' +
-      '<div class="docs-dash-donut__label"><strong>1.240</strong><span>operações</span></div></div>' +
+      pieChart(
+        "",
+        pieSeg("prob-1.svg", "0.17% 8.08% 69.47% 51.34%") +
+          pieSeg("prob-2.svg", "28.12% 0 0 49.73%") +
+          pieSeg("prob-3.svg", "0.17% 51.34% 0.37% 0"),
+        "<strong>1.240</strong><span>operações</span>"
+      ) +
       '<div class="docs-dash-prob">' +
       probItem("321", "success", "Alta", "R$ 2.000.000,00") +
       probItem("221", "alert", "Média", "R$ 1.000.000,00") +
       probItem("121", "warning", "Baixa", "R$ 500.000,00") +
       "</div></div></section>";
 
-    function rateCard(title, hint, pct, a, b) {
+    function rateCard(title, hint, pct, aFile, bFile, a, b) {
       return (
-        '<section class="docs-dash-card">' +
+        '<section class="docs-dash-card docs-dash-card--chart">' +
         '<div class="docs-dash-card__copy"><h2 class="docs-dash-card__title">' +
         title +
         "</h2>" +
@@ -858,15 +892,14 @@
         hint +
         "</p></div>" +
         '<div class="docs-dash-chart docs-dash-chart--pair">' +
-        '<div class="docs-dash-donut docs-dash-donut--sm docs-dash-donut--duo" style="--p:' +
-        pct +
-        '%">' +
-        '<div class="docs-dash-donut__label"><strong class="is-info">' +
-        pct +
-        "%</strong></div></div>" +
+        pieChart(
+          "docs-dash-pie--sm",
+          pieSeg(aFile, "0.18% 0 0 16.09%") + pieSeg(bFile, "0.45% 53.26% 17.94% 0"),
+          '<strong class="is-info">' + pct + "%</strong>"
+        ) +
         '<div class="docs-dash-legend-list docs-dash-legend-list--short">' +
-        legendRow("var(--primary-default)", a, "") +
-        legendRow("var(--info)", b, "") +
+        legendRow("#00a395", a, "") +
+        legendRow("#5e8fe8", b, "") +
         "</div></div></section>"
       );
     }
@@ -897,6 +930,8 @@
         "Conversão simulação para operação",
         "Operações abertas a partir de simulação",
         "42",
+        "sim-a.svg",
+        "sim-b.svg",
         "1000 simulações",
         "840 operações"
       ) +
@@ -904,6 +939,8 @@
         "Clientes recorrentes",
         "Texto de apoio",
         "12",
+        "rec-a.svg",
+        "rec-b.svg",
         "1000 clientes",
         "31 recorrências"
       ) +
