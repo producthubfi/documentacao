@@ -469,6 +469,10 @@
   font-size: 12px; font-weight: 500; line-height: 1.5; white-space: nowrap;
   box-sizing: border-box;
 }
+.hf-badge--sm {
+  height: 20px; min-height: 20px; padding: 2px 6px; gap: 2px;
+  font-size: 10px; line-height: 1.2;
+}
 .hf-badge__ico {
   position: relative; width: 12px; height: 12px; overflow: hidden; flex-shrink: 0;
 }
@@ -477,11 +481,12 @@
   max-width: none; display: block;
 }
 .hf-badge--dot { width: 20px; height: 20px; padding: 0; min-width: 20px; min-height: 20px; border-radius: 999px; }
+.hf-badge--sm.hf-badge--dot { padding: 2px; }
 .hf-badge--primary { background: var(--primary-default); color: #fff; }
 .hf-badge--secondary { background: var(--background-subtle); color: var(--text-primary); }
 .hf-badge--warning { background: var(--error-50); border: 1px solid var(--error-200); color: var(--error); }
-.hf-badge--alert { background: rgba(231, 176, 8, 0.1); border: 1px solid rgba(231, 176, 8, 0.4); color: #e7b008; }
-.hf-badge--success { background: rgba(13, 175, 159, 0.1); border: 1px solid rgba(13, 175, 159, 0.4); color: #0daf9f; }
+.hf-badge--alert { background: var(--warning-subtle); border: 1px solid var(--warning-200); color: var(--warning); }
+.hf-badge--success { background: var(--primary-50); border: 1px solid var(--primary-400); color: var(--primary-default); }
 .hf-badge--outline { border: 1px solid var(--border-default); color: var(--text-primary); }
 .hf-badge--information { background: var(--info-50); border: 1px solid var(--info-200); color: var(--info); }
 
@@ -699,12 +704,14 @@
   border: 1px solid var(--border-default);
   background: #fff; border-radius: 8px; font-family: var(--hf-font);
   font-size: 14px; font-weight: 500; cursor: pointer; color: var(--text-primary);
+  display: inline-grid; place-items: center;
 }
 .hf-pager button.is-current { background: var(--primary-default); border-color: var(--primary-default); color: #fff; }
-/* Paginação só com setas, usada no rodapé da Table. */
-.hf-pager--arrows button { border: 0; background: none; color: var(--text-secondary); }
+/* Paginação só com setas, usada no rodapé da Table. Figma 791:1364. */
+.hf-pager--arrows { gap: 8px; }
 .hf-pager--arrows button:hover:not(:disabled) { background: var(--background-subtle); }
-.hf-pager--arrows button:disabled { opacity: 0.4; cursor: default; }
+.hf-pager--arrows button:disabled { opacity: 0.5; cursor: default; }
+.hf-pager--arrows img { display: block; width: 16px; height: 16px; }
 
 /* Dropdown Menu — Figma 294:2376. 200×209. */
 .hf-dropdown {
@@ -1421,20 +1428,28 @@
 }
 
 .hf-table-wrap {
-  width: 100%; background: var(--background-default);
-  box-shadow: inset 0 0 0 1px var(--border-default);
-  border-radius: 12px; overflow: hidden;
+  width: 100%; display: flex; flex-direction: column; gap: 16px;
+  background: transparent; overflow: visible;
 }
 .hf-table-toolbar {
-  display: flex; align-items: center; gap: 16px; padding: 12px 16px;
-  border-bottom: 1px solid var(--border-default);
+  display: flex; align-items: flex-end; gap: 16px; padding: 0; border: 0;
 }
-.hf-table-toolbar .hf-search { flex: 1; min-width: 0; }
+.hf-table-toolbar .hf-search {
+  width: 576px; max-width: calc(100% - 66px); min-width: 250px;
+  border-radius: 8px;
+}
 .hf-table-toolbar__filter {
-  display: grid; place-items: center; width: 40px; height: 40px; flex-shrink: 0;
-  padding: 0; border: 0; border-radius: 8px; background: none; cursor: pointer;
+  display: grid; place-items: center; width: 50px; height: 40px; flex-shrink: 0;
+  padding: 8px 16px; box-sizing: border-box;
+  border: 1px solid var(--border-default); border-radius: 8px;
+  background: var(--background-default); cursor: pointer;
 }
 .hf-table-toolbar__filter:hover { background: var(--background-subtle); }
+.hf-table-toolbar__filter img { display: block; width: 16px; height: 16px; }
+.hf-table-body {
+  width: 100%; background: var(--background-default);
+  border: 1px solid var(--border-default); border-radius: 8px; overflow: hidden;
+}
 
 /* Células */
 .hf-cell { display: flex; align-items: center; gap: 8px; }
@@ -1443,44 +1458,84 @@
   font-size: 14px; font-weight: 500; line-height: 1.45; color: var(--text-primary);
 }
 .hf-cell__sub { display: block; font-size: 12px; font-weight: 400; line-height: 1.5; color: var(--text-primary); }
+.hf-cell__hint { display: block; font-size: 12px; font-weight: 400; line-height: 1.5; color: var(--text-secondary); }
 .hf-cell__text { font-size: 14px; font-weight: 400; line-height: 1.45; color: var(--text-primary); }
-.hf-cell--contact { flex-direction: column; align-items: flex-start; gap: 6px; }
+.hf-cell--contact { flex-direction: column; align-items: flex-start; gap: 4px; }
 .hf-cell__line {
-  display: flex; align-items: center; gap: 6px;
+  display: flex; align-items: center; gap: 4px;
   font-size: 12px; font-weight: 400; line-height: 1.5; color: var(--text-primary);
 }
 .hf-cell__line i {
   width: 16px; height: 16px; flex-shrink: 0;
   border-radius: 4px; background: var(--text-secondary);
 }
+.hf-cell--company { flex-direction: column; align-items: flex-start; gap: 2px; }
+.hf-cell--trend { flex-direction: column; align-items: flex-start; gap: 4px; }
+.hf-cell--trend__row { display: flex; align-items: center; gap: 6px; }
+.hf-cell--bank { flex-direction: column; align-items: flex-start; gap: 4px; }
+.hf-cell--bank__row { display: flex; align-items: center; gap: 8px; overflow: hidden; }
+.hf-cell--bank__ico { display: block; width: 24px; height: 24px; flex-shrink: 0; }
 .hf-sort {
   display: inline-flex; align-items: center; gap: 4px;
-  padding: 0; border: 0; background: none; cursor: pointer;
+  padding: 8px 4px; border: 0; background: none; cursor: pointer;
   font-family: var(--hf-font); font-size: 14px; font-weight: 500;
-  line-height: 1.45; color: var(--text-primary);
+  line-height: 1.45; color: var(--neutral-600); border-radius: 8px;
 }
 .hf-sort img { display: block; width: 16px; height: 16px; }
 .hf-table__act {
-  display: grid; place-items: center; width: 32px; height: 32px; margin-left: auto;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; margin-left: auto;
   padding: 0; border: 0; border-radius: 8px; background: none; cursor: pointer;
+  font-family: var(--hf-font); font-size: 14px; font-weight: 500;
+  line-height: 1.45; color: var(--text-primary);
 }
 .hf-table__act:hover { background: var(--background-subtle); }
 .hf-table__act img { display: block; width: 4px; height: 16px; }
+.hf-table__act--text,
+.hf-table__act--icon-text {
+  width: auto; height: 34px; padding: 6px 12px;
+  border: 1px solid var(--border-default); background: var(--background-default);
+}
+.hf-table__act--icon-text { gap: 6px; }
+.hf-table__act-ico {
+  width: 16px; height: 16px; border-radius: 4px; flex-shrink: 0;
+  background: var(--text-secondary);
+}
 .hf-table__actions { text-align: right; }
 
-/* Rodapé com itens por página e paginação */
+.hf-table-empty {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 24px; min-height: 400px; padding: 48px 24px; text-align: center; box-sizing: border-box;
+}
+.hf-table-empty__icon {
+  display: grid; place-items: center; width: 80px; height: 80px; flex-shrink: 0;
+  border-radius: 40px; background: var(--background-subtle);
+}
+.hf-table-empty__icon img { display: block; width: 40px; height: 40px; }
+.hf-table-empty__copy {
+  display: flex; flex-direction: column; gap: 8px; width: 480px; max-width: 100%;
+}
+.hf-table-empty__title {
+  margin: 0; font-size: 24px; font-weight: 500; line-height: 1.32; color: var(--text-primary);
+}
+.hf-table-empty__desc {
+  margin: 0; font-size: 16px; font-weight: 400; line-height: 1.5; color: var(--text-secondary);
+}
+
+/* Rodapé com itens por página e paginação — Figma 607:514 / 791:1353. */
 .hf-table-foot {
-  display: flex; align-items: center; gap: 24px;
-  padding: 12px 16px; border-top: 1px solid var(--border-default);
-  font-size: 12px; font-weight: 400; color: var(--text-primary);
+  display: flex; align-items: center; justify-content: center; gap: 24px;
+  padding: 0; border: 0;
+  font-size: 14px; font-weight: 500; line-height: 1.45; color: var(--text-primary);
 }
 .hf-table-foot__group { display: flex; align-items: center; gap: 8px; }
 .hf-table-foot__select {
-  display: inline-flex; align-items: center; gap: 8px;
-  height: 32px; padding: 0 8px; border-radius: 8px;
-  box-shadow: inset 0 0 0 1px var(--border-default);
+  display: inline-flex; align-items: center; justify-content: space-between;
+  width: 70px; height: 32px; padding: 8px 12px; box-sizing: border-box;
+  border-radius: 8px; border: 1px solid var(--border-default);
+  font-weight: 400;
 }
-.hf-table-foot__select img { display: block; width: 12px; height: 7px; }
+.hf-table-foot__select img { display: block; width: 16px; height: 16px; }
 
 /* Card File — Figma 571:737. 284×50, padding 9. O cartão é branco; o estado
    vive no selo de 24px. Ícones pintados via máscara para herdar os tokens. */

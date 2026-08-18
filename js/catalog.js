@@ -44,10 +44,10 @@
     );
   }
 
-  function searchField(value) {
+  function searchField(value, placeholder) {
     var extra = value
       ? ' value="' + value + '"'
-      : ' placeholder="Procurar por clientes..."';
+      : ' placeholder="' + (placeholder || "Procurar por clientes...") + '"';
     return (
       '<label class="hf-search"><span class="hf-search__icon" aria-hidden="true"><img src="' +
       ICON +
@@ -96,6 +96,107 @@
     );
   }
 
+  function tblCompany(name, sub) {
+    return (
+      '<div class="hf-cell hf-cell--company"><span class="hf-cell__name">' +
+      name +
+      '</span><span class="hf-cell__hint">' +
+      sub +
+      "</span></div>"
+    );
+  }
+
+  function tblTrend(value, pct, desc) {
+    return (
+      '<div class="hf-cell hf-cell--trend"><span class="hf-cell--trend__row"><span class="hf-cell__name">' +
+      value +
+      "</span>" +
+      badge("success", pct, true) +
+      '</span><span class="hf-cell__hint">' +
+      desc +
+      "</span></div>"
+    );
+  }
+
+  function tblBank(name, desc) {
+    return (
+      '<div class="hf-cell hf-cell--bank"><span class="hf-cell--bank__row"><img class="hf-cell--bank__ico" src="assets/icons/tbl-bank.svg" width="24" height="24" alt="">' +
+      '<span class="hf-cell__name">' +
+      name +
+      '</span></span><span class="hf-cell__hint">' +
+      desc +
+      "</span></div>"
+    );
+  }
+
+  function tblAct(style) {
+    if (style === "text") {
+      return '<button class="hf-table__act hf-table__act--text" type="button">Ação</button>';
+    }
+    if (style === "icon-text") {
+      return '<button class="hf-table__act hf-table__act--icon-text" type="button"><i class="hf-table__act-ico" aria-hidden="true"></i>Ação</button>';
+    }
+    return '<button class="hf-table__act" type="button" aria-label="Mais ações"><img src="assets/icons/tbl-dots.svg" alt=""></button>';
+  }
+
+  function tblPagerBtn(name, label, disabled) {
+    return (
+      '<button type="button"' +
+      (disabled ? " disabled" : "") +
+      ' aria-label="' +
+      label +
+      '"><img src="assets/icons/tbl-page-' +
+      name +
+      '.svg" width="16" height="16" alt=""></button>'
+    );
+  }
+
+  function tblToolbar(placeholder) {
+    return (
+      '<div class="hf-table-toolbar">' +
+      searchField("", placeholder || "Procurar por usuários...") +
+      '<button class="hf-table-toolbar__filter" type="button" aria-label="Filtrar"><img src="assets/icons/tbl-filter.svg" width="16" height="16" alt=""></button></div>'
+    );
+  }
+
+  function tblFoot(page, pages, perPage) {
+    var empty = pages === 0;
+    return (
+      '<div class="hf-table-foot"><span class="hf-table-foot__group">Itens por página' +
+      '<span class="hf-table-foot__select">' +
+      perPage +
+      '<img src="assets/icons/select-chevron-16.svg" alt=""></span></span>' +
+      '<span class="hf-table-foot__group">Página ' +
+      page +
+      " de " +
+      pages +
+      '<span class="hf-pager hf-pager--arrows">' +
+      tblPagerBtn("first", "Primeira", empty || page <= 1) +
+      tblPagerBtn("prev", "Anterior", empty || page <= 1) +
+      tblPagerBtn("next", "Próxima", empty || page >= pages) +
+      tblPagerBtn("last", "Última", empty || page >= pages) +
+      "</span></span></div>"
+    );
+  }
+
+  function tblHead() {
+    return (
+      "<thead><tr><th>" +
+      tblSort("Usuário") +
+      "</th><th>" +
+      tblSort("Contato") +
+      "</th><th>" +
+      tblSort("Empresa") +
+      "</th><th>" +
+      tblSort("Data de criação") +
+      "</th><th>" +
+      tblSort("Último acesso") +
+      "</th><th>" +
+      tblSort("Coluna") +
+      "</th></tr></thead>"
+    );
+  }
+
   function usersTable() {
     var rows = [
       ["testinhonildo@gmail.com QA", "Convidado da Empresa", "11999998888", "testinhonildo@gmail.com", "Tech Finance", "21/07/2026 17:51", "Nunca acessou"],
@@ -112,40 +213,44 @@
           tblUser(r[0], r[1]) +
           "</td><td>" +
           tblContact(r[2], r[3]) +
+          "</td><td>" +
+          tblCompany(r[4], "Subtítulo") +
           '</td><td><span class="hf-cell__text">' +
-          r[4] +
-          '</span></td><td><span class="hf-cell__text">' +
           r[5] +
           '</span></td><td><span class="hf-cell__text">' +
           r[6] +
-          '</span></td><td class="hf-table__actions"><button class="hf-table__act" type="button" aria-label="Mais ações"><img src="assets/icons/tbl-dots.svg" alt=""></button></td></tr>'
+          "</span></td><td>" +
+          tblAct() +
+          "</td></tr>"
         );
       })
       .join("");
     return (
-      '<div class="hf-table-wrap"><div class="hf-table-toolbar">' +
-      searchField() +
-      '<button class="hf-table-toolbar__filter" type="button" aria-label="Filtrar"><img src="assets/icons/tbl-filter.svg" width="20" height="20" alt=""></button>' +
-      '</div><table class="hf-table"><thead><tr><th>' +
-      tblSort("Usuário") +
-      "</th><th>" +
-      tblSort("Contato") +
-      "</th><th>" +
-      tblSort("Empresa") +
-      "</th><th>" +
-      tblSort("Data de criação") +
-      "</th><th>" +
-      tblSort("Último acesso") +
-      '</th><th></th></tr></thead><tbody>' +
+      '<div class="hf-table-wrap">' +
+      tblToolbar() +
+      '<div class="hf-table-body"><table class="hf-table">' +
+      tblHead() +
+      "<tbody>" +
       body +
-      '</tbody></table><div class="hf-table-foot">' +
-      '<span class="hf-table-foot__group">Itens por página' +
-      '<span class="hf-table-foot__select">10<img src="assets/icons/select-chevron.svg" alt=""></span></span>' +
-      '<span class="hf-table-foot__group">Página 1 de 78' +
-      '<span class="hf-pager hf-pager--arrows"><button type="button" disabled aria-label="Primeira">«</button>' +
-      '<button type="button" disabled aria-label="Anterior">‹</button>' +
-      '<button type="button" aria-label="Próxima">›</button>' +
-      '<button type="button" aria-label="Última">»</button></span></span></div></div>'
+      "</tbody></table></div>" +
+      tblFoot(1, 78, 10) +
+      "</div>"
+    );
+  }
+
+  function tableEmpty() {
+    return (
+      '<div class="hf-table-wrap">' +
+      tblToolbar() +
+      '<div class="hf-table-body"><table class="hf-table">' +
+      tblHead() +
+      "</table>" +
+      '<div class="hf-table-empty"><span class="hf-table-empty__icon"><img src="assets/icons/tbl-empty.svg" width="40" height="40" alt=""></span>' +
+      '<div class="hf-table-empty__copy"><p class="hf-table-empty__title">Nenhum resultado encontrado</p>' +
+      '<p class="hf-table-empty__desc">Tente ajustar os filtros ou termos de busca para encontrar o que procura.</p></div>' +
+      '<button class="hf-btn hf-btn--lg hf-btn--outline" type="button">Limpar filtros</button></div></div>' +
+      tblFoot(0, 0, 0) +
+      "</div>"
     );
   }
 
@@ -370,14 +475,20 @@
     );
   }
 
-  function badge(type, text, withIcon) {
+  function badge(type, text, withIcon, size) {
+    var sm = size === "sm" || size === "small";
     var ico = withIcon
       ? '<span class="hf-badge__ico"><img src="assets/icons/badge-info-' + type + '.svg" alt=""></span>'
       : "";
+    var cls =
+      "hf-badge hf-badge--" +
+      type +
+      (sm ? " hf-badge--sm" : "") +
+      (text ? "" : " hf-badge--dot");
     if (!text) {
-      return '<span class="hf-badge hf-badge--dot hf-badge--' + type + '"></span>';
+      return '<span class="' + cls + '"></span>';
     }
-    return '<span class="hf-badge hf-badge--' + type + '">' + text + ico + "</span>";
+    return '<span class="' + cls + '">' + text + ico + "</span>";
   }
 
   var SELECT_OPTIONS = [
@@ -1496,17 +1607,19 @@
     },
     badge: {
       title: "Badge",
-      lead: "primary, secondary, warning, alert, success, outline, information. Texto “Badge”. Pill 26px ou dot 20px. Ícone info 12px opcional.",
+      lead: "primary, secondary, warning, alert, success, outline, information. Default 26px ou small 20px. Dot 20px. Ícone info 12px opcional no tamanho default.",
       node: "294-2650",
       html: function () {
         var types = ["primary", "secondary", "warning", "alert", "success", "outline", "information"];
         return (
-          card("Variantes", "", preview(types.map(function (t) { return cell(t, badge(t, "Badge")); }).join(""))) +
-          card("Com ícone", "", preview(types.map(function (t) { return cell(t, badge(t, "Badge", true)); }).join(""))) +
+          card("Variantes", "Tamanho default, 26px.", preview(types.map(function (t) { return cell(t, badge(t, "Badge")); }).join(""))) +
+          card("Small", "Tamanho small, 20px · 10px Medium.", preview(types.map(function (t) { return cell(t, badge(t, "Badge", false, "sm")); }).join(""))) +
+          card("Com ícone", "Ícone só no tamanho default.", preview(types.map(function (t) { return cell(t, badge(t, "Badge", true)); }).join(""))) +
           card("Só indicador", "", preview(types.map(function (t) { return cell(t, badge(t)); }).join(""))) +
           card("Exemplo de uso", "Status do cliente na tabela.", preview(
             '<div class="docs-scene docs-scene--row"><span>Caloi Bike Store</span>' +
             badge("success", "Ativo") +
+            badge("success", "Ativo", false, "sm") +
             "</div>"
           ))
         );
@@ -1936,20 +2049,26 @@
     },
     table: {
       title: "Table",
-      lead: "Células Avatar, Text, Contact, Header, Action Button, Status Badge. Tabela completa com busca e paginação.",
+      lead: "Células Avatar, Text, Contact, Header, Action, Status, Empresa, Tendência e Banco. Tabela completa com busca, empty state e paginação.",
       node: "119-709",
       html: function () {
         return (
-          card("Células", "Átomos da Table.", preview(
+          card("Células", "Átomos da Table, inclusive Empresa, Tendência e Banco.", preview(
             cell("Avatar + subtítulo", tblUser("Marina Spíndola", "Administrador da Empresa")) +
             cell("Avatar", tblUser("Newart", "")) +
             cell("Text", '<span class="hf-cell__text">Tech Finance</span>') +
             cell("Contact", tblContact("(81) 99115-6938", "marinaspindola@gmail.com")) +
             cell("Header sortable", tblSort("Usuário")) +
-            cell("Action", '<button class="hf-table__act" type="button" aria-label="Mais ações"><img src="assets/icons/tbl-dots.svg" alt=""></button>') +
-            cell("Status", badge("success", "Ativo") + badge("warning", "Erro") + badge("alert", "Atenção") + badge("secondary", "Neutro"))
+            cell("Action icon", tblAct()) +
+            cell("Action text", tblAct("text")) +
+            cell("Action icon+text", tblAct("icon-text")) +
+            cell("Status", badge("primary", "Pendente") + badge("success", "Ativo") + badge("warning", "Erro") + badge("alert", "Atenção") + badge("secondary", "Neutro")) +
+            cell("Empresa", tblCompany("Nome da Empresa", "Subtítulo")) +
+            cell("Tendência", tblTrend("3.742", "+8%", "Descrição")) +
+            cell("Banco", tblBank("Nome do Banco", "Descrição"))
           )) +
-          card("Componente completo", "Busca, cabeçalho, linhas e rodapé com paginação.", preview(usersTable(), "docs-preview--stack")) +
+          card("Componente completo", "Busca fora da tabela, cabeçalho, linhas e paginação.", preview(usersTable(), "docs-preview--stack")) +
+          card("Empty state", "Nenhum resultado encontrado, com ação para limpar filtros.", preview(tableEmpty(), "docs-preview--stack")) +
           card("Exemplo de uso", "Listagem de usuários da plataforma.", preview(usersTable(), "docs-preview--stack"))
         );
       },
