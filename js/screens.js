@@ -3,7 +3,7 @@
   if (!catalog) return;
 
   var ui = catalog.ui || {};
-  var FIGMA_OP = "https://www.figma.com/design/LQfnfvRTFm2AZ9qwTWsQEk?node-id=8332-123243";
+  var FIGMA_OP = "https://www.figma.com/design/LQfnfvRTFm2AZ9qwTWsQEk?node-id=8135-36006";
 
   function ico(name, size) {
     return window.hfIcon ? window.hfIcon(name, size || 20) : "";
@@ -559,7 +559,7 @@
       "<li><em>3</em><div><strong>Filtrar pendências</strong><span>Use a busca ou as badges em vermelho</span></div></li>" +
       "<li><em>4</em><div><strong>Completar e salvar</strong><span>Preencha o que faltar e confirme</span></div></li>" +
       "</ol>",
-    node: "8332-123243",
+    node: "8135-36006",
     figmaFile: FIGMA_OP,
     wide: true,
     section: "Telas",
