@@ -791,13 +791,23 @@
       pctCell("Máximo", "200 dias") +
       "</div></div></section>";
 
-    function pieSeg(file, inset) {
+    function pieSeg(file, top, left, width, height) {
       return (
         '<img class="docs-dash-pie__seg" src="assets/screen/dash/' +
         file +
-        '" alt="" style="inset:' +
-        inset +
-        '">'
+        '" alt="" width="' +
+        width +
+        '" height="' +
+        height +
+        '" style="top:' +
+        top +
+        "px;left:" +
+        left +
+        "px;width:" +
+        width +
+        "px;height:" +
+        height +
+        'px">'
       );
     }
 
@@ -834,16 +844,16 @@
       '<div class="docs-dash-chart">' +
       pieChart(
         "",
-        pieSeg("perda-1.svg", "0.17% 0 25.6% 51.34%") +
-          pieSeg("perda-2.svg", "71.29% 9.7% 0 20.48%") +
-          pieSeg("perda-3.svg", "39.73% 74.9% 13.62% 0") +
-          pieSeg("perda-4.svg", "7.97% 69.34% 60.75% 2.65%") +
-          pieSeg("perda-5.svg", "0.17% 51.34% 82.95% 28.29%"),
+        pieSeg("perda-1.svg", 0.28, 84.2, 79.8, 121.75) +
+          pieSeg("perda-2.svg", 116.92, 33.59, 114.5, 47.09) +
+          pieSeg("perda-3.svg", 65.16, 0, 41.16, 76.51) +
+          pieSeg("perda-4.svg", 13.07, 4.35, 45.94, 51.3) +
+          pieSeg("perda-5.svg", 0.28, 46.4, 33.4, 27.69),
         "<strong>848</strong><span>perdidas</span>"
       ) +
       '<div class="docs-dash-legend-list">' +
       legendRow("#de3535", "Renda insuficiente", "34%") +
-      legendRow("#e7b008", "Desistência do cliente", "27%") +
+      legendRow("#f5c026", "Desistência do cliente", "27%") +
       legendRow("#00a395", "Documentação incompleta", "18%") +
       legendRow("#787d7d", "Taxa não competitiva", "13%") +
       legendRow("#e3e3e3", "Outros", "8%") +
@@ -871,9 +881,9 @@
       '<div class="docs-dash-chart">' +
       pieChart(
         "",
-        pieSeg("prob-1.svg", "0.17% 8.08% 69.47% 51.34%") +
-          pieSeg("prob-2.svg", "28.12% 0 0 49.73%") +
-          pieSeg("prob-3.svg", "0.17% 51.34% 0.37% 0"),
+        pieSeg("prob-1.svg", 0.28, 84.2, 66.56, 49.8) +
+          pieSeg("prob-2.svg", 46.12, 81.56, 82.44, 117.82) +
+          pieSeg("prob-3.svg", 0.28, 0, 79.8, 163.12),
         "<strong>1.240</strong><span>operações</span>"
       ) +
       '<div class="docs-dash-prob">' +
@@ -894,7 +904,8 @@
         '<div class="docs-dash-chart docs-dash-chart--pair">' +
         pieChart(
           "docs-dash-pie--sm",
-          pieSeg(aFile, "0.18% 0 0 16.09%") + pieSeg(bFile, "0.45% 53.26% 17.94% 0"),
+          pieSeg(aFile, 0.27, 24.14, 125.86, 149.72) +
+            pieSeg(bFile, 0.68, 0, 70.11, 122.42),
           '<strong class="is-info">' + pct + "%</strong>"
         ) +
         '<div class="docs-dash-legend-list docs-dash-legend-list--short">' +

@@ -1698,7 +1698,7 @@ textarea {
 .docs-dash-card--chart {
   min-height: 334px;
   border-color: #e3e3e3;
-  overflow: hidden;
+  overflow: visible;
   justify-content: flex-start;
 }
 .docs-dash-card__copy {
@@ -2052,6 +2052,7 @@ textarea {
   flex-shrink: 0;
   width: 164px;
   height: 164px;
+  overflow: visible;
 }
 .docs-dash-pie--sm {
   width: 150px;
@@ -2060,10 +2061,7 @@ textarea {
 .docs-dash-pie__seg {
   position: absolute;
   display: block;
-  width: 100%;
-  height: 100%;
   max-width: none;
-  object-fit: fill;
 }
 .docs-dash-pie__label {
   position: absolute;
