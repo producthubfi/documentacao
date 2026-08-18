@@ -2322,6 +2322,7 @@
       section: '<div class="hf-section"><h3>INFORMAÇÕES</h3><p>Conteúdo da seção</p></div>',
       "rich-text": '<div class="hf-rte" style="height:100px;max-width:240px"><div class="hf-rte__bar"><span class="hf-rte__style">Normal</span></div><div class="hf-rte__body">Notas…</div></div>',
       "detalhes-operacao": '<div class="docs-screen-thumb"><strong>OP-000000</strong><span>Nome cliente</span></div>',
+      "dashboard-operacoes": '<div class="docs-screen-thumb"><strong>Dashboard</strong><span>Visão estratégica</span></div>',
     };
     return map[slug] || "";
   }

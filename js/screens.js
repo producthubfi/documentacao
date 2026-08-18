@@ -4,6 +4,8 @@
 
   var ui = catalog.ui || {};
   var FIGMA_OP = "https://www.figma.com/design/LQfnfvRTFm2AZ9qwTWsQEk?node-id=8135-36006";
+  var FIGMA_DASH =
+    "https://www.figma.com/design/6GPvl7jqcGdcwaCCx9kyOI/Dashboard-de-opera%C3%A7%C3%B5es?node-id=2211-256";
 
   function ico(name, size) {
     return window.hfIcon ? window.hfIcon(name, size || 20) : "";
@@ -541,12 +543,383 @@
     }
   }
 
+  function dashSelect(label, value, options) {
+    var items = (options || [value])
+      .map(function (opt) {
+        var on = opt === value;
+        return (
+          '<div class="hf-select-menu__item' +
+          (on ? " is-active" : "") +
+          '" role="option" tabindex="-1" data-label="' +
+          opt +
+          '" aria-selected="' +
+          (on ? "true" : "false") +
+          '">' +
+          opt +
+          "</div>"
+        );
+      })
+      .join("");
+    return (
+      '<div class="hf-field hf-field--select" data-select data-select-type="default">' +
+      '<div class="hf-field__header"><span class="hf-field__label">' +
+      label +
+      "</span></div>" +
+      '<button class="hf-field__control" type="button" role="combobox" aria-haspopup="listbox" aria-expanded="false">' +
+      '<span class="hf-field__value">' +
+      value +
+      '</span><span class="hf-field__chevron"><img src="assets/icons/select-chevron.svg" alt=""></span></button>' +
+      '<div class="hf-select-menu" role="listbox">' +
+      items +
+      "</div></div>"
+    );
+  }
+
+  function dashScreen() {
+    var sidebar =
+      typeof ui.appSidebar === "function" ? ui.appSidebar("operacoes", "fit") : "";
+    var badge =
+      typeof ui.badge === "function"
+        ? ui.badge
+        : function (type, text) {
+            return '<span class="hf-badge hf-badge--' + type + '">' + text + "</span>";
+          };
+
+    var crumb =
+      '<nav class="hf-crumb">' +
+      '<span class="hf-crumb__home">' +
+      ico("panel-left", 20) +
+      "</span>" +
+      '<span class="hf-crumb__div"></span>' +
+      "<span>Visão estratégica</span></nav>";
+
+    var header =
+      "<header>" +
+      '<h1 class="docs-dash-title">Dashboard</h1>' +
+      '<p class="docs-dash-sub">Visão estratégica da plataforma Hubfi</p></header>';
+
+    var filters =
+      '<div class="docs-dash-filters">' +
+      dashSelect("Mesa", "Todas", ["Todas", "Mesa 1", "Mesa 2"]) +
+      dashSelect("Produto", "Todos", ["Todos", "Financiamento", "Consórcio"]) +
+      dashSelect("Empresa", "Todas", ["Todas", "Hubfi"]) +
+      dashSelect("Período", "Este mês", ["Este mês", "Este trimestre", "Este ano"]) +
+      dashSelect("Operador", "Todos", ["Todos", "Victor Tavares"]) +
+      dashSelect("Usuário", "Todos", ["Todos", "Lucas Augusto"]) +
+      "</div>";
+
+    var tabs =
+      '<div class="hf-tabs" data-tabs>' +
+      '<button class="hf-tab is-active" type="button">Operações</button>' +
+      '<button class="hf-tab" type="button">Empresas</button>' +
+      '<button class="hf-tab" type="button">Análise</button>' +
+      '<button class="hf-tab" type="button">Produtos</button></div>';
+
+    function kpi(icon, chipMod, label) {
+      return (
+        '<article class="docs-dash-kpi">' +
+        '<div class="docs-dash-kpi__head">' +
+        '<span class="docs-dash-kpi__chip' +
+        (chipMod ? " docs-dash-kpi__chip--" + chipMod : "") +
+        '">' +
+        ico(icon, 20) +
+        "</span>" +
+        '<span class="docs-dash-kpi__label">' +
+        label +
+        "</span>" +
+        '<span class="docs-dash-kpi__info">' +
+        ico("info", 20) +
+        "</span></div>" +
+        '<p class="docs-dash-kpi__value">R$ 1.000,00</p>' +
+        '<p class="docs-dash-kpi__meta">10 Operações</p></article>'
+      );
+    }
+
+    var kpis =
+      '<div class="docs-dash-kpis">' +
+      kpi("file-spreadsheet", "", "Pipeline originado") +
+      kpi("refresh-ccw", "info", "Pipeline ativo") +
+      kpi("circle-check", "ok", "Operações ganhas") +
+      kpi("circle-x", "err", "Operações perdidas") +
+      "</div>";
+
+    function bar(count, height, kind) {
+      var alert = kind === "warn" || kind === "crit";
+      return (
+        '<div class="docs-dash-bar' +
+        (kind ? " docs-dash-bar--" + kind : "") +
+        '">' +
+        '<span class="docs-dash-bar__n">' +
+        (alert ? ico("triangle-alert", 16) : "") +
+        count +
+        "</span>" +
+        '<span class="docs-dash-bar__fill" style="height:' +
+        height +
+        'px"></span></div>'
+      );
+    }
+
+    var funnel =
+      '<section class="docs-dash-card">' +
+      '<div class="docs-dash-funnel__head">' +
+      '<div class="docs-dash-card__copy"><h2 class="docs-dash-card__title">Funil de etapas</h2>' +
+      '<p class="docs-dash-card__hint">Confira quantas operações estão por etapa.</p></div>' +
+      '<div class="docs-dash-funnel__focus">Documentação das Partes' +
+      badge("warning", "Gargalo") +
+      "</div>" +
+      '<div class="docs-dash-legend">' +
+      '<span class="docs-dash-legend__item"><span class="docs-dash-legend__ico docs-dash-legend__ico--crit">' +
+      ico("triangle-alert", 16) +
+      "</span>Crítica</span>" +
+      '<span class="docs-dash-legend__item"><span class="docs-dash-legend__ico docs-dash-legend__ico--warn">' +
+      ico("triangle-alert", 16) +
+      "</span>Atenção</span>" +
+      '<span class="docs-dash-legend__item"><span class="docs-dash-legend__ico docs-dash-legend__ico--ok"></span>Dentro do prazo</span>' +
+      "</div></div>" +
+      '<div class="docs-dash-bars">' +
+      bar("19", 59, "") +
+      bar("32", 118, "warn") +
+      bar("32", 209, "crit") +
+      bar("32", 118, "warn") +
+      bar("15", 52, "") +
+      "</div>" +
+      '<div class="docs-dash-axis"><span>Coleta de Dados</span><span>Análise de Crédito</span><span>Doc. das Partes</span><span>Análise Jurídica</span><span>Coleta de Dados</span></div>' +
+      "</section>";
+
+    function convRow(stage, fill, ops, conv, convType, rel, vol, time, timeMod) {
+      return (
+        "<tr><td><div class=\"docs-dash-stage\"><span>" +
+        stage +
+        '</span><span class="docs-dash-track"><span style="width:' +
+        fill +
+        'px"></span></span></div></td>' +
+        '<td class="is-num">' +
+        ops +
+        '</td><td class="is-center">' +
+        badge(convType, conv) +
+        '</td><td class="is-center">' +
+        rel +
+        "</td><td>" +
+        vol +
+        '</td><td><span class="docs-dash-time docs-dash-time--' +
+        timeMod +
+        '">' +
+        ico("clock", 14) +
+        time +
+        "</span></td></tr>"
+      );
+    }
+
+    var conversion =
+      '<section class="docs-dash-card docs-dash-card--table">' +
+      '<div class="docs-dash-card__copy"><h2 class="docs-dash-card__title">Conversão entre etapas</h2>' +
+      '<p class="docs-dash-card__hint">Contagem, conversão e volume por etapa</p></div>' +
+      '<table class="docs-dash-table"><thead><tr>' +
+      "<th>Etapa</th><th>Operações</th><th class=\"is-center\">Conversão</th><th class=\"is-center\">% Relativa</th><th>Volume</th><th>Tempo médio</th>" +
+      "</tr></thead><tbody>" +
+      convRow("Coleta de dados", 120, "1.240", "100%", "success", "—", "R$ 18,4M", "13 dias", "err") +
+      convRow("Análise de crédito", 93, "968", "78%", "success", "22%", "R$ 14,1M", "4 dias", "warn") +
+      convRow("Documentação das partes", 62, "645", "52%", "secondary", "24%", "R$ 9,3M", "4 dias", "warn") +
+      convRow("Proposta enviada", 37, "384", "31%", "secondary", "21%", "R$ 5,4M", "3 dias", "warn") +
+      convRow("Fechamento", 15, "149", "12%", "secondary", "19%", "R$ 2,1M", "2 dias", "info") +
+      "</tbody></table></section>";
+
+    function pctCell(label, value) {
+      return (
+        '<div class="docs-dash-pct"><small>' +
+        label +
+        "</small><b>" +
+        value +
+        "</b></div>"
+      );
+    }
+
+    function avgTime(days) {
+      return (
+        '<div class="docs-dash-avg">' +
+        ico("clock", 14) +
+        " Tempo médio aberto<b>" +
+        days +
+        "</b></div>"
+      );
+    }
+
+    var taxa =
+      '<section class="docs-dash-card docs-dash-conv">' +
+      '<div class="docs-dash-card__head">' +
+      '<h2 class="docs-dash-card__title">Taxa de conversão</h2>' +
+      '<button class="docs-dash-conv__btn" type="button">' +
+      ico("circle-question-mark", 14) +
+      "Como funciona</button></div>" +
+      '<div class="docs-dash-safra">' +
+      '<div class="docs-dash-safra__label">' +
+      ico("calendar-clock", 16) +
+      "Safra selecionada" +
+      '<span class="docs-dash-chip">10/05/2026 - 10/06/2026</span></div>' +
+      '<div class="docs-dash-safra__row">' +
+      '<div class="docs-dash-rate">' +
+      '<span class="docs-dash-donut docs-dash-donut--ring" style="--p:0"></span>' +
+      "<strong>0%</strong>" +
+      "<p>Originadas e fechadas no período selecionado</p></div>" +
+      avgTime("77 dias") +
+      "</div>" +
+      '<div class="docs-dash-pcts">' +
+      pctCell("P50", "72 dias") +
+      pctCell("P75", "104 dias") +
+      pctCell("P90", "154 dias") +
+      pctCell("Máximo", "438 dias") +
+      "</div></div>" +
+      '<div class="docs-dash-closed">' +
+      '<div class="docs-dash-safra__label">' +
+      ico("calendar-check-2", 16) +
+      "Última safra fechada" +
+      '<span class="docs-dash-chip">Maio/2026</span></div>' +
+      '<div class="docs-dash-safra__row">' +
+      '<div class="docs-dash-rate">' +
+      '<span class="docs-dash-donut docs-dash-donut--ring" style="--p:7.8"></span>' +
+      '<strong class="is-ok">7,8%</strong></div>' +
+      avgTime("77 dias") +
+      "</div>" +
+      '<div class="docs-dash-counts">' +
+      "<span><b>20</b> Total</span>" +
+      '<span><b class="is-ok">18</b> Ganhas</span>' +
+      '<span><b class="is-err">2</b> Perdidas</span></div>' +
+      '<div class="docs-dash-pcts">' +
+      pctCell("P50", "50 dias") +
+      pctCell("P75", "100 dias") +
+      pctCell("P90", "120 dias") +
+      pctCell("Máximo", "200 dias") +
+      "</div></div></section>";
+
+    function legendRow(color, label, pct) {
+      return (
+        '<div class="docs-dash-legend-list__row">' +
+        '<span class="docs-dash-dot" style="background:' +
+        color +
+        '"></span>' +
+        "<span>" +
+        label +
+        "</span><b>" +
+        pct +
+        "</b></div>"
+      );
+    }
+
+    var perda =
+      '<section class="docs-dash-card">' +
+      '<div class="docs-dash-card__copy"><h2 class="docs-dash-card__title">Motivos de perda</h2>' +
+      '<p class="docs-dash-card__hint">Top 5 · % sobre o total de operações perdidas no período</p></div>' +
+      '<div class="docs-dash-chart">' +
+      '<div class="docs-dash-donut" style="--p1:34%;--p2:61%;--p3:79%;--p4:92%">' +
+      '<div class="docs-dash-donut__label"><strong>848</strong><span>perdidas</span></div></div>' +
+      '<div class="docs-dash-legend-list">' +
+      legendRow("#de3535", "Renda insuficiente", "34%") +
+      legendRow("#e7b008", "Desistência do cliente", "27%") +
+      legendRow("#00a395", "Documentação incompleta", "18%") +
+      legendRow("#787d7d", "Taxa não competitiva", "13%") +
+      legendRow("#e3e3e3", "Outros", "8%") +
+      "</div></div></section>";
+
+    function probItem(count, badgeType, badgeText, revenue) {
+      return (
+        '<div class="docs-dash-prob__item">' +
+        '<div class="docs-dash-prob__top"><span>' +
+        count +
+        " Operações</span>" +
+        badge(badgeType, badgeText) +
+        "</div>" +
+        '<div class="docs-dash-prob__rev">' +
+        ico("banknote-arrow-up", 20) +
+        revenue +
+        "</div></div>"
+      );
+    }
+
+    var probabilidade =
+      '<section class="docs-dash-card">' +
+      '<div class="docs-dash-card__copy"><h2 class="docs-dash-card__title">Probabilidade de fechamento</h2>' +
+      '<p class="docs-dash-card__hint">Distribuição por faixa · sem ponderação</p></div>' +
+      '<div class="docs-dash-chart">' +
+      '<div class="docs-dash-donut docs-dash-donut--prob">' +
+      '<div class="docs-dash-donut__label"><strong>1.240</strong><span>operações</span></div></div>' +
+      '<div class="docs-dash-prob">' +
+      probItem("321", "success", "Alta", "R$ 2.000.000,00") +
+      probItem("221", "alert", "Média", "R$ 1.000.000,00") +
+      probItem("121", "warning", "Baixa", "R$ 500.000,00") +
+      "</div></div></section>";
+
+    function rateCard(title, hint, pct, a, b) {
+      return (
+        '<section class="docs-dash-card">' +
+        '<div class="docs-dash-card__copy"><h2 class="docs-dash-card__title">' +
+        title +
+        "</h2>" +
+        '<p class="docs-dash-card__hint">' +
+        hint +
+        "</p></div>" +
+        '<div class="docs-dash-chart docs-dash-chart--pair">' +
+        '<div class="docs-dash-donut docs-dash-donut--sm docs-dash-donut--duo" style="--p:' +
+        pct +
+        '%">' +
+        '<div class="docs-dash-donut__label"><strong class="is-info">' +
+        pct +
+        "%</strong></div></div>" +
+        '<div class="docs-dash-legend-list docs-dash-legend-list--short">' +
+        legendRow("var(--primary-default)", a, "") +
+        legendRow("var(--info)", b, "") +
+        "</div></div></section>"
+      );
+    }
+
+    return (
+      '<div class="docs-screen docs-screen--dash">' +
+      sidebar +
+      '<div class="docs-screen__main">' +
+      '<div class="docs-screen__top">' +
+      crumb +
+      header +
+      "</div>" +
+      '<div class="docs-screen__body">' +
+      filters +
+      tabs +
+      kpis +
+      funnel +
+      '<div class="docs-dash-split">' +
+      conversion +
+      taxa +
+      "</div>" +
+      '<div class="docs-dash-split docs-dash-split--eq">' +
+      perda +
+      probabilidade +
+      "</div>" +
+      '<div class="docs-dash-split docs-dash-split--eq">' +
+      rateCard(
+        "Conversão simulação para operação",
+        "Operações abertas a partir de simulação",
+        "42",
+        "1000 simulações",
+        "840 operações"
+      ) +
+      rateCard(
+        "Clientes recorrentes",
+        "Texto de apoio",
+        "12",
+        "1000 clientes",
+        "31 recorrências"
+      ) +
+      "</div></div></div></div>"
+    );
+  }
+
   catalog.groups.push({
     id: "screens",
     label: "Telas",
     icon: "app-window",
     blurb: "Páginas compostas com os componentes do DS — como o produto usa de verdade.",
-    items: [["detalhes-operacao", "Detalhes da operação"]],
+    items: [
+      ["detalhes-operacao", "Detalhes da operação"],
+      ["dashboard-operacoes", "Dashboard de operações"],
+    ],
   });
 
   catalog.pages["detalhes-operacao"] = {
@@ -565,6 +938,18 @@
     section: "Telas",
     html: function () {
       return opScreen();
+    },
+  };
+
+  catalog.pages["dashboard-operacoes"] = {
+    title: "Dashboard de operações",
+    lead: "Visão estratégica da plataforma — funil, conversão e indicadores.",
+    node: "2211-256",
+    figmaFile: FIGMA_DASH,
+    wide: true,
+    section: "Telas",
+    html: function () {
+      return dashScreen();
     },
   };
 
