@@ -89,6 +89,13 @@
     var isFoundation = !!(catalog.foundations || []).some(function (item) {
       return item[0] === current;
     });
+    var app = document.querySelector(".docs-app");
+    if (app) app.classList.toggle("docs-app--screen", !!(isScreen && !isHome));
+    var back = document.getElementById("docs-back");
+    if (back) {
+      back.innerHTML =
+        (window.hfIcon ? window.hfIcon("arrow-left", 16) : "") + "Voltar";
+    }
     var crumb = isHome
       ? '<nav class="docs-crumb"><span>Documentação</span></nav>'
       : '<nav class="docs-crumb"><a href="#/">Documentação</a><span aria-hidden="true">/</span><span>' +
@@ -99,17 +106,19 @@
 
     stage.classList.toggle("docs-stage--wide", !!(page.wide && !isHome));
     stage.innerHTML =
-      '<div class="docs-page-head' +
-      (isHome ? " docs-page-head--home" : "") +
-      (page.wide ? " docs-page-head--wide" : "") +
-      '">' +
-      crumb +
-      '<h1 class="docs-h1">' +
-      page.title +
-      "</h1>" +
-      (page.leadHtml || '<p class="docs-lead">' + page.lead + "</p>") +
-      "</div>" +
-      page.html();
+      isScreen && !isHome
+        ? page.html()
+        : '<div class="docs-page-head' +
+          (isHome ? " docs-page-head--home" : "") +
+          (page.wide ? " docs-page-head--wide" : "") +
+          '">' +
+          crumb +
+          '<h1 class="docs-h1">' +
+          page.title +
+          "</h1>" +
+          (page.leadHtml || '<p class="docs-lead">' + page.lead + "</p>") +
+          "</div>" +
+          page.html();
 
     document.title = isHome ? "HubFi DS · Documentação" : page.title + " · HubFi DS";
     highlight();
