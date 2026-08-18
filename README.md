@@ -22,7 +22,7 @@ Tokens em `css/tokens.css`. Componentes em `css/hf.css`. Docs em `css/docs.css` 
 
 - **Badge** — tamanho `small` (20px, 10px Medium) além do default 26px. Cores de success e alert nos tokens (`--primary-50` / `--warning-subtle`).
 - **Table** — átomos alinhados ao Figma (Avatar, Text ± ícone, Contact 1/2 linhas, Header ± sort, Action, Status Badge). Tabela Default com 6 colunas + ação, Empresa como texto, coluna “Conteúdo”, empty state e paginação.
-- **Detalhes da operação** — sidebar, header/timeline e content no mesmo fundo `--neutral/50` (`#fcfcfc`). Cards continuam brancos.
+- **Detalhes da operação** — sidebar e content em `--neutral/50` (`#fcfcfc`). Hero (`.docs-screen__top`) branco. Cards brancos.
 
 Ver `/#/badge`, `/#/table` e `/#/detalhes-operacao`.
 

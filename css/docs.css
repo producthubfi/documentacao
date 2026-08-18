@@ -1518,6 +1518,8 @@ textarea {
   flex-direction: column;
   gap: 16px;
   padding: 24px 24px 16px;
+  background: #fff;
+  border-radius: 12px 12px 0 0;
 }
 
 .docs-screen__body {
