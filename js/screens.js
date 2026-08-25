@@ -4,6 +4,10 @@
 
   var ui = catalog.ui || {};
   var FIGMA_OP = "https://www.figma.com/design/LQfnfvRTFm2AZ9qwTWsQEk?node-id=8135-36006";
+  var FIGMA_OPEN =
+    "https://www.figma.com/design/LQfnfvRTFm2AZ9qwTWsQEk?node-id=7636-24781";
+  var FIGMA_OPEN_INFO =
+    "https://www.figma.com/design/LQfnfvRTFm2AZ9qwTWsQEk?node-id=7869-25743";
   var FIGMA_DASH =
     "https://www.figma.com/design/6GPvl7jqcGdcwaCCx9kyOI/Dashboard-de-opera%C3%A7%C3%B5es?node-id=2211-256";
 
@@ -436,7 +440,7 @@
     );
   }
 
-  function showSuccessToast() {
+  function showSuccessToast(msg) {
     var host = document.querySelector("[data-toast-host]");
     if (!host) {
       host = document.createElement("div");
@@ -445,7 +449,7 @@
       document.body.appendChild(host);
     }
     host.innerHTML = ui.toast
-      ? ui.toast("Dados salvos com sucesso.")
+      ? ui.toast(msg || "Dados salvos com sucesso.")
       : "";
     var toast = host.querySelector(".hf-toast");
     if (!toast) return;
@@ -959,16 +963,379 @@
     );
   }
 
+  function chipIco() {
+    return (
+      '<span class="hf-chipcard__ico" aria-hidden="true"><img src="assets/screen/open/chip-ico.svg" width="16" height="16" alt=""></span>'
+    );
+  }
+
+  function chipCard(label, selected, mod) {
+    return (
+      '<button class="hf-chipcard' +
+      (selected ? " is-selected" : "") +
+      (mod ? " " + mod : "") +
+      '" type="button" data-chipcard="' +
+      label +
+      '">' +
+      chipIco() +
+      "<span>" +
+      label +
+      "</span></button>"
+    );
+  }
+
+  function fmtCard(title, desc, selected) {
+    return (
+      '<button class="hf-fmt' +
+      (selected ? " is-selected" : "") +
+      '" type="button" data-fmt="' +
+      title +
+      '"><span class="hf-radio" aria-hidden="true"><span class="hf-radio-box"><img class="hf-radio-box__off" src="assets/icons/select-radio.svg" width="18" height="18" alt=""><img class="hf-radio-box__on" src="assets/icons/select-radio-on.svg" width="18" height="18" alt=""></span><span>Opção</span></span>' +
+      '<span class="hf-fmt__body"><strong>' +
+      title +
+      "</strong><p>" +
+      desc +
+      '</p><span class="hf-fmt__more">Entenda mais<img src="assets/screen/open/icon-right.svg" width="16" height="16" alt=""></span></span></button>'
+    );
+  }
+
+  function openField(label, placeholder) {
+    return (
+      '<div class="hf-field"><div class="hf-field__header"><span class="hf-field__label">' +
+      label +
+      '</span></div><div class="hf-field__control"><input class="hf-field__input" type="text" placeholder="' +
+      placeholder +
+      '"></div></div>'
+    );
+  }
+
+  function openSelect(label, options) {
+    var items = (options || [])
+      .map(function (opt) {
+        return (
+          '<div class="hf-select-menu__item" role="option" tabindex="-1" data-label="' +
+          opt +
+          '" aria-selected="false">' +
+          opt +
+          "</div>"
+        );
+      })
+      .join("");
+    return (
+      '<div class="hf-field hf-field--select" data-select data-select-type="default">' +
+      '<div class="hf-field__header"><span class="hf-field__label">' +
+      label +
+      "</span></div>" +
+      '<button class="hf-field__control" type="button" role="combobox" aria-haspopup="listbox" aria-expanded="false">' +
+      '<span class="hf-field__value">Selecionar</span>' +
+      '<span class="hf-field__chevron"><img src="assets/icons/select-chevron.svg" alt=""></span></button>' +
+      '<div class="hf-select-menu" role="listbox">' +
+      items +
+      "</div></div>"
+    );
+  }
+
+  var OPEN_STEP_HTML = {
+    "Perfil do cliente": "Perfil<br>do cliente",
+    "Seleção de Produto": "Seleção<br>de Produto",
+    "Informações do cliente": "Informações<br>do cliente",
+    "Dados do formulário": "Dados<br>do formulário",
+    Comunicação: "Comunicação",
+    Resumo: "Resumo",
+  };
+
+  function openStepper(active, labels) {
+    return (
+      '<div class="hf-stepper-s" data-open-stepper>' +
+      labels
+        .map(function (label, i) {
+          var status = i === active ? "current" : i < active ? "done" : "todo";
+          return (
+            '<div class="hf-step-s is-' +
+            status +
+            '" data-step="' +
+            i +
+            '"><span class="hf-step-s__track"><i class="hf-step-s__line hf-step-s__line--before"></i>' +
+            '<span class="hf-step-s__dot"></span>' +
+            '<i class="hf-step-s__line hf-step-s__line--after"></i></span>' +
+            '<span class="hf-step-s__label">' +
+            (OPEN_STEP_HTML[label] || label) +
+            "</span></div>"
+          );
+        })
+        .join("") +
+      "</div>"
+    );
+  }
+
+  var OPEN_MESAS = [
+    ["Câmbio", ""],
+    ["Imobiliário", ""],
+    ["Crédito", ""],
+    ["Operações Estruturadas", "hf-chipcard--wide"],
+    ["Seguros", ""],
+    ["Energia", ""],
+    ["Comércio", ""],
+    ["Investimentos", "hf-chipcard--invest"],
+  ];
+
+  var OPEN_PRODUCTS = {
+    Câmbio: ["Spot", "Turismo", "Importação", "Exportação", "Remessa"],
+    Imobiliário: ["Aquisição", "Construção", "Home Equity", "Portabilidade", "FGTS"],
+    Crédito: ["Capital de Giro", "Antecipação", "Consórcio", "CDC", "Empréstimo"],
+    "Operações Estruturadas": ["FIDC", "CRI", "CRA", "Debênture", "Securitização"],
+    Seguros: ["Vida", "Residencial", "Automóvel", "Empresarial", "Prestamista"],
+    Energia: ["Geração", "Distribuição", "Autoprodução", "Mercado Livre", "GD"],
+    Comércio: ["Antecipação", "Cobrança", "Fornecedor", "Varejo", "Atacado"],
+    Investimentos: ["Renda Fixa", "Fundos", "Previdência", "COE", "Ações"],
+  };
+
+  function productsFor(mesa) {
+    return OPEN_PRODUCTS[mesa] || [mesa, mesa, mesa, mesa, mesa];
+  }
+
+  function openScreen() {
+    var sidebar =
+      typeof ui.appSidebar === "function" ? ui.appSidebar("nova", "fit") : "";
+    var stepsA = [
+      "Perfil do cliente",
+      "Seleção de Produto",
+      "Informações do cliente",
+      "Comunicação",
+      "Resumo",
+    ];
+
+    var mesas =
+      '<div class="hf-chiprow" data-chip-group="mesa">' +
+      OPEN_MESAS.map(function (row) {
+        return chipCard(row[0], row[0] === "Imobiliário", row[1]);
+      }).join("") +
+      "</div>";
+
+    var produtos = productsFor("Imobiliário")
+      .map(function (name, i) {
+        return chipCard(name, i === 0, "hf-chipcard--fill");
+      })
+      .join("");
+
+    var formats =
+      fmtCard(
+        "Operação simplificada",
+        "Você informa mesa, produto e cliente. O cliente preenche o resto.",
+        true
+      ) +
+      fmtCard(
+        "Operação completa",
+        "Você preenche todos os dados agora, sem depender do cliente.",
+        false
+      ) +
+      fmtCard(
+        "Operação por link",
+        "Envie um link e o cliente escolhe o produto e preenche tudo.",
+        false
+      ) +
+      fmtCard(
+        "Simulação de operação",
+        "Simule o financiamento do seu clientes nos principais bancos.",
+        false
+      );
+
+    return (
+      '<div class="docs-screen docs-screen--open" data-open-root data-view="0">' +
+      sidebar +
+      '<div class="hf-open">' +
+      '<div class="hf-open__crumb"><span class="hf-open__crumb-ico"><img src="assets/screen/open/crumb.svg" width="20" height="20" alt=""></span><i class="hf-open__crumb-div"></i><span>Nova operação</span></div>' +
+      '<div class="hf-open__head"><h1 class="hf-open__title" data-open-title>Nova operação</h1>' +
+      '<p class="hf-open__sub" data-open-sub>Preencha as etapas para criar uma nova operação de produto.</p></div>' +
+      openStepper(0, stepsA) +
+      '<div class="hf-open__stage">' +
+      '<div class="hf-open__view is-on" data-open-view="0"><div class="hf-chiprow" data-chip-group="perfil">' +
+      chipCard("Pessoa Física", true) +
+      chipCard("Pessoa Jurídica", false, "hf-chipcard--pj") +
+      "</div></div>" +
+      '<div class="hf-open__view" data-open-view="1"><div class="hf-open-sec"><p class="hf-open-sec__title">Mesa de operações</p>' +
+      mesas +
+      "</div></div>" +
+      '<div class="hf-open__view" data-open-view="2"><div class="hf-open-sec"><p class="hf-open-sec__title">Produto</p>' +
+      '<div class="hf-chiprow" data-chip-group="produto">' +
+      produtos +
+      "</div></div></div>" +
+      '<div class="hf-open__view" data-open-view="3"><div class="hf-open-sec"><p class="hf-open-sec__title">Formato da operação</p>' +
+      '<div class="hf-fmt-grid">' +
+      formats +
+      "</div></div></div>" +
+      '<div class="hf-open__view" data-open-view="4"><h2 class="hf-open__h">Informações do cliente</h2>' +
+      '<div class="hf-open__form">' +
+      openSelect("Personal finance", ["Victor Tavares", "Lucas Augusto", "Maurício Lima"]) +
+      openSelect("Selecione um cliente", [
+        "Marcelo Oliveira",
+        "Ana Julia Silva",
+        "Caloi Bike Store",
+      ]) +
+      openField("Telefone", "Informar") +
+      openField("E-mail", "Informar") +
+      openField("Data de nascimento", "Informar") +
+      openField("Valor da operação", "R$ 0,00") +
+      '<div class="hf-field hf-field--area"><div class="hf-field__header"><span class="hf-field__label">Detalhe sobre a solicitação?</span></div>' +
+      '<div class="hf-field__control hf-field__control--area"><textarea class="hf-field__area" placeholder="Como buscamos ofertar uma solução customizada e mais assertiva, informe mais detalhes sobre a solicitação como: situação do cliente, finalidade da operação, etc."></textarea></div></div>' +
+      "</div></div></div>" +
+      '<div class="hf-open__foot"><button class="hf-open__back" type="button" data-open-back disabled>' +
+      '<img src="assets/screen/open/arrow-left.svg" width="18" height="18" alt="">Voltar</button>' +
+      '<button class="hf-open__next" type="button" data-open-next>Continuar<img src="assets/screen/open/arrow-right.svg" width="18" height="18" alt=""></button></div>' +
+      "</div></div>"
+    );
+  }
+
+  function bindOpen(root) {
+    var shell = root.querySelector("[data-open-root]");
+    if (!shell) return;
+    var view = 0;
+    var state = {
+      perfil: "Pessoa Física",
+      mesa: "Imobiliário",
+      produto: "Aquisição",
+      formato: "Operação simplificada",
+    };
+    var stepsEarly = [
+      "Perfil do cliente",
+      "Seleção de Produto",
+      "Informações do cliente",
+      "Comunicação",
+      "Resumo",
+    ];
+    var stepsLate = [
+      "Perfil do cliente",
+      "Seleção de Produto",
+      "Informações do cliente",
+      "Dados do formulário",
+      "Comunicação",
+    ];
+
+    function stepperIndex() {
+      if (view === 0) return 0;
+      if (view <= 3) return 1;
+      return 2;
+    }
+
+    function paint() {
+      shell.setAttribute("data-view", String(view));
+      shell.querySelectorAll("[data-open-view]").forEach(function (el) {
+        el.classList.toggle("is-on", Number(el.getAttribute("data-open-view")) === view);
+      });
+      var active = stepperIndex();
+      var labels = view === 4 ? stepsLate : stepsEarly;
+      shell.querySelectorAll("[data-open-stepper] .hf-step-s").forEach(function (el, i) {
+        el.classList.remove("is-current", "is-done", "is-todo");
+        el.classList.add(i === active ? "is-current" : i < active ? "is-done" : "is-todo");
+        var lab = el.querySelector(".hf-step-s__label");
+        if (lab && labels[i]) lab.innerHTML = OPEN_STEP_HTML[labels[i]] || labels[i];
+      });
+      var title = shell.querySelector("[data-open-title]");
+      var sub = shell.querySelector("[data-open-sub]");
+      if (view === 4) {
+        title.textContent =
+          "Financiamento " + state.mesa + " -" + state.produto + " - " + state.perfil;
+        title.classList.add("is-regular");
+        sub.textContent =
+          "Informe os dados de contato do cliente mais algumas informações complementares para solicitação da proposta.";
+      } else {
+        title.textContent = "Nova operação";
+        title.classList.remove("is-regular");
+        sub.textContent = "Preencha as etapas para criar uma nova operação de produto.";
+      }
+      var back = shell.querySelector("[data-open-back]");
+      var next = shell.querySelector("[data-open-next]");
+      if (back) back.disabled = view === 0;
+      if (next) {
+        next.innerHTML =
+          view === 4
+            ? 'Concluir operação<img src="assets/screen/open/arrow-right.svg" width="18" height="18" alt="">'
+            : 'Continuar<img src="assets/screen/open/arrow-right.svg" width="18" height="18" alt="">';
+      }
+    }
+
+    function refillProducts() {
+      var row = shell.querySelector('[data-chip-group="produto"]');
+      if (!row) return;
+      var list = productsFor(state.mesa);
+      state.produto = list[0];
+      row.innerHTML = list
+        .map(function (name, i) {
+          return chipCard(name, i === 0, "hf-chipcard--fill");
+        })
+        .join("");
+      row.querySelectorAll("[data-chipcard]").forEach(wireChip);
+    }
+
+    function wireChip(btn) {
+      btn.addEventListener("click", function () {
+        var group = btn.closest("[data-chip-group]");
+        var key = group.getAttribute("data-chip-group");
+        group.querySelectorAll("[data-chipcard]").forEach(function (other) {
+          other.classList.remove("is-selected");
+        });
+        btn.classList.add("is-selected");
+        state[key] = btn.getAttribute("data-chipcard");
+        if (key === "mesa") refillProducts();
+      });
+    }
+
+    shell.querySelectorAll("[data-chipcard]").forEach(wireChip);
+    shell.querySelectorAll("[data-fmt]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        shell.querySelectorAll("[data-fmt]").forEach(function (other) {
+          other.classList.remove("is-selected");
+        });
+        btn.classList.add("is-selected");
+        state.formato = btn.getAttribute("data-fmt");
+      });
+    });
+    var back = shell.querySelector("[data-open-back]");
+    var next = shell.querySelector("[data-open-next]");
+    if (back) {
+      back.addEventListener("click", function () {
+        if (view > 0) {
+          view -= 1;
+          paint();
+        }
+      });
+    }
+    if (next) {
+      next.addEventListener("click", function () {
+        if (view < 4) {
+          view += 1;
+          paint();
+          return;
+        }
+        showSuccessToast("Operação criada com sucesso.");
+      });
+    }
+    paint();
+  }
+
   catalog.groups.push({
     id: "screens",
     label: "Telas",
     icon: "app-window",
     blurb: "Páginas compostas com os componentes do DS — como o produto usa de verdade.",
     items: [
+      ["abertura-operacao", "Abertura de operação"],
       ["detalhes-operacao", "Detalhes da operação"],
       ["dashboard-operacoes", "Dashboard de operações"],
     ],
   });
+
+  catalog.pages["abertura-operacao"] = {
+    title: "Abertura de operação",
+    lead: "Wizard de nova operação: perfil, mesa, produto, formato e dados do cliente.",
+    node: "7636-24781",
+    figmaFile: FIGMA_OPEN,
+    wide: true,
+    section: "Telas",
+    html: function () {
+      return openScreen();
+    },
+  };
 
   catalog.pages["detalhes-operacao"] = {
     title: "Detalhes da operação",
@@ -1004,6 +1371,7 @@
   window.HF_SCREENS = {
     bind: function (root) {
       bindOcr(root);
+      bindOpen(root);
     },
   };
 })();

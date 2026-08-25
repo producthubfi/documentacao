@@ -2326,3 +2326,138 @@
   background: #fff;
 }
 
+/* Abertura de operação — Figma Nova operação 7636:24781 / 7869:25743 */
+.hf-chipcard {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: 208px;
+  min-height: 66px;
+  padding: 17px;
+  box-sizing: border-box;
+  border: 1px solid #e3e3e3;
+  border-radius: 8px;
+  background: #fff;
+  font-family: var(--hf-font);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: #141515;
+  cursor: pointer;
+  text-align: left;
+}
+.hf-chipcard--wide { width: 237px; }
+.hf-chipcard--fill { width: 211px; }
+.hf-chipcard--pj { width: 220px; }
+.hf-chipcard--invest { width: 236px; }
+.hf-chipcard:hover:not(.is-selected) { border-color: var(--primary-400); }
+.hf-chipcard.is-selected {
+  background: #f0faf9;
+  border-color: #00a395;
+}
+.hf-chipcard__ico {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background: rgba(13, 175, 159, 0.1);
+  overflow: hidden;
+}
+.hf-chipcard__ico img {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+.hf-chiprow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  width: 100%;
+}
+.hf-open-sec {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+.hf-open-sec__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #141515;
+}
+.hf-fmt-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  width: 100%;
+  align-items: stretch;
+}
+.hf-fmt {
+  display: flex;
+  flex: 1 1 240px;
+  min-width: 240px;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 16px;
+  border: 1px solid #eaecec;
+  border-radius: 8px;
+  background: #f8f9f9;
+  font-family: var(--hf-font);
+  text-align: left;
+  cursor: pointer;
+}
+.hf-fmt.is-selected {
+  background: #f0faf9;
+  border-color: #00a395;
+}
+.hf-fmt .hf-radio { pointer-events: none; flex-shrink: 0; }
+.hf-fmt.is-selected .hf-radio-box__off { opacity: 0; }
+.hf-fmt.is-selected .hf-radio-box__on { opacity: 1; }
+.hf-fmt__body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+.hf-fmt__body strong {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.45;
+  color: #141515;
+}
+.hf-fmt.is-selected .hf-fmt__body strong { color: #00a395; }
+.hf-fmt__body p {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #787e7e;
+}
+.hf-fmt__more {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin-top: 4px;
+  padding: 8px;
+  width: fit-content;
+  border: 1px solid #e3e3e3;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: #282a2a;
+}
+.hf-fmt__more img {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+

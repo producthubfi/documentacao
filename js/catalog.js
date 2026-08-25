@@ -883,6 +883,7 @@
 
   function appSidebar(variant, mod) {
     var backoffice = variant === "backoffice";
+    var nova = variant === "nova";
     return (
       '<div class="hf-app-nav' +
       (mod ? " hf-app-nav--" + mod : "") +
@@ -896,8 +897,8 @@
       "</div></div>" +
       '<div class="hf-app-nav__scroll">' +
       navGroup("Rotina", [
-        navItem("nav-plus", "Nova Operação"),
-        navItem("nav-ops", "Operações", { active: !backoffice }),
+        navItem("nav-plus", "Nova Operação", { active: nova }),
+        navItem("nav-ops", "Operações", { active: !backoffice && !nova }),
         navItem("nav-panel", "Painel de Produtos")
       ]) +
       navGroup("Gestão", [
@@ -2321,6 +2322,7 @@
       operations: opCard("finalizado"),
       section: '<div class="hf-section"><h3>INFORMAÇÕES</h3><p>Conteúdo da seção</p></div>',
       "rich-text": '<div class="hf-rte" style="height:100px;max-width:240px"><div class="hf-rte__bar"><span class="hf-rte__style">Normal</span></div><div class="hf-rte__body">Notas…</div></div>',
+      "abertura-operacao": '<div class="docs-screen-thumb"><strong>Nova operação</strong><span>Perfil · Produto · Cliente</span></div>',
       "detalhes-operacao": '<div class="docs-screen-thumb"><strong>OP-000000</strong><span>Nome cliente</span></div>',
       "dashboard-operacoes": '<div class="docs-screen-thumb"><strong>Dashboard</strong><span>Visão estratégica</span></div>',
     };
