@@ -10,6 +10,11 @@ Com o XAMPP ligado:
 
 Navegação por hash, por exemplo `/hubfi-components/#/button`.
 
+Protótipo da extensão (Itaú + spec dos 5 bancos):
+
+- [http://localhost/hubfi-components/extensao/](http://localhost/hubfi-components/extensao/)
+- [http://localhost/hubfi-components/extensao/spec.html](http://localhost/hubfi-components/extensao/spec.html)
+
 ## O que está em código
 
 Todos os componentes do arquivo Figma, com variantes:
@@ -24,7 +29,7 @@ Tokens em `css/tokens.css`. Componentes em `css/hf.css`. Docs em `css/docs.css` 
 - **Table** — átomos alinhados ao Figma (Avatar, Text ± ícone, Contact 1/2 linhas, Header ± sort, Action, Status Badge). Tabela Default com 6 colunas + ação, Empresa como texto, coluna “Conteúdo”, empty state e paginação.
 - **Detalhes da operação** — sidebar e content em `--neutral/50` (`#fcfcfc`). Hero (`.docs-screen__top`) branco. Cards brancos.
 - **Dashboard de operações** — tela executiva com filtros, KPIs, funil de etapas, conversão e gráficos.
-- **Abertura de operação** — wizard 1:1 com o Figma Nova operação: Perfil do cliente → Mesa → Produto → Formato → Informações do cliente.
+- **Abertura de operação** — wizard com match de CPF (mesma imobiliária, outra empresa HubFi, cliente novo). Ver também `/#/operacao-outro-canal`.
 
 Ver `/#/badge`, `/#/table`, `/#/abertura-operacao`, `/#/detalhes-operacao` e `/#/dashboard-operacoes`.
 

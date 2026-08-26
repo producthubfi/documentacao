@@ -8,6 +8,7 @@
 
   function slug() {
     var hash = (location.hash || "").replace(/^#\/?/, "");
+    hash = hash.split("?")[0];
     return hash || "home";
   }
 

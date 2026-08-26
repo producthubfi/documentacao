@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HubFi · Spec da extensão para o time</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/spec.css">
+</head>
+<body>
+  <header class="top">
+    <div class="top__brand">
+      <span class="top__mark" aria-hidden="true"></span>
+      <div>
+        <p class="top__kicker">HubFi · Extensão</p>
+        <h1 class="top__title">Como programar o preenchimento</h1>
+      </div>
+    </div>
+    <nav class="top__links">
+      <a href="index.html">Protótipo Itaú</a>
+      <a href="#lab" class="is-on">Spec do time</a>
+    </nav>
+  </header>
+
+  <nav class="toc" aria-label="Seções">
+    <a href="#modelo">Modelo</a>
+    <a href="#lab">Laboratório</a>
+    <a href="#chaves">Chaves</a>
+    <a href="#bancos">5 bancos</a>
+    <a href="#adapter">Adapter</a>
+    <a href="#pastas">Pastas</a>
+    <a href="#regras">Regras</a>
+  </nav>
+
+  <main>
+    <section class="hero" id="modelo">
+      <p class="hero__lead">O dado da HubFi já nasce com um código interno. O portal do banco mostra outro texto. O programa só precisa <strong>traduzir os dois para o mesmo código</strong> e preencher o step que está na tela.</p>
+      <ol class="pipe">
+        <li>
+          <span class="pipe__n">1</span>
+          <strong>Detectar o banco</strong>
+          <em>URL da aba → itau, caixa, inter, santander, bradesco</em>
+        </li>
+        <li>
+          <span class="pipe__n">2</span>
+          <strong>Ler o step visível</strong>
+          <em>título / stepper → dados pessoais, endereço…</em>
+        </li>
+        <li>
+          <span class="pipe__n">3</span>
+          <strong>Casar campos</strong>
+          <em>label do banco → chave HubFi, se confiança ≥ 0.90</em>
+        </li>
+        <li>
+          <span class="pipe__n">4</span>
+          <strong>Preencher só o visível</strong>
+          <em>nunca clicar Continuar. A pessoa avança.</em>
+        </li>
+      </ol>
+    </section>
+
+    <section class="lab" id="lab">
+      <div class="lab__head">
+        <div>
+          <p class="eyebrow">Laboratório do matcher</p>
+          <h2>Clique num label do banco. Veja a tradução interna.</h2>
+        </div>
+        <p class="lab__hint">Isto é o que o código faz em cada clique de <em>Preencher formulário</em>. Não compara frase com frase. Os dois lados caem na mesma chave.</p>
+      </div>
+
+      <div class="banks" role="tablist" aria-label="Banco aberto">
+        <button type="button" class="bank-tab is-on" data-bank="itau" role="tab" aria-selected="true"><i style="--c:#ec7000"></i>Itaú</button>
+        <button type="button" class="bank-tab" data-bank="caixa" role="tab" aria-selected="false"><i style="--c:#005ca9"></i>Caixa</button>
+        <button type="button" class="bank-tab" data-bank="inter" role="tab" aria-selected="false"><i style="--c:#ff7a00"></i>Inter</button>
+        <button type="button" class="bank-tab" data-bank="santander" role="tab" aria-selected="false"><i style="--c:#ec0000"></i>Santander</button>
+        <button type="button" class="bank-tab" data-bank="bradesco" role="tab" aria-selected="false"><i style="--c:#cc092f"></i>Bradesco</button>
+      </div>
+
+      <div class="lab__grid">
+        <div class="panel">
+          <p class="panel__k">O que o banco mostra</p>
+          <p class="panel__sub" data-host></p>
+          <div class="labels" data-labels></div>
+          <label class="typebox">
+            <span>Ou digite um label que o banco use</span>
+            <input data-type placeholder="ex.: nome do cliente" autocomplete="off">
+          </label>
+        </div>
+
+        <div class="trace" data-trace>
+          <p class="trace__idle">Escolha um campo à esquerda.</p>
+        </div>
+
+        <div class="panel panel--hub">
+          <p class="panel__k">O que a HubFi guarda</p>
+          <p class="panel__sub">Operação OP-002773 · proponente Herminio</p>
+          <dl class="hub" data-hub></dl>
+        </div>
+      </div>
+    </section>
+
+    <section id="chaves">
+      <p class="eyebrow">Camada 1 · uma vez só</p>
+      <h2>Dicionário HubFi — igual nos 5 bancos</h2>
+      <p class="prose">O backend e a extensão falam esta lista. O painel pode escrever “Nome do Titular”; o código interno é <code>holderName</code>. O Itaú pode escrever “Nome”; o matcher aponta para <code>fullName</code> do <code>applicant</code>.</p>
+      <div class="keys">
+        <article>
+          <h3>Pessoa · papel <code>applicant</code></h3>
+          <ul>
+            <li><code>fullName</code> nome, nome completo, nome do proponente, nome do cliente</li>
+            <li><code>cpf</code> cpf, cpf do cliente</li>
+            <li><code>birthDate</code> nascimento, data de nascimento, dt nasc</li>
+            <li><code>phone</code> telefone, celular, whatsapp</li>
+            <li><code>email</code> e-mail, email</li>
+            <li><code>motherName</code> nome da mãe</li>
+            <li><code>rg</code> rg, identidade</li>
+          </ul>
+        </article>
+        <article>
+          <h3>Endereço · mesmo papel</h3>
+          <ul>
+            <li><code>cep</code> cep, código postal</li>
+            <li><code>street</code> rua, logradouro, endereço</li>
+            <li><code>number</code> número, nro, n°</li>
+            <li><code>complement</code> complemento, apto</li>
+            <li><code>neighborhood</code> bairro</li>
+            <li><code>city</code> cidade, município</li>
+            <li><code>state</code> estado, uf</li>
+          </ul>
+        </article>
+        <article>
+          <h3>Papéis — não misturar</h3>
+          <ul>
+            <li><code>applicant</code> quem está no form do banco agora</li>
+            <li><code>spouse</code> cônjuge, se o step disser isso</li>
+            <li><code>guarantor</code> avalista</li>
+            <li><code>holderName</code> titular do documento (CNH). Só preenche o form se o CPF for o mesmo do applicant</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="bancos">
+      <p class="eyebrow">Camada 2 · um arquivo por banco</p>
+      <h2>Os 5 bancos não precisam de 5 dicionários</h2>
+      <p class="prose">Cada banco é um <strong>adapter fino</strong>: hosts da URL, como o stepper se chama naquele portal, e atalhos só para o campo que o dicionário errar. CPF e e-mail quase sempre caem no genérico.</p>
+      <div class="bank-cards" data-bank-cards></div>
+    </section>
+
+    <section id="adapter">
+      <p class="eyebrow">Contrato para o time</p>
+      <h2>O que cada adapter implementa</h2>
+      <pre class="code"><code>interface BankAdapter {
+  id: "itau" | "caixa" | "inter" | "santander" | "bradesco"
+  name: string
+  hosts: string[]                 // hostname termina com
+  detectStep(doc: Document): {
+    id: string                    // "applicant-data" | "address" | ...
+    label: string                 // texto para o card da extensão
+  } | null
+  hints?: Partial&lt;Record&lt;FieldKey, string[]&gt;&gt;
+  // CSS opcional. Confiança 1.00. Usar quando o label for ruim.
+  write?(el: HTMLElement, value: string, key: FieldKey): boolean
+  // máscara, React, select customizado
+  afterWrite?(el: HTMLElement, key: FieldKey): void
+  // esperar ViaCEP depois de cep
+}</code></pre>
+      <div class="split">
+        <div>
+          <h3>Matcher genérico (core)</h3>
+          <ol class="steps">
+            <li>Normaliza o label: minúsculo, sem acento, sem “digite o”.</li>
+            <li>Procura no dicionário. Match exato 0.98. Contém o alias 0.92.</li>
+            <li><code>autocomplete="email"</code> / <code>cc-name</code> vale 0.99.</li>
+            <li>Hint do adapter vale 1.00 e ganha.</li>
+            <li>Abaixo de 0.90: não preenche. Reporta “precisa de revisão”.</li>
+            <li>Uma chave só casa com um input por step.</li>
+          </ol>
+        </div>
+        <div>
+          <h3>Filler (core)</h3>
+          <ol class="steps">
+            <li>Só input/select/textarea visível e habilitado.</li>
+            <li>Setter nativo + eventos <code>input</code> e <code>change</code> (React).</li>
+            <li>Lê de volta. Se o valor não ficou, status “não permaneceu”.</li>
+            <li>Não dispara clique em Continuar, Enviar, Próximo.</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section id="pastas">
+      <p class="eyebrow">Como organizar o repo</p>
+      <h2>Pastas da extensão real (Chrome MV3)</h2>
+      <pre class="code tree"><code>hubfi-extension/
+  manifest.json
+  background/          tab URL → bankId
+  sidepanel/           UI atual da operação + card de autofill
+  core/
+    schema.ts          chaves e papéis
+    dictionary.ts      aliases PT-BR → FieldKey
+    detector.ts        hosts dos 5 bancos
+    scanner.ts         campos visíveis do step
+    matcher.ts         score e 1:1
+    filler.ts          escrever e conferir
+  adapters/
+    itau.ts
+    caixa.ts
+    inter.ts
+    santander.ts
+    bradesco.ts
+  data/
+    operation.ts       payload da OP (applicant, docs, requested)</code></pre>
+      <ol class="ship">
+        <li><strong>Entrega 1.</strong> Core + adapter Itaú. Dois steps do protótipo: pessoais e endereço.</li>
+        <li><strong>Entrega 2.</strong> Demais steps do Itaú (renda, profissional, veículo) com as mesmas chaves.</li>
+        <li><strong>Entrega 3.</strong> Caixa, Inter, Santander, Bradesco: hosts + detectStep + hints só onde quebrar.</li>
+      </ol>
+    </section>
+
+    <section id="regras">
+      <p class="eyebrow">Não negociar</p>
+      <h2>Regras de preenchimento</h2>
+      <ul class="rules">
+        <li>A extensão informa o banco sozinha, pela URL. A pessoa não escolhe “estou no Itaú”.</li>
+        <li>Se a aba não for um dos 5 hosts, o card de preenchimento some. O restante da operação continua.</li>
+        <li>Preenche só o step montado na tela. Campos de steps futuros não existem no DOM.</li>
+        <li>Titular da CNH ≠ proponente, se o CPF for outro. Não copiar Honorio no nome do Herminio.</li>
+        <li>Dado ausente (complemento) fica vazio e aparece como “sem informação”.</li>
+        <li>Dado divergente entre fontes da mesma pessoa: não preenche, pede revisão.</li>
+        <li>Nunca alterar CSS permanente do banco. Highlight no máximo durante o fill, e some.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p>Tela de briefing para o time. O fluxo clicável continua no <a href="index.html">protótipo Itaú</a>.</p>
+  </footer>
+
+  <script src="js/spec.js"></script>
+</body>
+</html>

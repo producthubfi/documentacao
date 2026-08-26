@@ -874,10 +874,6 @@
   height: 2px;
   background: #eaecec;
 }
-.hf-stepper-s .hf-step-s:first-child .hf-step-s__line--before,
-.hf-stepper-s .hf-step-s:last-child .hf-step-s__line--after {
-  background: transparent;
-}
 .hf-step-s__dot {
   display: block;
   width: 10px;
@@ -889,6 +885,14 @@
 .hf-step-s.is-current .hf-step-s__dot,
 .hf-step-s.is-done .hf-step-s__dot {
   background: #00a395;
+}
+.hf-step-s.is-done .hf-step-s__line,
+.hf-step-s.is-current .hf-step-s__line--before {
+  background: #00a395;
+}
+.hf-stepper-s .hf-step-s:first-child .hf-step-s__line--before,
+.hf-stepper-s .hf-step-s:last-child .hf-step-s__line--after {
+  background: transparent;
 }
 .hf-step-s__label {
   font-size: 12px;
@@ -1315,6 +1319,12 @@
 .hf-select-btn:hover:not(.is-selected) { border-color: var(--primary-400); }
 .hf-select-btn.is-selected {
   background: var(--primary-subtle); border-color: var(--primary-default); color: var(--primary-default);
+}
+.hf-select-btn.is-selected .hf-select-btn__icon {
+  background: #00a395;
+}
+.hf-select-btn.is-selected .hf-select-btn__icon img {
+  filter: brightness(0) invert(1);
 }
 .hf-select-btn__icon {
   display: flex; align-items: center; justify-content: center;
@@ -2366,10 +2376,16 @@
   background: rgba(13, 175, 159, 0.1);
   overflow: hidden;
 }
+.hf-chipcard.is-selected .hf-chipcard__ico {
+  background: #00a395;
+}
 .hf-chipcard__ico img {
   display: block;
   width: 16px;
   height: 16px;
+}
+.hf-chipcard.is-selected .hf-chipcard__ico img {
+  filter: brightness(0) invert(1);
 }
 .hf-chiprow {
   display: flex;
@@ -2459,5 +2475,10 @@
   display: block;
   width: 16px;
   height: 16px;
+}
+.hf-fmt:disabled {
+  opacity: 0.45;
+  cursor: default;
+  pointer-events: none;
 }
 

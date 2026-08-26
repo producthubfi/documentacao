@@ -1646,8 +1646,10 @@ textarea {
 .hf-open__head {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 0;
   width: 100%;
+  text-align: left;
 }
 .hf-open__title {
   margin: 0;
@@ -1656,6 +1658,7 @@ textarea {
   line-height: 1.32;
   color: #0daf9f;
   max-width: 100%;
+  text-align: left;
 }
 .hf-open__title.is-regular { font-weight: 400; color: #00a395; }
 .hf-open__sub {
@@ -1664,6 +1667,7 @@ textarea {
   font-weight: 400;
   line-height: 16px;
   color: #191a1a;
+  text-align: left;
 }
 .hf-open .hf-stepper-s {
   align-self: center;
@@ -1682,6 +1686,10 @@ textarea {
 .hf-open .hf-step-s.is-current .hf-step-s__line--after {
   background: #eaecec;
 }
+.hf-open .hf-step-s:first-child .hf-step-s__line--before,
+.hf-open .hf-step-s:last-child .hf-step-s__line--after {
+  background: transparent;
+}
 .hf-open__stage {
   display: flex;
   flex-direction: column;
@@ -1691,7 +1699,12 @@ textarea {
   padding-top: 32px;
 }
 .hf-open__view { display: none; }
-.hf-open__view.is-on { display: block; }
+.hf-open__view.is-on {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
 .hf-open__h {
   margin: 0 0 24px;
   font-size: 18px;
@@ -1776,6 +1789,172 @@ textarea {
 .hf-open__next:disabled {
   opacity: 0.45;
   cursor: default;
+}
+
+.hf-open__view .hf-chiprow {
+  justify-content: center;
+}
+.hf-open-sec {
+  width: 100%;
+  max-width: 1040px;
+  margin: 0 auto;
+}
+.hf-open-id {
+  max-width: 720px;
+}
+.hf-open-id .hf-open-sec__title {
+  text-align: center;
+  width: 100%;
+}
+.hf-open-id__hint {
+  margin: 0 0 16px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.45;
+  color: #787e7e;
+  max-width: 720px;
+  text-align: center;
+}
+.hf-open__form--id {
+  justify-content: center;
+  max-width: 720px;
+  width: 100%;
+}
+.hf-open-demos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  max-width: 720px;
+  width: 100%;
+  margin-top: 4px;
+}
+.hf-open-demos > span {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: #787e7e;
+}
+.hf-open-demo {
+  height: 28px;
+  padding: 0 10px;
+  border: 1px dashed #e3e3e3;
+  border-radius: 8px;
+  background: #fff;
+  font-family: var(--hf-font);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: #141515;
+  cursor: pointer;
+}
+.hf-open-demo:hover { border-color: #00a395; color: #00a395; }
+.hf-open-demo.is-on {
+  border-style: solid;
+  border-color: #00a395;
+  background: #f0faf9;
+  color: #00a395;
+}
+.hf-match-host {
+  max-width: 720px;
+  width: 100%;
+  margin: 24px auto 0;
+}
+.hf-match {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid #eaecec;
+  border-radius: 12px;
+  background: #f8f9f9;
+}
+.hf-match--same {
+  background: #fff8eb;
+  border-color: #f5c026;
+}
+.hf-match--other {
+  background: #f3f7fd;
+  border-color: #5e8fe8;
+}
+.hf-match--ok {
+  background: #f0faf9;
+  border-color: #00a395;
+}
+.hf-match .hf-alert { max-width: none; }
+.hf-match__h {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #141515;
+}
+.hf-match__p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.45;
+  color: #787e7e;
+}
+.hf-match__reason.hf-field--area,
+.hf-match .hf-field--area,
+.hf-match .hf-field__control--area,
+.hf-match .hf-field__area {
+  width: 100%;
+  max-width: none;
+}
+.hf-match .hf-field__control--area {
+  min-height: 96px;
+}
+.hf-match__op {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  padding: 12px 16px;
+  background: #fff;
+  border-radius: 8px;
+}
+.hf-match__acts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.hf-lost {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px;
+  border: 1px solid #eaecec;
+  border-left: 3px solid #787e7e;
+  border-radius: 8px;
+  background: #f8f9f9;
+}
+.hf-lost__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.hf-lost__head strong {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.45;
+  color: #141515;
+}
+.hf-lost p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.45;
+  color: #141515;
+}
+.hf-lost small {
+  font-size: 12px;
+  line-height: 1.5;
+  color: #787e7e;
+}
+
+@media (max-width: 800px) {
+  .hf-match__op { grid-template-columns: 1fr 1fr; }
 }
 
 .docs-dash-title {

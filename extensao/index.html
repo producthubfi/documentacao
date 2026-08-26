@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HubFi · Protótipo da extensão</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/proto.css">
+</head>
+<body>
+  <a class="dev-link" href="spec.html">Spec para o time</a>
+  <div class="app">
+    <main class="bank">
+      <div class="bank__sheet">
+        <div class="bank__brand">
+          <div class="bank__logo"><img src="assets/itau.png" width="48" height="48" alt="Itaú"></div>
+          <div>
+            <h1 class="bank__title">Solicitação de Financiamento</h1>
+            <p class="bank__sub">Banco Itaú S.A.</p>
+          </div>
+        </div>
+        <div class="bank__bar"></div>
+
+        <section class="bank__step is-on" data-bank-step="applicant-data">
+          <h2 class="bank__h2">Dados Pessoais</h2>
+          <div class="bank__grid">
+            <label class="bank__field"><span class="bank__label">Nome Completo <span class="bank__req">*</span></span><input data-field="fullName" placeholder="Digite o nome completo"></label>
+            <label class="bank__field"><span class="bank__label">CPF <span class="bank__req">*</span></span><input data-field="cpf" placeholder="000.000.000-00"></label>
+            <label class="bank__field"><span class="bank__label">Data de Nascimento <span class="bank__req">*</span></span><input data-field="birthDate" placeholder="dd/mm/aaaa"></label>
+            <label class="bank__field"><span class="bank__label">Telefone <span class="bank__req">*</span></span><input data-field="phone" placeholder="(00) 00000-0000"></label>
+            <label class="bank__field is-wide"><span class="bank__label">E-mail <span class="bank__req">*</span></span><input data-field="email" placeholder="seuemail@exemplo.com"></label>
+          </div>
+        </section>
+
+        <section class="bank__step" data-bank-step="address">
+          <h2 class="bank__h2">Endereço</h2>
+          <div class="bank__grid">
+            <label class="bank__field"><span class="bank__label">CEP <span class="bank__req">*</span></span><input data-field="cep" placeholder="00000-000"></label>
+            <label class="bank__field"><span class="bank__label">Rua <span class="bank__req">*</span></span><input data-field="street" placeholder="Nome da rua"></label>
+            <label class="bank__field"><span class="bank__label">Número <span class="bank__req">*</span></span><input data-field="number" placeholder="Nº"></label>
+            <label class="bank__field"><span class="bank__label">Complemento</span><input data-field="complement" placeholder="Apto, bloco..."></label>
+            <label class="bank__field"><span class="bank__label">Bairro <span class="bank__req">*</span></span><input data-field="neighborhood"></label>
+            <label class="bank__field"><span class="bank__label">Cidade <span class="bank__req">*</span></span><input data-field="city"></label>
+            <label class="bank__field"><span class="bank__label">Estado <span class="bank__req">*</span></span>
+              <select data-field="state">
+                <option value="">Selecionar</option>
+                <option value="SP">SP</option>
+                <option value="RJ">RJ</option>
+              </select>
+            </label>
+          </div>
+        </section>
+
+        <p class="bank__note"><strong>Importante:</strong> campos com * são obrigatórios. A extensão não clica em Continuar nem Enviar. O avanço é seu.</p>
+        <div class="bank__acts">
+          <button class="bank__btn bank__btn--ghost" type="button">Cancelar</button>
+          <button class="bank__btn bank__btn--primary" type="button" data-next>Continuar</button>
+        </div>
+      </div>
+    </main>
+
+    <aside class="ext">
+      <header class="ext__head">
+        <button class="ext__back" type="button">
+          <img src="assets/icons/arrow-left.svg" width="20" height="20" alt="">
+          Voltar
+        </button>
+        <div class="ext__title-row">
+          <div class="ext__title-left">
+            <span class="ext__ico" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Z" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/><path d="M14 3v5h5" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>
+            </span>
+            <div>
+              <h1 class="ext__h">Dados da Operação</h1>
+              <p class="ext__tag">Extensão Hubfi</p>
+            </div>
+          </div>
+          <span data-chev></span>
+        </div>
+      </header>
+
+      <div class="ext__status">
+        <div>
+          <p class="ext__status-k">Status</p>
+          <p class="ext__status-v"><i class="ext__dot"></i>Em Análise</p>
+        </div>
+        <span class="ext__badge">Ativo</span>
+      </div>
+
+      <div class="ext__body">
+        <div class="autofill" data-autofill></div>
+
+        <section class="sec">
+          <button class="sec__head" type="button" data-sec>Informações Principais <span data-chev></span></button>
+          <div class="sec__pad" data-main-fields></div>
+        </section>
+
+        <p class="sec__title">Documentos</p>
+        <article class="doc">
+          <button class="doc__head" type="button" data-doc>
+            <span class="doc__left"><span class="doc__file"></span>CNH - Frente</span>
+            <span data-chev></span>
+          </button>
+          <div class="doc__body" data-cnh-fields></div>
+        </article>
+        <article class="doc">
+          <div class="doc__head"><span class="doc__left"><span class="doc__file"></span>Comprovante de Residência</span></div>
+        </article>
+        <article class="doc">
+          <div class="doc__head"><span class="doc__left"><span class="doc__file"></span>Contrato Social</span></div>
+        </article>
+
+        <p class="sec__title">Dados e Documentos Solicitados</p>
+        <p class="sec__hint">Cliente enviou em: 10/10/2025</p>
+        <div class="sec__pad" data-requested></div>
+      </div>
+    </aside>
+  </div>
+  <div class="toast" role="status"></div>
+  <script src="js/proto.js"></script>
+</body>
+</html>

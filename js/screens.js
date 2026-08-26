@@ -67,7 +67,8 @@
     return typeof ui.step === "function" ? ui.step(state, label) : "";
   }
 
-  function opScreen() {
+  function opScreen(opts) {
+    opts = opts || {};
     var sidebar =
       typeof ui.appSidebar === "function" ? ui.appSidebar(null, "fit") : "";
     var badge =
@@ -256,6 +257,13 @@
       flow +
       "</div>" +
       '<div class="docs-screen__body">' +
+      (opts.lostChannel
+        ? '<div class="hf-lost" role="status"><div class="hf-lost__head">' +
+          badge("outline", "Encerrada") +
+          "<strong>Esta operação foi encerrada</strong></div>" +
+          "<p>Não é possível seguir com esta operação. Se precisar de mais informações, fale com o time HubFi.</p>" +
+          "<small>Registrado em 25/08/2026 · Time HubFi</small></div>"
+        : "") +
       summary +
       etapa +
       "</div>" +
@@ -999,13 +1007,16 @@
     );
   }
 
-  function openField(label, placeholder) {
+  function openField(label, placeholder, extra) {
+    extra = extra || "";
     return (
       '<div class="hf-field"><div class="hf-field__header"><span class="hf-field__label">' +
       label +
       '</span></div><div class="hf-field__control"><input class="hf-field__input" type="text" placeholder="' +
       placeholder +
-      '"></div></div>'
+      '"' +
+      extra +
+      "></div></div>"
     );
   }
 
@@ -1094,6 +1105,192 @@
     return OPEN_PRODUCTS[mesa] || [mesa, mesa, mesa, mesa, mesa];
   }
 
+  var OPEN_CLIENTS = {
+    "12345678900": {
+      name: "Marcelo Oliveira",
+      phone: "(11) 98888-0101",
+      email: "marcelo.oliveira@email.com",
+      birth: "12/03/1988",
+      kind: "same",
+      op: {
+        id: "OP-002941",
+        product: "Aquisição",
+        owner: "Ana Costa",
+        stage: "Análise de crédito",
+        opened: "12/08/2026",
+      },
+    },
+    "98765432100": {
+      name: "Ana Julia Silva",
+      phone: "(21) 97777-2020",
+      email: "ana.julia@email.com",
+      birth: "04/11/1992",
+      kind: "other",
+    },
+    "11122233344": {
+      name: "Ricardo Mendes",
+      phone: "(81) 99115-6938",
+      email: "ricardo.mendes@email.com",
+      birth: "22/07/1985",
+      kind: "closed",
+      last: {
+        id: "OP-001102",
+        product: "Portabilidade",
+        status: "Ganha",
+        date: "03/2026",
+      },
+    },
+  };
+
+  function cpfDigits(value) {
+    return String(value || "")
+      .replace(/\D/g, "")
+      .slice(0, 11);
+  }
+
+  function cpfMask(digits) {
+    var d = cpfDigits(digits);
+    if (d.length <= 3) return d;
+    if (d.length <= 6) return d.slice(0, 3) + "." + d.slice(3);
+    if (d.length <= 9) return d.slice(0, 3) + "." + d.slice(3, 6) + "." + d.slice(6);
+    return d.slice(0, 3) + "." + d.slice(3, 6) + "." + d.slice(6, 9) + "-" + d.slice(9);
+  }
+
+  function matchKind(client, produto) {
+    if (!client) return "new";
+    if (client.kind === "same" && client.op && client.op.product === produto) return "same";
+    if (client.kind === "same") return "other-product";
+    return client.kind;
+  }
+
+  function openBtn(style, label, act) {
+    return (
+      '<button class="hf-btn hf-btn--sm hf-btn--' +
+      style +
+      '" type="button" data-match-act="' +
+      act +
+      '">' +
+      label +
+      "</button>"
+    );
+  }
+
+  function renderMatch(kind, client, produto, request) {
+    request = request || "";
+    if (kind === "same") {
+      var op = client.op;
+      if (request === "form") {
+        return (
+          '<div class="hf-match hf-match--same">' +
+          "<strong class=\"hf-match__h\">Solicitar troca de responsável</strong>" +
+          '<p class="hf-match__p">A operação ' +
+          op.id +
+          " continua com " +
+          op.owner +
+          ". A troca só acontece se ela ou um gestor aceitar. Isso não é imediato.</p>" +
+          '<div class="hf-match__op">' +
+          kv("Responsável atual", op.owner) +
+          kv("Solicitante", "Lucas Augusto") +
+          kv("Operação", op.id) +
+          kv("Produto", "Imobiliário · " + op.product) +
+          "</div>" +
+          '<div class="hf-field hf-field--area hf-match__reason"><div class="hf-field__header"><span class="hf-field__label">Por que você precisa assumir?</span><span class="hf-field__req">*</span></div>' +
+          '<div class="hf-field__control hf-field__control--area"><textarea class="hf-field__area" data-assume-reason placeholder="Explique o motivo. O responsável atual e um gestor vão ver este pedido."></textarea></div>' +
+          '<p class="hf-field__error" data-assume-error hidden>Informe o motivo para enviar o pedido.</p></div>' +
+          '<div class="hf-match__acts">' +
+          openBtn("ghost", "Voltar", "assume-back") +
+          openBtn("primary", "Enviar pedido", "assume-send") +
+          "</div></div>"
+        );
+      }
+      if (request === "pending") {
+        return (
+          '<div class="hf-match hf-match--same">' +
+          '<div class="hf-alert hf-alert--info" role="status"><img class="hf-alert__icon" src="assets/icons/alert-info.svg" width="20" height="20" alt=""><div class="hf-alert__body"><p class="hf-alert__title">Pedido enviado. A operação não mudou de responsável</p><p class="hf-alert__desc">Aguardando ' +
+          op.owner +
+          " ou um gestor aceitar. Enquanto isso, você só pode abrir a operação para acompanhar.</p></div></div>" +
+          '<div class="hf-match__op">' +
+          kv("Operação", op.id) +
+          kv("Responsável", op.owner) +
+          kv("Seu pedido", "Troca de responsável") +
+          kv("Status", "Pendente") +
+          "</div>" +
+          '<div class="hf-match__acts">' +
+          openBtn("primary", "Abrir operação", "open") +
+          "</div></div>"
+        );
+      }
+      if (request === "join-pending") {
+        return (
+          '<div class="hf-match hf-match--same">' +
+          '<div class="hf-alert hf-alert--info" role="status"><img class="hf-alert__icon" src="assets/icons/alert-info.svg" width="20" height="20" alt=""><div class="hf-alert__body"><p class="hf-alert__title">Pedido para participar enviado</p><p class="hf-alert__desc">' +
+          op.owner +
+          " continua responsável. Você entra como apoio só depois que ela aceitar.</p></div></div>" +
+          '<div class="hf-match__acts">' +
+          openBtn("primary", "Abrir operação", "open") +
+          "</div></div>"
+        );
+      }
+      return (
+        '<div class="hf-match hf-match--same">' +
+        '<div class="hf-alert hf-alert--warning" role="alert"><img class="hf-alert__icon" src="assets/icons/alert-warning.svg" width="20" height="20" alt=""><div class="hf-alert__body"><p class="hf-alert__title">Este cliente já possui uma operação em andamento</p><p class="hf-alert__desc">Mesmo produto na sua imobiliária. Não crie outra. Abra a existente ou solicite a troca de responsável.</p></div></div>' +
+        '<div class="hf-match__op">' +
+        kv("Operação", op.id) +
+        kv("Produto", "Imobiliário · " + op.product) +
+        kv("Responsável", op.owner) +
+        kv("Etapa", op.stage + " · " + op.opened) +
+        "</div>" +
+        '<div class="hf-match__acts">' +
+        openBtn("primary", "Abrir operação", "open") +
+        openBtn("ghost", "Solicitar troca de responsável", "assume") +
+        openBtn("outline", "Pedir para participar", "join") +
+        "</div></div>"
+      );
+    }
+    if (kind === "other") {
+      return (
+        '<div class="hf-match hf-match--other">' +
+        '<div class="hf-alert hf-alert--info" role="alert"><img class="hf-alert__icon" src="assets/icons/alert-info.svg" width="20" height="20" alt=""><div class="hf-alert__body"><p class="hf-alert__title">Não é possível abrir esta operação</p><p class="hf-alert__desc">Este CPF não está disponível para uma operação completa deste produto no momento. Você pode simular ou pedir uma revisão ao time HubFi.</p></div></div>' +
+        '<div class="hf-match__acts">' +
+        openBtn("primary", "Fazer simulação", "simulate") +
+        openBtn("ghost", "Solicitar revisão à HubFi", "review") +
+        "</div></div>"
+      );
+    }
+    if (kind === "other-product") {
+      return (
+        '<div class="hf-match hf-match--ok">' +
+        '<div class="hf-alert hf-alert--info" role="alert"><img class="hf-alert__icon" src="assets/icons/alert-info.svg" width="20" height="20" alt=""><div class="hf-alert__body"><p class="hf-alert__title">Cliente já cadastrado na sua imobiliária</p><p class="hf-alert__desc">' +
+        client.name +
+        " tem " +
+        client.op.product +
+        " em andamento com " +
+        client.op.owner +
+        ". Você está abrindo " +
+        produto +
+        ". Pode seguir.</p></div></div></div>"
+      );
+    }
+    if (kind === "closed") {
+      return (
+        '<div class="hf-match hf-match--ok">' +
+        '<div class="hf-alert hf-alert--success" role="alert"><img class="hf-alert__icon" src="assets/icons/alert-success.svg" width="20" height="20" alt=""><div class="hf-alert__body"><p class="hf-alert__title">Cliente já cadastrado</p><p class="hf-alert__desc">Última operação: ' +
+        client.last.product +
+        " · " +
+        client.last.status +
+        " em " +
+        client.last.date +
+        " (" +
+        client.last.id +
+        "). Pode abrir uma nova.</p></div></div></div>"
+      );
+    }
+    return (
+      '<div class="hf-match hf-match--ok">' +
+      '<div class="hf-alert hf-alert--success" role="alert"><img class="hf-alert__icon" src="assets/icons/alert-success.svg" width="20" height="20" alt=""><div class="hf-alert__body"><p class="hf-alert__title">Novo cliente</p><p class="hf-alert__desc">Nenhuma operação deste CPF na sua imobiliária. Siga para o formato da operação.</p></div></div></div>'
+    );
+  }
+
   function openScreen() {
     var sidebar =
       typeof ui.appSidebar === "function" ? ui.appSidebar("nova", "fit") : "";
@@ -1160,21 +1357,29 @@
       '<div class="hf-chiprow" data-chip-group="produto">' +
       produtos +
       "</div></div></div>" +
-      '<div class="hf-open__view" data-open-view="3"><div class="hf-open-sec"><p class="hf-open-sec__title">Formato da operação</p>' +
+      '<div class="hf-open__view" data-open-view="3"><div class="hf-open-sec hf-open-id"><p class="hf-open-sec__title">Identifique o cliente</p>' +
+      '<p class="hf-open-id__hint">Informe o CPF para ver se já existe operação deste produto. O cliente pertence à imobiliária, não ao operador.</p>' +
+      '<div class="hf-open__form hf-open__form--id">' +
+      openField("CPF", "000.000.000-00", ' data-cpf-input inputmode="numeric" autocomplete="off"') +
+      openField("Nome completo", "Preenchido após o CPF", " data-name-input") +
+      "</div>" +
+      '<div class="hf-open-demos"><span>Testar cenário</span>' +
+      '<button class="hf-open-demo" type="button" data-demo-cpf="12345678900">Mesma imobiliária</button>' +
+      '<button class="hf-open-demo" type="button" data-demo-cpf="98765432100">CPF indisponível</button>' +
+      '<button class="hf-open-demo" type="button" data-demo-cpf="11122233344">Cliente já cadastrado</button>' +
+      '<button class="hf-open-demo" type="button" data-demo-cpf="39053344705">Cliente novo</button>' +
+      "</div>" +
+      '<div class="hf-match-host" data-match-panel></div></div></div>' +
+      '<div class="hf-open__view" data-open-view="4"><div class="hf-open-sec"><p class="hf-open-sec__title">Formato da operação</p>' +
       '<div class="hf-fmt-grid">' +
       formats +
       "</div></div></div>" +
-      '<div class="hf-open__view" data-open-view="4"><h2 class="hf-open__h">Informações do cliente</h2>' +
+      '<div class="hf-open__view" data-open-view="5"><h2 class="hf-open__h">Informações do cliente</h2>' +
       '<div class="hf-open__form">' +
       openSelect("Personal finance", ["Victor Tavares", "Lucas Augusto", "Maurício Lima"]) +
-      openSelect("Selecione um cliente", [
-        "Marcelo Oliveira",
-        "Ana Julia Silva",
-        "Caloi Bike Store",
-      ]) +
-      openField("Telefone", "Informar") +
-      openField("E-mail", "Informar") +
-      openField("Data de nascimento", "Informar") +
+      openField("Telefone", "Informar", " data-phone-input") +
+      openField("E-mail", "Informar", " data-email-input") +
+      openField("Data de nascimento", "Informar", " data-birth-input") +
       openField("Valor da operação", "R$ 0,00") +
       '<div class="hf-field hf-field--area"><div class="hf-field__header"><span class="hf-field__label">Detalhe sobre a solicitação?</span></div>' +
       '<div class="hf-field__control hf-field__control--area"><textarea class="hf-field__area" placeholder="Como buscamos ofertar uma solução customizada e mais assertiva, informe mais detalhes sobre a solicitação como: situação do cliente, finalidade da operação, etc."></textarea></div></div>' +
@@ -1195,6 +1400,11 @@
       mesa: "Imobiliário",
       produto: "Aquisição",
       formato: "Operação simplificada",
+      cpf: "",
+      name: "",
+      match: "",
+      lockSim: false,
+      ownerRequest: "",
     };
     var stepsEarly = [
       "Perfil do cliente",
@@ -1210,11 +1420,86 @@
       "Dados do formulário",
       "Comunicação",
     ];
+    var cpfInput = shell.querySelector("[data-cpf-input]");
+    var nameInput = shell.querySelector("[data-name-input]");
+    var panel = shell.querySelector("[data-match-panel]");
+    var lastView = 5;
 
     function stepperIndex() {
       if (view === 0) return 0;
-      if (view <= 3) return 1;
+      if (view <= 2) return 1;
       return 2;
+    }
+
+    function clientOf() {
+      return OPEN_CLIENTS[state.cpf] || null;
+    }
+
+    function currentKind() {
+      if (state.cpf.length !== 11) return "";
+      return matchKind(clientOf(), state.produto);
+    }
+
+    function canProceed() {
+      var kind = currentKind();
+      if (view !== 3) return true;
+      if (!kind) return false;
+      if (kind === "same") return false;
+      if (kind === "other") return !!state.lockSim;
+      return true;
+    }
+
+    function paintMatch() {
+      if (!panel) return;
+      var kind = currentKind();
+      state.match = kind;
+      if (!kind) {
+        panel.innerHTML = "";
+        return;
+      }
+      var client = clientOf() || { name: nameInput ? nameInput.value : "" };
+      panel.innerHTML = renderMatch(kind, client, state.produto, state.ownerRequest);
+      if (kind === "other") {
+        if (nameInput) nameInput.value = "";
+        state.name = "";
+      } else {
+        if (client.name && nameInput) nameInput.value = client.name;
+        state.name = client.name || state.name;
+        var phone = shell.querySelector("[data-phone-input]");
+        var email = shell.querySelector("[data-email-input]");
+        var birth = shell.querySelector("[data-birth-input]");
+        if (client.phone && phone) phone.value = client.phone;
+        if (client.email && email) email.value = client.email;
+        if (client.birth && birth) birth.value = client.birth;
+      }
+    }
+
+    function lookupFromInput() {
+      if (!cpfInput) return;
+      var nextCpf = cpfDigits(cpfInput.value);
+      if (nextCpf !== state.cpf) state.ownerRequest = "";
+      state.cpf = nextCpf;
+      cpfInput.value = cpfMask(state.cpf);
+      if (state.cpf.length < 11) {
+        state.lockSim = false;
+        state.ownerRequest = "";
+        if (nameInput && !OPEN_CLIENTS[state.cpf]) nameInput.value = "";
+      }
+      paintMatch();
+      paint();
+    }
+
+    function paintFormats() {
+      shell.querySelectorAll("[data-fmt]").forEach(function (btn) {
+        var sim = btn.getAttribute("data-fmt") === "Simulação de operação";
+        if (state.lockSim) {
+          btn.disabled = !sim;
+          btn.classList.toggle("is-selected", sim);
+          if (sim) state.formato = "Simulação de operação";
+        } else {
+          btn.disabled = false;
+        }
+      });
     }
 
     function paint() {
@@ -1223,7 +1508,7 @@
         el.classList.toggle("is-on", Number(el.getAttribute("data-open-view")) === view);
       });
       var active = stepperIndex();
-      var labels = view === 4 ? stepsLate : stepsEarly;
+      var labels = view === lastView ? stepsLate : stepsEarly;
       shell.querySelectorAll("[data-open-stepper] .hf-step-s").forEach(function (el, i) {
         el.classList.remove("is-current", "is-done", "is-todo");
         el.classList.add(i === active ? "is-current" : i < active ? "is-done" : "is-todo");
@@ -1232,12 +1517,14 @@
       });
       var title = shell.querySelector("[data-open-title]");
       var sub = shell.querySelector("[data-open-sub]");
-      if (view === 4) {
+      if (view >= 3) {
         title.textContent =
           "Financiamento " + state.mesa + " -" + state.produto + " - " + state.perfil;
         title.classList.add("is-regular");
         sub.textContent =
-          "Informe os dados de contato do cliente mais algumas informações complementares para solicitação da proposta.";
+          view === 3
+            ? "Confira se este CPF já tem operação deste produto antes de seguir."
+            : "Informe os dados de contato do cliente mais algumas informações complementares para solicitação da proposta.";
       } else {
         title.textContent = "Nova operação";
         title.classList.remove("is-regular");
@@ -1247,11 +1534,21 @@
       var next = shell.querySelector("[data-open-next]");
       if (back) back.disabled = view === 0;
       if (next) {
+        var blocked = view === 3 && !canProceed();
+        next.disabled = blocked;
+        next.hidden = blocked;
         next.innerHTML =
-          view === 4
+          view === lastView
             ? 'Concluir operação<img src="assets/screen/open/arrow-right.svg" width="18" height="18" alt="">'
             : 'Continuar<img src="assets/screen/open/arrow-right.svg" width="18" height="18" alt="">';
       }
+      paintFormats();
+      shell.querySelectorAll("[data-demo-cpf]").forEach(function (btn) {
+        btn.classList.toggle(
+          "is-on",
+          cpfDigits(btn.getAttribute("data-demo-cpf")) === state.cpf
+        );
+      });
     }
 
     function refillProducts() {
@@ -1259,12 +1556,15 @@
       if (!row) return;
       var list = productsFor(state.mesa);
       state.produto = list[0];
+      state.ownerRequest = "";
       row.innerHTML = list
         .map(function (name, i) {
           return chipCard(name, i === 0, "hf-chipcard--fill");
         })
         .join("");
       row.querySelectorAll("[data-chipcard]").forEach(wireChip);
+      if (state.cpf.length === 11) paintMatch();
+      paint();
     }
 
     function wireChip(btn) {
@@ -1277,18 +1577,89 @@
         btn.classList.add("is-selected");
         state[key] = btn.getAttribute("data-chipcard");
         if (key === "mesa") refillProducts();
+        if (key === "produto" && state.cpf.length === 11) {
+          state.lockSim = false;
+          state.ownerRequest = "";
+          paintMatch();
+          paint();
+        }
       });
     }
 
     shell.querySelectorAll("[data-chipcard]").forEach(wireChip);
     shell.querySelectorAll("[data-fmt]").forEach(function (btn) {
       btn.addEventListener("click", function () {
+        if (btn.disabled) return;
         shell.querySelectorAll("[data-fmt]").forEach(function (other) {
           other.classList.remove("is-selected");
         });
         btn.classList.add("is-selected");
         state.formato = btn.getAttribute("data-fmt");
       });
+    });
+    if (cpfInput) {
+      cpfInput.addEventListener("input", lookupFromInput);
+      cpfInput.addEventListener("blur", lookupFromInput);
+    }
+    shell.querySelectorAll("[data-demo-cpf]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        if (!cpfInput) return;
+        cpfInput.value = btn.getAttribute("data-demo-cpf");
+        lookupFromInput();
+        cpfInput.focus();
+      });
+    });
+    shell.addEventListener("click", function (event) {
+      var el = event.target.nodeType === 1 ? event.target : event.target.parentElement;
+      var act = el && el.closest("[data-match-act]");
+      if (!act || !shell.contains(act)) return;
+      var which = act.getAttribute("data-match-act");
+      if (which === "open") {
+        location.hash = "#/detalhes-operacao";
+        return;
+      }
+      if (which === "assume") {
+        state.ownerRequest = "form";
+        paintMatch();
+        return;
+      }
+      if (which === "assume-back") {
+        state.ownerRequest = "";
+        paintMatch();
+        return;
+      }
+      if (which === "assume-send") {
+        var reason = shell.querySelector("[data-assume-reason]");
+        var err = shell.querySelector("[data-assume-error]");
+        var field = reason && reason.closest(".hf-field");
+        var text = reason ? String(reason.value || "").trim() : "";
+        if (!text) {
+          if (field) field.classList.add("hf-field--error");
+          if (err) err.hidden = false;
+          if (reason) reason.focus();
+          return;
+        }
+        state.ownerRequest = "pending";
+        paintMatch();
+        showSuccessToast("Pedido enviado. Aguardando o responsável ou um gestor.");
+        return;
+      }
+      if (which === "join") {
+        state.ownerRequest = "join-pending";
+        paintMatch();
+        showSuccessToast("Pedido para participar enviado. Aguardando o responsável.");
+        return;
+      }
+      if (which === "simulate") {
+        state.lockSim = true;
+        state.formato = "Simulação de operação";
+        view = 4;
+        paint();
+        return;
+      }
+      if (which === "review") {
+        showSuccessToast("Solicitação enviada ao time HubFi.");
+      }
     });
     var back = shell.querySelector("[data-open-back]");
     var next = shell.querySelector("[data-open-next]");
@@ -1302,7 +1673,11 @@
     }
     if (next) {
       next.addEventListener("click", function () {
-        if (view < 4) {
+        if (view === 3 && !canProceed()) {
+          lookupFromInput();
+          return;
+        }
+        if (view < lastView) {
           view += 1;
           paint();
           return;
@@ -1310,7 +1685,20 @@
         showSuccessToast("Operação criada com sucesso.");
       });
     }
-    paint();
+    var q = (location.hash.split("?")[1] || "").split("&")[0];
+    var demoMap = {
+      "cenario=mesma": "12345678900",
+      "cenario=outra": "98765432100",
+      "cenario=cadastrado": "11122233344",
+      "cenario=novo": "39053344705",
+    };
+    if (demoMap[q] && cpfInput) {
+      view = 3;
+      cpfInput.value = demoMap[q];
+      lookupFromInput();
+    } else {
+      paint();
+    }
   }
 
   catalog.groups.push({
@@ -1320,6 +1708,7 @@
     blurb: "Páginas compostas com os componentes do DS — como o produto usa de verdade.",
     items: [
       ["abertura-operacao", "Abertura de operação"],
+      ["operacao-outro-canal", "Operação encerrada"],
       ["detalhes-operacao", "Detalhes da operação"],
       ["dashboard-operacoes", "Dashboard de operações"],
     ],
@@ -1327,13 +1716,32 @@
 
   catalog.pages["abertura-operacao"] = {
     title: "Abertura de operação",
-    lead: "Wizard de nova operação: perfil, mesa, produto, formato e dados do cliente.",
+    lead: "Wizard de nova operação com match de CPF. Bloqueio entre empresas não cita o outro canal.",
+    leadHtml:
+      '<ol class="docs-howto">' +
+      "<li><em>1</em><div><strong>Perfil, mesa e produto</strong><span>O match só roda depois do produto escolhido</span></div></li>" +
+      "<li><em>2</em><div><strong>CPF do cliente</strong><span>Teste: Mesma imobiliária · CPF indisponível · Cliente já cadastrado · Cliente novo</span></div></li>" +
+      "<li><em>3</em><div><strong>Mesma imobiliária</strong><span>Não cria OP. Abrir, ou pedir troca de responsável (com aprovação)</span></div></li>" +
+      "<li><em>4</em><div><strong>CPF indisponível</strong><span>Bloqueio genérico. Sem citar outra empresa ou outro canal. Motivo real só no backoffice HubFi</span></div></li>" +
+      "</ol>",
     node: "7636-24781",
     figmaFile: FIGMA_OPEN,
     wide: true,
     section: "Telas",
     html: function () {
       return openScreen();
+    },
+  };
+
+  catalog.pages["operacao-outro-canal"] = {
+    title: "Operação encerrada",
+    lead: "O que a imobiliária vê. O motivo real (contratação em outro canal) fica só no backoffice HubFi, por LGPD.",
+    node: "8135-36006",
+    figmaFile: FIGMA_OP,
+    wide: true,
+    section: "Telas",
+    html: function () {
+      return opScreen({ lostChannel: true });
     },
   };
 
