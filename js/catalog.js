@@ -493,8 +493,10 @@
     opts = opts || {};
     var icon = opts.noIcon
       ? ""
-      : '<img class="hf-alert__icon" src="assets/icons/alert-' + type + '.svg" width="20" height="20" alt="">';
-    var desc = opts.noDesc ? "" : '<p class="hf-alert__desc">Alert description message here.</p>';
+      : '<img class="hf-alert__icon" src="assets/icons/alert-' + type + '.svg?v=87" width="20" height="20" alt="">';
+    var desc = opts.noDesc
+      ? ""
+      : '<p class="hf-alert__desc">' + (opts.desc || "Alert description message here.") + "</p>";
     var close = opts.noClose
       ? ""
       : '<button class="hf-alert__close" type="button" data-alert-close aria-label="Fechar">✕</button>';
@@ -503,7 +505,9 @@
       type +
       '" role="alert">' +
       icon +
-      '<div class="hf-alert__body"><p class="hf-alert__title">Alert title</p>' +
+      '<div class="hf-alert__body"><p class="hf-alert__title">' +
+      (opts.title || "Alert title") +
+      "</p>" +
       desc +
       "</div>" +
       close +
@@ -884,6 +888,7 @@
   function appSidebar(variant, mod) {
     var backoffice = variant === "backoffice";
     var nova = variant === "nova";
+    var clientes = variant === "clientes";
     return (
       '<div class="hf-app-nav' +
       (mod ? " hf-app-nav--" + mod : "") +
@@ -898,11 +903,11 @@
       '<div class="hf-app-nav__scroll">' +
       navGroup("Rotina", [
         navItem("nav-plus", "Nova Operação", { active: nova }),
-        navItem("nav-ops", "Operações", { active: !backoffice && !nova }),
+        navItem("nav-ops", "Operações", { active: !backoffice && !nova && !clientes }),
         navItem("nav-panel", "Painel de Produtos")
       ]) +
       navGroup("Gestão", [
-        navItem("nav-clients", "Clientes"),
+        navItem("nav-clients", "Clientes", { active: clientes }),
         navItem("nav-users", "Usuários", { more: true })
       ]) +
       navGroup("Administração Interna", [
@@ -962,10 +967,14 @@
     );
   }
 
-  function miniBtn(icon, label) {
+  function miniBtn(icon, label, extra) {
     return (
-      '<button class="hf-btn hf-btn--sm hf-btn--ghost" type="button">' +
-      '<span class="hf-btn__glyph"><img src="assets/icons/' + icon + '.svg" alt=""></span>' +
+      '<button class="hf-btn hf-header__act' +
+      (extra ? " " + extra : "") +
+      '" type="button">' +
+      '<span class="hf-btn__glyph"><img src="assets/icons/' +
+      icon +
+      '.svg?v=89" width="16" height="16" alt=""></span>' +
       label +
       "</button>"
     );
@@ -983,11 +992,10 @@
       '<div class="hf-header__actions">' +
       '<div class="hf-header__group">' +
       miniBtn("hd-check", "Ganho") +
-      '<i class="hf-header__rule" style="height:24px"></i>' +
       miniBtn("hd-x", "Perdido") +
       "</div>" +
-      '<i class="hf-header__rule" style="height:28px"></i>' +
-      miniBtn("hd-info", "Mais informações") +
+      '<i class="hf-header__rule" style="height:20px"></i>' +
+      miniBtn("hd-info", "Mais informações", "hf-header__act--more") +
       "</div></div>" +
       '<h1 class="hf-header__title">Teste Daily</h1>' +
       '<div class="hf-header__chips">' +
@@ -1619,8 +1627,8 @@
     },
     alert: {
       title: "Alert",
-      lead: "info, success, warning, error. Opções: sem descrição, sem fechar, sem ícone. Largura 500px, border-left 3px.",
-      node: "294-2100",
+      lead: "info, success, warning, error. Fundo sutil, borda 1px no tom 200. Na jornada, entra dentro do card branco (hf-match) com padding 16px.",
+      node: "460-892",
       html: function () {
         return (
           card("Tipos", "Cores semânticas do Figma.", preview(
@@ -1635,8 +1643,15 @@
             cell("Sem botão fechar", alertBox("success", { noClose: true })) +
             cell("Sem ícone", alertBox("warning", { noIcon: true }))
           )) +
-          card("Exemplo de uso", "Notificações empilhadas em um formulário.", preview(
-            alertBox("info") + alertBox("success") + alertBox("error"),
+          card("Exemplo de uso", "Na abertura de operação o Alert do DS fica dentro do card branco, com 16px de padding.", preview(
+            '<div class="hf-match hf-match--warning">' +
+            alertBox("warning", {
+              noClose: true,
+              title: "Este cliente já possui uma operação em andamento",
+              desc: "Mesmo produto na sua imobiliária. Não crie outra. Abra a existente.",
+            }) +
+            '<div class="hf-match__facts"><div class="hf-kv"><span class="hf-kv__label">Operação</span><span class="hf-kv__value">OP-000000</span></div><div class="hf-kv"><span class="hf-kv__label">Responsável</span><span class="hf-kv__value">Camila Souza</span></div></div>' +
+            '<div class="hf-match__acts"><button class="hf-btn hf-btn--sm hf-btn--primary" type="button">Abrir operação</button></div></div>',
             "docs-preview--stack"
           ))
         );
@@ -2322,7 +2337,10 @@
       operations: opCard("finalizado"),
       section: '<div class="hf-section"><h3>INFORMAÇÕES</h3><p>Conteúdo da seção</p></div>',
       "rich-text": '<div class="hf-rte" style="height:100px;max-width:240px"><div class="hf-rte__bar"><span class="hf-rte__style">Normal</span></div><div class="hf-rte__body">Notas…</div></div>',
-      "abertura-operacao": '<div class="docs-screen-thumb"><strong>Nova operação</strong><span>Perfil · CPF · Match</span></div>',
+      "abertura-operacao": '<div class="docs-screen-thumb"><strong>Nova operação</strong><span>Documento · ficha da empresa</span></div>',
+      "cadastro-cliente": '<div class="docs-screen-thumb"><strong>Novo cliente</strong><span>Bloqueio · importar ficha</span></div>',
+      "edicao-cliente": '<div class="docs-screen-thumb"><strong>Editar cliente</strong><span>Trava · verificação · auditoria</span></div>',
+      "link-publico": '<div class="docs-screen-thumb"><strong>Link público</strong><span>Documento · canal · OTP</span></div>',
       "operacao-outro-canal": '<div class="docs-screen-thumb"><strong>OP encerrada</strong><span>Motivo só no backoffice</span></div>',
       "detalhes-operacao": '<div class="docs-screen-thumb"><strong>OP-000000</strong><span>Nome cliente</span></div>',
       "dashboard-operacoes": '<div class="docs-screen-thumb"><strong>Dashboard</strong><span>Visão estratégica</span></div>',

@@ -5,9 +5,9 @@
   var ui = catalog.ui || {};
   var FIGMA_OP = "https://www.figma.com/design/LQfnfvRTFm2AZ9qwTWsQEk?node-id=8135-36006";
   var FIGMA_OPEN =
-    "https://www.figma.com/design/LQfnfvRTFm2AZ9qwTWsQEk?node-id=7636-24781";
+    "https://www.figma.com/design/C9RP2qnls5pDBjMSEdhT1n/Untitled?node-id=5-4106";
   var FIGMA_OPEN_INFO =
-    "https://www.figma.com/design/LQfnfvRTFm2AZ9qwTWsQEk?node-id=7869-25743";
+    "https://www.figma.com/design/C9RP2qnls5pDBjMSEdhT1n/Untitled?node-id=5-5689";
   var FIGMA_DASH =
     "https://www.figma.com/design/6GPvl7jqcGdcwaCCx9kyOI/Dashboard-de-opera%C3%A7%C3%B5es?node-id=2211-256";
 
@@ -25,6 +25,25 @@
       label +
       '">' +
       ico(name, 16) +
+      "</button>"
+    );
+  }
+
+  function headerBtn(icon, label, act, extra) {
+    var glyph = "";
+    if (icon) {
+      glyph = /\.svg$/.test(icon)
+        ? '<span class="hf-btn__glyph"><img src="assets/icons/' + icon + '?v=89" width="16" height="16" alt=""></span>'
+        : ico(icon, 16);
+    }
+    return (
+      '<button class="hf-btn hf-header__act' +
+      (extra ? " " + extra : "") +
+      '" type="button"' +
+      (act ? ' data-op-act="' + act + '"' : "") +
+      ">" +
+      glyph +
+      label +
       "</button>"
     );
   }
@@ -97,12 +116,25 @@
       "</div>" +
       '<div class="hf-opage__title-row">' +
       '<h1 class="hf-opage__title">Nome cliente</h1>' +
+      '<span class="hf-opage__status" data-op-badge hidden></span>' +
       '<i class="hf-header__rule" style="height:20px"></i>' +
       '<span class="hf-opage__person">Marcelo Oliveira</span>' +
       '<span class="hf-opage__spacer"></span>' +
-      '<button class="hf-btn hf-btn--sm hf-btn--ghost" type="button">' +
-      ico("clipboard-list", 16) +
-      "Ver informações</button></div>" +
+      '<div class="hf-header__actions">' +
+      '<span class="hf-opage__acts" data-op-acts-live>' +
+      '<div class="hf-header__group">' +
+      headerBtn("hd-check.svg", "Ganho", "won") +
+      headerBtn("hd-x.svg", "Perdido", "lost") +
+      "</div></span>" +
+      '<span class="hf-opage__acts" data-op-acts-paused hidden>' +
+      headerBtn("", "Retomar", "resume", "hf-btn--primary") +
+      headerBtn("", "Estender pausa", "extend") +
+      "</span>" +
+      '<i class="hf-header__rule" style="height:20px"></i>' +
+      headerBtn("hd-info.svg", "Mais informações", "", "hf-header__act--more") +
+      '<span class="hf-opage__acts" data-op-acts-live>' +
+      headerBtn("pause", "Pausado", "pause") +
+      "</span></div></div>" +
       '<div class="hf-header__chips">' +
       '<div class="hf-header__meta"><span class="hf-opage__chip-ico">' +
       ico("house", 15) +
@@ -237,6 +269,7 @@
       ico("chevron-down", 20) +
       "<span>Operação criada no sistema</span>" +
       "<small>13/04/2026 14:20</small></p>" +
+      '<div data-pause-log></div>' +
       nested +
       "</div></section>";
 
@@ -247,14 +280,53 @@
         : "") +
       "</div>";
 
+    var demos = opts.lostChannel
+      ? ""
+      : '<div class="hf-open-demos"><span>Testar cenário</span>' +
+        '<button class="hf-open-demo is-on" type="button" data-op-demo="in_progress">Em andamento</button>' +
+        '<button class="hf-open-demo" type="button" data-op-demo="paused">Pausado</button>' +
+        '<button class="hf-open-demo" type="button" data-op-demo="cadence">Cadência vencida</button>' +
+        '<button class="hf-open-demo" type="button" data-op-demo="auto_lost">Perdido por pausa</button></div>';
+
+    var pauseReasons = [
+      "Cliente sem definição de imóvel",
+      "Documento pendente do cliente",
+      "Cliente sem disponibilidade no momento",
+      "Aguardando decisão financeira do cliente",
+      "Aguardando condição de mercado (taxa, oferta)",
+      "Outro",
+    ];
+    var pauseOverlay = opts.lostChannel
+      ? ""
+      : '<div class="docs-overlay" data-pause-overlay hidden>' +
+        '<div class="hf-dialog"><div class="hf-dialog__head"><h3 class="hf-dialog__title" data-pause-dialog-title>Pausar operação</h3></div>' +
+        '<p class="hf-dialog__desc">A operação sai das filas de SLA e volta na data de retorno, com lembrete no Slack do responsável.</p>' +
+        '<div class="hf-dialog__slot hf-dialog__slot--form">' +
+        openSelect("Motivo", pauseReasons, { req: true, attrs: " data-pause-reason-field" }) +
+        '<div class="hf-field"><div class="hf-field__header"><span class="hf-field__label">Data de retorno prevista</span><span class="hf-field__req">*</span></div>' +
+        '<div class="hf-field__control"><input class="hf-field__input" type="date" data-pause-date></div></div>' +
+        '<div class="hf-field hf-field--area"><div class="hf-field__header"><span class="hf-field__label">Detalhe</span></div>' +
+        '<div class="hf-field__control hf-field__control--area"><textarea class="hf-field__area" data-pause-detail placeholder="Complemento ao motivo. Obrigatório se o motivo for Outro."></textarea></div></div>' +
+        '<p class="hf-field__error" data-pause-error hidden>Informe motivo e data de retorno.</p></div>' +
+        '<hr class="hf-dialog__div"><div class="hf-dialog__foot">' +
+        '<button class="hf-btn hf-btn--lg hf-btn--ghost" type="button" data-pause-cancel>Cancelar</button>' +
+        '<button class="hf-btn hf-btn--lg hf-btn--primary" type="button" data-pause-confirm>Pausar operação</button>' +
+        "</div></div></div>";
+
     return (
-      '<div class="docs-screen">' +
+      '<div class="docs-screen' +
+      (opts.lostChannel ? "" : " docs-screen--op-detail") +
+      '"' +
+      (opts.lostChannel ? "" : " data-op-detail") +
+      ">" +
       sidebar +
       '<div class="docs-screen__main">' +
       '<div class="docs-screen__top">' +
       crumb +
+      demos +
       header +
       flow +
+      '<p class="hf-opage__sla" data-pause-sla hidden>SLA pausado · operação fora das filas ativas</p>' +
       "</div>" +
       '<div class="docs-screen__body">' +
       (opts.lostChannel
@@ -263,13 +335,14 @@
           "<strong>Esta operação foi encerrada</strong></div>" +
           "<p>Não é possível seguir com esta operação. Se precisar de mais informações, fale com o time HubFi.</p>" +
           "<small>Registrado em 25/08/2026 · Time HubFi</small></div>"
-        : "") +
+        : '<div class="hf-match-host" data-pause-banner></div>') +
       summary +
       etapa +
       "</div>" +
       chat +
       "</div>" +
       ocrOverlay() +
+      pauseOverlay +
       "</div>"
     );
   }
@@ -998,21 +1071,29 @@
       (selected ? " is-selected" : "") +
       '" type="button" data-fmt="' +
       title +
-      '"><span class="hf-radio" aria-hidden="true"><span class="hf-radio-box"><img class="hf-radio-box__off" src="assets/icons/select-radio.svg" width="18" height="18" alt=""><img class="hf-radio-box__on" src="assets/icons/select-radio-on.svg" width="18" height="18" alt=""></span><span>Opção</span></span>' +
+      '"><span class="hf-radio" aria-hidden="true"><span class="hf-radio-box"><img class="hf-radio-box__off" src="assets/icons/select-radio.svg" width="16" height="16" alt=""><img class="hf-radio-box__on" src="assets/icons/select-radio-on.svg" width="16" height="16" alt=""></span></span>' +
       '<span class="hf-fmt__body"><strong>' +
       title +
       "</strong><p>" +
       desc +
-      '</p><span class="hf-fmt__more">Entenda mais<img src="assets/screen/open/icon-right.svg" width="16" height="16" alt=""></span></span></button>'
+      '</p><span class="hf-fmt__more">Saber mais<img class="hf-fmt__more-ico" src="assets/screen/open/fmt-more.svg" width="14" height="14" alt=""></span></span></button>'
     );
   }
 
-  function openField(label, placeholder, extra) {
+  function openField(label, placeholder, extra, opts) {
     extra = extra || "";
+    opts = opts || {};
     return (
-      '<div class="hf-field"><div class="hf-field__header"><span class="hf-field__label">' +
+      '<div class="hf-field' +
+      (opts.mod ? " " + opts.mod : "") +
+      '"><div class="hf-field__header"><span class="hf-field__label">' +
       label +
-      '</span></div><div class="hf-field__control"><input class="hf-field__input" type="text" placeholder="' +
+      "</span>" +
+      (opts.info
+        ? '<img class="hf-field__info" src="assets/icons/field-info.svg" width="16" height="16" alt="">'
+        : "") +
+      (opts.req ? '<span class="hf-field__req">*</span>' : "") +
+      '</div><div class="hf-field__control"><input class="hf-field__input" type="text" placeholder="' +
       placeholder +
       '"' +
       extra +
@@ -1020,27 +1101,73 @@
     );
   }
 
-  function openSelect(label, options) {
+  function openSelect(label, options, extra) {
+    extra = extra || {};
+    var filled = extra.filled || "";
     var items = (options || [])
       .map(function (opt) {
+        var text = typeof opt === "string" ? opt : opt.label;
+        var cpf = typeof opt === "string" ? "" : opt.cpf || "";
         return (
           '<div class="hf-select-menu__item" role="option" tabindex="-1" data-label="' +
-          opt +
-          '" aria-selected="false">' +
-          opt +
+          text +
+          '"' +
+          (cpf ? ' data-client-cpf="' + cpf + '"' : "") +
+          ">" +
+          text +
           "</div>"
         );
       })
       .join("");
     return (
-      '<div class="hf-field hf-field--select" data-select data-select-type="default">' +
+      '<div class="hf-field hf-field--select' +
+      (extra.mod ? " " + extra.mod : "") +
+      '" data-select data-select-type="default"' +
+      (extra.attrs || "") +
+      ">" +
       '<div class="hf-field__header"><span class="hf-field__label">' +
       label +
-      "</span></div>" +
+      "</span>" +
+      (extra.req ? '<span class="hf-field__req">*</span>' : "") +
+      "</div>" +
       '<button class="hf-field__control" type="button" role="combobox" aria-haspopup="listbox" aria-expanded="false">' +
-      '<span class="hf-field__value">Selecionar</span>' +
-      '<span class="hf-field__chevron"><img src="assets/icons/select-chevron.svg" alt=""></span></button>' +
+      '<span class="hf-field__value' +
+      (filled ? "" : " hf-field__value--placeholder") +
+      '">' +
+      (filled || "Selecionar") +
+      '</span><span class="hf-field__chevron"><img src="assets/icons/select-chevron.svg" alt=""></span></button>' +
       '<div class="hf-select-menu" role="listbox">' +
+      items +
+      "</div></div>"
+    );
+  }
+
+  function openClientPicker() {
+    var items = [
+      { label: "Marcelo Oliveira", cpf: "12345678900" },
+      { label: "Novo cliente", cpf: "39053344705" },
+    ]
+      .map(function (opt) {
+        return (
+          '<div class="hf-select-menu__item" role="option" tabindex="-1" data-label="' +
+          opt.label +
+          '" data-client-cpf="' +
+          opt.cpf +
+          '">' +
+          opt.label +
+          "</div>"
+        );
+      })
+      .join("");
+    return (
+      '<div class="hf-field hf-field--select hf-open-client" data-client-select>' +
+      '<div class="hf-field__header"><span class="hf-field__label">Selecione um cliente</span><span class="hf-field__req">*</span></div>' +
+      '<div class="hf-field__control" data-client-trigger>' +
+      '<input class="hf-field__input" type="text" data-client-query placeholder="Selecionar" autocomplete="off">' +
+      '<button class="hf-open-client__clear" type="button" data-client-clear hidden aria-label="Limpar">' +
+      '<img src="assets/ds-icons/x.svg" width="16" height="16" alt=""></button>' +
+      '<span class="hf-field__chevron" aria-hidden="true"><img src="assets/icons/search.svg" width="16" height="16" alt=""></span></div>' +
+      '<div class="hf-select-menu" role="listbox" data-client-menu>' +
       items +
       "</div></div>"
     );
@@ -1083,11 +1210,11 @@
     ["Câmbio", ""],
     ["Imobiliário", ""],
     ["Crédito", ""],
-    ["Operações Estruturadas", "hf-chipcard--wide"],
+    ["Operações Estruturadas", ""],
     ["Seguros", ""],
     ["Energia", ""],
-    ["Comércio", ""],
-    ["Investimentos", "hf-chipcard--invest"],
+    ["Consórcio", ""],
+    ["Investimentos", ""],
   ];
 
   var OPEN_PRODUCTS = {
@@ -1097,13 +1224,20 @@
     "Operações Estruturadas": ["FIDC", "CRI", "CRA", "Debênture", "Securitização"],
     Seguros: ["Vida", "Residencial", "Automóvel", "Empresarial", "Prestamista"],
     Energia: ["Geração", "Distribuição", "Autoprodução", "Mercado Livre", "GD"],
-    Comércio: ["Antecipação", "Cobrança", "Fornecedor", "Varejo", "Atacado"],
+    Consórcio: ["Imóvel", "Auto", "Moto", "Serviços", "Pesados"],
     Investimentos: ["Renda Fixa", "Fundos", "Previdência", "COE", "Ações"],
   };
 
   function productsFor(mesa) {
     return OPEN_PRODUCTS[mesa] || [mesa, mesa, mesa, mesa, mesa];
   }
+
+  var OPEN_BROKER = {
+    cpf: "52998224725",
+    name: "Lucas Augusto",
+    email: "lucasaugusto@hubfi.com.br",
+    phone: "62996026603",
+  };
 
   var OPEN_CLIENTS = {
     "12345678900": {
@@ -1119,13 +1253,6 @@
         stage: "Análise de crédito",
         opened: "12/08/2026",
       },
-    },
-    "98765432100": {
-      name: "Ana Julia Silva",
-      phone: "(21) 97777-2020",
-      email: "ana.julia@email.com",
-      birth: "04/11/1992",
-      kind: "other",
     },
     "11122233344": {
       name: "Ricardo Mendes",
@@ -1143,29 +1270,55 @@
   };
 
   function cpfDigits(value) {
-    return String(value || "")
-      .replace(/\D/g, "")
-      .slice(0, 11);
+    return String(value || "").replace(/\D/g, "");
   }
 
   function cpfMask(digits) {
-    var d = cpfDigits(digits);
+    var d = cpfDigits(digits).slice(0, 11);
     if (d.length <= 3) return d;
     if (d.length <= 6) return d.slice(0, 3) + "." + d.slice(3);
     if (d.length <= 9) return d.slice(0, 3) + "." + d.slice(3, 6) + "." + d.slice(6);
     return d.slice(0, 3) + "." + d.slice(3, 6) + "." + d.slice(6, 9) + "-" + d.slice(9);
   }
 
-  function matchKind(client, produto) {
+  function cnpjMask(digits) {
+    var d = cpfDigits(digits).slice(0, 14);
+    if (d.length <= 2) return d;
+    if (d.length <= 5) return d.slice(0, 2) + "." + d.slice(2);
+    if (d.length <= 8) return d.slice(0, 2) + "." + d.slice(2, 5) + "." + d.slice(5);
+    if (d.length <= 12) return d.slice(0, 2) + "." + d.slice(2, 5) + "." + d.slice(5, 8) + "/" + d.slice(8);
+    return (
+      d.slice(0, 2) +
+      "." +
+      d.slice(2, 5) +
+      "." +
+      d.slice(5, 8) +
+      "/" +
+      d.slice(8, 12) +
+      "-" +
+      d.slice(12)
+    );
+  }
+
+  function matchKind(client, produto, cpf) {
+    if (cpf && cpf === OPEN_BROKER.cpf) return "broker";
     if (!client) return "new";
     if (client.kind === "same" && client.op && client.op.product === produto) return "same";
     if (client.kind === "same") return "other-product";
     return client.kind;
   }
 
+  function setOpenLocked(input, locked) {
+    if (!input) return;
+    input.disabled = !!locked;
+    input.readOnly = !!locked;
+    var field = input.closest(".hf-field");
+    if (field) field.classList.toggle("hf-field--disabled", !!locked);
+  }
+
   function openBtn(style, label, act) {
     return (
-      '<button class="hf-btn hf-btn--sm hf-btn--' +
+      '<button class="hf-btn hf-btn--lg hf-btn--' +
       style +
       '" type="button" data-match-act="' +
       act +
@@ -1175,216 +1328,184 @@
     );
   }
 
-  function renderMatch(kind, client, produto, request) {
-    request = request || "";
+  function alertTone(tone) {
+    if (tone === "error" || tone === "other") return "error";
+    if (tone === "success" || tone === "ok") return "success";
+    if (tone === "info") return "info";
+    return "warning";
+  }
+
+  function matchCard(tone, title, desc, factsHtml, actsHtml, extraHtml) {
+    var type = alertTone(tone);
+    return (
+      '<div class="hf-match hf-match--' +
+      tone +
+      '" role="status">' +
+      '<div class="hf-alert hf-alert--' +
+      type +
+      '" role="alert"><img class="hf-alert__icon" src="assets/icons/alert-' +
+      type +
+      '.svg?v=87" width="20" height="20" alt=""><div class="hf-alert__body"><p class="hf-alert__title">' +
+      title +
+      "</p>" +
+      (desc ? '<p class="hf-alert__desc">' + desc + "</p>" : "") +
+      "</div></div>" +
+      (factsHtml ? '<div class="hf-match__facts">' + factsHtml + "</div>" : "") +
+      (extraHtml || "") +
+      (actsHtml ? '<div class="hf-match__acts">' + actsHtml + "</div>" : "") +
+      "</div>"
+    );
+  }
+
+  function renderMatch(kind, client, produto) {
     if (kind === "same") {
       var op = client.op;
-      if (request === "form") {
-        return (
-          '<div class="hf-match hf-match--same">' +
-          "<strong class=\"hf-match__h\">Solicitar troca de responsável</strong>" +
-          '<p class="hf-match__p">A operação ' +
-          op.id +
-          " continua com " +
-          op.owner +
-          ". A troca só acontece se ela ou um gestor aceitar. Isso não é imediato.</p>" +
-          '<div class="hf-match__op">' +
-          kv("Responsável atual", op.owner) +
-          kv("Solicitante", "Lucas Augusto") +
-          kv("Operação", op.id) +
-          kv("Produto", "Imobiliário · " + op.product) +
-          "</div>" +
-          '<div class="hf-field hf-field--area hf-match__reason"><div class="hf-field__header"><span class="hf-field__label">Por que você precisa assumir?</span><span class="hf-field__req">*</span></div>' +
-          '<div class="hf-field__control hf-field__control--area"><textarea class="hf-field__area" data-assume-reason placeholder="Explique o motivo. O responsável atual e um gestor vão ver este pedido."></textarea></div>' +
-          '<p class="hf-field__error" data-assume-error hidden>Informe o motivo para enviar o pedido.</p></div>' +
-          '<div class="hf-match__acts">' +
-          openBtn("ghost", "Voltar", "assume-back") +
-          openBtn("primary", "Enviar pedido", "assume-send") +
-          "</div></div>"
-        );
-      }
-      if (request === "pending") {
-        return (
-          '<div class="hf-match hf-match--same">' +
-          '<div class="hf-alert hf-alert--info" role="status"><img class="hf-alert__icon" src="assets/icons/alert-info.svg" width="20" height="20" alt=""><div class="hf-alert__body"><p class="hf-alert__title">Pedido enviado. A operação não mudou de responsável</p><p class="hf-alert__desc">Aguardando ' +
-          op.owner +
-          " ou um gestor aceitar. Enquanto isso, você só pode abrir a operação para acompanhar.</p></div></div>" +
-          '<div class="hf-match__op">' +
-          kv("Operação", op.id) +
-          kv("Responsável", op.owner) +
-          kv("Seu pedido", "Troca de responsável") +
-          kv("Status", "Pendente") +
-          "</div>" +
-          '<div class="hf-match__acts">' +
-          openBtn("primary", "Abrir operação", "open") +
-          "</div></div>"
-        );
-      }
-      if (request === "join-pending") {
-        return (
-          '<div class="hf-match hf-match--same">' +
-          '<div class="hf-alert hf-alert--info" role="status"><img class="hf-alert__icon" src="assets/icons/alert-info.svg" width="20" height="20" alt=""><div class="hf-alert__body"><p class="hf-alert__title">Pedido para participar enviado</p><p class="hf-alert__desc">' +
-          op.owner +
-          " continua responsável. Você entra como apoio só depois que ela aceitar.</p></div></div>" +
-          '<div class="hf-match__acts">' +
-          openBtn("primary", "Abrir operação", "open") +
-          "</div></div>"
-        );
-      }
-      return (
-        '<div class="hf-match hf-match--same">' +
-        '<div class="hf-alert hf-alert--warning" role="alert"><img class="hf-alert__icon" src="assets/icons/alert-warning.svg" width="20" height="20" alt=""><div class="hf-alert__body"><p class="hf-alert__title">Este cliente já possui uma operação em andamento</p><p class="hf-alert__desc">Mesmo produto na sua imobiliária. Não crie outra. Abra a existente ou solicite a troca de responsável.</p></div></div>' +
-        '<div class="hf-match__op">' +
+      return matchCard(
+        "warning",
+        "Este cliente já possui uma operação em andamento",
+        "Mesmo produto na sua imobiliária. Não crie outra. Abra a existente.",
         kv("Operação", op.id) +
-        kv("Produto", "Imobiliário · " + op.product) +
-        kv("Responsável", op.owner) +
-        kv("Etapa", op.stage + " · " + op.opened) +
-        "</div>" +
-        '<div class="hf-match__acts">' +
-        openBtn("primary", "Abrir operação", "open") +
-        openBtn("ghost", "Solicitar troca de responsável", "assume") +
-        openBtn("outline", "Pedir para participar", "join") +
-        "</div></div>"
+          kv("Produto", "Imobiliário · " + op.product) +
+          kv("Responsável", op.owner) +
+          kv("Etapa", op.stage + " · " + op.opened),
+        openBtn("primary", "Abrir operação", "open")
       );
     }
-    if (kind === "other") {
-      return (
-        '<div class="hf-match hf-match--other">' +
-        '<div class="hf-alert hf-alert--info" role="alert"><img class="hf-alert__icon" src="assets/icons/alert-info.svg" width="20" height="20" alt=""><div class="hf-alert__body"><p class="hf-alert__title">Não é possível abrir esta operação</p><p class="hf-alert__desc">Este CPF não está disponível para uma operação completa deste produto no momento. Você pode simular ou pedir uma revisão ao time HubFi.</p></div></div>' +
-        '<div class="hf-match__acts">' +
-        openBtn("primary", "Fazer simulação", "simulate") +
-        openBtn("ghost", "Solicitar revisão à HubFi", "review") +
-        "</div></div>"
+    if (kind === "broker") {
+      return matchCard(
+        "error",
+        "Estes dados pertencem ao profissional responsável",
+        "Informe o documento do cliente. Não é possível abrir uma operação em nome do próprio corretor."
       );
     }
     if (kind === "other-product") {
-      return (
-        '<div class="hf-match hf-match--ok">' +
-        '<div class="hf-alert hf-alert--info" role="alert"><img class="hf-alert__icon" src="assets/icons/alert-info.svg" width="20" height="20" alt=""><div class="hf-alert__body"><p class="hf-alert__title">Cliente já cadastrado na sua imobiliária</p><p class="hf-alert__desc">' +
+      return matchCard(
+        "info",
+        "Ficha reaproveitada da empresa",
         client.name +
-        " tem " +
-        client.op.product +
-        " em andamento com " +
-        client.op.owner +
-        ". Você está abrindo " +
-        produto +
-        ". Pode seguir.</p></div></div></div>"
+          " já está cadastrado. Nome e contato vieram da ficha e não se editam nesta tela. " +
+          client.op.product +
+          " segue com " +
+          client.op.owner +
+          ". Você está abrindo " +
+          produto +
+          "."
       );
     }
     if (kind === "closed") {
-      return (
-        '<div class="hf-match hf-match--ok">' +
-        '<div class="hf-alert hf-alert--success" role="alert"><img class="hf-alert__icon" src="assets/icons/alert-success.svg" width="20" height="20" alt=""><div class="hf-alert__body"><p class="hf-alert__title">Cliente já cadastrado</p><p class="hf-alert__desc">Última operação: ' +
-        client.last.product +
-        " · " +
-        client.last.status +
-        " em " +
-        client.last.date +
-        " (" +
-        client.last.id +
-        "). Pode abrir uma nova.</p></div></div></div>"
+      return matchCard(
+        "success",
+        "Cliente já cadastrado na empresa",
+        "A operação será vinculada a esta ficha, mesmo que outro colega tenha cadastrado. Última operação: " +
+          client.last.product +
+          " · " +
+          client.last.status +
+          " em " +
+          client.last.date +
+          " (" +
+          client.last.id +
+          ")."
       );
     }
-    return (
-      '<div class="hf-match hf-match--ok">' +
-      '<div class="hf-alert hf-alert--success" role="alert"><img class="hf-alert__icon" src="assets/icons/alert-success.svg" width="20" height="20" alt=""><div class="hf-alert__body"><p class="hf-alert__title">Novo cliente</p><p class="hf-alert__desc">Nenhuma operação deste CPF na sua imobiliária. Siga para o formato da operação.</p></div></div></div>'
+    return matchCard(
+      "success",
+      "Novo cliente nesta empresa",
+      "Nenhum cadastro deste cliente na sua empresa. Preencha telefone e e-mail para criar a ficha."
     );
   }
 
   function openScreen() {
     var sidebar =
       typeof ui.appSidebar === "function" ? ui.appSidebar("nova", "fit") : "";
-    var stepsA = [
+    var steps = [
       "Perfil do cliente",
       "Seleção de Produto",
       "Informações do cliente",
       "Comunicação",
-      "Resumo",
     ];
 
     var mesas =
       '<div class="hf-chiprow" data-chip-group="mesa">' +
       OPEN_MESAS.map(function (row) {
-        return chipCard(row[0], row[0] === "Imobiliário", row[1]);
+        return chipCard(row[0], row[0] === "Imobiliário");
       }).join("") +
       "</div>";
 
     var produtos = productsFor("Imobiliário")
       .map(function (name, i) {
-        return chipCard(name, i === 0, "hf-chipcard--fill");
+        return chipCard(name, i === 0);
       })
       .join("");
 
     var formats =
       fmtCard(
         "Operação simplificada",
-        "Você informa mesa, produto e cliente. O cliente preenche o resto.",
-        true
-      ) +
-      fmtCard(
-        "Operação completa",
-        "Você preenche todos os dados agora, sem depender do cliente.",
+        "Cadastre o cliente em segundos e foque no que gera resultado. A gente cuida do resto, te avisando de cada avanço.",
         false
       ) +
       fmtCard(
+        "Operação completa",
+        "Traga todos os dados de uma vez e adiante a operação. Você decide quem fala com o cliente.",
+        true
+      ) +
+      fmtCard(
         "Operação por link",
-        "Envie um link e o cliente escolhe o produto e preenche tudo.",
+        "Compartilhe um link e deixe o cliente preencher no tempo dele, sem esforço nenhum da sua parte.",
         false
       ) +
       fmtCard(
         "Simulação de operação",
-        "Simule o financiamento do seu clientes nos principais bancos.",
+        "Mostre o resultado ao cliente antes de decidir. Sem compromisso, sem abrir operação.",
         false
       );
 
     return (
-      '<div class="docs-screen docs-screen--open" data-open-root data-view="0">' +
+      '<div class="docs-screen docs-screen--open docs-screen--open-flow" data-open-root data-view="0">' +
       sidebar +
       '<div class="hf-open">' +
-      '<div class="hf-open__crumb"><span class="hf-open__crumb-ico"><img src="assets/screen/open/crumb.svg" width="20" height="20" alt=""></span><i class="hf-open__crumb-div"></i><span>Nova operação</span></div>' +
+      '<div class="hf-open__crumb"><span class="hf-open__crumb-ico"><img src="assets/screen/open/crumb.svg" width="20" height="20" alt=""></span><i class="hf-open__crumb-div"></i><span>Nova Operação</span><span class="hf-open__crumb-div"></span><span>Operações</span></div>' +
       '<div class="hf-open__head"><h1 class="hf-open__title" data-open-title>Nova operação</h1>' +
       '<p class="hf-open__sub" data-open-sub>Preencha as etapas para criar uma nova operação de produto.</p></div>' +
-      openStepper(0, stepsA) +
+      openStepper(0, steps) +
       '<div class="hf-open__stage">' +
-      '<div class="hf-open__view is-on" data-open-view="0"><div class="hf-chiprow" data-chip-group="perfil">' +
+      '<div class="hf-open__view is-on" data-open-view="0"><div class="hf-open__stack">' +
+      '<div class="hf-open-sec"><p class="hf-open-sec__title">Perfil do cliente</p>' +
+      '<div class="hf-chiprow" data-chip-group="perfil">' +
       chipCard("Pessoa Física", true) +
-      chipCard("Pessoa Jurídica", false, "hf-chipcard--pj") +
+      chipCard("Pessoa Jurídica", false) +
       "</div></div>" +
-      '<div class="hf-open__view" data-open-view="1"><div class="hf-open-sec"><p class="hf-open-sec__title">Mesa de operações</p>' +
+      '<div class="hf-open-sec"><p class="hf-open-sec__title">Mesa de Operações</p>' +
       mesas +
-      "</div></div>" +
-      '<div class="hf-open__view" data-open-view="2"><div class="hf-open-sec"><p class="hf-open-sec__title">Produto</p>' +
+      "</div>" +
+      '<div class="hf-open-sec"><p class="hf-open-sec__title">Produto</p>' +
       '<div class="hf-chiprow" data-chip-group="produto">' +
       produtos +
-      "</div></div></div>" +
-      '<div class="hf-open__view" data-open-view="3"><div class="hf-open-sec hf-open-id"><p class="hf-open-sec__title">Identifique o cliente</p>' +
-      '<p class="hf-open-id__hint">Informe o CPF para ver se já existe operação deste produto. O cliente pertence à imobiliária, não ao operador.</p>' +
-      '<div class="hf-open__form hf-open__form--id">' +
-      openField("CPF", "000.000.000-00", ' data-cpf-input inputmode="numeric" autocomplete="off"') +
-      openField("Nome completo", "Preenchido após o CPF", " data-name-input") +
-      "</div>" +
-      '<div class="hf-open-demos"><span>Testar cenário</span>' +
-      '<button class="hf-open-demo" type="button" data-demo-cpf="12345678900">Mesma imobiliária</button>' +
-      '<button class="hf-open-demo" type="button" data-demo-cpf="98765432100">CPF indisponível</button>' +
-      '<button class="hf-open-demo" type="button" data-demo-cpf="11122233344">Cliente já cadastrado</button>' +
-      '<button class="hf-open-demo" type="button" data-demo-cpf="39053344705">Cliente novo</button>' +
-      "</div>" +
-      '<div class="hf-match-host" data-match-panel></div></div></div>' +
-      '<div class="hf-open__view" data-open-view="4"><div class="hf-open-sec"><p class="hf-open-sec__title">Formato da operação</p>' +
+      "</div></div>" +
+      '<div class="hf-open-sec"><p class="hf-open-sec__title">Formato da operação</p>' +
       '<div class="hf-fmt-grid">' +
       formats +
-      "</div></div></div>" +
-      '<div class="hf-open__view" data-open-view="5"><h2 class="hf-open__h">Informações do cliente</h2>' +
-      '<div class="hf-open__form">' +
-      openSelect("Personal finance", ["Victor Tavares", "Lucas Augusto", "Maurício Lima"]) +
-      openField("Telefone", "Informar", " data-phone-input") +
-      openField("E-mail", "Informar", " data-email-input") +
-      openField("Data de nascimento", "Informar", " data-birth-input") +
-      openField("Valor da operação", "R$ 0,00") +
+      "</div></div></div></div>" +
+      '<div class="hf-open__view" data-open-view="1"><div class="hf-open__info">' +
+      '<h2 class="hf-open__h">Informações do Cliente</h2>' +
+      '<div class="hf-open-demos"><span>Testar cenário</span>' +
+      '<button class="hf-open-demo" type="button" data-demo-cpf="12345678900">Operação aberta</button>' +
+      '<button class="hf-open-demo" type="button" data-demo-cpf="52998224725">Dados do corretor</button>' +
+      "</div>" +
+      '<div class="hf-match-host" data-match-panel></div>' +
+      '<input type="hidden" data-cpf-input data-doc-input value="">' +
+      '<div class="hf-open__form hf-open__form--info">' +
+      openSelect("Personal Finance", ["Ricardo Teste", "Lucas Augusto", "Maurício Lima"], {
+        req: true,
+        filled: "Ricardo Teste",
+      }) +
+      openClientPicker() +
+      openField("Telefone", "(00) 00000-0000", " data-phone-input", { req: true }) +
+      openField("Email", "email@cliente.com", " data-email-input", { req: true }) +
+      openField("Valor da Operação", "R$ 0", " data-amount-input", { info: true }) +
       '<div class="hf-field hf-field--area"><div class="hf-field__header"><span class="hf-field__label">Detalhe sobre a solicitação?</span></div>' +
       '<div class="hf-field__control hf-field__control--area"><textarea class="hf-field__area" placeholder="Como buscamos ofertar uma solução customizada e mais assertiva, informe mais detalhes sobre a solicitação como: situação do cliente, finalidade da operação, etc."></textarea></div></div>' +
       "</div></div></div>" +
-      '<div class="hf-open__foot"><button class="hf-open__back" type="button" data-open-back disabled>' +
+      '<div class="hf-open__foot"><button class="hf-open__back" type="button" data-open-back hidden>' +
       '<img src="assets/screen/open/arrow-left.svg" width="18" height="18" alt="">Voltar</button>' +
       '<button class="hf-open__next" type="button" data-open-next>Continuar<img src="assets/screen/open/arrow-right.svg" width="18" height="18" alt=""></button></div>' +
       "</div></div>"
@@ -1399,36 +1520,40 @@
       perfil: "Pessoa Física",
       mesa: "Imobiliário",
       produto: "Aquisição",
-      formato: "Operação simplificada",
+      formato: "Operação completa",
       cpf: "",
       name: "",
       match: "",
-      lockSim: false,
-      ownerRequest: "",
     };
     var stepsEarly = [
       "Perfil do cliente",
       "Seleção de Produto",
       "Informações do cliente",
       "Comunicação",
-      "Resumo",
-    ];
-    var stepsLate = [
-      "Perfil do cliente",
-      "Seleção de Produto",
-      "Informações do cliente",
-      "Dados do formulário",
-      "Comunicação",
     ];
     var cpfInput = shell.querySelector("[data-cpf-input]");
-    var nameInput = shell.querySelector("[data-name-input]");
+    var clientSelect = shell.querySelector("[data-client-select]");
     var panel = shell.querySelector("[data-match-panel]");
-    var lastView = 5;
+    var lastView = 1;
+
+    function isPj() {
+      return state.perfil === "Pessoa Jurídica";
+    }
+
+    function docLen() {
+      return isPj() ? 14 : 11;
+    }
+
+    function docLabel() {
+      return isPj() ? "CNPJ" : "CPF";
+    }
+
+    function maskDoc(value) {
+      return isPj() ? cnpjMask(value) : cpfMask(value);
+    }
 
     function stepperIndex() {
-      if (view === 0) return 0;
-      if (view <= 2) return 1;
-      return 2;
+      return view === 0 ? 0 : 2;
     }
 
     function clientOf() {
@@ -1436,54 +1561,83 @@
     }
 
     function currentKind() {
-      if (state.cpf.length !== 11) return "";
-      return matchKind(clientOf(), state.produto);
+      if (state.cpf.length !== docLen()) return "";
+      return matchKind(clientOf(), state.produto, state.cpf);
+    }
+
+    function reused() {
+      var kind = currentKind();
+      return kind === "same" || kind === "closed" || kind === "other-product";
+    }
+
+    function contactFilled() {
+      var phone = shell.querySelector("[data-phone-input]");
+      var email = shell.querySelector("[data-email-input]");
+      return !!(phone && String(phone.value || "").trim() && email && String(email.value || "").trim());
     }
 
     function canProceed() {
       var kind = currentKind();
-      if (view !== 3) return true;
-      if (!kind) return false;
-      if (kind === "same") return false;
-      if (kind === "other") return !!state.lockSim;
+      if (view !== 1) return true;
+      if (!kind || kind === "same" || kind === "broker") return false;
+      if (kind === "new" && !contactFilled()) return false;
       return true;
+    }
+
+    function setClientLabel(text, filled) {
+      if (!clientSelect) return;
+      var query = clientSelect.querySelector("[data-client-query]");
+      var clear = clientSelect.querySelector("[data-client-clear]");
+      if (query) query.value = filled ? text || "" : "";
+      if (clear) clear.hidden = !filled;
     }
 
     function paintMatch() {
       if (!panel) return;
       var kind = currentKind();
       state.match = kind;
+      var phone = shell.querySelector("[data-phone-input]");
+      var email = shell.querySelector("[data-email-input]");
       if (!kind) {
         panel.innerHTML = "";
+        setOpenLocked(phone, false);
+        setOpenLocked(email, false);
+        setClientLabel("Selecionar", false);
         return;
       }
-      var client = clientOf() || { name: nameInput ? nameInput.value : "" };
-      panel.innerHTML = renderMatch(kind, client, state.produto, state.ownerRequest);
-      if (kind === "other") {
-        if (nameInput) nameInput.value = "";
+      var client = clientOf() || {};
+      panel.innerHTML = renderMatch(kind, client, state.produto);
+      if (kind === "broker") {
         state.name = "";
-      } else {
-        if (client.name && nameInput) nameInput.value = client.name;
+        setClientLabel("Selecionar", false);
+        if (phone) phone.value = "";
+        if (email) email.value = "";
+        setOpenLocked(phone, true);
+        setOpenLocked(email, true);
+        return;
+      }
+      if (reused()) {
         state.name = client.name || state.name;
-        var phone = shell.querySelector("[data-phone-input]");
-        var email = shell.querySelector("[data-email-input]");
-        var birth = shell.querySelector("[data-birth-input]");
+        setClientLabel(client.name, true);
         if (client.phone && phone) phone.value = client.phone;
         if (client.email && email) email.value = client.email;
-        if (client.birth && birth) birth.value = client.birth;
+        setOpenLocked(phone, true);
+        setOpenLocked(email, true);
+        return;
       }
+      state.name = "Novo cliente";
+      setClientLabel("Novo cliente", true);
+      setOpenLocked(phone, false);
+      setOpenLocked(email, false);
     }
 
     function lookupFromInput() {
       if (!cpfInput) return;
-      var nextCpf = cpfDigits(cpfInput.value);
-      if (nextCpf !== state.cpf) state.ownerRequest = "";
+      var nextCpf = cpfDigits(cpfInput.value).slice(0, docLen());
       state.cpf = nextCpf;
-      cpfInput.value = cpfMask(state.cpf);
-      if (state.cpf.length < 11) {
-        state.lockSim = false;
-        state.ownerRequest = "";
-        if (nameInput && !OPEN_CLIENTS[state.cpf]) nameInput.value = "";
+      cpfInput.value = nextCpf;
+      if (state.cpf.length < docLen()) {
+        state.name = "";
       }
       paintMatch();
       paint();
@@ -1491,14 +1645,7 @@
 
     function paintFormats() {
       shell.querySelectorAll("[data-fmt]").forEach(function (btn) {
-        var sim = btn.getAttribute("data-fmt") === "Simulação de operação";
-        if (state.lockSim) {
-          btn.disabled = !sim;
-          btn.classList.toggle("is-selected", sim);
-          if (sim) state.formato = "Simulação de operação";
-        } else {
-          btn.disabled = false;
-        }
+        btn.disabled = false;
       });
     }
 
@@ -1508,7 +1655,7 @@
         el.classList.toggle("is-on", Number(el.getAttribute("data-open-view")) === view);
       });
       var active = stepperIndex();
-      var labels = view === lastView ? stepsLate : stepsEarly;
+      var labels = stepsEarly;
       shell.querySelectorAll("[data-open-stepper] .hf-step-s").forEach(function (el, i) {
         el.classList.remove("is-current", "is-done", "is-todo");
         el.classList.add(i === active ? "is-current" : i < active ? "is-done" : "is-todo");
@@ -1517,14 +1664,13 @@
       });
       var title = shell.querySelector("[data-open-title]");
       var sub = shell.querySelector("[data-open-sub]");
-      if (view >= 3) {
+      if (view === 1) {
         title.textContent =
-          "Financiamento " + state.mesa + " -" + state.produto + " - " + state.perfil;
+          "Financiamento " + state.mesa + " - " + state.produto + " - " + state.perfil;
         title.classList.add("is-regular");
-        sub.textContent =
-          view === 3
-            ? "Confira se este CPF já tem operação deste produto antes de seguir."
-            : "Informe os dados de contato do cliente mais algumas informações complementares para solicitação da proposta.";
+        sub.textContent = reused()
+          ? "Contato carregado da ficha. Para alterar e-mail ou telefone, edite o cadastro do cliente."
+          : "Informe os dados de contato do cliente mais algumas informações complementares para solicitação da proposta.";
       } else {
         title.textContent = "Nova operação";
         title.classList.remove("is-regular");
@@ -1532,15 +1678,18 @@
       }
       var back = shell.querySelector("[data-open-back]");
       var next = shell.querySelector("[data-open-next]");
-      if (back) back.disabled = view === 0;
+      if (back) {
+        back.disabled = view === 0;
+        back.hidden = view === 0;
+      }
       if (next) {
-        var blocked = view === 3 && !canProceed();
-        next.disabled = blocked;
+        var kind = currentKind();
+        var blocked = view === 1 && (kind === "same" || kind === "broker");
+        var incomplete = view === 1 && (!kind || (kind === "new" && !contactFilled()));
+        next.disabled = blocked || incomplete;
         next.hidden = blocked;
         next.innerHTML =
-          view === lastView
-            ? 'Concluir operação<img src="assets/screen/open/arrow-right.svg" width="18" height="18" alt="">'
-            : 'Continuar<img src="assets/screen/open/arrow-right.svg" width="18" height="18" alt="">';
+          'Continuar<img src="assets/screen/open/arrow-right.svg" width="18" height="18" alt="">';
       }
       paintFormats();
       shell.querySelectorAll("[data-demo-cpf]").forEach(function (btn) {
@@ -1556,14 +1705,13 @@
       if (!row) return;
       var list = productsFor(state.mesa);
       state.produto = list[0];
-      state.ownerRequest = "";
       row.innerHTML = list
         .map(function (name, i) {
-          return chipCard(name, i === 0, "hf-chipcard--fill");
+          return chipCard(name, i === 0);
         })
         .join("");
       row.querySelectorAll("[data-chipcard]").forEach(wireChip);
-      if (state.cpf.length === 11) paintMatch();
+      if (state.cpf.length === docLen()) paintMatch();
       paint();
     }
 
@@ -1576,13 +1724,18 @@
         });
         btn.classList.add("is-selected");
         state[key] = btn.getAttribute("data-chipcard");
+        if (key === "perfil") {
+          state.cpf = "";
+          state.name = "";
+          if (cpfInput) cpfInput.value = "";
+          paintMatch();
+        }
         if (key === "mesa") refillProducts();
-        if (key === "produto" && state.cpf.length === 11) {
-          state.lockSim = false;
-          state.ownerRequest = "";
+        if (key === "produto" && state.cpf.length === docLen()) {
           paintMatch();
           paint();
         }
+        paint();
       });
     }
 
@@ -1597,16 +1750,82 @@
         state.formato = btn.getAttribute("data-fmt");
       });
     });
-    if (cpfInput) {
-      cpfInput.addEventListener("input", lookupFromInput);
-      cpfInput.addEventListener("blur", lookupFromInput);
+    if (clientSelect) {
+      var clientQuery = clientSelect.querySelector("[data-client-query]");
+      var clientMenu = clientSelect.querySelector("[data-client-menu]");
+      var clientClear = clientSelect.querySelector("[data-client-clear]");
+
+      function closeClientMenu() {
+        clientSelect.classList.remove("is-open");
+      }
+
+      function openClientMenu() {
+        clientSelect.classList.add("is-open");
+        if (clientMenu) {
+          var trigger = clientSelect.querySelector("[data-client-trigger]");
+          if (trigger) {
+            clientMenu.style.top = trigger.offsetTop + trigger.offsetHeight + 4 + "px";
+          }
+        }
+      }
+
+      function filterClientMenu(q) {
+        var needle = String(q || "")
+          .toLowerCase()
+          .trim();
+        clientSelect.querySelectorAll("[data-client-cpf]").forEach(function (item) {
+          var label = (item.getAttribute("data-label") || item.textContent || "").toLowerCase();
+          item.hidden = !!(needle && label.indexOf(needle) === -1);
+        });
+      }
+
+      function pickClient(item) {
+        if (!item || !cpfInput) return;
+        cpfInput.value = item.getAttribute("data-client-cpf") || "";
+        closeClientMenu();
+        lookupFromInput();
+      }
+
+      if (clientQuery) {
+        clientQuery.addEventListener("focus", function () {
+          filterClientMenu(clientQuery.value);
+          openClientMenu();
+        });
+        clientQuery.addEventListener("input", function () {
+          filterClientMenu(clientQuery.value);
+          openClientMenu();
+          if (!clientQuery.value.trim() && cpfInput && state.cpf) {
+            cpfInput.value = "";
+            lookupFromInput();
+          }
+        });
+      }
+      if (clientClear) {
+        clientClear.addEventListener("click", function (event) {
+          event.preventDefault();
+          event.stopPropagation();
+          if (cpfInput) cpfInput.value = "";
+          closeClientMenu();
+          lookupFromInput();
+          if (clientQuery) clientQuery.focus();
+        });
+      }
+      clientSelect.addEventListener("click", function (event) {
+        var item = event.target.closest("[data-client-cpf]");
+        if (!item || !clientSelect.contains(item)) return;
+        event.preventDefault();
+        pickClient(item);
+      });
+      document.addEventListener("click", function (event) {
+        if (!clientSelect.contains(event.target)) closeClientMenu();
+      });
     }
     shell.querySelectorAll("[data-demo-cpf]").forEach(function (btn) {
       btn.addEventListener("click", function () {
         if (!cpfInput) return;
+        view = 1;
         cpfInput.value = btn.getAttribute("data-demo-cpf");
         lookupFromInput();
-        cpfInput.focus();
       });
     });
     shell.addEventListener("click", function (event) {
@@ -1616,50 +1835,10 @@
       var which = act.getAttribute("data-match-act");
       if (which === "open") {
         location.hash = "#/detalhes-operacao";
-        return;
       }
-      if (which === "assume") {
-        state.ownerRequest = "form";
-        paintMatch();
-        return;
-      }
-      if (which === "assume-back") {
-        state.ownerRequest = "";
-        paintMatch();
-        return;
-      }
-      if (which === "assume-send") {
-        var reason = shell.querySelector("[data-assume-reason]");
-        var err = shell.querySelector("[data-assume-error]");
-        var field = reason && reason.closest(".hf-field");
-        var text = reason ? String(reason.value || "").trim() : "";
-        if (!text) {
-          if (field) field.classList.add("hf-field--error");
-          if (err) err.hidden = false;
-          if (reason) reason.focus();
-          return;
-        }
-        state.ownerRequest = "pending";
-        paintMatch();
-        showSuccessToast("Pedido enviado. Aguardando o responsável ou um gestor.");
-        return;
-      }
-      if (which === "join") {
-        state.ownerRequest = "join-pending";
-        paintMatch();
-        showSuccessToast("Pedido para participar enviado. Aguardando o responsável.");
-        return;
-      }
-      if (which === "simulate") {
-        state.lockSim = true;
-        state.formato = "Simulação de operação";
-        view = 4;
-        paint();
-        return;
-      }
-      if (which === "review") {
-        showSuccessToast("Solicitação enviada ao time HubFi.");
-      }
+    });
+    shell.querySelectorAll("[data-phone-input], [data-email-input]").forEach(function (el) {
+      el.addEventListener("input", paint);
     });
     var back = shell.querySelector("[data-open-back]");
     var next = shell.querySelector("[data-open-next]");
@@ -1673,7 +1852,7 @@
     }
     if (next) {
       next.addEventListener("click", function () {
-        if (view === 3 && !canProceed()) {
+        if (view === 1 && !canProceed()) {
           lookupFromInput();
           return;
         }
@@ -1685,19 +1864,17 @@
         showSuccessToast("Operação criada com sucesso.");
       });
     }
-    var q = (location.hash.split("?")[1] || "").split("&")[0];
-    var demoMap = {
-      "cenario=mesma": "12345678900",
-      "cenario=outra": "98765432100",
-      "cenario=cadastrado": "11122233344",
-      "cenario=novo": "39053344705",
-    };
-    if (demoMap[q] && cpfInput) {
-      view = 3;
-      cpfInput.value = demoMap[q];
-      lookupFromInput();
-    } else {
-      paint();
+    paint();
+    var openQs = (location.hash.split("?")[1] || "");
+    if (/(?:^|&)step=info/.test(openQs) || /(?:^|&)cpf=/.test(openQs)) {
+      view = 1;
+      var cpfQ = openQs.match(/(?:^|&)cpf=([^&]+)/);
+      if (cpfQ && cpfInput) {
+        cpfInput.value = decodeURIComponent(cpfQ[1]);
+        lookupFromInput();
+      } else {
+        paint();
+      }
     }
   }
 
@@ -1708,6 +1885,9 @@
     blurb: "Páginas compostas com os componentes do DS — como o produto usa de verdade.",
     items: [
       ["abertura-operacao", "Abertura de operação"],
+      ["cadastro-cliente", "Cadastro de cliente"],
+      ["edicao-cliente", "Edição de cliente"],
+      ["link-publico", "Link público"],
       ["operacao-outro-canal", "Operação encerrada"],
       ["detalhes-operacao", "Detalhes da operação"],
       ["dashboard-operacoes", "Dashboard de operações"],
@@ -1716,15 +1896,15 @@
 
   catalog.pages["abertura-operacao"] = {
     title: "Abertura de operação",
-    lead: "Wizard de nova operação com match de CPF. Bloqueio entre empresas não cita o outro canal.",
+    lead: "Documento é a identidade. A ficha é única na empresa e reaproveitada entre colegas. Outra empresa cadastra o mesmo CPF em silêncio.",
     leadHtml:
       '<ol class="docs-howto">' +
-      "<li><em>1</em><div><strong>Perfil, mesa e produto</strong><span>O match só roda depois do produto escolhido</span></div></li>" +
-      "<li><em>2</em><div><strong>CPF do cliente</strong><span>Teste: Mesma imobiliária · CPF indisponível · Cliente já cadastrado · Cliente novo</span></div></li>" +
-      "<li><em>3</em><div><strong>Mesma imobiliária</strong><span>Não cria OP. Abrir, ou pedir troca de responsável (com aprovação)</span></div></li>" +
-      "<li><em>4</em><div><strong>CPF indisponível</strong><span>Bloqueio genérico. Sem citar outra empresa ou outro canal. Motivo real só no backoffice HubFi</span></div></li>" +
+      "<li><em>1</em><div><strong>Perfil, mesa e produto</strong><span>PF pede CPF. PJ pede CNPJ. O match roda depois do produto</span></div></li>" +
+      "<li><em>2</em><div><strong>Documento do cliente</strong><span>O match roda ao informar um CPF ou CNPJ válido</span></div></li>" +
+      "<li><em>3</em><div><strong>Reaproveitar ou criar</strong><span>Ficha da empresa carrega nome e contato travados. Cliente novo preenche. Sem documento não avança</span></div></li>" +
+      "<li><em>4</em><div><strong>Outra empresa</strong><span>Cria ficha nova, sem mencionar que o documento existe fora. Dados do corretor são recusados</span></div></li>" +
       "</ol>",
-    node: "7636-24781",
+    node: "5-4106",
     figmaFile: FIGMA_OPEN,
     wide: true,
     section: "Telas",
@@ -1747,13 +1927,13 @@
 
   catalog.pages["detalhes-operacao"] = {
     title: "Detalhes da operação",
-    lead: "Tela composta da Nova operação.",
+    lead: "Status da operação, incluindo Pausado: pendência temporária, data de retorno e cadência de lembretes.",
     leadHtml:
       '<ol class="docs-howto">' +
-      "<li><em>1</em><div><strong>Abrir o OCR</strong><span>Clique em um Card File do formulário</span></div></li>" +
-      "<li><em>2</em><div><strong>Conferir os dados</strong><span>Documento à esquerda, extração à direita</span></div></li>" +
-      "<li><em>3</em><div><strong>Filtrar pendências</strong><span>Use a busca ou as badges em vermelho</span></div></li>" +
-      "<li><em>4</em><div><strong>Completar e salvar</strong><span>Preencha o que faltar e confirme</span></div></li>" +
+      "<li><em>1</em><div><strong>Pausar</strong><span>Em andamento → Pausado. Motivo e data de retorno são obrigatórios</span></div></li>" +
+      "<li><em>2</em><div><strong>Fora do SLA</strong><span>A operação some da fila ativa, mas continua buscável com o filtro Pausado</span></div></li>" +
+      "<li><em>3</em><div><strong>Retomar ou estender</strong><span>Volta para Em andamento ou define nova data. A cadência de Slack reinicia</span></div></li>" +
+      "<li><em>4</em><div><strong>Cadência vencida</strong><span>D+0, D+2 e D+4. Sem ação, vira Perdido por pausa vencida</span></div></li>" +
       "</ol>",
     node: "8135-36006",
     figmaFile: FIGMA_OP,
@@ -1776,10 +1956,327 @@
     },
   };
 
+  function bindOpDetail(root) {
+    var shell = root.querySelector("[data-op-detail]");
+    if (!shell) return;
+
+    var state = {
+      status: "in_progress",
+      reason: "Documento pendente do cliente",
+      detail: "Cliente aguarda segunda via do RG.",
+      returnDate: "",
+      mode: "pause",
+    };
+
+    function pad(n) {
+      return n < 10 ? "0" + n : String(n);
+    }
+    function todayPlus(days) {
+      var d = new Date();
+      d.setDate(d.getDate() + days);
+      return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+    }
+    function fmtDate(iso) {
+      if (!iso) return "—";
+      var p = String(iso).split("-");
+      return p.length === 3 ? p[2] + "/" + p[1] + "/" + p[0] : iso;
+    }
+    function logLine(text, time) {
+      return (
+        '<p class="hf-etapa__log">' +
+        ico("chevron-down", 20) +
+        "<span>" +
+        text +
+        "</span><small>" +
+        time +
+        "</small></p>"
+      );
+    }
+    function actBtn(style, label, act) {
+      return (
+        '<button class="hf-btn hf-btn--sm hf-btn--' +
+        style +
+        '" type="button" data-op-act="' +
+        act +
+        '">' +
+        label +
+        "</button>"
+      );
+    }
+
+    function reasonField() {
+      return shell.querySelector("[data-pause-reason-field]");
+    }
+    function reasonValue() {
+      var field = reasonField();
+      var value = field && field.querySelector(".hf-field__value");
+      if (!value || value.classList.contains("hf-field__value--placeholder")) return "";
+      return String(value.textContent || "").trim();
+    }
+    function setReason(text) {
+      var field = reasonField();
+      if (!field) return;
+      var value = field.querySelector(".hf-field__value");
+      var filled = !!text;
+      if (value) {
+        value.textContent = filled ? text : "Selecionar";
+        value.classList.toggle("hf-field__value--placeholder", !filled);
+      }
+      field.querySelectorAll(".hf-select-menu__item").forEach(function (item) {
+        var on = filled && item.getAttribute("data-label") === text;
+        item.classList.toggle("is-active", on);
+        item.setAttribute("aria-selected", on ? "true" : "false");
+      });
+      field.classList.remove("is-open");
+      var trigger = field.querySelector(".hf-field__control");
+      if (trigger) trigger.setAttribute("aria-expanded", "false");
+    }
+
+    function openDialog(mode) {
+      state.mode = mode;
+      var overlay = shell.querySelector("[data-pause-overlay]");
+      var title = shell.querySelector("[data-pause-dialog-title]");
+      var confirm = shell.querySelector("[data-pause-confirm]");
+      var date = shell.querySelector("[data-pause-date]");
+      var detail = shell.querySelector("[data-pause-detail]");
+      var err = shell.querySelector("[data-pause-error]");
+      if (title) title.textContent = mode === "extend" ? "Estender pausa" : "Pausar operação";
+      if (confirm) confirm.textContent = mode === "extend" ? "Salvar nova data" : "Pausar operação";
+      setReason(state.reason || "");
+      if (date) date.value = state.returnDate || todayPlus(15);
+      if (detail) detail.value = state.detail || "";
+      if (err) err.hidden = true;
+      if (overlay) {
+        overlay.hidden = false;
+        overlay.classList.add("is-open");
+      }
+    }
+
+    function closeDialog() {
+      var overlay = shell.querySelector("[data-pause-overlay]");
+      if (!overlay) return;
+      setReason(reasonValue());
+      overlay.classList.remove("is-open");
+      overlay.hidden = true;
+    }
+
+    function samplePaused() {
+      state.status = "paused";
+      state.reason = "Documento pendente do cliente";
+      state.detail = "Cliente aguarda segunda via do RG.";
+      state.returnDate = todayPlus(15);
+    }
+
+    function paint() {
+      var badgeHost = shell.querySelector("[data-op-badge]");
+      var liveActs = shell.querySelectorAll("[data-op-acts-live]");
+      var pausedActs = shell.querySelector("[data-op-acts-paused]");
+      var banner = shell.querySelector("[data-pause-banner]");
+      var log = shell.querySelector("[data-pause-log]");
+      var sla = shell.querySelector("[data-pause-sla]");
+      var badgeFn = ui.badge || function (t, text) {
+        return '<span class="hf-badge hf-badge--' + t + '">' + text + "</span>";
+      };
+
+      shell.classList.toggle("is-paused", state.status === "paused" || state.status === "cadence");
+      shell.classList.toggle("is-lost", state.status === "auto_lost");
+      shell.querySelectorAll("[data-op-demo]").forEach(function (btn) {
+        btn.classList.toggle("is-on", btn.getAttribute("data-op-demo") === state.status);
+      });
+
+      if (badgeHost) {
+        if (state.status === "paused") {
+          badgeHost.hidden = false;
+          badgeHost.innerHTML = badgeFn("alert", "Pausado");
+        } else if (state.status === "cadence") {
+          badgeHost.hidden = false;
+          badgeHost.innerHTML = badgeFn("warning", "Pausa vencida");
+        } else if (state.status === "auto_lost") {
+          badgeHost.hidden = false;
+          badgeHost.innerHTML = badgeFn("outline", "Perdido");
+        } else {
+          badgeHost.hidden = true;
+          badgeHost.innerHTML = "";
+        }
+      }
+      liveActs.forEach(function (el) {
+        el.hidden = state.status !== "in_progress";
+      });
+      if (pausedActs) pausedActs.hidden = state.status !== "paused" && state.status !== "cadence";
+      if (sla) sla.hidden = state.status !== "paused" && state.status !== "cadence";
+
+      if (banner) {
+        if (state.status === "paused") {
+          banner.innerHTML = matchCard(
+            "warning",
+            "Operação pausada",
+            "Fora das filas de SLA até a data de retorno. O responsável recebe lembrete no Slack.",
+            kv("Motivo", state.reason) +
+              kv("Retorno previsto", fmtDate(state.returnDate)) +
+              kv("Pausado por", "Victor Tavares") +
+              (state.detail ? kv("Detalhe", state.detail) : ""),
+            actBtn("primary", "Retomar", "resume") + actBtn("ghost", "Estender pausa", "extend")
+          );
+        } else if (state.status === "cadence") {
+          banner.innerHTML = matchCard(
+            "warning",
+            "A data de retorno venceu",
+            "Cadência de lembretes no Slack: 2 de 3. Sem ação, a operação vai para Perdido por pausa vencida.",
+            kv("Motivo", state.reason) +
+              kv("Retorno previsto", fmtDate(state.returnDate)) +
+              kv("Último lembrete", "Enviado · D+2") +
+              kv("Próximo", "D+4"),
+            actBtn("primary", "Retomar", "resume") + actBtn("ghost", "Estender pausa", "extend")
+          );
+        } else if (state.status === "auto_lost") {
+          banner.innerHTML = matchCard(
+            "error",
+            "Perdido por pausa vencida sem retomada",
+            "A cadência de lembretes terminou sem ação. Este motivo fica separado da perda real, para não inflar a taxa de Perdido.",
+            kv("Motivo original", state.reason) +
+              kv("Retorno previsto", fmtDate(state.returnDate)) +
+              kv("Encerrado em", "27/08/2026") +
+              kv("Responsável", "Victor Tavares")
+          );
+        } else {
+          banner.innerHTML = "";
+        }
+      }
+
+      if (log) {
+        var html = "";
+        if (state.status !== "in_progress") {
+          html += logLine(
+            "Operação pausada · " + state.reason + " · retorno " + fmtDate(state.returnDate),
+            "27/08/2026 10:12"
+          );
+        }
+        if (state.status === "cadence" || state.status === "auto_lost") {
+          html += logLine("Lembrete Slack enviado (D+0) · sem resposta", "11/09/2026 09:00");
+          html += logLine("Lembrete Slack enviado (D+2) · sem resposta", "13/09/2026 09:00");
+        }
+        if (state.status === "auto_lost") {
+          html += logLine("Lembrete Slack enviado (D+4) · sem resposta", "15/09/2026 09:00");
+          html += logLine("Status alterado para Perdido por pausa vencida sem retomada", "15/09/2026 18:00");
+        }
+        log.innerHTML = html;
+      }
+    }
+
+    shell.addEventListener("click", function (event) {
+      var demo = event.target.closest("[data-op-demo]");
+      if (demo && shell.contains(demo)) {
+        var which = demo.getAttribute("data-op-demo");
+        if (which === "in_progress") {
+          state.status = "in_progress";
+        } else if (which === "paused") {
+          samplePaused();
+        } else if (which === "cadence") {
+          samplePaused();
+          state.status = "cadence";
+          state.returnDate = todayPlus(-4);
+        } else if (which === "auto_lost") {
+          samplePaused();
+          state.status = "auto_lost";
+          state.returnDate = todayPlus(-10);
+        }
+        paint();
+        return;
+      }
+      var act = event.target.closest("[data-op-act]");
+      if (!act || !shell.contains(act)) return;
+      var whichAct = act.getAttribute("data-op-act");
+      if (whichAct === "won") {
+        showSuccessToast("Operação marcada como Ganho.");
+        return;
+      }
+      if (whichAct === "lost") {
+        showSuccessToast("Operação marcada como Perdido.");
+        return;
+      }
+      if (whichAct === "pause") {
+        openDialog("pause");
+        return;
+      }
+      if (whichAct === "extend") {
+        openDialog("extend");
+        return;
+      }
+      if (whichAct === "resume") {
+        state.status = "in_progress";
+        paint();
+        showSuccessToast("Operação retomada. Voltou para Em andamento.");
+      }
+    });
+
+    var cancel = shell.querySelector("[data-pause-cancel]");
+    var confirm = shell.querySelector("[data-pause-confirm]");
+    var overlay = shell.querySelector("[data-pause-overlay]");
+    if (cancel) cancel.addEventListener("click", closeDialog);
+    if (overlay) {
+      overlay.addEventListener("click", function (event) {
+        if (event.target === overlay) closeDialog();
+      });
+    }
+    if (confirm) {
+      confirm.addEventListener("click", function () {
+        var date = shell.querySelector("[data-pause-date]");
+        var detail = shell.querySelector("[data-pause-detail]");
+        var err = shell.querySelector("[data-pause-error]");
+        var reasonVal = reasonValue();
+        var dateVal = date ? String(date.value || "").trim() : "";
+        var detailVal = detail ? String(detail.value || "").trim() : "";
+        var needDetail = reasonVal === "Outro";
+        if (!reasonVal || !dateVal || (needDetail && !detailVal)) {
+          if (err) {
+            err.hidden = false;
+            err.textContent = needDetail
+              ? "Outro exige detalhe em texto livre."
+              : "Informe motivo e data de retorno.";
+          }
+          return;
+        }
+        state.reason = reasonVal;
+        state.returnDate = dateVal;
+        state.detail = detailVal;
+        state.status = "paused";
+        closeDialog();
+        paint();
+        showSuccessToast(
+          state.mode === "extend"
+            ? "Pausa estendida. Cadência de lembretes reiniciada."
+            : "Operação pausada. Lembrete agendado no Slack."
+        );
+      });
+    }
+
+    paint();
+    var opQs = (location.hash.split("?")[1] || "");
+    var opDemo = opQs.match(/(?:^|&)demo=([^&]+)/);
+    if (opDemo) {
+      var whichDemo = decodeURIComponent(opDemo[1]);
+      if (whichDemo === "paused") samplePaused();
+      else if (whichDemo === "cadence") {
+        samplePaused();
+        state.status = "cadence";
+        state.returnDate = todayPlus(-4);
+      } else if (whichDemo === "auto_lost") {
+        samplePaused();
+        state.status = "auto_lost";
+        state.returnDate = todayPlus(-10);
+      }
+      paint();
+    }
+  }
+
   window.HF_SCREENS = {
     bind: function (root) {
       bindOcr(root);
       bindOpen(root);
+      bindOpDetail(root);
+      if (window.HF_IDENTITY && typeof window.HF_IDENTITY.bind === "function") {
+        window.HF_IDENTITY.bind(root);
+      }
     },
   };
 })();
