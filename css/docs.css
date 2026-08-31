@@ -1814,7 +1814,7 @@ textarea {
   max-width: 100%;
   text-align: left;
 }
-.hf-open__title.is-regular { font-weight: 400; color: #00a395; }
+.hf-open__title.is-regular { font-weight: 600; color: #00a395; }
 .hf-open__sub {
   margin: 0;
   font-size: 12px;
@@ -2012,29 +2012,41 @@ textarea {
   margin-left: auto;
 }
 .hf-open-client .hf-field__control {
-  cursor: text;
+  cursor: pointer;
 }
 .hf-open-client .hf-select-menu {
   width: 100%;
 }
-.hf-open-client__clear {
-  display: grid;
-  place-items: center;
-  width: 16px;
-  height: 16px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  cursor: pointer;
-  flex-shrink: 0;
+.hf-open-client .hf-select-menu__search {
+  padding: 8px 8px 4px;
 }
-.hf-open-client__clear[hidden] {
+.hf-open-client__create {
+  display: block;
+  width: calc(100% - 8px);
+  margin: 4px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: #f4f5f5;
+  color: #191a1a;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  text-align: left;
+  cursor: pointer;
+}
+.hf-open-client__create:hover {
+  background: #eeefef;
+}
+.hf-open-client__create[hidden] {
   display: none;
 }
-.hf-open-client__clear img {
-  display: block;
-  width: 16px;
-  height: 16px;
+.hf-open-client [data-open-doc-wrap],
+.hf-open__form--info [data-open-doc-wrap] {
+  grid-column: 1 / -1;
+}
+.hf-open__form--info [data-open-doc-wrap][hidden] {
+  display: none;
 }
 .hf-open__info .hf-open-demos {
   justify-content: flex-start;

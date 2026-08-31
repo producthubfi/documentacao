@@ -1120,7 +1120,11 @@
     return (
       '<div class="hf-field' +
       (opts.mod ? " " + opts.mod : "") +
-      '"><div class="hf-field__header"><span class="hf-field__label">' +
+      '"' +
+      (opts.wrap || "") +
+      '><div class="hf-field__header"><span class="hf-field__label"' +
+      (opts.labelAttr || "") +
+      ">" +
       label +
       "</span>" +
       (opts.info
@@ -1181,7 +1185,6 @@
     var items = (opts.items || [
       { label: "Marcelo Oliveira", cpf: "12345678900" },
       { label: "Ricardo Mendes", cpf: "11122233344" },
-      { label: "Novo cliente", cpf: "39053344705" },
     ])
       .map(function (opt) {
         return (
@@ -1198,13 +1201,16 @@
     return (
       '<div class="hf-field hf-field--select hf-open-client" data-client-select>' +
       '<div class="hf-field__header"><span class="hf-field__label">Selecione um cliente</span><span class="hf-field__req">*</span></div>' +
-      '<div class="hf-field__control" data-client-trigger>' +
-      '<input class="hf-field__input" type="text" data-client-query placeholder="Selecionar" autocomplete="off">' +
-      '<button class="hf-open-client__clear" type="button" data-client-clear hidden aria-label="Limpar">' +
-      '<img src="assets/ds-icons/x.svg" width="16" height="16" alt=""></button>' +
-      '<span class="hf-field__chevron" aria-hidden="true"><img src="assets/icons/search.svg" width="16" height="16" alt=""></span></div>' +
+      '<button class="hf-field__control" type="button" data-client-trigger role="combobox" aria-haspopup="listbox" aria-expanded="false">' +
+      '<span class="hf-field__value hf-field__value--placeholder" data-client-value>Selecionar</span>' +
+      '<span class="hf-field__chevron" aria-hidden="true"><img src="assets/icons/select-chevron.svg" alt=""></span></button>' +
       '<div class="hf-select-menu" role="listbox" data-client-menu>' +
+      '<div class="hf-select-menu__search"><label class="hf-search"><span class="hf-search__icon" aria-hidden="true"><img src="assets/icons/search.svg" width="13" height="13" alt=""></span>' +
+      '<input class="hf-search__field" type="search" data-client-query placeholder="Buscar cliente" autocomplete="off"></label></div>' +
+      '<div data-client-options>' +
       items +
+      "</div>" +
+      '<button class="hf-open-client__create" type="button" data-client-create hidden></button>' +
       "</div></div>"
     );
   }
@@ -1430,22 +1436,22 @@
       return matchCard(
         "info",
         "Cliente já cadastrado na empresa",
-        "Não duplicamos um usuário. " +
+        "A ficha é única. " +
           client.name +
-          " já está na sua empresa. Nome e contato vieram do cadastro e não se editam nesta tela. " +
+          " já está na sua empresa — não criamos outro cadastro. A operação de " +
           client.op.product +
           " segue com " +
           client.op.owner +
-          ". Você está abrindo " +
+          ". Você está abrindo outra operação, de " +
           produto +
-          "."
+          ", no mesmo cliente."
       );
     }
     if (kind === "closed") {
       return matchCard(
         "success",
         "Cliente já cadastrado na empresa",
-        "Não duplicamos um usuário. A operação será vinculada a este cadastro, mesmo que outro colega tenha criado. Última operação: " +
+        "A ficha é única na empresa. Esta operação nova entra no mesmo cadastro — não cria outro cliente, mesmo que outro colega tenha cadastrado. Última operação: " +
           client.last.product +
           " · " +
           client.last.status +
@@ -1459,7 +1465,7 @@
     return matchCard(
       "success",
       "Novo cliente nesta empresa",
-      "Nenhum usuário com este CPF na sua empresa. Preencha telefone e e-mail para cadastrar."
+      "Nenhum cliente com este CPF na sua empresa. Preencha telefone e e-mail para cadastrar."
     );
   }
 
@@ -1543,13 +1549,17 @@
       '<button class="hf-open-demo" type="button" data-demo-cpf="52998224725">Dados do corretor</button>' +
       "</div>" +
       '<div class="hf-match-host" data-match-panel></div>' +
-      '<input type="hidden" data-cpf-input data-doc-input value="">' +
       '<div class="hf-open__form hf-open__form--info">' +
       openSelect("Personal Finance", ["Ricardo Teste", "Lucas Augusto", "Maurício Lima"], {
         req: true,
         filled: "Ricardo Teste",
       }) +
       openClientPicker() +
+      openField("CPF", "000.000.000-00", ' data-cpf-input data-doc-input inputmode="numeric"', {
+        req: true,
+        wrap: ' data-open-doc-wrap hidden',
+        labelAttr: " data-doc-label",
+      }) +
       openField("Telefone", "(00) 00000-0000", " data-phone-input", { req: true }) +
       openField("Email", "email@cliente.com", " data-email-input", { req: true }) +
       openField("Valor da Operação", "R$ 0", " data-amount-input", { info: true }) +
@@ -1574,6 +1584,7 @@
       formato: "Operação completa",
       cpf: "",
       name: "",
+      creating: false,
       match: "",
     };
     var stepsEarly = [
@@ -1583,6 +1594,8 @@
       "Comunicação",
     ];
     var cpfInput = shell.querySelector("[data-cpf-input]");
+    var docWrap = shell.querySelector("[data-open-doc-wrap]");
+    var docLabelEl = shell.querySelector("[data-doc-label]");
     var clientSelect = shell.querySelector("[data-client-select]");
     var clientMenu = clientSelect && clientSelect.querySelector("[data-client-menu]");
     var panel = shell.querySelector("[data-match-panel]");
@@ -1590,21 +1603,18 @@
 
     function clientItems() {
       if (isPj()) {
-        return [
-          { label: "Jardins Incorporadora Ltda", cpf: "11222333000181" },
-          { label: "Novo cliente", cpf: "33444555000190" },
-        ];
+        return [{ label: "Jardins Incorporadora Ltda", cpf: "11222333000181" }];
       }
       return [
         { label: "Marcelo Oliveira", cpf: "12345678900" },
         { label: "Ricardo Mendes", cpf: "11122233344" },
-        { label: "Novo cliente", cpf: "39053344705" },
       ];
     }
 
     function refillClientMenu() {
-      if (!clientMenu) return;
-      clientMenu.innerHTML = clientItems()
+      var host = shell.querySelector("[data-client-options]");
+      if (!host) return;
+      host.innerHTML = clientItems()
         .map(function (opt) {
           return (
             '<div class="hf-select-menu__item" role="option" tabindex="-1" data-label="' +
@@ -1617,6 +1627,15 @@
           );
         })
         .join("");
+    }
+
+    function showDocField(on) {
+      if (!docWrap) return;
+      docWrap.hidden = !on;
+      if (docLabelEl) docLabelEl.textContent = docLabel();
+      if (cpfInput) {
+        cpfInput.placeholder = isPj() ? "00.000.000/0000-00" : "000.000.000-00";
+      }
     }
 
     function setPerfil(label) {
@@ -1679,10 +1698,10 @@
 
     function setClientLabel(text, filled) {
       if (!clientSelect) return;
-      var query = clientSelect.querySelector("[data-client-query]");
-      var clear = clientSelect.querySelector("[data-client-clear]");
-      if (query) query.value = filled ? text || "" : "";
-      if (clear) clear.hidden = !filled;
+      var value = clientSelect.querySelector("[data-client-value]");
+      if (!value) return;
+      value.textContent = filled && text ? text : "Selecionar";
+      value.classList.toggle("hf-field__value--placeholder", !(filled && text));
     }
 
     function paintMatch() {
@@ -1692,34 +1711,54 @@
       var phone = shell.querySelector("[data-phone-input]");
       var email = shell.querySelector("[data-email-input]");
       if (!kind) {
+        if (state.creating) {
+          panel.innerHTML = matchCard(
+            "warning",
+            "Informe o " + docLabel(),
+            "O nome ainda não identifica o cliente. O " +
+              docLabel() +
+              " decide se a ficha já existe na empresa."
+          );
+          setClientLabel(state.name, true);
+          showDocField(true);
+          setOpenLocked(phone, false);
+          setOpenLocked(email, false);
+          return;
+        }
         panel.innerHTML = "";
         setOpenLocked(phone, false);
         setOpenLocked(email, false);
         setClientLabel("Selecionar", false);
+        showDocField(false);
         return;
       }
       var client = clientOf() || {};
       panel.innerHTML = renderMatch(kind, client, state.produto);
       if (kind === "broker") {
         state.name = "";
+        state.creating = false;
         setClientLabel("Selecionar", false);
         if (phone) phone.value = "";
         if (email) email.value = "";
         setOpenLocked(phone, true);
         setOpenLocked(email, true);
+        showDocField(true);
         return;
       }
       if (reused()) {
         state.name = client.name || state.name;
+        state.creating = false;
         setClientLabel(client.name, true);
         if (client.phone && phone) phone.value = client.phone;
         if (client.email && email) email.value = client.email;
         setOpenLocked(phone, true);
         setOpenLocked(email, true);
+        showDocField(false);
         return;
       }
-      state.name = "Novo cliente";
-      setClientLabel("Novo cliente", true);
+      state.name = state.name || "Novo cliente";
+      setClientLabel(state.name, true);
+      showDocField(true);
       setOpenLocked(phone, false);
       setOpenLocked(email, false);
     }
@@ -1728,9 +1767,9 @@
       if (!cpfInput) return;
       var nextCpf = cpfDigits(cpfInput.value).slice(0, docLen());
       state.cpf = nextCpf;
-      cpfInput.value = nextCpf;
+      cpfInput.value = maskDoc(nextCpf);
       if (state.cpf.length < docLen()) {
-        state.name = "";
+        if (!state.creating) state.name = "";
       }
       paintMatch();
       paint();
@@ -1820,8 +1859,10 @@
         if (key === "perfil") {
           state.cpf = "";
           state.name = "";
+          state.creating = false;
           if (cpfInput) cpfInput.value = "";
           refillClientMenu();
+          showDocField(false);
           paintMatch();
         }
         if (key === "mesa") refillProducts();
@@ -1846,66 +1887,102 @@
     });
     if (clientSelect) {
       var clientQuery = clientSelect.querySelector("[data-client-query]");
-      var clientMenu = clientSelect.querySelector("[data-client-menu]");
-      var clientClear = clientSelect.querySelector("[data-client-clear]");
+      var clientCreate = clientSelect.querySelector("[data-client-create]");
+      var clientTrigger = clientSelect.querySelector("[data-client-trigger]");
 
       function closeClientMenu() {
         clientSelect.classList.remove("is-open");
+        if (clientTrigger) clientTrigger.setAttribute("aria-expanded", "false");
       }
 
       function openClientMenu() {
         clientSelect.classList.add("is-open");
-        if (clientMenu) {
-          var trigger = clientSelect.querySelector("[data-client-trigger]");
-          if (trigger) {
-            clientMenu.style.top = trigger.offsetTop + trigger.offsetHeight + 4 + "px";
-          }
+        if (clientTrigger) clientTrigger.setAttribute("aria-expanded", "true");
+        if (clientMenu && clientTrigger) {
+          clientMenu.style.top = clientTrigger.offsetTop + clientTrigger.offsetHeight + 4 + "px";
+        }
+        if (clientQuery) {
+          clientQuery.value = "";
+          filterClientMenu("");
+          clientQuery.focus();
         }
       }
 
       function filterClientMenu(q) {
-        var needle = String(q || "")
-          .toLowerCase()
-          .trim();
+        var needle = String(q || "").trim();
+        var lower = needle.toLowerCase();
+        var visible = 0;
         clientSelect.querySelectorAll("[data-client-cpf]").forEach(function (item) {
           var label = (item.getAttribute("data-label") || item.textContent || "").toLowerCase();
           var cpf = item.getAttribute("data-client-cpf") || "";
-          var digitsNeedle = needle.replace(/\D/g, "");
-          var hitLabel = !needle || label.indexOf(needle) !== -1;
+          var digitsNeedle = lower.replace(/\D/g, "");
+          var hitLabel = !lower || label.indexOf(lower) !== -1;
           var hitDoc = !digitsNeedle || cpf.indexOf(digitsNeedle) !== -1;
-          item.hidden = !(hitLabel || hitDoc);
+          var show = hitLabel || hitDoc;
+          item.hidden = !show;
+          if (show) visible += 1;
         });
+        if (clientCreate) {
+          var showCreate = !!needle && visible === 0;
+          clientCreate.hidden = !showCreate;
+          clientCreate.textContent = showCreate ? 'Criar cliente "' + needle + '"' : "";
+          clientCreate.setAttribute("data-create-name", needle);
+        }
       }
 
       function pickClient(item) {
         if (!item || !cpfInput) return;
+        state.creating = false;
+        state.name = item.getAttribute("data-label") || item.textContent.trim();
         cpfInput.value = item.getAttribute("data-client-cpf") || "";
         closeClientMenu();
         lookupFromInput();
       }
 
+      function createClient(name) {
+        var next = String(name || "").trim();
+        if (!next) return;
+        state.creating = true;
+        state.name = next;
+        state.cpf = "";
+        if (cpfInput) cpfInput.value = "";
+        closeClientMenu();
+        setClientLabel(next, true);
+        showDocField(true);
+        paintMatch();
+        paint();
+        if (cpfInput) cpfInput.focus();
+      }
+
+      if (clientTrigger) {
+        clientTrigger.addEventListener("click", function (event) {
+          event.preventDefault();
+          event.stopPropagation();
+          if (clientSelect.classList.contains("is-open")) closeClientMenu();
+          else openClientMenu();
+        });
+      }
       if (clientQuery) {
-        clientQuery.addEventListener("focus", function () {
-          filterClientMenu(clientQuery.value);
-          openClientMenu();
+        clientQuery.addEventListener("click", function (event) {
+          event.stopPropagation();
         });
         clientQuery.addEventListener("input", function () {
           filterClientMenu(clientQuery.value);
-          openClientMenu();
-          if (!clientQuery.value.trim() && cpfInput && state.cpf) {
-            cpfInput.value = "";
-            lookupFromInput();
+        });
+        clientQuery.addEventListener("keydown", function (event) {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            var first = clientSelect.querySelector("[data-client-cpf]:not([hidden])");
+            if (first) pickClient(first);
+            else if (clientCreate && !clientCreate.hidden) createClient(clientCreate.getAttribute("data-create-name"));
           }
         });
       }
-      if (clientClear) {
-        clientClear.addEventListener("click", function (event) {
+      if (clientCreate) {
+        clientCreate.addEventListener("click", function (event) {
           event.preventDefault();
           event.stopPropagation();
-          if (cpfInput) cpfInput.value = "";
-          closeClientMenu();
-          lookupFromInput();
-          if (clientQuery) clientQuery.focus();
+          createClient(clientCreate.getAttribute("data-create-name"));
         });
       }
       clientSelect.addEventListener("click", function (event) {
@@ -1918,6 +1995,12 @@
         if (!clientSelect.contains(event.target)) closeClientMenu();
       });
     }
+    if (cpfInput) {
+      cpfInput.addEventListener("input", function () {
+        cpfInput.value = maskDoc(cpfInput.value);
+        lookupFromInput();
+      });
+    }
     shell.querySelectorAll("[data-demo-cpf]").forEach(function (btn) {
       btn.addEventListener("click", function () {
         if (!cpfInput) return;
@@ -1925,6 +2008,7 @@
         if (perfil === "pj") setPerfil("Pessoa Jurídica");
         else setPerfil("Pessoa Física");
         view = 1;
+        state.creating = false;
         cpfInput.value = btn.getAttribute("data-demo-cpf");
         lookupFromInput();
       });
