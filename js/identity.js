@@ -12,6 +12,16 @@
   };
 
   var COMPANY = {
+    "12345678900": {
+      name: "Marcelo Oliveira",
+      email: "marcelo.oliveira@email.com",
+      phone: "(11) 98888-0101",
+      owner: "Ana Costa",
+      created: "12/08/2026",
+      emailVerified: true,
+      phoneVerified: true,
+      formalized: false,
+    },
     "22233344455": {
       name: "Camila Ferreira",
       email: "camila.ferreira@email.com",
@@ -52,6 +62,28 @@
       phoneVerified: false,
       noDocument: true,
       formalized: false,
+    },
+    "55566677788": {
+      name: "Bruno Alves",
+      email: "bruno.alves@email.com",
+      phone: "(11) 96666-1100",
+      owner: "Ana Costa",
+      created: "14/01/2026",
+      emailVerified: true,
+      phoneVerified: true,
+      formalized: false,
+      deleted: true,
+    },
+    "11222333000181": {
+      name: "Jardins Incorporadora Ltda",
+      email: "contato@jardins.com.br",
+      phone: "(11) 3000-1000",
+      owner: "Ana Costa",
+      created: "12/01/2026",
+      emailVerified: true,
+      phoneVerified: true,
+      formalized: false,
+      pj: true,
     },
   };
 
@@ -220,6 +252,14 @@
     );
   }
 
+  function hashDemo(shell) {
+    var qs = (location.hash.split("?")[1] || "");
+    var match = qs.match(/(?:^|&)demo=([^&]+)/);
+    if (!match) return;
+    var btn = shell.querySelector('[data-id-demo="' + decodeURIComponent(match[1]) + '"]');
+    if (btn) btn.click();
+  }
+
   function overlay(inner) {
     return '<div class="docs-overlay" data-id-overlay hidden>' + inner + "</div>";
   }
@@ -243,18 +283,30 @@
     window.setTimeout(hide, 4000);
   }
 
-  function openOverlay(root) {
-    var el = root.querySelector("[data-id-overlay]");
+  function overlayEl(root, name) {
+    if (name) return root.querySelector('[data-id-overlay="' + name + '"]');
+    return root.querySelector("[data-id-overlay]");
+  }
+
+  function openOverlay(root, name) {
+    var el = overlayEl(root, name);
     if (!el) return;
     el.hidden = false;
     el.classList.add("is-open");
   }
 
-  function closeOverlay(root) {
-    var el = root.querySelector("[data-id-overlay]");
+  function closeOverlay(root, name) {
+    var el = overlayEl(root, name);
     if (!el) return;
     el.classList.remove("is-open");
     el.hidden = true;
+  }
+
+  function otherClient(doc, current) {
+    var c = COMPANY[digits(doc)];
+    if (!c || c.deleted) return null;
+    if (current && digits(doc) === digits(current)) return null;
+    return c;
   }
 
   function isBrokerDoc(cpf) {
@@ -376,6 +428,8 @@
         demos([
           ["novo", "Cliente novo"],
           ["empresa", "Já na empresa"],
+          ["excluido", "Cliente excluído"],
+          ["pj", "Pessoa jurídica"],
         ]) +
         '<div class="hf-table-wrap hf-cli-table"><div class="hf-table-toolbar">' +
         '<label class="hf-search"><span class="hf-search__icon" aria-hidden="true"><img src="assets/icons/search.svg" width="13" height="13" alt=""></span>' +
@@ -447,15 +501,6 @@
         '<div class="hf-cli-sheet__foot">' +
         darkBtn("Registrar", "create") +
         "</div></div></aside></div>",
-      overlay: overlay(
-        '<div class="hf-dialog"><div class="hf-dialog__head"><h3 class="hf-dialog__title">Importar cliente para a sua base?</h3></div>' +
-          '<p class="hf-dialog__desc">A ficha continua única na empresa. Você passa a vê-la na sua lista, sem criar um segundo cadastro.</p>' +
-          '<div class="hf-dialog__slot" data-id-import-slot></div><hr class="hf-dialog__div">' +
-          '<div class="hf-dialog__foot">' +
-          btn("ghost", "Cancelar", "import-cancel", "lg") +
-          btn("primary", "Importar para minha base", "import-confirm", "lg") +
-          "</div></div>"
-      ),
     });
   }
 
@@ -470,7 +515,7 @@
         "</button>" +
         '<div class="hf-header__titles"><h1 class="hf-header__title">Detalhes do Cliente</h1>' +
         '<p class="hf-header__sub">Informações do cliente e histórico de todas as operações associadas.</p></div>' +
-        '<button class="hf-btn hf-btn--lg hf-btn--ghost hf-btn--icon" type="button" aria-label="Excluir">' +
+        '<button class="hf-btn hf-btn--lg hf-btn--ghost hf-btn--icon" type="button" data-id-act="delete" aria-label="Excluir">' +
         ico("trash-2", 20) +
         "</button></div>" +
         '<div class="hf-id-role" data-id-role>Perfil em teste: <strong>usuário comum</strong> · sem operação formalizada</div>' +
@@ -479,6 +524,7 @@
           ["trava", "Com formalização · usuário"],
           ["gestor", "Com formalização · gestor"],
           ["backoffice", "Backoffice HubFi"],
+          ["colisao", "Colisão de documento"],
         ]) +
         '<div class="hf-cli-cols">' +
         '<section class="hf-cli-card"><h3>Informações</h3>' +
@@ -489,6 +535,7 @@
           label: "CPF",
           value: "222.333.444-55",
           req: true,
+          badge: "Travado",
           mod: "hf-cli-field",
           extra: ' data-id-doc inputmode="numeric"',
         }) +
@@ -535,22 +582,32 @@
         ico("chevron-right", 24) +
         "</button></section></div>" +
         '<div class="hf-id-audit"><h3>Auditoria do cadastro</h3><ul data-id-audit></ul></div>',
-      overlay: overlay(
-        '<div class="hf-dialog"><div class="hf-dialog__head"><h3 class="hf-dialog__title">Alterar documento</h3></div>' +
-          '<p class="hf-dialog__desc">Este cliente já tem operação formalizada. A alteração exige justificativa e fica na auditoria.</p>' +
-          '<div class="hf-dialog__slot">' +
-          field({
-            label: "Novo CPF",
-            placeholder: "000.000.000-00",
-            extra: ' data-id-new-doc inputmode="numeric"',
-          }) +
-          '<div class="hf-field hf-field--area"><div class="hf-field__header"><span class="hf-field__label">Justificativa</span><span class="hf-field__req">*</span></div>' +
-          '<div class="hf-field__control hf-field__control--area"><textarea class="hf-field__area" data-id-reason placeholder="Explique o motivo da correção. Fica registrado na auditoria."></textarea></div></div>' +
-          '</div><hr class="hf-dialog__div"><div class="hf-dialog__foot">' +
-          btn("ghost", "Cancelar", "doc-cancel", "lg") +
-          btn("primary", "Salvar documento", "doc-confirm", "lg") +
-          "</div></div>"
-      ),
+      overlay:
+        overlay(
+          '<div class="hf-dialog"><div class="hf-dialog__head"><h3 class="hf-dialog__title">Alterar documento</h3></div>' +
+            '<p class="hf-dialog__desc">Este cliente já tem operação formalizada. A alteração exige justificativa e fica na auditoria.</p>' +
+            '<div class="hf-dialog__slot">' +
+            field({
+              label: "Novo CPF",
+              placeholder: "000.000.000-00",
+              extra: ' data-id-new-doc inputmode="numeric"',
+            }) +
+            '<p class="hf-field__error" data-id-doc-error hidden>Este CPF já pertence a outro cliente da empresa. Não duplicamos um usuário.</p>' +
+            '<div class="hf-field hf-field--area"><div class="hf-field__header"><span class="hf-field__label">Justificativa</span><span class="hf-field__req">*</span></div>' +
+            '<div class="hf-field__control hf-field__control--area"><textarea class="hf-field__area" data-id-reason placeholder="Explique o motivo da correção. Fica registrado na auditoria."></textarea></div></div>' +
+            '</div><hr class="hf-dialog__div"><div class="hf-dialog__foot">' +
+            btn("ghost", "Cancelar", "doc-cancel", "lg") +
+            btn("primary", "Salvar documento", "doc-confirm", "lg") +
+            "</div></div>"
+        ).replace('data-id-overlay hidden', 'data-id-overlay="doc" hidden') +
+        overlay(
+          '<div class="hf-dialog"><div class="hf-dialog__head"><h3 class="hf-dialog__title">Excluir cliente?</h3></div>' +
+            '<p class="hf-dialog__desc">O usuário sai da base desta empresa. O CPF fica livre para um novo cadastro — não duplicamos o cliente.</p>' +
+            '<hr class="hf-dialog__div"><div class="hf-dialog__foot">' +
+            btn("ghost", "Cancelar", "del-cancel", "lg") +
+            btn("primary", "Excluir cadastro", "del-confirm", "lg") +
+            "</div></div>"
+        ).replace('data-id-overlay hidden', 'data-id-overlay="del" hidden'),
     });
   }
 
@@ -561,7 +618,7 @@
       '<img class="hf-pub__logo" src="assets/logos/h-color-light.svg" width="109" height="27" alt="hubfi">' +
       '<p class="hf-pub__kicker">Abertura de operação · Jardins Imóveis</p>' +
       '<h1 class="hf-pub__title" data-id-title>Informe seu documento</h1>' +
-      '<p class="hf-pub__sub" data-id-sub>Usamos o CPF ou CNPJ só para localizar ou criar sua ficha nesta empresa.</p>' +
+      '<p class="hf-pub__sub" data-id-sub>Usamos o CPF ou CNPJ só para localizar ou cadastrar o cliente nesta empresa.</p>' +
       '<div class="hf-pub__steps" data-id-steps></div>' +
       '<div class="hf-pub__card" data-id-card></div>' +
       demos([
@@ -570,6 +627,7 @@
         ["novo", "Cliente novo"],
         ["legado", "Ficha sem documento"],
         ["corretor", "Dados do corretor"],
+        ["expirado", "Token expirado"],
       ]) +
       "</div></div>"
     );
@@ -578,7 +636,7 @@
   function bindCadastro(root) {
     var shell = root.querySelector('[data-id-root="cadastro"]');
     if (!shell) return;
-    var state = { tipo: "PF", doc: "", imported: false };
+    var state = { tipo: "PF", doc: "", typed: false };
     var sheet = shell.querySelector("[data-id-sheet]");
     var docInput = shell.querySelector("[data-id-doc]");
     var nameInput = shell.querySelector("[data-id-name]");
@@ -596,13 +654,31 @@
     }
 
     function found() {
-      return COMPANY[state.doc] || null;
+      var c = COMPANY[state.doc];
+      if (c && c.deleted) return null;
+      if (state.doc.length !== expectedLen()) return null;
+      if (c) return c;
+      return COMPANY[state.tipo === "PJ" ? "11222333000181" : "22233344455"];
+    }
+
+    function released() {
+      var c = COMPANY[state.doc];
+      return c && c.deleted ? c : null;
     }
 
     function openSheet() {
       if (!sheet) return;
       sheet.hidden = false;
       sheet.classList.add("is-open");
+    }
+
+    function resetSheet() {
+      state.doc = "";
+      state.typed = false;
+      if (docInput) docInput.value = "";
+      if (nameInput) nameInput.value = "";
+      if (emailInput) emailInput.value = "";
+      if (phoneInput) phoneInput.value = "";
     }
 
     function closeSheet() {
@@ -631,30 +707,28 @@
         if (rest) rest.hidden = true;
         return;
       }
-      if (client && !state.imported) {
+      if (client) {
         if (rest) rest.hidden = true;
         panel.innerHTML = matchCard(
           "warning",
-          "Este documento já está na sua empresa",
-          "Não criamos uma segunda ficha. Localize o cadastro existente ou importe para a sua base.",
+          "Este usuário já está na sua empresa",
+          "Não duplicamos um cliente. Abra o cadastro existente — a ficha é única na empresa, inclusive se outro colega tiver criado.",
           facts([
             ["Cliente", client.name],
             ["Cadastrado por", client.owner],
             ["Desde", client.created],
           ]),
-          btn("primary", "Importar para minha base", "import", "lg") +
-            btn("ghost", "Abrir cadastro existente", "open", "lg")
+          btn("primary", "Abrir cadastro existente", "open", "lg")
         );
         return;
       }
-      if (client && state.imported) {
-        if (rest) rest.hidden = true;
+      var freed = released();
+      if (freed) {
+        if (rest) rest.hidden = false;
         panel.innerHTML = matchCard(
           "success",
-          "Cliente na sua base",
-          client.name + " agora aparece na sua lista. A ficha da empresa continua única.",
-          "",
-          btn("primary", "Abrir cadastro", "open", "lg")
+          "Usuário liberado",
+          "Este usuário estava em um cadastro excluído. Pode cadastrar de novo nesta empresa — não havia mais um cliente com este CPF."
         );
         return;
       }
@@ -671,27 +745,42 @@
         next.disabled = !complete || blocked;
         next.hidden = blocked;
       }
+      var demoMap = {
+        empresa: "22233344455",
+        excluido: "55566677788",
+        pj: "11222333000181",
+      };
       shell.querySelectorAll("[data-id-demo]").forEach(function (btnEl) {
-        var map = { novo: "39053344705", empresa: "22233344455" };
-        btnEl.classList.toggle("is-on", map[btnEl.getAttribute("data-id-demo")] === state.doc);
+        var key = btnEl.getAttribute("data-id-demo");
+        var on = key === "novo" ? sheet && !sheet.hidden && !state.doc : demoMap[key] === state.doc;
+        btnEl.classList.toggle("is-on", !!on);
       });
     }
 
     function lookup() {
       state.doc = digits(docInput.value).slice(0, expectedLen());
-      state.imported = false;
       docInput.value = maskDoc(state.doc);
       var client = found();
       if (client) {
         nameInput.value = client.name;
         emailInput.value = client.email;
         phoneInput.value = client.phone;
+      } else {
+        var gone = released();
+        if (gone) {
+          nameInput.value = gone.name;
+          emailInput.value = gone.email;
+          phoneInput.value = gone.phone;
+        }
       }
       paint();
     }
 
     if (docInput) {
-      docInput.addEventListener("input", lookup);
+      docInput.addEventListener("input", function () {
+        state.typed = true;
+        lookup();
+      });
       docInput.addEventListener("blur", lookup);
     }
     if (phoneInput) {
@@ -707,10 +796,22 @@
     });
     shell.querySelectorAll("[data-id-demo]").forEach(function (btnEl) {
       btnEl.addEventListener("click", function () {
-        var map = { novo: "39053344705", empresa: "22233344455" };
-        setTipo("PF");
+        var which = btnEl.getAttribute("data-id-demo");
+        var map = {
+          empresa: "22233344455",
+          excluido: "55566677788",
+          pj: "11222333000181",
+        };
+        setTipo(which === "pj" ? "PJ" : "PF");
+        if (which === "novo") {
+          resetSheet();
+          openSheet();
+          paint();
+          if (docInput) docInput.focus();
+          return;
+        }
         openSheet();
-        docInput.value = map[btnEl.getAttribute("data-id-demo")] || "";
+        docInput.value = map[which] || "";
         lookup();
       });
     });
@@ -720,38 +821,15 @@
       if (!act || !shell.contains(act)) return;
       var which = act.getAttribute("data-id-act");
       if (which === "new") {
+        setTipo("PF");
+        resetSheet();
         openSheet();
+        paint();
+        if (docInput) docInput.focus();
         return;
       }
       if (which === "close-sheet") {
         closeSheet();
-        return;
-      }
-      if (which === "import") {
-        var client = found();
-        var slot = shell.querySelector("[data-id-import-slot]");
-        if (slot && client) {
-          slot.innerHTML =
-            "<strong>" +
-            client.name +
-            "</strong><p>" +
-            maskDoc(state.doc) +
-            " · cadastrado por " +
-            client.owner +
-            "</p>";
-        }
-        openOverlay(shell);
-        return;
-      }
-      if (which === "import-cancel") {
-        closeOverlay(shell);
-        return;
-      }
-      if (which === "import-confirm") {
-        state.imported = true;
-        closeOverlay(shell);
-        paint();
-        showToast("Cliente importado para a sua base.");
         return;
       }
       if (which === "open") {
@@ -763,6 +841,10 @@
           showToast("Informe o nome do cliente.");
           return;
         }
+        if (COMPANY[state.doc] && COMPANY[state.doc].deleted) {
+          COMPANY[state.doc].deleted = false;
+          COMPANY[state.doc].name = String(nameInput.value || "").trim() || COMPANY[state.doc].name;
+        }
         closeSheet();
         showToast("Cliente cadastrado nesta empresa.");
       }
@@ -772,13 +854,8 @@
         if (event.target === sheet) closeSheet();
       });
     }
-    var overlayEl = shell.querySelector("[data-id-overlay]");
-    if (overlayEl) {
-      overlayEl.addEventListener("click", function (event) {
-        if (event.target === overlayEl) closeOverlay(shell);
-      });
-    }
     paint();
+    hashDemo(shell);
   }
 
   function bindEdicao(root) {
@@ -787,6 +864,7 @@
     var state = {
       role: "user",
       formalized: false,
+      deleted: false,
       doc: "22233344455",
       emailVerified: true,
       phoneVerified: true,
@@ -801,6 +879,7 @@
       ],
     };
     var docInput = shell.querySelector("[data-id-doc]");
+    var nameInput = shell.querySelector("[data-id-name]");
     var emailInput = shell.querySelector("[data-id-email]");
     var phoneInput = shell.querySelector("[data-id-phone]");
     var panel = shell.querySelector("[data-id-panel]");
@@ -808,6 +887,7 @@
     var auditEl = shell.querySelector("[data-id-audit]");
     var original = {
       doc: digits(docInput.value),
+      name: nameInput ? String(nameInput.value || "").trim() : "",
       email: emailInput.value,
       phone: digits(phoneInput.value),
     };
@@ -820,10 +900,13 @@
     function paintBadges() {
       var emailField = emailInput.closest(".hf-field");
       var phoneField = phoneInput.closest(".hf-field");
+      var docField = docInput.closest(".hf-field");
       var emailBadge = emailField.querySelector(".hf-id-badge");
       var phoneBadge = phoneField.querySelector(".hf-id-badge");
+      var docBadge = docField.querySelector(".hf-id-badge");
       if (emailBadge) emailBadge.hidden = !state.emailVerified;
       if (phoneBadge) phoneBadge.hidden = !state.phoneVerified;
+      if (docBadge) docBadge.hidden = canEditDoc() || state.deleted;
     }
 
     function paintAudit() {
@@ -846,6 +929,23 @@
         .join("");
     }
 
+    function colliding() {
+      return otherClient(digits(docInput.value), state.doc);
+    }
+
+    function paintCollision() {
+      var clash = colliding();
+      if (!clash) return false;
+      panel.innerHTML = matchCard(
+        "error",
+          "Este cliente já pertence a outro usuário",
+          "Não duplicamos um cliente. O CPF de " +
+          clash.name +
+          " já está nesta empresa. Em outra empresa, o mesmo CPF seria permitido."
+      );
+      return true;
+    }
+
     function paint() {
       var locked = !canEditDoc();
       docInput.disabled = locked;
@@ -858,21 +958,32 @@
         backoffice: "Perfil em teste: <strong>backoffice HubFi</strong> · acesso irrestrito",
       };
       if (roleEl) roleEl.innerHTML = labels[state.role] || labels.user;
-      if (locked) {
+      if (state.deleted) {
+        docInput.disabled = true;
+        panel.innerHTML = matchCard(
+          "success",
+          "Cadastro excluído",
+          "O usuário saiu da base. Um novo cadastro pode usar este CPF — não duplicamos o cliente.",
+          "",
+          btn("primary", "Cadastrar de novo", "recadastro", "lg")
+        );
+      } else if (paintCollision()) {
+        /* card already painted */
+      } else if (locked) {
         panel.innerHTML = matchCard(
           "info",
-          "Documento travado",
-          "Já existe operação formalizada. Um gestor da empresa altera com justificativa.",
+          "CPF travado",
+          "Nome, e-mail e telefone você edita e salva normalmente. Só o CPF exige um gestor da empresa e justificativa, porque já existe operação formalizada.",
           "",
           state.role === "manager" || state.role === "backoffice"
-            ? btn("primary", "Alterar documento", "unlock-doc", "lg")
+            ? btn("primary", "Alterar CPF", "unlock-doc", "lg")
             : ""
         );
       } else {
         panel.innerHTML = matchCard(
           "success",
-          "Documento editável",
-          "Ainda não há operação formalizada. Qualquer usuário com acesso corrige o documento."
+          "CPF editável",
+          "Ainda não há operação formalizada. Qualquer usuário com acesso corrige o CPF."
         );
       }
       paintBadges();
@@ -915,6 +1026,10 @@
         );
       }
     });
+    docInput.addEventListener("input", function () {
+      docInput.value = cpfMask(docInput.value);
+      paint();
+    });
     shell.querySelectorAll("[data-id-demo]").forEach(function (btnEl) {
       btnEl.addEventListener("click", function () {
         var which = btnEl.getAttribute("data-id-demo");
@@ -922,18 +1037,32 @@
         if (which === "livre") {
           state.role = "user";
           state.formalized = false;
+          state.deleted = false;
+          docInput.value = cpfMask(state.doc);
         }
         if (which === "trava") {
           state.role = "user";
           state.formalized = true;
+          state.deleted = false;
+          docInput.value = cpfMask(state.doc);
         }
         if (which === "gestor") {
           state.role = "manager";
           state.formalized = true;
+          state.deleted = false;
+          docInput.value = cpfMask(state.doc);
         }
         if (which === "backoffice") {
           state.role = "backoffice";
           state.formalized = true;
+          state.deleted = false;
+          docInput.value = cpfMask(state.doc);
+        }
+        if (which === "colisao") {
+          state.role = "user";
+          state.formalized = false;
+          state.deleted = false;
+          docInput.value = cpfMask("11122233344");
         }
         paint();
       });
@@ -949,22 +1078,25 @@
       if (!act || !shell.contains(act)) return;
       var which = act.getAttribute("data-id-act");
       if (which === "unlock-doc") {
-        openOverlay(shell);
+        openOverlay(shell, "doc");
         return;
       }
       if (which === "doc-cancel") {
-        closeOverlay(shell);
+        closeOverlay(shell, "doc");
         return;
       }
       if (which === "doc-confirm") {
         var nextDoc = digits(shell.querySelector("[data-id-new-doc]").value);
         var reason = String(shell.querySelector("[data-id-reason]").value || "").trim();
+        var err = shell.querySelector("[data-id-doc-error]");
+        if (err) err.hidden = true;
         if (nextDoc.length !== 11) {
           showToast("Informe um CPF válido.");
           return;
         }
-        if (COMPANY[nextDoc] && nextDoc !== state.doc) {
-          showToast("Este documento já pertence a outro cliente da empresa.");
+        if (otherClient(nextDoc, state.doc)) {
+          if (err) err.hidden = false;
+          showToast("Este CPF já pertence a outro cliente. Não duplicamos um usuário.");
           return;
         }
         if (!reason && state.role !== "backoffice") {
@@ -973,21 +1105,51 @@
         }
         pushAudit("Documento", cpfMask(state.doc), cpfMask(nextDoc));
         state.doc = nextDoc;
+        original.doc = nextDoc;
         docInput.value = cpfMask(nextDoc);
-        closeOverlay(shell);
+        closeOverlay(shell, "doc");
         paint();
         showToast("Documento atualizado e registrado na auditoria.");
         return;
       }
+      if (which === "delete") {
+        openOverlay(shell, "del");
+        return;
+      }
+      if (which === "del-cancel") {
+        closeOverlay(shell, "del");
+        return;
+      }
+      if (which === "del-confirm") {
+        if (COMPANY[state.doc]) COMPANY[state.doc].deleted = true;
+        state.deleted = true;
+        closeOverlay(shell, "del");
+        paint();
+        showToast("Cadastro excluído. Este CPF está livre para um novo usuário.");
+        return;
+      }
+      if (which === "recadastro") {
+        location.hash = "#/cadastro-cliente";
+        return;
+      }
       if (which === "save") {
+        if (colliding()) {
+          paint();
+          showToast("Este CPF já pertence a outro cliente. Não duplicamos um usuário.");
+          return;
+        }
+        var nameVal = nameInput ? String(nameInput.value || "").trim() : "";
+        var nameChanged = nameVal && nameVal !== original.name;
         if (digits(docInput.value) !== original.doc) {
           if (state.formalized && state.role === "user") {
-            showToast("Usuário comum não altera documento após formalização.");
+            showToast("Usuário comum não altera o CPF após formalização. Peça a um gestor.");
             return;
           }
-          pushAudit("Documento", cpfMask(original.doc), cpfMask(docInput.value));
+          pushAudit("CPF", cpfMask(original.doc), cpfMask(docInput.value));
           original.doc = digits(docInput.value);
+          state.doc = original.doc;
         }
+        if (nameChanged) original.name = nameVal;
         if (normEmail(emailInput.value) !== normEmail(original.email)) {
           pushAudit("E-mail", original.email, emailInput.value);
           original.email = emailInput.value;
@@ -997,7 +1159,17 @@
           original.phone = digits(phoneInput.value);
         }
         paintAudit();
-        showToast("Alterações salvas.");
+        if (nameChanged && canEditDoc() === false) {
+          panel.innerHTML = matchCard(
+            "success",
+            "Nome atualizado",
+            "Nome não pede justificativa. O CPF continua travado — só um gestor da empresa altera, com justificativa."
+          );
+          showToast("Nome salvo.");
+          return;
+        }
+        paint();
+        showToast(nameChanged ? "Nome salvo." : "Alterações salvas.");
         return;
       }
       if (which === "back" || which === "cancel") {
@@ -1008,14 +1180,14 @@
         location.hash = "#/detalhes-operacao";
       }
     });
-    var overlayEl = shell.querySelector("[data-id-overlay]");
-    if (overlayEl) {
-      overlayEl.addEventListener("click", function (event) {
-        if (event.target === overlayEl) closeOverlay(shell);
+    shell.querySelectorAll("[data-id-overlay]").forEach(function (el) {
+      el.addEventListener("click", function (event) {
+        if (event.target === el) closeOverlay(shell, el.getAttribute("data-id-overlay"));
       });
-    }
+    });
     state.demo = "livre";
     paint();
+    hashDemo(shell);
   }
 
   function bindPublico(root) {
@@ -1033,6 +1205,7 @@
       phoneOk: false,
       otp: "",
       demo: "",
+      expired: false,
     };
     var title = shell.querySelector("[data-id-title]");
     var sub = shell.querySelector("[data-id-sub]");
@@ -1078,7 +1251,7 @@
     function paintCard() {
       if (state.step === "doc") {
         title.textContent = "Informe seu documento";
-        sub.textContent = "Usamos o CPF só para localizar ou criar sua ficha nesta empresa.";
+        sub.textContent = "Usamos o CPF só para localizar ou cadastrar o cliente nesta empresa.";
         card.innerHTML =
           '<div data-pub-panel></div>' +
           fieldRow({
@@ -1160,9 +1333,18 @@
       }
       title.textContent = "Código de acesso";
       sub.textContent = complete()
-        ? "Encontramos sua ficha. Confirme o acesso para seguir."
+        ? state.expired
+          ? "O acesso anterior expirou. Confirme o código novamente."
+          : "Encontramos o seu cadastro. Confirme o acesso para seguir."
         : "Sessão liberada pelo canal confirmado.";
       card.innerHTML =
+        (state.expired
+          ? matchCard(
+              "warning",
+              "Acesso expirado",
+              "O token desta sessão venceu. Autentique de novo para entrar no formulário."
+            )
+          : "") +
         fieldRow({
           label: "Código de acesso",
           placeholder: "000000",
@@ -1220,6 +1402,7 @@
         return;
       }
       if (complete()) {
+        state.expired = state.demo === "expirado";
         state.step = "otp";
         paint();
         return;
@@ -1284,6 +1467,7 @@
           phoneOk: false,
           otp: "",
           demo: which,
+          expired: which === "expirado",
         };
         var map = {
           completo: "11122233344",
@@ -1291,6 +1475,7 @@
           novo: "39053344705",
           legado: "33344455566",
           corretor: BROKER.cpf,
+          expirado: "11122233344",
         };
         state.doc = map[which] || "";
         if (which === "legado") {
@@ -1368,25 +1553,174 @@
           showToast("Código inválido. Use 123456 neste protótipo.");
           return;
         }
-        showToast("Acesso liberado. Seguindo para o formulário.");
+        location.hash = "#/formulario-publico";
+        return;
       }
     });
     paint();
+    hashDemo(shell);
+  }
+
+  function formHtml() {
+    return (
+      '<div class="docs-screen docs-screen--public" data-id-root="formulario">' +
+      '<div class="hf-pub hf-pub--form">' +
+      '<img class="hf-pub__logo" src="assets/logos/h-color-light.svg" width="109" height="27" alt="hubfi">' +
+      '<p class="hf-pub__kicker">Formulário da operação · Jardins Imóveis · OP-002941</p>' +
+      '<h1 class="hf-pub__title">Complete os dados da operação</h1>' +
+      '<p class="hf-pub__sub">O cliente desta operação já existe. Identidade só por documento — e-mail e telefone não localizam ficha.</p>' +
+      '<div class="hf-pub__card" data-id-card></div>' +
+      demos([
+        ["com-doc", "Com documento"],
+        ["sem-doc", "Sem documento"],
+      ]) +
+      "</div></div>"
+    );
+  }
+
+  function bindFormulario(root) {
+    var shell = root.querySelector('[data-id-root="formulario"]');
+    if (!shell) return;
+    var state = { demo: "com-doc", doc: "12345678900", email: "marcelo.oliveira@email.com", phone: "(11) 98888-0101" };
+    var card = shell.querySelector("[data-id-card]");
+    card.innerHTML =
+      '<div data-form-panel></div>' +
+      field({
+        label: "CPF ou CNPJ",
+        placeholder: "000.000.000-00",
+        req: true,
+        extra: ' data-form-doc inputmode="numeric"',
+      }) +
+      field({
+        label: "E-mail",
+        placeholder: "email@cliente.com",
+        extra: " data-form-email",
+      }) +
+      field({
+        label: "Telefone",
+        placeholder: "(00) 00000-0000",
+        extra: ' data-form-phone inputmode="numeric"',
+      }) +
+      field({
+        label: "Renda mensal",
+        placeholder: "R$ 0",
+      }) +
+      '<div class="hf-pub__acts">' +
+      '<button class="hf-open__next" type="button" data-id-act="send">Enviar formulário</button></div>';
+    var docInput = card.querySelector("[data-form-doc]");
+    var emailInput = card.querySelector("[data-form-email]");
+    var phoneInput = card.querySelector("[data-form-phone]");
+    var panel = card.querySelector("[data-form-panel]");
+    var send = card.querySelector('[data-id-act="send"]');
+
+    function paint() {
+      var d = digits(state.doc);
+      var hasDoc = d.length === 11 || d.length === 14;
+      var contactOnly = !hasDoc && (!!state.email || !!digits(state.phone));
+      var matchByContact = null;
+      if (!hasDoc) {
+        Object.keys(COMPANY).forEach(function (key) {
+          var c = COMPANY[key];
+          if (!c || c.deleted) return;
+          if (state.email && normEmail(c.email) === normEmail(state.email)) matchByContact = c;
+          if (digits(state.phone) && digits(c.phone) === digits(state.phone)) matchByContact = c;
+        });
+      }
+      if (contactOnly) {
+        panel.innerHTML = matchCard(
+          "error",
+          "Sem documento, não há identidade",
+          "Cadastro sem CPF ou CNPJ está depreciado. E-mail e telefone não localizam ficha, mesmo que já existam nesta empresa" +
+            (matchByContact ? " — " + matchByContact.name + " não é encontrado por contato." : ".")
+        );
+      } else if (hasDoc) {
+        var known = COMPANY[d];
+        panel.innerHTML = matchCard(
+          "success",
+          "Documento recebido",
+          known && !known.deleted
+            ? "A ficha desta operação permanece a mesma. O formulário não cria outro cadastro nem busca por contato."
+            : "Documento válido. Os demais campos são dados da operação, não chave de identidade."
+        );
+      } else {
+        panel.innerHTML = "";
+      }
+      if (send) send.disabled = !hasDoc;
+      if (docInput) docInput.value = d.length > 11 ? cnpjMask(d) : cpfMask(d);
+      if (emailInput) emailInput.value = state.email;
+      if (phoneInput) phoneInput.value = state.phone;
+      shell.querySelectorAll("[data-id-demo]").forEach(function (btnEl) {
+        btnEl.classList.toggle("is-on", btnEl.getAttribute("data-id-demo") === state.demo);
+      });
+    }
+
+    if (docInput) {
+      docInput.addEventListener("input", function () {
+        state.doc = digits(docInput.value).slice(0, 14);
+        paint();
+      });
+    }
+    if (emailInput) {
+      emailInput.addEventListener("input", function () {
+        state.email = emailInput.value;
+        paint();
+      });
+    }
+    if (phoneInput) {
+      phoneInput.addEventListener("input", function () {
+        state.phone = phoneMask(phoneInput.value);
+        paint();
+      });
+    }
+    shell.addEventListener("click", function (event) {
+      var demo = event.target.closest("[data-id-demo]");
+      if (demo) {
+        var which = demo.getAttribute("data-id-demo");
+        state.demo = which;
+        if (which === "com-doc") {
+          state.doc = "12345678900";
+          state.email = "marcelo.oliveira@email.com";
+          state.phone = "(11) 98888-0101";
+        } else {
+          state.doc = "";
+          state.email = "camila.ferreira@email.com";
+          state.phone = "(11) 97777-4411";
+        }
+        paint();
+        return;
+      }
+      var act = event.target.closest("[data-id-act]");
+      if (!act || act.getAttribute("data-id-act") !== "send") return;
+      if (digits(state.doc).length !== 11 && digits(state.doc).length !== 14) {
+        showToast("Informe o documento para enviar.");
+        return;
+      }
+      showToast("Formulário enviado. A ficha não foi alterada por e-mail ou telefone.");
+    });
+    paint();
+    hashDemo(shell);
   }
 
   catalog.pages["cadastro-cliente"] = {
     title: "Cadastro de cliente",
-    lead: "Criação explícita bloqueia documento já existente na empresa e oferece importar a ficha para a base do usuário.",
+    lead: "Criação explícita bloqueia documento já existente na empresa. A ficha é única: o usuário abre o cadastro existente.",
     leadHtml:
       '<ol class="docs-howto">' +
       "<li><em>1</em><div><strong>Documento primeiro</strong><span>CPF ou CNPJ decide se a ficha já existe nesta empresa</span></div></li>" +
-      "<li><em>2</em><div><strong>Já na empresa</strong><span>Não cria outra ficha. Importar para a sua base ou abrir o cadastro</span></div></li>" +
+      "<li><em>2</em><div><strong>Já na empresa</strong><span>Não duplicamos um cliente. Bloqueia a criação e abre o cadastro existente</span></div></li>" +
       "<li><em>3</em><div><strong>Documento livre</strong><span>Cadastra normalmente, inclusive se o mesmo CPF existir em outra empresa — sem citar isso</span></div></li>" +
+      "<li><em>4</em><div><strong>Excluído</strong><span>Documento de cadastro excluído volta a ficar livre nesta empresa</span></div></li>" +
       "</ol>",
     node: "1-1870",
     figmaFile: "https://www.figma.com/design/C9RP2qnls5pDBjMSEdhT1n/Untitled?node-id=1-1870",
     wide: true,
     section: "Telas",
+    scenarios: [
+      { label: "Cliente novo", note: "Documento livre. Cadastra nesta empresa.", href: "#/cadastro-cliente?demo=novo" },
+      { label: "Já na empresa", note: "Bloqueia ficha nova. Abre o cadastro existente.", href: "#/cadastro-cliente?demo=empresa" },
+      { label: "Cliente excluído", note: "CPF volta a ficar livre nesta empresa.", href: "#/cadastro-cliente?demo=excluido" },
+      { label: "Pessoa jurídica", note: "CNPJ no lugar do CPF. Mesma regra.", href: "#/cadastro-cliente?demo=pj" },
+    ],
     html: cadastroHtml,
   };
 
@@ -1399,11 +1733,20 @@
       "<li><em>2</em><div><strong>Com formalização</strong><span>Usuário comum não altera. Gestor informa justificativa</span></div></li>" +
       "<li><em>3</em><div><strong>Contato</strong><span>Trocar e-mail ou telefone verificado remove a confirmação daquele canal</span></div></li>" +
       "<li><em>4</em><div><strong>Auditoria</strong><span>Documento, e-mail e telefone registram valor anterior, novo, autor e data</span></div></li>" +
+      "<li><em>5</em><div><strong>Colisão</strong><span>Trocar o documento para o CPF de outro cliente da empresa é bloqueado</span></div></li>" +
+      "<li><em>6</em><div><strong>Excluir</strong><span>O documento fica livre para um novo cadastro na mesma empresa</span></div></li>" +
       "</ol>",
     node: "1-1871",
     figmaFile: "https://www.figma.com/design/C9RP2qnls5pDBjMSEdhT1n/Untitled?node-id=1-1871",
     wide: true,
     section: "Telas",
+    scenarios: [
+      { label: "Sem formalização", note: "Qualquer usuário corrige o CPF.", href: "#/edicao-cliente?demo=livre" },
+      { label: "Com formalização · usuário", note: "CPF travado. Nome, e-mail e telefone livres. Verificação cai ao editar contato.", href: "#/edicao-cliente?demo=trava" },
+      { label: "Com formalização · gestor", note: "Altera o CPF com justificativa. Fica na auditoria.", href: "#/edicao-cliente?demo=gestor" },
+      { label: "Backoffice HubFi", note: "Acesso irrestrito, com rastro.", href: "#/edicao-cliente?demo=backoffice" },
+      { label: "Colisão de documento", note: "CPF de outro cliente da empresa é bloqueado.", href: "#/edicao-cliente?demo=colisao" },
+    ],
     html: edicaoHtml,
   };
 
@@ -1416,10 +1759,37 @@
       "<li><em>2</em><div><strong>Ficha completa</strong><span>Pula coleta e vai para verificação de acesso</span></div></li>" +
       "<li><em>3</em><div><strong>Um canal</strong><span>Dá para pular e-mail ou WhatsApp, nunca os dois. Comunicação segue só no canal confirmado</span></div></li>" +
       "<li><em>4</em><div><strong>Legado</strong><span>Contato verificado de ficha sem documento grava o CPF nela, em vez de criar outra</span></div></li>" +
+      "<li><em>5</em><div><strong>Token expirado</strong><span>Ficha completa pede o código de acesso de novo antes do formulário</span></div></li>" +
       "</ol>",
     wide: true,
     section: "Telas",
+    later: true,
+    scenarios: [
+      { label: "Já cadastrado", note: "Aceite de link público fica para depois.", href: "#/link-publico?demo=completo" },
+      { label: "Contato incompleto", href: "#/link-publico?demo=incompleto" },
+      { label: "Cliente novo", href: "#/link-publico?demo=novo" },
+      { label: "Ficha sem documento", href: "#/link-publico?demo=legado" },
+      { label: "Dados do corretor", href: "#/link-publico?demo=corretor" },
+      { label: "Token expirado", href: "#/link-publico?demo=expirado" },
+    ],
     html: publicHtml,
+  };
+
+  catalog.pages["formulario-publico"] = {
+    title: "Formulário público",
+    lead: "O cliente da operação já existe. Sem CPF ou CNPJ a ficha é depreciada: e-mail e telefone não fazem match.",
+    leadHtml:
+      '<ol class="docs-howto">' +
+      "<li><em>1</em><div><strong>Documento</strong><span>Única chave. O formulário não cria cadastro novo</span></div></li>" +
+      "<li><em>2</em><div><strong>Sem documento</strong><span>Não localiza ficha por e-mail ou telefone, mesmo que o contato já exista na empresa</span></div></li>" +
+      "</ol>",
+    wide: true,
+    section: "Telas",
+    scenarios: [
+      { label: "Com documento", note: "Única chave. Não cria outro cadastro.", href: "#/formulario-publico?demo=com-doc" },
+      { label: "Sem documento", note: "E-mail e telefone não localizam ficha.", href: "#/formulario-publico?demo=sem-doc" },
+    ],
+    html: formHtml,
   };
 
   window.HF_IDENTITY = {
@@ -1427,6 +1797,7 @@
       bindCadastro(root);
       bindEdicao(root);
       bindPublico(root);
+      bindFormulario(root);
     },
   };
 })();

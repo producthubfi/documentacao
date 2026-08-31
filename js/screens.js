@@ -48,6 +48,40 @@
     );
   }
 
+  function timeCard(icon, label, value, hint, extraClass) {
+    return (
+      '<div class="hf-opage__time-card' +
+      (extraClass ? " " + extraClass : "") +
+      '">' +
+      '<span class="hf-opage__time-ico" aria-hidden="true">' +
+      ico(icon, 16) +
+      "</span>" +
+      '<div class="hf-opage__time-copy"><small>' +
+      label +
+      "</small><b>" +
+      value +
+      "</b><p>" +
+      hint +
+      "</p></div></div>"
+    );
+  }
+
+  function pauseTimeCards(pausedDays, slaValue) {
+    return (
+      '<div class="hf-opage__times">' +
+      timeCard(
+        "pause",
+        "SLA",
+        slaValue || "Pausado",
+        "Operação fora das filas ativas",
+        "hf-opage__time-card--sla"
+      ) +
+      timeCard("clock", "Tempo em andamento", "18 dias", "Conta no SLA da etapa") +
+      timeCard("hourglass", "Tempo pausado", pausedDays + " dias", "Fora do SLA", "is-paused") +
+      "</div>"
+    );
+  }
+
   function kv(label, value, empty) {
     return (
       '<div class="hf-kv"><span class="hf-kv__label">' +
@@ -326,7 +360,6 @@
       demos +
       header +
       flow +
-      '<p class="hf-opage__sla" data-pause-sla hidden>SLA pausado · operação fora das filas ativas</p>' +
       "</div>" +
       '<div class="docs-screen__body">' +
       (opts.lostChannel
@@ -335,9 +368,10 @@
           "<strong>Esta operação foi encerrada</strong></div>" +
           "<p>Não é possível seguir com esta operação. Se precisar de mais informações, fale com o time HubFi.</p>" +
           "<small>Registrado em 25/08/2026 · Time HubFi</small></div>"
-        : '<div class="hf-match-host" data-pause-banner></div>') +
+        : "") +
       summary +
       etapa +
+      (opts.lostChannel ? "" : '<div class="hf-match-host" data-pause-banner></div>') +
       "</div>" +
       chat +
       "</div>" +
@@ -1142,11 +1176,13 @@
     );
   }
 
-  function openClientPicker() {
-    var items = [
+  function openClientPicker(opts) {
+    opts = opts || {};
+    var items = (opts.items || [
       { label: "Marcelo Oliveira", cpf: "12345678900" },
+      { label: "Ricardo Mendes", cpf: "11122233344" },
       { label: "Novo cliente", cpf: "39053344705" },
-    ]
+    ])
       .map(function (opt) {
         return (
           '<div class="hf-select-menu__item" role="option" tabindex="-1" data-label="' +
@@ -1267,6 +1303,18 @@
         date: "03/2026",
       },
     },
+    "11222333000181": {
+      name: "Jardins Incorporadora Ltda",
+      phone: "(11) 3000-1000",
+      email: "contato@jardins.com.br",
+      kind: "closed",
+      last: {
+        id: "OP-000880",
+        product: "Construção",
+        status: "Ganha",
+        date: "11/2025",
+      },
+    },
   };
 
   function cpfDigits(value) {
@@ -1381,9 +1429,10 @@
     if (kind === "other-product") {
       return matchCard(
         "info",
-        "Ficha reaproveitada da empresa",
-        client.name +
-          " já está cadastrado. Nome e contato vieram da ficha e não se editam nesta tela. " +
+        "Cliente já cadastrado na empresa",
+        "Não duplicamos um usuário. " +
+          client.name +
+          " já está na sua empresa. Nome e contato vieram do cadastro e não se editam nesta tela. " +
           client.op.product +
           " segue com " +
           client.op.owner +
@@ -1396,7 +1445,7 @@
       return matchCard(
         "success",
         "Cliente já cadastrado na empresa",
-        "A operação será vinculada a esta ficha, mesmo que outro colega tenha cadastrado. Última operação: " +
+        "Não duplicamos um usuário. A operação será vinculada a este cadastro, mesmo que outro colega tenha criado. Última operação: " +
           client.last.product +
           " · " +
           client.last.status +
@@ -1410,7 +1459,7 @@
     return matchCard(
       "success",
       "Novo cliente nesta empresa",
-      "Nenhum cadastro deste cliente na sua empresa. Preencha telefone e e-mail para criar a ficha."
+      "Nenhum usuário com este CPF na sua empresa. Preencha telefone e e-mail para cadastrar."
     );
   }
 
@@ -1489,6 +1538,8 @@
       '<h2 class="hf-open__h">Informações do Cliente</h2>' +
       '<div class="hf-open-demos"><span>Testar cenário</span>' +
       '<button class="hf-open-demo" type="button" data-demo-cpf="12345678900">Operação aberta</button>' +
+      '<button class="hf-open-demo" type="button" data-demo-cpf="11122233344">Cliente do colega</button>' +
+      '<button class="hf-open-demo" type="button" data-demo-cpf="11222333000181" data-demo-perfil="pj">Pessoa jurídica</button>' +
       '<button class="hf-open-demo" type="button" data-demo-cpf="52998224725">Dados do corretor</button>' +
       "</div>" +
       '<div class="hf-match-host" data-match-panel></div>' +
@@ -1533,8 +1584,50 @@
     ];
     var cpfInput = shell.querySelector("[data-cpf-input]");
     var clientSelect = shell.querySelector("[data-client-select]");
+    var clientMenu = clientSelect && clientSelect.querySelector("[data-client-menu]");
     var panel = shell.querySelector("[data-match-panel]");
     var lastView = 1;
+
+    function clientItems() {
+      if (isPj()) {
+        return [
+          { label: "Jardins Incorporadora Ltda", cpf: "11222333000181" },
+          { label: "Novo cliente", cpf: "33444555000190" },
+        ];
+      }
+      return [
+        { label: "Marcelo Oliveira", cpf: "12345678900" },
+        { label: "Ricardo Mendes", cpf: "11122233344" },
+        { label: "Novo cliente", cpf: "39053344705" },
+      ];
+    }
+
+    function refillClientMenu() {
+      if (!clientMenu) return;
+      clientMenu.innerHTML = clientItems()
+        .map(function (opt) {
+          return (
+            '<div class="hf-select-menu__item" role="option" tabindex="-1" data-label="' +
+            opt.label +
+            '" data-client-cpf="' +
+            opt.cpf +
+            '">' +
+            opt.label +
+            "</div>"
+          );
+        })
+        .join("");
+    }
+
+    function setPerfil(label) {
+      state.perfil = label;
+      var row = shell.querySelector('[data-chip-group="perfil"]');
+      if (!row) return;
+      row.querySelectorAll("[data-chipcard]").forEach(function (chip) {
+        chip.classList.toggle("is-selected", chip.getAttribute("data-chipcard") === label);
+      });
+      refillClientMenu();
+    }
 
     function isPj() {
       return state.perfil === "Pessoa Jurídica";
@@ -1669,7 +1762,7 @@
           "Financiamento " + state.mesa + " - " + state.produto + " - " + state.perfil;
         title.classList.add("is-regular");
         sub.textContent = reused()
-          ? "Contato carregado da ficha. Para alterar e-mail ou telefone, edite o cadastro do cliente."
+          ? "Contato carregado do cadastro. Para alterar e-mail ou telefone, edite o cliente."
           : "Informe os dados de contato do cliente mais algumas informações complementares para solicitação da proposta.";
       } else {
         title.textContent = "Nova operação";
@@ -1728,6 +1821,7 @@
           state.cpf = "";
           state.name = "";
           if (cpfInput) cpfInput.value = "";
+          refillClientMenu();
           paintMatch();
         }
         if (key === "mesa") refillProducts();
@@ -1775,7 +1869,11 @@
           .trim();
         clientSelect.querySelectorAll("[data-client-cpf]").forEach(function (item) {
           var label = (item.getAttribute("data-label") || item.textContent || "").toLowerCase();
-          item.hidden = !!(needle && label.indexOf(needle) === -1);
+          var cpf = item.getAttribute("data-client-cpf") || "";
+          var digitsNeedle = needle.replace(/\D/g, "");
+          var hitLabel = !needle || label.indexOf(needle) !== -1;
+          var hitDoc = !digitsNeedle || cpf.indexOf(digitsNeedle) !== -1;
+          item.hidden = !(hitLabel || hitDoc);
         });
       }
 
@@ -1823,6 +1921,9 @@
     shell.querySelectorAll("[data-demo-cpf]").forEach(function (btn) {
       btn.addEventListener("click", function () {
         if (!cpfInput) return;
+        var perfil = btn.getAttribute("data-demo-perfil");
+        if (perfil === "pj") setPerfil("Pessoa Jurídica");
+        else setPerfil("Pessoa Física");
         view = 1;
         cpfInput.value = btn.getAttribute("data-demo-cpf");
         lookupFromInput();
@@ -1878,21 +1979,44 @@
     }
   }
 
-  catalog.groups.push({
-    id: "screens",
-    label: "Telas",
-    icon: "app-window",
-    blurb: "Páginas compostas com os componentes do DS — como o produto usa de verdade.",
-    items: [
-      ["abertura-operacao", "Abertura de operação"],
-      ["cadastro-cliente", "Cadastro de cliente"],
-      ["edicao-cliente", "Edição de cliente"],
-      ["link-publico", "Link público"],
-      ["operacao-outro-canal", "Operação encerrada"],
-      ["detalhes-operacao", "Detalhes da operação"],
-      ["dashboard-operacoes", "Dashboard de operações"],
-    ],
-  });
+  catalog.groups.unshift(
+    {
+      id: "cliente",
+      label: "Cliente",
+      icon: "users",
+      layout: "proto",
+      blurb: "Unicidade por empresa: abertura de operação, cadastro e edição. Link público existe no DS, mas o aceite desses cenários fica para depois. Integração de parceiro ainda não tem tela.",
+      pending: [
+        {
+          title: "Integração de parceiro",
+          note: "Documento já cadastrado por outro usuário da mesma empresa deve reaproveitar a ficha. Sem protótipo neste DS.",
+        },
+        {
+          title: "Duas empresas, mesmo CPF",
+          note: "Cada empresa cadastra de forma independente, sem mencionar a outra. Hoje isso só aparece na copy da abertura.",
+        },
+      ],
+      items: [
+        ["abertura-operacao", "Abertura de operação"],
+        ["cadastro-cliente", "Cadastro de cliente"],
+        ["edicao-cliente", "Edição de cliente"],
+        ["formulario-publico", "Formulário público"],
+        ["link-publico", "Link público"],
+      ],
+    },
+    {
+      id: "ops",
+      label: "Operações",
+      icon: "app-window",
+      layout: "proto",
+      blurb: "Status da operação, pausa fora do SLA e visão estratégica. Não faz parte do briefing de unicidade de cliente.",
+      items: [
+        ["detalhes-operacao", "Detalhes da operação"],
+        ["operacao-outro-canal", "Operação encerrada"],
+        ["dashboard-operacoes", "Dashboard de operações"],
+      ],
+    }
+  );
 
   catalog.pages["abertura-operacao"] = {
     title: "Abertura de operação",
@@ -1903,11 +2027,20 @@
       "<li><em>2</em><div><strong>Documento do cliente</strong><span>O match roda ao informar um CPF ou CNPJ válido</span></div></li>" +
       "<li><em>3</em><div><strong>Reaproveitar ou criar</strong><span>Ficha da empresa carrega nome e contato travados. Cliente novo preenche. Sem documento não avança</span></div></li>" +
       "<li><em>4</em><div><strong>Outra empresa</strong><span>Cria ficha nova, sem mencionar que o documento existe fora. Dados do corretor são recusados</span></div></li>" +
+      "<li><em>5</em><div><strong>Cliente do colega</strong><span>CPF já na empresa reaproveita o cadastro, mesmo criado por outro usuário</span></div></li>" +
+      "<li><em>6</em><div><strong>Pessoa jurídica</strong><span>CNPJ no lugar do CPF. A mesma regra de unicidade</span></div></li>" +
       "</ol>",
     node: "5-4106",
     figmaFile: FIGMA_OPEN,
     wide: true,
     section: "Telas",
+    scenarios: [
+      { label: "Documento obrigatório", note: "Sem CPF ou CNPJ válido, não avança.", href: "#/abertura-operacao?step=info" },
+      { label: "Cliente do colega", note: "Reaproveita a ficha e vincula a operação nova.", href: "#/abertura-operacao?step=info&cpf=11122233344" },
+      { label: "Operação aberta", note: "Mesmo produto já em andamento.", href: "#/abertura-operacao?step=info&cpf=12345678900" },
+      { label: "Pessoa jurídica", note: "CNPJ no lugar do CPF. Mesma regra de unicidade.", href: "#/abertura-operacao?step=info&cpf=11222333000181" },
+      { label: "Dados do corretor", note: "Documento do responsável é recusado.", href: "#/abertura-operacao?step=info&cpf=52998224725" },
+    ],
     html: function () {
       return openScreen();
     },
@@ -1920,6 +2053,9 @@
     figmaFile: FIGMA_OP,
     wide: true,
     section: "Telas",
+    scenarios: [
+      { label: "Imobiliária", note: "Motivo real da perda fica só no backoffice.", href: "#/operacao-outro-canal" },
+    ],
     html: function () {
       return opScreen({ lostChannel: true });
     },
@@ -1934,11 +2070,18 @@
       "<li><em>2</em><div><strong>Fora do SLA</strong><span>A operação some da fila ativa, mas continua buscável com o filtro Pausado</span></div></li>" +
       "<li><em>3</em><div><strong>Retomar ou estender</strong><span>Volta para Em andamento ou define nova data. A cadência de Slack reinicia</span></div></li>" +
       "<li><em>4</em><div><strong>Cadência vencida</strong><span>D+0, D+2 e D+4. Sem ação, vira Perdido por pausa vencida</span></div></li>" +
+      "<li><em>5</em><div><strong>Tempo</strong><span>Dias pausados ficam separados do tempo em andamento e não entram no SLA</span></div></li>" +
       "</ol>",
     node: "8135-36006",
     figmaFile: FIGMA_OP,
     wide: true,
     section: "Telas",
+    scenarios: [
+      { label: "Em andamento", note: "Fluxo padrão, sem card de pausa.", href: "#/detalhes-operacao" },
+      { label: "Pausado", note: "Fora das filas. Tempo pausado separado do SLA.", href: "#/detalhes-operacao?demo=paused" },
+      { label: "Cadência vencida", note: "Lembretes D+0, D+2, D+4.", href: "#/detalhes-operacao?demo=cadence" },
+      { label: "Perdido por pausa", note: "Sem retomada ao fim da cadência.", href: "#/detalhes-operacao?demo=auto_lost" },
+    ],
     html: function () {
       return opScreen();
     },
@@ -1951,6 +2094,9 @@
     figmaFile: FIGMA_DASH,
     wide: true,
     section: "Telas",
+    scenarios: [
+      { label: "Visão estratégica", note: "Funil, conversão e indicadores.", href: "#/dashboard-operacoes" },
+    ],
     html: function () {
       return dashScreen();
     },
@@ -1992,18 +2138,6 @@
         "</small></p>"
       );
     }
-    function actBtn(style, label, act) {
-      return (
-        '<button class="hf-btn hf-btn--sm hf-btn--' +
-        style +
-        '" type="button" data-op-act="' +
-        act +
-        '">' +
-        label +
-        "</button>"
-      );
-    }
-
     function reasonField() {
       return shell.querySelector("[data-pause-reason-field]");
     }
@@ -2067,13 +2201,36 @@
       state.returnDate = todayPlus(15);
     }
 
-    function paint() {
+    function scrollToPauseBanner(smooth) {
+      if (state.status === "in_progress") {
+        var bodyReset = shell.querySelector(".docs-screen__body");
+        if (bodyReset) bodyReset.scrollTo({ top: 0, behavior: smooth ? "smooth" : "auto" });
+        return;
+      }
+      var run = function () {
+        var bannerEl = shell.querySelector("[data-pause-banner]");
+        var card = bannerEl && bannerEl.querySelector(".hf-match");
+        var body = shell.querySelector(".docs-screen__body");
+        if (!card || !body) return;
+        var top =
+          body.scrollTop +
+          card.getBoundingClientRect().top -
+          body.getBoundingClientRect().top -
+          8;
+        body.scrollTo({ top: Math.max(0, top), behavior: smooth ? "smooth" : "auto" });
+      };
+      requestAnimationFrame(function () {
+        requestAnimationFrame(run);
+      });
+    }
+
+    function paint(opts) {
+      opts = opts || {};
       var badgeHost = shell.querySelector("[data-op-badge]");
       var liveActs = shell.querySelectorAll("[data-op-acts-live]");
       var pausedActs = shell.querySelector("[data-op-acts-paused]");
       var banner = shell.querySelector("[data-pause-banner]");
       var log = shell.querySelector("[data-pause-log]");
-      var sla = shell.querySelector("[data-pause-sla]");
       var badgeFn = ui.badge || function (t, text) {
         return '<span class="hf-badge hf-badge--' + t + '">' + text + "</span>";
       };
@@ -2103,7 +2260,6 @@
         el.hidden = state.status !== "in_progress";
       });
       if (pausedActs) pausedActs.hidden = state.status !== "paused" && state.status !== "cadence";
-      if (sla) sla.hidden = state.status !== "paused" && state.status !== "cadence";
 
       if (banner) {
         if (state.status === "paused") {
@@ -2115,7 +2271,8 @@
               kv("Retorno previsto", fmtDate(state.returnDate)) +
               kv("Pausado por", "Victor Tavares") +
               (state.detail ? kv("Detalhe", state.detail) : ""),
-            actBtn("primary", "Retomar", "resume") + actBtn("ghost", "Estender pausa", "extend")
+            "",
+            pauseTimeCards(12, "Pausado")
           );
         } else if (state.status === "cadence") {
           banner.innerHTML = matchCard(
@@ -2126,7 +2283,8 @@
               kv("Retorno previsto", fmtDate(state.returnDate)) +
               kv("Último lembrete", "Enviado · D+2") +
               kv("Próximo", "D+4"),
-            actBtn("primary", "Retomar", "resume") + actBtn("ghost", "Estender pausa", "extend")
+            "",
+            pauseTimeCards(19, "Pausa vencida")
           );
         } else if (state.status === "auto_lost") {
           banner.innerHTML = matchCard(
@@ -2136,7 +2294,9 @@
             kv("Motivo original", state.reason) +
               kv("Retorno previsto", fmtDate(state.returnDate)) +
               kv("Encerrado em", "27/08/2026") +
-              kv("Responsável", "Victor Tavares")
+              kv("Responsável", "Victor Tavares"),
+            "",
+            pauseTimeCards(19, "Encerrado")
           );
         } else {
           banner.innerHTML = "";
@@ -2150,6 +2310,7 @@
             "Operação pausada · " + state.reason + " · retorno " + fmtDate(state.returnDate),
             "27/08/2026 10:12"
           );
+          html += logLine("Tempo pausado separado do tempo em andamento · não entra no SLA", "27/08/2026 10:12");
         }
         if (state.status === "cadence" || state.status === "auto_lost") {
           html += logLine("Lembrete Slack enviado (D+0) · sem resposta", "11/09/2026 09:00");
@@ -2161,6 +2322,8 @@
         }
         log.innerHTML = html;
       }
+
+      if (opts.scroll !== false) scrollToPauseBanner(opts.smooth);
     }
 
     shell.addEventListener("click", function (event) {
@@ -2180,7 +2343,7 @@
           state.status = "auto_lost";
           state.returnDate = todayPlus(-10);
         }
-        paint();
+        paint({ smooth: true });
         return;
       }
       var act = event.target.closest("[data-op-act]");
@@ -2204,7 +2367,7 @@
       }
       if (whichAct === "resume") {
         state.status = "in_progress";
-        paint();
+        paint({ smooth: true });
         showSuccessToast("Operação retomada. Voltou para Em andamento.");
       }
     });
@@ -2241,7 +2404,7 @@
         state.detail = detailVal;
         state.status = "paused";
         closeDialog();
-        paint();
+        paint({ smooth: true });
         showSuccessToast(
           state.mode === "extend"
             ? "Pausa estendida. Cadência de lembretes reiniciada."
@@ -2250,7 +2413,6 @@
       });
     }
 
-    paint();
     var opQs = (location.hash.split("?")[1] || "");
     var opDemo = opQs.match(/(?:^|&)demo=([^&]+)/);
     if (opDemo) {
@@ -2265,8 +2427,8 @@
         state.status = "auto_lost";
         state.returnDate = todayPlus(-10);
       }
-      paint();
     }
+    paint({ smooth: false });
   }
 
   window.HF_SCREENS = {

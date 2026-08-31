@@ -2134,12 +2134,77 @@
 }
 .hf-opage__acts .hf-btn { gap: 8px; }
 .hf-opage__status { display: inline-flex; align-items: center; }
-.hf-opage__sla {
+.hf-opage__times {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+  margin: 0;
+}
+.hf-opage__time-card {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 0;
+  padding: 12px 14px;
+  text-align: left;
+  background: #fff;
+  border: 1px solid #e3e3e3;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+.hf-opage__time-ico {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  background: #f3f4f4;
+  color: #5f6565;
+}
+.hf-opage__time-ico .hf-icon { width: 16px; height: 16px; }
+.hf-opage__time-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-width: 0;
+}
+.hf-opage__time-card small {
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 14px;
+  color: #787e7e;
+}
+.hf-opage__time-card b {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+  color: #141515;
+}
+.hf-opage__time-card p {
   margin: 0;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 16px;
+  color: #787e7e;
+}
+.hf-opage__time-card--sla .hf-opage__time-ico,
+.hf-opage__time-card.is-paused .hf-opage__time-ico {
+  background: #fff7e8;
   color: var(--warning);
+}
+.hf-opage__time-card--sla b { color: var(--warning); }
+.hf-opage__time-card.is-paused {
+  border-color: #f5d9a8;
+  background: #fffbf3;
+}
+.hf-opage__time-card.is-paused b { color: var(--warning); }
+.hf-opage__time-card[hidden] { display: none !important; }
+@media (max-width: 720px) {
+  .hf-opage__times { grid-template-columns: 1fr; }
 }
 .docs-screen--op-detail.is-paused .hf-stepper { opacity: 0.45; }
 .hf-opage__title {

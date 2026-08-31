@@ -2338,9 +2338,10 @@
       section: '<div class="hf-section"><h3>INFORMAÇÕES</h3><p>Conteúdo da seção</p></div>',
       "rich-text": '<div class="hf-rte" style="height:100px;max-width:240px"><div class="hf-rte__bar"><span class="hf-rte__style">Normal</span></div><div class="hf-rte__body">Notas…</div></div>',
       "abertura-operacao": '<div class="docs-screen-thumb"><strong>Nova operação</strong><span>Documento · ficha da empresa</span></div>',
-      "cadastro-cliente": '<div class="docs-screen-thumb"><strong>Novo cliente</strong><span>Bloqueio · importar ficha</span></div>',
+      "cadastro-cliente": '<div class="docs-screen-thumb"><strong>Novo cliente</strong><span>Bloqueio · abrir cadastro</span></div>',
       "edicao-cliente": '<div class="docs-screen-thumb"><strong>Editar cliente</strong><span>Trava · verificação · auditoria</span></div>',
       "link-publico": '<div class="docs-screen-thumb"><strong>Link público</strong><span>Documento · canal · OTP</span></div>',
+      "formulario-publico": '<div class="docs-screen-thumb"><strong>Formulário público</strong><span>Só documento identifica</span></div>',
       "operacao-outro-canal": '<div class="docs-screen-thumb"><strong>OP encerrada</strong><span>Motivo só no backoffice</span></div>',
       "detalhes-operacao": '<div class="docs-screen-thumb"><strong>OP-000000</strong><span>Nome cliente</span></div>',
       "dashboard-operacoes": '<div class="docs-screen-thumb"><strong>Dashboard</strong><span>Visão estratégica</span></div>',
@@ -2348,9 +2349,72 @@
     return map[slug] || "";
   }
 
+  function protoCard(slug, title) {
+    var page = pages[slug];
+    var scenarios = (page && page.scenarios) || [];
+    var hits = scenarios
+      .map(function (s) {
+        return (
+          '<a class="docs-proto__hit" href="' +
+          s.href +
+          '"><strong>' +
+          s.label +
+          "</strong>" +
+          (s.note ? "<span>" + s.note + "</span>" : "") +
+          "</a>"
+        );
+      })
+      .join("");
+    return (
+      '<article class="docs-proto' +
+      (page && page.later ? " docs-proto--later" : "") +
+      '"><a class="docs-proto__head" href="#/' +
+      slug +
+      '"><strong>' +
+      title +
+      "</strong><span>" +
+      (page && page.lead ? page.lead.split(".")[0] + "." : "") +
+      "</span></a>" +
+      (hits ? '<div class="docs-proto__hits">' + hits + "</div>" : "") +
+      "</article>"
+    );
+  }
+
+  function protoGallery(g) {
+    var cards = g.items
+      .map(function (item) {
+        return protoCard(item[0], item[1]);
+      })
+      .join("");
+    var pending = (g.pending || [])
+      .map(function (row) {
+        return (
+          '<article class="docs-proto docs-proto--pending"><div class="docs-proto__head"><strong>' +
+          row.title +
+          "</strong><span>" +
+          row.note +
+          "</span></div></article>"
+        );
+      })
+      .join("");
+    return (
+      '<section class="docs-gallery docs-gallery--proto"><div class="docs-gallery__head">' +
+      (window.hfIconBox ? window.hfIconBox(g.icon) : "") +
+      '<div class="docs-gallery__copy"><h2 class="docs-h2">' +
+      g.label +
+      "</h2>" +
+      (g.blurb ? '<p class="docs-section-copy">' + g.blurb + "</p>" : "") +
+      '</div></div><div class="docs-proto-grid">' +
+      cards +
+      pending +
+      "</div></section>"
+    );
+  }
+
   function homeHtml() {
     return groups
       .map(function (g) {
+        if (g.layout === "proto") return protoGallery(g);
         var tiles = g.items
           .map(function (item) {
             var page = pages[item[0]];
@@ -2389,7 +2453,7 @@
     home: {
       title: "Componentes HubFi",
       kicker: "",
-      lead: "Catálogo vivo dos componentes HubFi. Abra um item na barra ao lado ou no grid abaixo.",
+      lead: "Protótipos de cliente e operação no topo, com cada cenário. Em seguida, o catálogo de componentes.",
       node: null,
       html: homeHtml,
     },
