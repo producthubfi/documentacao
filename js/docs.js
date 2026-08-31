@@ -28,9 +28,23 @@
     );
   }
 
+  function protoMatch(q) {
+    if (!q) return true;
+    var keys = ["protótipos", "prototipos", "briefing", "unicidade", "pausado", "pausa"];
+    return keys.some(function (key) {
+      return key.indexOf(q) !== -1;
+    });
+  }
+
   function renderNav() {
     var q = filter && filter.value ? filter.value.toLowerCase().trim() : "";
     var html = navGroup("Documentação", "book-open", '<a href="#/" data-slug="home">Visão geral</a>');
+    html +=
+      '<div class="docs-nav-group docs-nav-group--proto"' +
+      (protoMatch(q) ? "" : ' hidden') +
+      '><a href="#/prototipos" data-slug="prototipos" class="docs-nav-proto">' +
+      iconBox("layers-2") +
+      "<span>PROTÓTIPOS</span></a></div>";
     if (catalog.foundations && catalog.foundations.length) {
       var fLinks = "";
       var fVisible = 0;
@@ -51,6 +65,7 @@
       if (!q || fVisible) html += navGroup("Foundations", "swatch-book", fLinks);
     }
     catalog.groups.forEach(function (group) {
+      if (group.nav === "single" || group.id === "prototipos") return;
       var links = "";
       var visible = 0;
       group.items.forEach(function (item) {
@@ -76,8 +91,11 @@
   function highlight() {
     var current = slug();
     if (current !== "home" && !catalog.pages[current]) current = "home";
+    var page = catalog.pages[current];
+    var protoOn = current === "prototipos" || !!(page && page.section === "Telas");
     nav.querySelectorAll("a").forEach(function (link) {
-      var active = link.getAttribute("data-slug") === current;
+      var slugAttr = link.getAttribute("data-slug");
+      var active = slugAttr === "prototipos" ? protoOn : slugAttr === current;
       link.classList.toggle("is-active", active);
     });
   }
@@ -87,6 +105,7 @@
     var isHome = current === "home" || !catalog.pages[current];
     var page = isHome ? catalog.home : catalog.pages[current];
     var isScreen = page.section === "Telas" || current === "detalhes-operacao";
+    var isProtoHub = current === "prototipos";
     var isFoundation = !!(catalog.foundations || []).some(function (item) {
       return item[0] === current;
     });
@@ -94,16 +113,29 @@
     if (app) app.classList.toggle("docs-app--screen", !!(isScreen && !isHome));
     var back = document.getElementById("docs-back");
     if (back) {
+      back.setAttribute("href", isScreen && !isHome ? "#/prototipos" : "#/");
       back.innerHTML =
         (window.hfIcon ? window.hfIcon("arrow-left", 16) : "") + "Voltar";
     }
-    var crumb = isHome
-      ? '<nav class="docs-crumb"><span>Documentação</span></nav>'
-      : '<nav class="docs-crumb"><a href="#/">Documentação</a><span aria-hidden="true">/</span><span>' +
-        (isFoundation ? "Foundations" : isScreen ? "Telas" : "Componentes") +
+    var crumb;
+    if (isHome) {
+      crumb = '<nav class="docs-crumb"><span>Documentação</span></nav>';
+    } else if (isProtoHub) {
+      crumb =
+        '<nav class="docs-crumb"><a href="#/">Documentação</a><span aria-hidden="true">/</span><span>PROTÓTIPOS</span></nav>';
+    } else if (isScreen) {
+      crumb =
+        '<nav class="docs-crumb"><a href="#/">Documentação</a><span aria-hidden="true">/</span><a href="#/prototipos">PROTÓTIPOS</a><span aria-hidden="true">/</span><span>' +
+        page.title +
+        "</span></nav>";
+    } else {
+      crumb =
+        '<nav class="docs-crumb"><a href="#/">Documentação</a><span aria-hidden="true">/</span><span>' +
+        (isFoundation ? "Foundations" : "Componentes") +
         '</span><span aria-hidden="true">/</span><span>' +
         page.title +
         "</span></nav>";
+    }
 
     stage.classList.toggle("docs-stage--wide", !!(page.wide && !isHome));
     stage.innerHTML =

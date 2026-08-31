@@ -1979,44 +1979,148 @@
     }
   }
 
-  catalog.groups.unshift(
+  catalog.briefings = [
     {
-      id: "cliente",
-      label: "Cliente",
-      icon: "users",
-      layout: "proto",
-      blurb: "Unicidade por empresa: abertura de operação, cadastro e edição. Link público existe no DS, mas o aceite desses cenários fica para depois. Integração de parceiro ainda não tem tela.",
-      pending: [
+      title: "Unicidade de Cliente por Empresa",
+      lead: "Identidade é só o documento. A ficha é única na empresa e compartilhada entre os colegas. Outra empresa cadastra o mesmo CPF em silêncio.",
+      scenarios: [
         {
-          title: "Integração de parceiro",
-          note: "Documento já cadastrado por outro usuário da mesma empresa deve reaproveitar a ficha. Sem protótipo neste DS.",
+          label: "Cadastro explícito bloqueia documento já na empresa",
+          note: "Não cria ficha nova. Abre o cadastro existente.",
+          href: "#/cadastro-cliente?demo=empresa",
         },
         {
-          title: "Duas empresas, mesmo CPF",
-          note: "Cada empresa cadastra de forma independente, sem mencionar a outra. Hoje isso só aparece na copy da abertura.",
+          label: "Cliente novo cadastra nesta empresa",
+          note: "Documento livre. Cadastra normalmente.",
+          href: "#/cadastro-cliente?demo=novo",
+        },
+        {
+          label: "Pessoa jurídica no cadastro",
+          note: "CNPJ no lugar do CPF. A mesma regra de unicidade.",
+          href: "#/cadastro-cliente?demo=pj",
+        },
+        {
+          label: "Cliente excluído libera o documento",
+          note: "O CPF volta a ficar livre para um novo cadastro na mesma empresa.",
+          href: "#/cadastro-cliente?demo=excluido",
+        },
+        {
+          label: "Abertura: documento obrigatório",
+          note: "Sem CPF ou CNPJ válido, não avança.",
+          href: "#/abertura-operacao?step=info",
+        },
+        {
+          label: "Abertura: ficha do colega é reaproveitada",
+          note: "Carrega os dados e vincula a operação a esse cadastro.",
+          href: "#/abertura-operacao?step=info&cpf=11122233344",
+        },
+        {
+          label: "Abertura: dados do corretor são recusados",
+          note: "Documento do responsável não abre operação.",
+          href: "#/abertura-operacao?step=info&cpf=52998224725",
+        },
+        {
+          label: "Abertura: pessoa jurídica",
+          note: "CNPJ no lugar do CPF. A mesma unicidade.",
+          href: "#/abertura-operacao?step=info&cpf=11222333000181",
+        },
+        {
+          label: "Formulário público: só o documento identifica",
+          note: "Sem CPF ou CNPJ, e-mail e telefone não fazem match.",
+          href: "#/formulario-publico?demo=sem-doc",
+        },
+        {
+          label: "Edição sem formalização",
+          note: "Qualquer usuário com acesso corrige o CPF.",
+          href: "#/edicao-cliente?demo=livre",
+        },
+        {
+          label: "Edição com formalização · usuário",
+          note: "CPF travado. E-mail ou telefone verificado perde a confirmação ao editar.",
+          href: "#/edicao-cliente?demo=trava",
+        },
+        {
+          label: "Edição com formalização · gestor",
+          note: "Altera o CPF com justificativa. Fica na auditoria.",
+          href: "#/edicao-cliente?demo=gestor",
+        },
+        {
+          label: "Backoffice HubFi",
+          note: "Acesso irrestrito, com rastro.",
+          href: "#/edicao-cliente?demo=backoffice",
+        },
+        {
+          label: "Colisão de documento",
+          note: "Trocar para o CPF de outro cliente da empresa é bloqueado.",
+          href: "#/edicao-cliente?demo=colisao",
         },
       ],
-      items: [
-        ["abertura-operacao", "Abertura de operação"],
-        ["cadastro-cliente", "Cadastro de cliente"],
-        ["edicao-cliente", "Edição de cliente"],
-        ["formulario-publico", "Formulário público"],
-        ["link-publico", "Link público"],
+      pending: [
+        {
+          title: "Duas empresas, mesmo CPF",
+          note: "Cada empresa cadastra de forma independente, sem mencionar a outra. Hoje isso só aparece na copy.",
+        },
+        {
+          title: "Integração de parceiro",
+          note: "Documento já cadastrado por outro usuário da mesma empresa deve reaproveitar a ficha. Sem tela neste DS.",
+        },
+        {
+          title: "Link público",
+          note: "Aceite desses cenários fica para depois.",
+        },
       ],
     },
     {
-      id: "ops",
-      label: "Operações",
-      icon: "app-window",
-      layout: "proto",
-      blurb: "Status da operação, pausa fora do SLA e visão estratégica. Não faz parte do briefing de unicidade de cliente.",
-      items: [
-        ["detalhes-operacao", "Detalhes da operação"],
-        ["operacao-outro-canal", "Operação encerrada"],
-        ["dashboard-operacoes", "Dashboard de operações"],
+      title: 'Status "Pausado" — Retenção de operações com pendência temporária',
+      lead: "Pausa a operação com motivo e data de retorno. O tempo pausado fica fora do SLA. Sem retomada na cadência, vira Perdido por pausa vencida.",
+      scenarios: [
+        {
+          label: "Transição para Pausado",
+          note: "A partir de Em andamento. Motivo e data de retorno são obrigatórios.",
+          href: "#/detalhes-operacao?demo=paused",
+        },
+        {
+          label: "Tempo pausado separado do SLA",
+          note: "Dias pausados não entram no tempo em andamento.",
+          href: "#/detalhes-operacao?demo=paused",
+        },
+        {
+          label: "Retomar ou estender",
+          note: "Volta para Em andamento ou define nova data. A cadência reinicia.",
+          href: "#/detalhes-operacao?demo=paused",
+        },
+        {
+          label: "Cadência pós-vencimento",
+          note: "Lembretes D+0, D+2 e D+4 depois da data de retorno.",
+          href: "#/detalhes-operacao?demo=cadence",
+        },
+        {
+          label: "Perdido por pausa vencida",
+          note: "Sem ação ao fim da cadência. Motivo distinto da perda real.",
+          href: "#/detalhes-operacao?demo=auto_lost",
+        },
       ],
-    }
-  );
+      pending: [
+        {
+          title: "Listagem (RF-PAUSA-01)",
+          note: "Kanban e tabela sem pausadas por padrão, com filtro. Fora deste protótipo.",
+        },
+        {
+          title: "Mensagem de Slack (RF-PAUSA-04)",
+          note: "Lembrete no canal do operador. Fora deste protótipo.",
+        },
+      ],
+    },
+  ];
+
+  catalog.pages["prototipos"] = {
+    title: "PROTÓTIPOS",
+    lead: "Dois briefings. Em cada um, os critérios de aceite já prototipados.",
+    section: "Protótipos",
+    html: function () {
+      return catalog.ui.briefingHub ? catalog.ui.briefingHub() : "";
+    },
+  };
 
   catalog.pages["abertura-operacao"] = {
     title: "Abertura de operação",

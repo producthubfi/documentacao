@@ -276,6 +276,34 @@ textarea {
   font-weight: 500;
 }
 
+.docs-nav-group--proto {
+  padding-top: 8px;
+}
+
+.docs-nav a.docs-nav-proto {
+  gap: 10px;
+  min-height: 40px;
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #3d3f3f;
+}
+
+.docs-nav a.docs-nav-proto:hover {
+  color: #141414;
+}
+
+.docs-nav a.docs-nav-proto.is-active {
+  color: #008a7e;
+}
+
+.docs-nav a.docs-nav-proto .docs-ico {
+  width: 28px;
+  height: 28px;
+}
+
 .docs-main {
   min-width: 0;
   display: flex;
@@ -305,6 +333,10 @@ textarea {
   text-align: left;
   margin: 0 0 48px;
   max-width: 720px;
+}
+
+.docs-page-head:has(+ .docs-proto-grid--brief) {
+  margin-bottom: 16px;
 }
 
 .docs-page-head--home {
@@ -865,6 +897,29 @@ textarea {
   background: #f7f8f8;
 }
 .docs-proto--pending .docs-proto__head strong { color: #5f6565; }
+.docs-proto-grid--brief {
+  grid-template-columns: 1fr;
+  gap: 16px;
+  max-width: 720px;
+  padding-top: 0;
+}
+.docs-proto--brief .docs-proto__head {
+  padding: 20px 20px 16px;
+}
+.docs-proto--brief .docs-proto__head strong {
+  font-size: 18px;
+}
+.docs-proto__hit--pending {
+  background: #f7f8f8;
+  cursor: default;
+}
+.docs-proto__hit--pending strong {
+  color: #5f6565;
+  font-weight: 500;
+}
+.docs-proto__hit--pending span::before {
+  content: "Ainda não · ";
+}
 @media (max-width: 800px) {
   .docs-proto-grid { grid-template-columns: 1fr; }
 }

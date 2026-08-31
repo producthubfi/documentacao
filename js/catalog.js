@@ -2411,10 +2411,52 @@
     );
   }
 
+  function briefingHub() {
+    var list = (global.HF_CATALOG && global.HF_CATALOG.briefings) || [];
+    var cards = list
+      .map(function (b) {
+        var hits = (b.scenarios || [])
+          .map(function (s) {
+            return (
+              '<a class="docs-proto__hit" href="' +
+              s.href +
+              '"><strong>' +
+              s.label +
+              "</strong>" +
+              (s.note ? "<span>" + s.note + "</span>" : "") +
+              "</a>"
+            );
+          })
+          .join("");
+        var pending = (b.pending || [])
+          .map(function (row) {
+            return (
+              '<div class="docs-proto__hit docs-proto__hit--pending"><strong>' +
+              row.title +
+              "</strong><span>" +
+              row.note +
+              "</span></div>"
+            );
+          })
+          .join("");
+        return (
+          '<article class="docs-proto docs-proto--brief"><div class="docs-proto__head"><strong>' +
+          b.title +
+          "</strong><span>" +
+          b.lead +
+          "</span></div>" +
+          (hits || pending ? '<div class="docs-proto__hits">' + hits + pending + "</div>" : "") +
+          "</article>"
+        );
+      })
+      .join("");
+    return '<div class="docs-proto-grid docs-proto-grid--brief">' + cards + "</div>";
+  }
+
   function homeHtml() {
     return groups
       .map(function (g) {
-        if (g.layout === "proto") return protoGallery(g);
+        if (g.layout === "proto" || g.nav === "single") return "";
         var tiles = g.items
           .map(function (item) {
             var page = pages[item[0]];
@@ -2453,7 +2495,7 @@
     home: {
       title: "Componentes HubFi",
       kicker: "",
-      lead: "Protótipos de cliente e operação no topo, com cada cenário. Em seguida, o catálogo de componentes.",
+      lead: "Catálogo de componentes. Os fluxos de produto ficam em PROTÓTIPOS, no menu.",
       node: null,
       html: homeHtml,
     },
@@ -2467,6 +2509,7 @@
       stepperSimple: stepperSimple,
       step: step,
       toast: toastBox,
+      briefingHub: briefingHub,
     },
   };
 })(window);
