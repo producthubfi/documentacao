@@ -1982,75 +1982,45 @@
   catalog.briefings = [
     {
       title: "Unicidade de Cliente por Empresa",
-      lead: "Identidade é só o documento. A ficha é única na empresa e compartilhada entre os colegas. Outra empresa cadastra o mesmo CPF em silêncio.",
+      lead: "Só os fluxos com erro ou alerta: bloqueio, recusa e trava. Caminhos felizes ficam fora desta lista.",
       scenarios: [
         {
-          label: "Cadastro explícito bloqueia documento já na empresa",
-          note: "Não cria ficha nova. Abre o cadastro existente.",
+          label: "Cadastro: documento já na empresa",
+          note: "Bloqueia a ficha nova. Card de alerta e abrir o cadastro existente.",
           href: "#/cadastro-cliente?demo=empresa",
         },
         {
-          label: "Cliente novo cadastra nesta empresa",
-          note: "Documento livre. Cadastra normalmente.",
-          href: "#/cadastro-cliente?demo=novo",
-        },
-        {
-          label: "Pessoa jurídica no cadastro",
-          note: "CNPJ no lugar do CPF. A mesma regra de unicidade.",
+          label: "Cadastro: CNPJ já na empresa",
+          note: "Mesmo alerta de duplicata, com pessoa jurídica.",
           href: "#/cadastro-cliente?demo=pj",
         },
         {
-          label: "Cliente excluído libera o documento",
-          note: "O CPF volta a ficar livre para um novo cadastro na mesma empresa.",
-          href: "#/cadastro-cliente?demo=excluido",
-        },
-        {
           label: "Abertura: documento obrigatório",
-          note: "Sem CPF ou CNPJ válido, não avança.",
+          note: "Sem CPF ou CNPJ válido, alerta e não avança.",
           href: "#/abertura-operacao?step=info",
         },
         {
-          label: "Abertura: ficha do colega é reaproveitada",
-          note: "Carrega os dados e vincula a operação a esse cadastro.",
-          href: "#/abertura-operacao?step=info&cpf=11122233344",
+          label: "Abertura: operação já em andamento",
+          note: "Mesmo produto. Alerta para abrir a operação existente.",
+          href: "#/abertura-operacao?step=info&cpf=12345678900",
         },
         {
-          label: "Abertura: dados do corretor são recusados",
-          note: "Documento do responsável não abre operação.",
+          label: "Abertura: dados do corretor",
+          note: "Documento do responsável é recusado.",
           href: "#/abertura-operacao?step=info&cpf=52998224725",
         },
         {
-          label: "Abertura: pessoa jurídica",
-          note: "CNPJ no lugar do CPF. A mesma unicidade.",
-          href: "#/abertura-operacao?step=info&cpf=11222333000181",
-        },
-        {
-          label: "Formulário público: só o documento identifica",
-          note: "Sem CPF ou CNPJ, e-mail e telefone não fazem match.",
+          label: "Formulário público: sem documento",
+          note: "E-mail e telefone não fazem match. Erro de identidade.",
           href: "#/formulario-publico?demo=sem-doc",
         },
         {
-          label: "Edição sem formalização",
-          note: "Qualquer usuário com acesso corrige o CPF.",
-          href: "#/edicao-cliente?demo=livre",
-        },
-        {
-          label: "Edição com formalização · usuário",
-          note: "CPF travado. E-mail ou telefone verificado perde a confirmação ao editar.",
+          label: "Edição: CPF travado",
+          note: "Operação formalizada. Usuário comum não altera o documento.",
           href: "#/edicao-cliente?demo=trava",
         },
         {
-          label: "Edição com formalização · gestor",
-          note: "Altera o CPF com justificativa. Fica na auditoria.",
-          href: "#/edicao-cliente?demo=gestor",
-        },
-        {
-          label: "Backoffice HubFi",
-          note: "Acesso irrestrito, com rastro.",
-          href: "#/edicao-cliente?demo=backoffice",
-        },
-        {
-          label: "Colisão de documento",
+          label: "Edição: colisão de documento",
           note: "Trocar para o CPF de outro cliente da empresa é bloqueado.",
           href: "#/edicao-cliente?demo=colisao",
         },
@@ -2117,6 +2087,7 @@
     title: "PROTÓTIPOS",
     lead: "Dois briefings. Em cada um, os critérios de aceite já prototipados.",
     section: "Protótipos",
+    wide: true,
     html: function () {
       return catalog.ui.briefingHub ? catalog.ui.briefingHub() : "";
     },

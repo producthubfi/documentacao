@@ -2420,22 +2420,24 @@
             return (
               '<a class="docs-proto__hit" href="' +
               s.href +
-              '"><strong>' +
+              '"><span class="docs-proto__check" aria-hidden="true">' +
+              ico("check", 12) +
+              '</span><span class="docs-proto__hit-copy"><strong>' +
               s.label +
               "</strong>" +
               (s.note ? "<span>" + s.note + "</span>" : "") +
-              "</a>"
+              "</span></a>"
             );
           })
           .join("");
         var pending = (b.pending || [])
           .map(function (row) {
             return (
-              '<div class="docs-proto__hit docs-proto__hit--pending"><strong>' +
+              '<div class="docs-proto__hit docs-proto__hit--pending"><span class="docs-proto__check" aria-hidden="true"></span><span class="docs-proto__hit-copy"><strong>' +
               row.title +
               "</strong><span>" +
               row.note +
-              "</span></div>"
+              "</span></span></div>"
             );
           })
           .join("");
