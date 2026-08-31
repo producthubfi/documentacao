@@ -863,9 +863,13 @@
     return (
       '<a class="hf-app-nav__item' +
       (opts.active ? " is-active" : "") +
-      '" href="#">' +
+      '" href="#" title="' +
+      label +
+      '" aria-label="' +
+      label +
+      '">' +
       navIco(icon) +
-      "<span>" +
+      '<span class="hf-app-nav__label">' +
       label +
       "</span>" +
       (opts.more
@@ -889,9 +893,16 @@
     var backoffice = variant === "backoffice";
     var nova = variant === "nova";
     var clientes = variant === "clientes";
+    var extra = String(mod || "")
+      .split(/\s+/)
+      .filter(Boolean)
+      .map(function (token) {
+        return " hf-app-nav--" + token;
+      })
+      .join("");
     return (
       '<div class="hf-app-nav' +
-      (mod ? " hf-app-nav--" + mod : "") +
+      extra +
       '"><nav class="hf-app-nav__panel">' +
       '<div class="hf-app-nav__brand">' +
       '<div class="hf-app-nav__logo"><img src="assets/logos/h-color-light.svg" width="109" height="27" alt="hubfi"></div>' +
@@ -1818,6 +1829,7 @@
         return (
           card("Operações", "Item ativo em Rotina › Operações.", preview(appSidebar("operacoes"))) +
           card("Backoffice", "Item ativo em Administração Interna › Backoffice.", preview(appSidebar("backoffice"))) +
+          card("Fechada", "Trilho com ícones. O rótulo aparece no title de cada item.", preview(appSidebar("operacoes", "fit collapsed"))) +
           card(
             "Exemplo de uso",
             "Shell da plataforma: navegação fixa à esquerda e conteúdo da operação à direita.",

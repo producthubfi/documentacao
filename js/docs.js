@@ -309,6 +309,17 @@
       });
     });
 
+    stage.querySelectorAll("[data-nav-toggle]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var screen = btn.closest(".docs-screen");
+        var nav = screen && screen.querySelector(".hf-app-nav");
+        if (!nav) return;
+        var collapsed = nav.classList.toggle("hf-app-nav--collapsed");
+        btn.setAttribute("aria-expanded", collapsed ? "false" : "true");
+        btn.setAttribute("aria-label", collapsed ? "Expandir menu" : "Recolher menu");
+      });
+    });
+
     stage.querySelectorAll("[data-tabs]").forEach(function (root) {
       root.querySelectorAll(".hf-tab").forEach(function (tab) {
         tab.addEventListener("click", function () {

@@ -696,7 +696,7 @@
 
   function dashScreen() {
     var sidebar =
-      typeof ui.appSidebar === "function" ? ui.appSidebar("operacoes", "fit") : "";
+      typeof ui.appSidebar === "function" ? ui.appSidebar("operacoes", "fit collapsed") : "";
     var badge =
       typeof ui.badge === "function"
         ? ui.badge
@@ -706,9 +706,9 @@
 
     var crumb =
       '<nav class="hf-crumb">' +
-      '<span class="hf-crumb__home">' +
+      '<button class="hf-crumb__home" type="button" data-nav-toggle aria-expanded="false" aria-label="Expandir menu">' +
       ico("panel-left", 20) +
-      "</span>" +
+      "</button>" +
       '<span class="hf-crumb__div"></span>' +
       "<span>Visão estratégica</span></nav>";
 

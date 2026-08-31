@@ -1695,6 +1695,9 @@ textarea {
 .docs-screen .hf-app-nav__panel {
   background: #fcfcfc;
 }
+.docs-screen .hf-app-nav {
+  transition: width 0.18s ease;
+}
 
 .docs-screen__main {
   position: relative;
@@ -2994,6 +2997,10 @@ textarea {
   }
 
   .docs-cover {
+    transition: none;
+  }
+
+  .docs-screen .hf-app-nav {
     transition: none;
   }
 
