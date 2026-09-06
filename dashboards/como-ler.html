@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Como ler os dados do painel Hubfi</title>
+<meta name="description" content="Guia do Admin da empresa e do Gestor da empresa: o que cada card do dashboard significa e o que fazer com ele."/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = { theme: { extend: {
+  fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+  colors: {
+    ink: { 100:'#E8EAEF', 200:'#D1D5DD', 300:'#9CA3AF', 400:'#6B7280', 500:'#4B5563', 600:'#374151', 700:'#262B3B', 800:'#1A1F2E', 900:'#0F1219', 950:'#0B0E14' },
+    teal: { 50:'#EBF7F4', 100:'#D7EFE9', 200:'#AEDFD3', 300:'#7CCBB9', 400:'#3DB29C', 500:'#0E8B7A', 600:'#0A7165', 700:'#08574F', 800:'#053D38', 900:'#022B27', 950:'#0a796a' },
+    paper: { 50:'#FAFBFB', 100:'#F4F5F7', 200:'#E5E7EB' }
+  },
+  borderRadius: { 'sm':'4px', DEFAULT:'6px', 'md':'8px', 'lg':'10px' }
+}}};
+</script>
+<link href="css/style.css" rel="stylesheet"/>
+<style>
+  .reveal{ opacity:0; transform:translateY(16px); transition:opacity .7s ease, transform .7s ease; }
+  .reveal.in{ opacity:1; transform:none; }
+
+  .page-signoff{ position:relative; overflow:hidden; background:linear-gradient(135deg,#08574F 0%,#053D38 55%,#022B27 100%); color:#fff; }
+  .page-signoff::before{ content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(174,223,211,.32),transparent); }
+  .page-signoff::after{ content:''; position:absolute; top:-180px; right:-80px; width:520px; height:520px; background:radial-gradient(circle,rgba(124,203,185,.14),transparent 65%); pointer-events:none; }
+  .page-signoff-inner{ position:relative; max-width:1440px; margin:0 auto; padding:56px 48px 28px; }
+  .page-signoff-grid{ display:grid; grid-template-columns:1.4fr .8fr; gap:56px; align-items:end; }
+  .page-signoff-mark{ display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:#7CCBB9; margin-bottom:18px; }
+  .page-signoff-mark i{ width:18px; height:1px; background:#7CCBB9; display:block; }
+  .page-signoff h2{ font-size:34px; line-height:1.15; font-weight:600; letter-spacing:-.025em; color:#fff; max-width:16em; }
+  .page-signoff h2 em{ font-style:normal; color:#7CCBB9; }
+  .page-signoff-lines{ margin:20px 0 0; font-size:15.5px; line-height:1.7; color:rgba(255,255,255,.68); max-width:520px; }
+  .page-signoff-lines span{ display:block; }
+  .page-signoff-tag{ margin:18px 0 0; font-size:17px; font-weight:600; color:#AEDFD3; letter-spacing:-.012em; }
+  .page-signoff-aside{ display:flex; flex-direction:column; align-items:flex-start; gap:18px; padding:28px; border-radius:16px; background:rgba(174,223,211,.06); border:1px solid rgba(174,223,211,.12); }
+  .page-signoff-aside p{ font-size:14.5px; line-height:1.55; color:rgba(255,255,255,.72); }
+  .page-signoff-meta{ display:flex; flex-direction:column; gap:8px; }
+  .page-signoff-meta a{ display:inline-flex; align-items:center; gap:8px; font-size:14px; color:rgba(255,255,255,.78); text-decoration:none; }
+  .page-signoff-meta a:hover{ color:#AEDFD3; }
+  .page-signoff-copy{ display:flex; justify-content:space-between; align-items:center; gap:16px; margin-top:40px; padding-top:20px; border-top:1px solid rgba(174,223,211,.12); font-size:12.5px; color:rgba(255,255,255,.42); }
+  .page-signoff-copy button{ background:none; border:0; color:rgba(255,255,255,.55); font:inherit; cursor:pointer; }
+  .page-signoff-copy button:hover{ color:#7CCBB9; }
+  @media (max-width:900px){
+    .page-signoff-inner{ padding:44px 24px 24px; }
+    .page-signoff-grid{ grid-template-columns:1fr; gap:28px; }
+    .page-signoff h2{ font-size:28px; max-width:none; }
+  }
+
+
+  .dash-mock{
+    --primary:#00a395; --primary-50:#ecfbf9; --primary-100:#d9f6f2; --primary-200:#a6e8e0; --primary-400:#2fc0b1;
+    --warning:#e7b008; --warning-50:#fffdf0; --warning-200:#ffeba8;
+    --error:#de3535; --error-50:#fdf2f2; --error-200:#f5b8b8;
+    --info:#3672e2; --info-50:#f2f6fd;
+    --text-primary:#141414; --text-heading:#191a1a; --text-secondary:#787d7d; --text-tertiary:#a1a5a5;
+    --neutral-50:#fafafa; --neutral-100:#f5f5f5; --neutral-200:#eaecec; --neutral-400:#a8a8a8; --neutral-800:#282a2a;
+    --border-default:#e3e3e3; --border-table:#e5e7ea;
+    --bg-sidebar:#fcfcfc;
+    color:var(--text-primary);
+  }
+  .dash-mock .card{ margin-bottom:0; }
+  .dash-mock .kpi-row{ margin-bottom:0; }
+  .dash-shell{
+    background:#fff;
+    border:1px solid #E5E7EB;
+    border-radius:14px;
+    padding:16px 16px 18px;
+    box-shadow:0 1px 3px rgba(15,18,25,.04), 0 18px 40px -24px rgba(8,55,45,.18);
+  }
+  .guide-item{
+    background:transparent; border:0; padding:0;
+    display:flex; flex-direction:column; gap:14px; overflow:visible;
+  }
+  .guide-notes{
+    display:grid; gap:10px;
+    background:#F4F8F7;
+    border:1px solid #D7EFE9;
+    border-radius:14px;
+    padding:14px;
+  }
+  .guide-notes.cols-4{ grid-template-columns:repeat(4,1fr); }
+  .guide-notes.cols-3{ grid-template-columns:repeat(3,1fr); }
+  .guide-notes.cols-2{ grid-template-columns:1fr 1fr; }
+  .guide-notes.cols-1{ grid-template-columns:1fr; }
+  .guide-copy{
+    background:#fff;
+    border:1px solid #E5E7EB;
+    border-radius:12px;
+    padding:14px 16px 14px;
+    display:flex; flex-direction:column; gap:12px;
+    min-width:0;
+  }
+  .guide-copy-head{ display:flex; align-items:center; gap:10px; min-width:0; }
+  .guide-num{
+    width:28px; height:28px; border-radius:8px; flex:none;
+    display:inline-flex; align-items:center; justify-content:center;
+    background:#EBF7F4; color:#08574F;
+    font-size:11px; font-weight:800; letter-spacing:.02em;
+  }
+  .guide-num.n2{ background:#f2f6fd; color:#1d4ed8; }
+  .guide-num.n3{ background:#ecfbf9; color:#0A7165; }
+  .guide-num.n4{ background:#fdf2f2; color:#b42318; }
+  .guide-num.gestor{ background:#fff7ed; color:#c2410c; }
+  .guide-copy h5{ font-size:15px; font-weight:700; color:#0F1219; margin:0; line-height:1.25; }
+  .guide-pair{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .guide-notes.cols-4 .guide-pair{ grid-template-columns:1fr; }
+  .guide-fact, .guide-act{
+    margin:0; font-size:13.5px; line-height:1.5; color:#374151;
+    padding:10px 12px; border-radius:8px;
+  }
+  .guide-fact{ background:#F7F8FA; }
+  .guide-act{ background:#EBF7F4; color:#08574F; font-weight:500; }
+  .guide-lbl{
+    display:block; font-size:10px; font-weight:800; letter-spacing:.1em;
+    text-transform:uppercase; margin-bottom:5px; color:#9CA3AF;
+  }
+  .guide-act .guide-lbl{ color:#0A7165; }
+  @media (max-width:1100px){ .guide-notes.cols-4{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:860px){
+    .guide-notes.cols-4, .guide-notes.cols-3, .guide-notes.cols-2{ grid-template-columns:1fr; }
+    .guide-pair{ grid-template-columns:1fr; }
+  }
+
+.dash-mock .filter-bar{display:flex; gap:8px; margin-bottom:8px; flex-wrap:wrap;}
+.dash-mock .filter-field{flex:1 1 150px; display:flex; flex-direction:column; gap:4px; min-width:140px;}
+.dash-mock .filter-field label{font-size:14px; font-weight:500;}
+.dash-mock .filter-field .field{height:38px; border:1px solid var(--border-default); border-radius:8px; padding:0 14px; display:flex; align-items:center; justify-content:space-between; font-size:15px; background:#fff;}
+.dash-mock .filter-field .field .chevron{width:16px; height:16px; opacity:.5; flex:none;}
+.dash-mock .filter-field.is-locked .field{background:var(--neutral-100); color:var(--text-secondary); cursor:not-allowed;}
+.dash-mock .filter-field.is-locked label{display:flex; align-items:center; gap:5px; color:var(--text-secondary);}
+.dash-mock .filter-field.is-locked .lock{width:12px; height:12px; opacity:.6;}
+.dash-mock .filter-field.is-hidden{display:none;}
+.dash-mock .field-select{height:38px; width:100%; border:1px solid var(--border-default); border-radius:8px; padding:0 34px 0 14px; font-family:inherit; font-size:15px; color:var(--text-primary); background-color:#fff; appearance:none; -webkit-appearance:none; cursor:pointer;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><path d='M5 7l5 5 5-5' stroke='%23141414' stroke-width='1.6' fill='none' stroke-linecap='round'/></svg>");
+    background-repeat:no-repeat; background-position:right 12px center; background-size:16px;}
+.dash-mock .filter-note{font-size:12px; color:var(--text-tertiary); margin:0 0 20px;}
+.dash-mock .kpi-row{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px;}
+.dash-mock .kpi-row.cols-3{grid-template-columns:repeat(3,1fr);}
+.dash-mock .kpi-row.cols-2{grid-template-columns:repeat(2,1fr);}
+.dash-mock .kpi-card{border:1px solid var(--border-table); border-radius:8px; padding:16px; display:flex; flex-direction:column; gap:12px;}
+.dash-mock .kpi-card .kpi-head{display:flex; align-items:center; gap:8px;}
+.dash-mock .kpi-chip{width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex:none; font-size:15px;}
+.dash-mock .kpi-chip.teal{background:var(--primary-50); color:var(--primary);}
+.dash-mock .kpi-chip.info{background:var(--info-50); color:var(--info);}
+.dash-mock .kpi-chip.green{background:var(--primary-50); color:var(--primary);}
+.dash-mock .kpi-chip.red{background:var(--error-50); color:var(--error);}
+.dash-mock .kpi-chip.gray{background:var(--neutral-100); color:var(--text-secondary);}
+.dash-mock .kpi-label{font-size:14px; font-weight:500; color:var(--neutral-800); flex:1;}
+.dash-mock .kpi-value{font-size:20px; font-weight:600;}
+.dash-mock .kpi-sub{font-size:12px; color:var(--text-tertiary); font-weight:500;}
+.dash-mock .kpi-sub.pause{color:var(--text-secondary);}
+.dash-mock .kpi-sub.pause b{color:var(--text-primary); font-weight:600;}
+.dash-mock .kpi-delta{display:inline-flex; align-items:center; gap:3px; font-size:12px; font-weight:600; color:var(--primary); background:var(--primary-50); padding:2px 8px; border-radius:20px; margin-left:6px;}
+.dash-mock .kpi-foot{border-top:1px solid var(--neutral-100); padding-top:8px; margin-top:2px; font-size:12px; color:var(--text-secondary); display:flex; justify-content:space-between;}
+.dash-mock .kpi-foot b{color:var(--text-primary); font-weight:600;}
+.dash-mock .card{border:1px solid var(--border-table); border-radius:8px; padding:16px; margin-bottom:24px; background:#fff;}
+.dash-mock .card-head{display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; gap:16px; flex-wrap:wrap;}
+.dash-mock .card-head h3{font-size:16px; font-weight:600; margin:0 0 2px;}
+.dash-mock .card-head .sub{font-size:14px; color:var(--text-secondary); margin:0;}
+.dash-mock .link-btn{appearance:none; border:none; background:none; color:var(--primary); font-weight:600; font-size:13px; cursor:pointer; padding:0; white-space:nowrap;}
+.dash-mock .link-btn:hover{text-decoration:underline;}
+.dash-mock .legend-row{display:flex; gap:6px; background:var(--bg-sidebar); padding:8px; border-radius:8px;}
+.dash-mock .legend-item{display:flex; align-items:center; gap:8px; font-size:12px;}
+.dash-mock .legend-dot{width:24px; height:24px; border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:12px;}
+.dash-mock .legend-dot.crit{background:var(--error-50); color:var(--error);}
+.dash-mock .legend-dot.att{background:var(--warning-50); color:var(--warning);}
+.dash-mock .legend-dot.ok{background:var(--primary-50); color:var(--primary);}
+.dash-mock .funnel-chart{display:flex; gap:8px; align-items:flex-end; height:220px; padding:8px 0 0; border-top:1px solid var(--neutral-100);}
+.dash-mock .funnel-bar{flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; justify-content:flex-end; height:100%; min-width:0;}
+.dash-mock .funnel-bar .tag{border-radius:8px; padding:5px 8px; font-size:13px; font-weight:600; display:flex; align-items:center; gap:4px; white-space:nowrap;}
+.dash-mock .funnel-bar .tag.ok{background:#fff; border:1px solid var(--neutral-100); color:var(--text-primary);}
+.dash-mock .funnel-bar .tag.att{background:var(--warning-50); color:var(--warning);}
+.dash-mock .funnel-bar .tag.crit{background:var(--error-50); color:var(--error);}
+.dash-mock .funnel-bar .fill{width:100%; border-radius:8px;}
+.dash-mock .funnel-bar .fill.ok{background:linear-gradient(180deg,var(--primary-200),var(--primary));}
+.dash-mock .funnel-bar .fill.att{background:linear-gradient(180deg,var(--warning-200),var(--warning));}
+.dash-mock .funnel-bar .fill.crit{background:linear-gradient(180deg,var(--error-200),#c41f1f);}
+.dash-mock .funnel-labels{display:flex; gap:8px; margin-top:12px;}
+.dash-mock .funnel-labels span{flex:1; text-align:center; font-size:12px; font-weight:500; color:var(--text-tertiary); line-height:1.3;}
+.dash-mock .funnel-bar{position:relative;}
+.dash-mock .gargalo-icon{color:var(--error); font-size:12px; margin-right:2px;}
+.dash-mock .stage-popover{
+    position:absolute; bottom:calc(100% + 10px); left:50%; transform:translateX(-50%);
+    width:280px; background:#fff; border-radius:10px; border:1px solid var(--border-table);
+    box-shadow:0 10px 28px rgba(0,0,0,.16); padding:14px; z-index:60;
+    opacity:0; visibility:hidden; transition:opacity .15s; text-align:left; pointer-events:none;
+  }
+.dash-mock .funnel-bar:hover .stage-popover{opacity:1; visibility:visible;}
+.dash-mock .stage-popover .pop-head{display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:10px;}
+.dash-mock .stage-popover .pop-head .name{font-size:14px; font-weight:600; white-space:normal;}
+.dash-mock .stage-popover .pop-callout{display:flex; gap:8px; background:var(--info-50); border-radius:8px; padding:8px 10px; margin-bottom:10px; font-size:12px; color:var(--text-primary); line-height:1.4;}
+.dash-mock .stage-popover .pop-callout span.ic{flex:none; color:var(--info); font-weight:700;}
+.dash-mock .stage-popover .pop-stats{display:flex; justify-content:space-between; font-size:13px; font-weight:600; padding-top:8px; border-top:1px solid var(--neutral-100); margin-bottom:8px;}
+.dash-mock .stage-popover .pop-status-row{display:flex; justify-content:space-between; align-items:center; font-size:12px; padding:4px 0;}
+.dash-mock .stage-popover .pop-status-row .lbl{display:flex; align-items:center; gap:6px; color:var(--text-secondary);}
+.dash-mock .stage-popover .pop-status-row .dot{width:8px; height:8px; border-radius:50%; flex:none;}
+.dash-mock .stage-popover .pop-status-row .val{font-weight:600;}
+.dash-mock .table-scroll{overflow-x:auto;}
+.dash-mock .table-scroll table{min-width:820px;}
+.dash-mock .stage-table{width:100%; border-collapse:collapse;}
+.dash-mock .stage-table thead th{text-align:left; font-size:12px; font-weight:500; color:var(--text-tertiary); padding:8px 8px; border-bottom:1px solid var(--border-table); white-space:nowrap;}
+.dash-mock .stage-table th.sortable{cursor:pointer; user-select:none;}
+.dash-mock .sort-icon{font-size:10px; color:var(--text-tertiary); margin-left:3px;}
+.dash-mock .th-info{cursor:help; color:var(--text-tertiary); margin-left:4px; display:inline-flex; align-items:center; vertical-align:middle;}
+.dash-mock .stage-table td{padding:12px 8px; font-size:14px; border-bottom:1px solid var(--border-table); vertical-align:middle;}
+.dash-mock .stage-table tr:last-child td{border-bottom:none;}
+.dash-mock .stage-table tr.clickable{cursor:pointer;}
+.dash-mock .stage-table tr.clickable:hover{background:var(--neutral-50);}
+.dash-mock .stage-name{font-size:14px; margin-bottom:6px;}
+.dash-mock .cell-sub{font-size:11px; color:var(--text-tertiary); margin-top:2px;}
+.dash-mock .progress-track{height:6px; background:var(--neutral-100); border-radius:3px; overflow:hidden;}
+.dash-mock .progress-fill{height:100%; background:var(--primary); border-radius:3px;}
+.dash-mock .badge{display:inline-flex; align-items:center; gap:4px; padding:4px 10px; border-radius:32px; font-size:12px; font-weight:500;}
+.dash-mock .badge.teal{background:var(--primary-50); color:var(--primary); border:1px solid var(--primary-400);}
+.dash-mock .badge.gray{background:var(--neutral-100); color:var(--text-primary);}
+.dash-mock .badge.amber{background:var(--warning-50); color:var(--warning); border:1px solid var(--warning-200);}
+.dash-mock .badge.red{background:var(--error-50); color:var(--error); border:1px solid var(--error-200);}
+.dash-mock .badge.slate{background:var(--neutral-100); color:var(--text-secondary); border:1px solid var(--neutral-200);}
+.dash-mock .duration{display:flex; align-items:center; gap:6px; font-weight:500; font-size:14px;}
+.dash-mock .table-foot{display:flex; justify-content:space-between; align-items:center; margin-top:12px; font-size:13px; color:var(--text-secondary);}
+.dash-mock .page-btns{display:flex; gap:4px;}
+.dash-mock .page-btns button{width:28px; height:28px; border-radius:6px; border:1px solid var(--border-default); background:#fff; cursor:pointer; font-size:13px;}
+.dash-mock .page-btns button:disabled{opacity:.4; cursor:not-allowed;}
+.dash-mock .conv-res-stack{display:flex; flex-direction:column; gap:16px;}
+.dash-mock .conv-metric{border:1px solid var(--neutral-100); border-radius:8px; padding:16px; display:flex; flex-direction:column; gap:12px;}
+.dash-mock .conv-metric .top-row{display:flex; align-items:center; gap:16px;}
+.dash-mock .conv-metric .big{font-size:32px; font-weight:700;}
+.dash-mock .conv-metric.win .big{color:var(--primary);}
+.dash-mock .conv-metric.res .big{color:var(--info);}
+.dash-mock .conv-metric .caption{font-size:12px; color:var(--text-tertiary);}
+.dash-mock .conv-metric .foot{font-size:12px; color:var(--text-secondary); display:flex; justify-content:space-between; border-top:1px solid var(--neutral-100); padding-top:10px;}
+.dash-mock .donut-mini{width:52px; height:52px; border-radius:50%; flex:none;}
+.dash-mock .percentile-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:4px; margin-top:12px; margin-bottom:4px;}
+.dash-mock .percentile-cell{border:1px solid var(--neutral-100); border-radius:8px; padding:8px;}
+.dash-mock .percentile-cell .p-label{font-size:12px; color:var(--text-tertiary); font-weight:500;}
+.dash-mock .percentile-cell .p-value{font-size:14px; font-weight:600; margin-top:2px;}
+.dash-mock .donut-row{display:flex; align-items:center; gap:32px;}
+.dash-mock .donut{position:relative; width:150px; height:150px; border-radius:50%; flex:none;}
+.dash-mock .donut::after{content:""; position:absolute; inset:22px; background:#fff; border-radius:50%;}
+.dash-mock .donut-center{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:1;}
+.dash-mock .donut-center .v{font-size:28px; font-weight:700;}
+.dash-mock .donut-center .c{font-size:12px; color:var(--text-secondary);}
+.dash-mock .legend-list{flex:1; display:flex; flex-direction:column; gap:10px;}
+.dash-mock .legend-list .row{display:flex; align-items:center; gap:12px; font-size:14px; padding:6px 8px; border-radius:8px;}
+.dash-mock .legend-list .row.clickable{cursor:pointer;}
+.dash-mock .legend-list .row.clickable:hover{background:var(--neutral-50);}
+.dash-mock .legend-list .dot{width:10px; height:10px; border-radius:50%; flex:none;}
+.dash-mock .legend-list .name{flex:1;}
+.dash-mock .legend-list .val{font-weight:600; width:44px; text-align:right;}
+.dash-mock .legend-list .arrow{color:var(--text-tertiary); font-size:13px;}
+.dash-mock .two-col{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:24px;}
+.dash-mock .two-col-asym{display:grid; grid-template-columns:2fr 1fr; gap:16px; align-items:start; margin-bottom:24px;}
+.dash-mock .two-col > .card,.dash-mock .two-col-asym > .card{min-width:0;}
+.dash-mock .rank-row{display:flex; align-items:center; gap:12px; padding:10px 4px; border-bottom:1px solid var(--border-table);}
+.dash-mock .rank-row:last-child{border-bottom:none;}
+.dash-mock .rank-num{width:22px; height:22px; border-radius:6px; background:var(--neutral-100); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600; color:var(--text-secondary); flex:none;}
+.dash-mock .rank-num.top{background:var(--primary-50); color:var(--primary);}
+.dash-mock .rank-name{flex:1; font-size:14px; font-weight:500;}
+.dash-mock .rank-name .you{color:var(--primary); font-weight:600;}
+.dash-mock .rank-track{width:120px;}
+.dash-mock .rank-pct{width:48px; text-align:right; font-size:14px; font-weight:600;}
+.dash-mock .rank-alert{font-size:12px; color:var(--error); font-weight:500;}
+.dash-mock .locked-note{display:flex; align-items:center; gap:8px; background:var(--neutral-100); border-radius:8px; padding:10px 12px; font-size:13px; color:var(--text-secondary); margin-bottom:8px;}
+.dash-mock .crit-group-title{font-size:13px; font-weight:600; color:var(--text-secondary); margin:16px 0 8px; text-transform:uppercase; letter-spacing:.03em;}
+.dash-mock td.crit-group-title{font-size:13px; font-weight:600; color:var(--text-secondary); text-transform:uppercase; letter-spacing:.03em; padding:14px 8px 6px; border-bottom:1px solid var(--border-table);}
+.dash-mock .crit-row{display:flex; align-items:center; gap:12px; padding:10px 12px; border:1px solid var(--border-table); border-radius:8px; margin-bottom:8px;}
+.dash-mock .crit-status{width:8px; height:8px; border-radius:50%; flex:none;}
+.dash-mock .crit-status.crit{background:var(--error);}
+.dash-mock .crit-status.att{background:var(--warning);}
+.dash-mock .crit-status.pause{background:var(--text-tertiary);}
+.dash-mock .crit-op{font-size:14px; font-weight:600; width:90px; flex:none;}
+.dash-mock .crit-stage{flex:1; font-size:14px; color:var(--text-secondary);}
+.dash-mock .crit-time{font-size:13px; font-weight:500; width:110px; text-align:right;}
+.dash-mock .crit-time.crit{color:var(--error);}
+.dash-mock .crit-time.att{color:var(--warning);}
+.dash-mock .crit-time.pause{color:var(--text-tertiary); font-style:italic;}
+.dash-mock .crit-cta{font-size:12px; font-weight:600; color:var(--primary); background:var(--primary-50); padding:5px 10px; border-radius:6px; white-space:nowrap;}
+.dash-mock .icon-btn{border:none; background:none; color:var(--text-tertiary); cursor:pointer; padding:6px; border-radius:6px; display:inline-flex; align-items:center; justify-content:center;}
+.dash-mock .icon-btn:hover{background:var(--neutral-100); color:var(--primary);}
+.dash-mock .stacked-bar{display:flex; height:14px; border-radius:4px; overflow:hidden; width:100%; min-width:140px; background:var(--neutral-100);}
+.dash-mock .stacked-bar span{height:100%;}
+.dash-mock .stage-reason-legend{display:flex; flex-wrap:wrap; gap:12px 16px; margin-bottom:16px; padding:10px 12px; background:var(--bg-sidebar); border-radius:8px;}
+.dash-mock .stage-reason-legend .item{display:flex; align-items:center; gap:6px; font-size:12px; color:var(--text-secondary);}
+.dash-mock .stage-reason-legend .dot{width:9px; height:9px; border-radius:50%; flex:none;}
+.dash-mock .ops-table td{white-space:nowrap;}
+.dash-mock .ops-table .cell-sub{white-space:normal;}
+.dash-mock .pend-badge{display:inline-flex; align-items:center; gap:4px; padding:4px 10px; border-radius:32px; font-size:12px; font-weight:500; white-space:nowrap;}
+.dash-mock .pend-badge.hubfi{background:var(--info-50); color:var(--info); border:1px solid #bcd3f7;}
+.dash-mock .pend-badge.usuario{background:var(--warning-50); color:var(--warning); border:1px solid var(--warning-200);}
+.dash-mock .pend-badge.cliente{background:var(--error-50); color:var(--error); border:1px solid var(--error-200);}
+.dash-mock .form-funnel{display:flex; gap:8px;}
+.dash-mock .ff-stage{flex:1; border:1px solid var(--border-table); border-radius:8px; padding:14px; text-align:center;}
+.dash-mock .ff-stage .n{font-size:22px; font-weight:700;}
+.dash-mock .ff-stage .l{font-size:12px; color:var(--text-secondary); margin-top:4px;}
+.dash-mock .ff-stage.s1{background:var(--neutral-50);}
+.dash-mock .ff-stage.s2{background:var(--info-50);}
+.dash-mock .ff-stage.s3{background:var(--warning-50);}
+.dash-mock .ff-stage.s4{background:var(--primary-50);}
+.dash-mock .ops-list .op-row{display:flex; align-items:center; gap:12px; padding:12px; border:1px solid var(--border-table); border-radius:8px; margin-bottom:8px;}
+.dash-mock .op-row .code{font-weight:600; font-size:14px; width:90px;}
+.dash-mock .op-row .client{flex:1; font-size:14px; color:var(--text-secondary);}
+.dash-mock .op-row .stage{font-size:13px; color:var(--text-tertiary); width:170px;}
+.dash-mock .profile-banner{background:var(--primary-50); border:1px solid var(--primary-200); border-radius:8px; padding:12px 16px; font-size:14px; margin-bottom:20px;}
+.dash-mock .profile-banner b{color:var(--primary);}
+.dash-mock .info-banner{background:var(--info-50); border:1px solid #bcd3f7; border-radius:8px; padding:12px 16px; font-size:13px; color:var(--text-primary); margin-bottom:16px;}
+.dash-mock .demo-toggle{display:flex; gap:8px; margin-bottom:16px;}
+.dash-mock .demo-toggle button{border:1px solid var(--border-default); background:#fff; padding:6px 12px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer;}
+.dash-mock .demo-toggle button.active{background:var(--primary); border-color:var(--primary); color:#fff;}
+.dash-mock .stage-table.hide-empresa .empresa-col{display:none;}
+@media (max-width:860px){
+  .dash-mock .kpi-row,.dash-mock .kpi-row.cols-3,.dash-mock .kpi-row.cols-2{grid-template-columns:repeat(2,1fr);}
+  .dash-mock .two-col,.dash-mock .two-col-asym{grid-template-columns:1fr;}
+  .dash-mock .app{padding:16px; margin:12px;}
+}
+
+  .who-chip{
+    display:inline-flex; align-items:center; gap:6px;
+    height:24px; padding:0 10px; border-radius:999px;
+    font-size:11px; font-weight:700; letter-spacing:.02em;
+    background:#F4F5F7; color:#374151; border:1px solid #E5E7EB;
+  }
+  .who-chip.admin{ background:#EBF7F4; color:#08574F; border-color:#D7EFE9; }
+  .who-chip.gestor{ background:#f2f6fd; color:#1d4ed8; border-color:#dbe7fb; }
+  .who-chip.off{ background:#F4F5F7; color:#9CA3AF; border-color:#E5E7EB; text-decoration:line-through; text-decoration-thickness:1px; }
+
+  #guiaPage .tabs-nav{ display:inline-flex; flex-wrap:wrap; justify-content:center; }
+  #guiaPage .tab-card{ min-width:260px; flex:1; }
+  #guiaPage .tab-title{ display:block; font-size:15px; font-weight:700; line-height:1.15; color:#0F1219; }
+  #guiaPage .tab-meta{ display:block; font-size:12px; color:#6B7280; margin-top:3px; font-weight:500; }
+  #guiaPage .tab-card[data-active="true"] .tab-title{ color:#fff; }
+  #guiaPage .tab-card[data-active="true"] .tab-meta{ color:#fff; }
+  #guiaPage .tab-txt{ flex:1; min-width:0; }
+
+  .guia-tabs-wrap{
+    position:sticky; top:68px; z-index:40;
+    background:rgba(250,251,251,.92); backdrop-filter:blur(12px);
+    border-bottom:1px solid #E5E7EB;
+    margin:0 -24px 32px; padding:12px 24px 14px;
+    display:flex; justify-content:center;
+  }
+
+  .guide-compare{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:28px; }
+  .guide-role{
+    background:#fff; border:1px solid #E5E7EB; border-radius:14px; padding:22px 24px;
+    display:flex; flex-direction:column; gap:12px;
+  }
+  .guide-role h3{ font-size:18px; font-weight:700; color:#0F1219; margin:0; }
+  .guide-role p{ font-size:14.5px; color:#4B5563; line-height:1.55; margin:0; }
+  .guide-role ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px; }
+  .guide-role li{ display:flex; gap:8px; font-size:13.5px; color:#374151; line-height:1.4; }
+  .guide-role li i{ width:6px; height:6px; border-radius:50%; background:#0E8B7A; flex:none; margin-top:7px; }
+  .guide-role .miss i{ background:#9CA3AF; }
+  .guide-role .miss{ color:#6B7280; }
+  .guide-intro{ text-align:center; max-width:640px; margin:0 auto 28px; }
+  .guide-intro p{ font-size:15.5px; color:#4B5563; line-height:1.6; margin:8px 0 0; }
+  .guide-pages{ display:flex; flex-wrap:wrap; justify-content:center; gap:6px; margin-top:14px; }
+  .guide-page{
+    font-size:12px; font-weight:700; color:#08574F; background:#EBF7F4;
+    border:1px solid #D7EFE9; padding:5px 10px; border-radius:6px;
+  }
+  .guide-block{ margin-bottom:28px; }
+  .guide-block h4{
+    font-size:13px; font-weight:800; letter-spacing:.1em; text-transform:uppercase;
+    color:#6B7280; margin:0 0 12px; display:flex; align-items:center; gap:10px;
+  }
+  .guide-block h4::after{ content:''; flex:1; height:1px; background:#E5E7EB; }
+  .dash-mock .card, .dash-mock .kpi-row{ margin-bottom:0; }
+  .dash-mock .hide-empresa .empresa-col, .dash-mock.hide-empresa .empresa-col{ display:none; }
+  .dash-mock .funnel-chart, .dash-mock .card{ overflow:visible; }
+  #guia [hidden]{ display:none !important; }
+  nav a.is-current{ color:#0F1219; background:#EBF7F4; }
+  @media (max-width:860px){
+    .guide-compare{ grid-template-columns:1fr; }
+    #guiaPage .tab-card{ min-width:100%; }
+  }
+</style>
+</head>
+<body class="bg-paper-50 text-ink-900">
+
+<div class="bg-ink-950 text-white text-[13px]">
+  <div class="max-w-[1440px] mx-auto px-6 h-10 flex items-center justify-center gap-3">
+    <span class="inline-flex items-center gap-1.5 rounded-md bg-teal-500 text-white px-2 py-0.5 text-[11px] font-bold tracking-wider uppercase">Guia</span>
+    <span class="text-white/85">Como ler cada card do painel: Admin da empresa e Gestor da empresa</span>
+    <a class="hidden sm:inline-flex items-center gap-1 text-teal-300 hover:text-teal-200 font-semibold" href="hubfi-painel-empresas.html#painel">Ver o painel
+      <svg fill="none" height="12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" width="12"><path d="M5 12h14M13 5l7 7-7 7"></path></svg>
+    </a>
+  </div>
+</div>
+
+<header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-paper-200">
+  <div class="max-w-[1440px] mx-auto px-6 h-[68px] flex items-center justify-between">
+    <div class="flex items-center gap-10">
+      <a class="flex items-center gap-2.5 shrink-0" href="hubfi-painel-empresas.html"><img src="images/hubfi.png" id="logo" alt="Hubfi"></a>
+      <nav class="hidden lg:flex items-center gap-1">
+        <a class="flex items-center h-10 px-3 rounded-md text-[14.5px] font-medium text-ink-700 hover:text-ink-950 hover:bg-paper-100" href="hubfi-painel-empresas.html#recursos">Recursos</a>
+        <a class="flex items-center h-10 px-3 rounded-md text-[14.5px] font-medium text-ink-700 hover:text-ink-950 hover:bg-paper-100" href="hubfi-painel-empresas.html#painel">Por dentro do painel</a>
+        <a class="flex items-center h-10 px-3 rounded-md text-[14.5px] font-medium is-current" href="como-ler.html" aria-current="page">Como ler os dados</a>
+        <a class="flex items-center h-10 px-3 rounded-md text-[14.5px] font-medium text-ink-700 hover:text-ink-950 hover:bg-paper-100" href="hubfi-painel-empresas.html#perfis">Perfis de acesso</a>
+      </nav>
+    </div>
+    <div class="flex items-center gap-2">
+      <a class="hidden sm:inline-flex items-center h-10 px-3 rounded-md text-[14.5px] font-medium btn-ghost" href="hubfi-painel-empresas.html">Voltar ao painel</a>
+      <a class="btn-cta-primary btn-cta-primary--sm" href="hubfi-painel-empresas.html#contato">
+        <span class="icn-wrap"><svg class="arr" fill="none" height="13" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="13"><path d="M5 12h14M13 5l7 7-7 7"></path></svg></span>
+        Falar com a Hubfi
+      </a>
+    </div>
+  </div>
+</header>
+
+<main id="guiaPage">
+  <section class="relative overflow-hidden">
+    <div class="absolute inset-0 pointer-events-none"><div class="absolute top-0 left-1/2 -translate-x-1/2 w-[640px] h-[380px] rounded-full bg-teal-100/40 blur-3xl"></div></div>
+    <div class="relative max-w-[1440px] mx-auto px-6 pt-16 pb-6 lg:pt-20">
+      <div class="max-w-[780px] mx-auto text-center reveal">
+        <div class="section-eyebrow mb-5 justify-center">
+          <span class="frame-icon-xs"><span class="frame-icon-xs-inner"><svg fill="none" height="14" viewBox="0 0 24 24" width="14"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="#0A7165" stroke-width="1.7"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke="#0A7165" stroke-width="1.7"></path></svg></span></span>
+          <span class="section-eyebrow-label">Como ler os dados</span><span class="section-eyebrow-divider"></span><span class="section-eyebrow-meta">2 visões</span>
+        </div>
+        <h1 class="text-[34px] md:text-[46px] leading-[1.08] font-bold text-ink-950 text-balance">O que cada card significa <span class="text-teal-500">no perfil que você usa</span></h1>
+        <p class="mt-5 text-[17px] text-ink-500 leading-relaxed">Admin da empresa e Gestor da empresa não veem a mesma tela. Escolha a aba do seu perfil e leia o dashboard card a card, em português.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="pb-24">
+    <div class="max-w-[1440px] mx-auto px-6" id="guia">
+      <div class="guia-tabs-wrap">
+        <div class="tabs-nav" id="guiaSwitch" role="tablist" aria-label="Perfil do guia">
+          <button class="tab-card" type="button" data-guide-profile="admin" data-active="true">
+            <span class="tab-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="M7 15l4-4 3 3 5-6"></path></svg></span>
+            <span class="tab-txt"><span class="tab-title">Admin da empresa</span><span class="tab-meta">Panorama · Safra</span></span>
+            <svg class="tab-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"></path></svg>
+          </button>
+          <button class="tab-card" type="button" data-guide-profile="gestor" data-active="false">
+            <span class="tab-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></span>
+            <span class="tab-txt"><span class="tab-title">Gestor da empresa</span><span class="tab-meta">Pendências · dia a dia</span></span>
+            <svg class="tab-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"></path></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="guide-compare">
+        <article class="guide-role">
+          <span class="who-chip admin">Admin da empresa</span>
+          <h3>Panorama para decidir</h3>
+          <p>Dono, sócio ou direção. Entra e vê se a empresa originou, fechou e cresceu, com a aba Safra, que o gestor não tem.</p>
+          <ul>
+            <li><i></i> Abas: Operações, Safra, Produtos, Usuários</li>
+            <li><i></i> Lê volume, conversão e ranking do time</li>
+            <li class="miss"><i></i> Não vê a fila de pendência do dia a dia</li>
+          </ul>
+        </article>
+        <article class="guide-role">
+          <span class="who-chip gestor">Gestor da empresa</span>
+          <h3>Dia a dia para cobrar</h3>
+          <p>Quem toca a operação. Entra e vê de quem é a bola agora: Hubfi ou a sua empresa. Sem a aba Safra. Essa leitura fica com o admin.</p>
+          <ul>
+            <li><i></i> Abas: Operações, Produtos, Usuários</li>
+            <li><i></i> Card extra: Status de pendência</li>
+            <li class="miss"><i></i> Não vê a aba Safra</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="guide-intro">
+        <p id="guiaIntro">Você está lendo o painel do <b>Admin da empresa</b>: produção, safra, produtos e time da sua operação, sempre filtrado na sua empresa.</p>
+        <div class="guide-pages" id="guiaPages">
+          <span class="guide-page">Operações</span>
+          <span class="guide-page" data-guide="admin">Safra</span>
+          <span class="guide-page">Produtos</span>
+          <span class="guide-page">Usuários</span>
+        </div>
+      </div>
+
+
+      <div class="guide-block" data-guide="both">
+        <h4>Operações · os 4 números de cima</h4>
+        <article class="guide-item">
+          <div class="dash-mock dash-shell">    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-head"><div class="kpi-chip teal"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg></div><div class="kpi-label">Pipeline originado</div></div><div class="kpi-value">R$ 18,4M</div><div class="kpi-sub">1.240 operações</div><div class="kpi-foot"><span>Ticket médio</span><b>R$ 14.800</b></div></div>
+      <div class="kpi-card"><div class="kpi-head"><div class="kpi-chip info"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg></div><div class="kpi-label">Pipeline ativo</div></div><div class="kpi-value">R$ 11,2M</div><div class="kpi-sub">760 operações tratadas no período</div><div class="kpi-sub">350 remanescentes de períodos anteriores</div><div class="kpi-sub pause">84 pausadas (R$ 1,1M)</div><div class="kpi-foot"><span>Ticket médio</span><b>R$ 14.700</b></div></div>
+      <div class="kpi-card"><div class="kpi-head"><div class="kpi-chip green"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><circle cx="12" cy="12" r="10"></circle><polyline points="9 12 12 15 16 10"></polyline></svg></div><div class="kpi-label">Operações ganhas</div></div><div class="kpi-value">R$ 5,4M</div><div class="kpi-sub">372 operações</div><div class="kpi-foot"><span>Ticket médio</span><b>R$ 14.500</b></div></div>
+      <div class="kpi-card"><div class="kpi-head"><div class="kpi-chip red"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg></div><div class="kpi-label">Operações perdidas</div></div><div class="kpi-value">R$ 1,8M</div><div class="kpi-sub">124 operações</div><div class="kpi-foot"><span>Ticket médio</span><b>R$ 14.500</b></div></div>
+    </div></div>
+          <div class="guide-notes cols-4">
+                        <div class="guide-copy">
+              <div class="guide-copy-head">
+                <span class="guide-num">01</span>
+                <h5>Pipeline originado</h5>
+              </div>
+              <div class="guide-pair">
+                <p class="guide-fact"><span class="guide-lbl">O que é</span>Tudo que a sua empresa colocou na Hubfi no período. Volume em reais, quantidade de operações e o ticket médio.</p>
+                <p class="guide-act"><span class="guide-lbl">O que fazer</span>Use para saber o tamanho da entrada. Se originado cai, o restante do funil vai encolher depois.</p>
+              </div>
+            </div>
+                        <div class="guide-copy">
+              <div class="guide-copy-head">
+                <span class="guide-num n2">02</span>
+                <h5>Pipeline ativo</h5>
+              </div>
+              <div class="guide-pair">
+                <p class="guide-fact"><span class="guide-lbl">O que é</span>O dinheiro ainda em jogo. Separa o que foi tratado neste período, o que veio de períodos anteriores e o que está pausado.</p>
+                <p class="guide-act"><span class="guide-lbl">O que fazer</span>Pausadas ficam à parte: nunca entram na conta de atraso. O gestor olha o ativo para saber o que ainda pode fechar.</p>
+              </div>
+            </div>
+                        <div class="guide-copy">
+              <div class="guide-copy-head">
+                <span class="guide-num n3">03</span>
+                <h5>Operações ganhas</h5>
+              </div>
+              <div class="guide-pair">
+                <p class="guide-fact"><span class="guide-lbl">O que é</span>O que fechou no período: volume, quantidade e ticket. É o resultado que caiu, não o que ainda está no funil.</p>
+                <p class="guide-act"><span class="guide-lbl">O que fazer</span>Compare com o originado. Se originou R$ 18M e ganhou R$ 5M, a conversão está nessa diferença, não no feeling da reunião.</p>
+              </div>
+            </div>
+                        <div class="guide-copy">
+              <div class="guide-copy-head">
+                <span class="guide-num n4">04</span>
+                <h5>Operações perdidas</h5>
+              </div>
+              <div class="guide-pair">
+                <p class="guide-fact"><span class="guide-lbl">O que é</span>O que caiu no período. Volume e quantidade. Sozinho o número assusta; cruzado com Motivos de perda, ele vira ação.</p>
+                <p class="guide-act"><span class="guide-lbl">O que fazer</span>Não trate perda como azar. Abra o card de motivos e ataque a causa que mais se repete.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="guide-block" data-guide="both">
+        <h4>Operações · funil e SLA</h4>
+        <article class="guide-item">
+          <div class="dash-mock dash-shell">    <div class="card">
+      <div class="card-head">
+        <div><h3>Funil de etapas</h3><p class="sub" id="funnel-sub">Pipeline genérico · selecione um produto específico no filtro para ver o funil detalhado dele</p></div>
+        <div class="legend-row" id="funnel-legend-row">
+          <div class="legend-item"><div class="legend-dot crit"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>Crítica</div>
+          <div class="legend-item"><div class="legend-dot att"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>Atenção</div>
+          <div class="legend-item"><div class="legend-dot ok"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><polyline points="20 6 9 17 4 12"></polyline></svg></div>Dentro do prazo</div>
+          <span class="th-info" style="align-self:center;" title="Crítica: tempo decorrido na etapa atual ≥ 80% do SLA definido para ela. Atenção: ≥ 50% do SLA. Abaixo de 50%: Dentro do prazo. SLA é configurado por etapa em cada produto. Passe o mouse sobre uma coluna do funil para ver o detalhe."><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></span>
+        </div>
+      </div>
+      <p class="filter-note" style="margin:0 0 4px;">Passe o mouse sobre uma coluna do funil para ver o detalhe da etapa.</p>
+      <div class="funnel-chart" id="funnel-chart"><div class="funnel-bar"><div class="tag ok">1.240</div><div class="fill ok" style="height:210px"></div><div class="stage-popover"><div class="pop-head"><span class="name">Pré-cadastro</span><span class="badge teal">Dentro do prazo</span></div><div class="pop-stats"><span>1.240 operações</span><span>R$ 18,4M</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--error)"></span>Crítica</span><span class="val">0</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--warning)"></span>Atenção</span><span class="val">0</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--primary)"></span>Dentro do prazo</span><span class="val">1240</span></div></div></div><div class="funnel-bar"><div class="tag att">820</div><div class="fill att" style="height:139px"></div><div class="stage-popover"><div class="pop-head"><span class="name">Em análise</span><span class="badge amber">Atenção</span></div><div class="pop-stats"><span>820 operações</span><span>R$ 12,1M</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--error)"></span>Crítica</span><span class="val">0</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--warning)"></span>Atenção</span><span class="val">90</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--primary)"></span>Dentro do prazo</span><span class="val">730</span></div></div></div><div class="funnel-bar"><div class="tag crit"><span class="gargalo-icon"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></span>410</div><div class="fill crit" style="height:69px"></div><div class="stage-popover"><div class="pop-head"><span class="name">Proposta</span><span class="badge red">Gargalo</span></div><div class="pop-callout"><span class="ic">i</span><span>Entra em gargalo quando 50% ou mais das operações nesta etapa estão em Atenção ou Crítica.</span></div><div class="pop-stats"><span>410 operações</span><span>R$ 6,4M</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--error)"></span>Crítica</span><span class="val">15</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--warning)"></span>Atenção</span><span class="val">190</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--primary)"></span>Dentro do prazo</span><span class="val">205</span></div></div></div><div class="funnel-bar"><div class="tag crit">180</div><div class="fill crit" style="height:30px"></div><div class="stage-popover"><div class="pop-head"><span class="name">Formalização</span><span class="badge red">Crítica</span></div><div class="pop-stats"><span>180 operações</span><span>R$ 2,8M</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--error)"></span>Crítica</span><span class="val">2</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--warning)"></span>Atenção</span><span class="val">20</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--primary)"></span>Dentro do prazo</span><span class="val">158</span></div></div></div><div class="funnel-bar"><div class="tag ok">90</div><div class="fill ok" style="height:20px"></div><div class="stage-popover"><div class="pop-head"><span class="name">Finalizado</span><span class="badge teal">Dentro do prazo</span></div><div class="pop-stats"><span>90 operações</span><span>R$ 1,4M</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--error)"></span>Crítica</span><span class="val">0</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--warning)"></span>Atenção</span><span class="val">0</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--primary)"></span>Dentro do prazo</span><span class="val">90</span></div></div></div></div>
+      <div class="funnel-labels" id="funnel-labels"><span>Pré-cadastro</span><span>Em análise</span><span>Proposta</span><span>Formalização</span><span>Finalizado</span></div>
+    </div></div>
+          <div class="guide-notes cols-1">
+                        <div class="guide-copy">
+              <div class="guide-copy-head">
+                <span class="guide-num">05</span>
+                <h5>Funil de etapas</h5>
+              </div>
+              <div class="guide-pair">
+                <p class="guide-fact"><span class="guide-lbl">O que é</span>Onde cada operação está agora. Cada coluna é uma etapa. A cor não é “volume”: é prazo. SLA é o tempo combinado daquela etapa naquele produto. Passe o mouse na coluna para ver crítica, atenção e no prazo.</p>
+                <p class="guide-act"><span class="guide-lbl">O que fazer</span>Selecione um produto no filtro para ver o funil detalhado dele. O genérico mistura etapas de linhas diferentes. Gargalo: 50% ou mais da etapa em atenção ou crítica. A coluna fica vermelha: é pra lá que se olha primeiro.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="guide-block" data-guide="gestor">
+        <h4>Operações · só o Gestor vê</h4>
+        <article class="guide-item">
+          <div class="dash-mock dash-shell">    <div class="card">
+      <div class="card-head">
+        <div><h3>Status de pendência</h3><p class="sub">De quem é a bola agora: rodando com a Hubfi, ou pendente aguardando alguém da sua empresa</p></div>
+        <button class="link-btn">Ver todas as pendências <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+      </div>
+      <div class="kpi-row cols-2" style="margin-bottom:16px;">
+        <div class="kpi-card"><div class="kpi-head"><div class="kpi-chip info"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg></div><div class="kpi-label">Rodando (Hubfi)</div></div><div class="kpi-value">142</div><div class="kpi-sub">na mão do backoffice Hubfi</div></div>
+        <div class="kpi-card"><div class="kpi-head"><div class="kpi-chip" style="background:var(--warning-50); color:var(--warning);"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div><div class="kpi-label">Pendente</div></div><div class="kpi-value">38</div><div class="kpi-sub">aguardando sua empresa ou o cliente</div></div>
+      </div>
+      <table class="stage-table ops-table">
+        <thead><tr><th></th><th>Operação</th><th>Cliente</th><th>Produto</th><th>Valor</th><th>Operador</th><th>Tempo</th><th></th></tr></thead>
+        <tbody>
+          <tr><td colspan="8" class="crit-group-title" style="color:var(--warning)">Pendentes há mais tempo</td></tr>
+          <tr><td><span class="crit-status att"></span></td><td>OP-08301</td><td>Fernando Melo</td><td>Financiamento Imobiliário<div class="cell-sub">Análise de Crédito, dados incompletos</div></td><td>R$ 250.000</td><td>Marina Souza</td><td><span class="crit-time att">pendente há 4 dias</span></td><td><button class="icon-btn" title="Abrir operação em outra aba"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg></button></td></tr>
+          <tr><td><span class="crit-status att"></span></td><td>OP-08190</td><td>Juliana Prado</td><td>Financiamento Imobiliário<div class="cell-sub">Aguardando assinatura do cliente</div></td><td>R$ 410.000</td><td>Marina Souza</td><td><span class="crit-time att">pendente há 6 dias</span></td><td><button class="icon-btn" title="Abrir operação em outra aba"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg></button></td></tr>
+          <tr><td><span class="crit-status att"></span></td><td>OP-08165</td><td>Rodrigo Alves</td><td>Financiamento Imobiliário<div class="cell-sub">Falta comprovante de renda do cliente</div></td><td>R$ 300.000</td><td>Júlia Ramos</td><td><span class="crit-time att">pendente há 5 dias</span></td><td><button class="icon-btn" title="Abrir operação em outra aba"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg></button></td></tr>
+        </tbody>
+      </table>
+    </div></div>
+          <div class="guide-notes cols-1">
+                        <div class="guide-copy">
+              <div class="guide-copy-head">
+                <span class="guide-num gestor">G</span>
+                <h5>Status de pendência</h5>
+              </div>
+              <div class="guide-pair">
+                <p class="guide-fact"><span class="guide-lbl">O que é</span>De quem é a bola agora. Rodando = a Hubfi está trabalhando. Pendente = parou esperando alguém da sua empresa ou o cliente. A tabela lista as paradas há mais tempo.</p>
+                <p class="guide-act"><span class="guide-lbl">O que fazer</span>Comece pelas pendentes há mais tempo. É a lista do que o seu time precisa destravar hoje. O Admin não tem este card.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="guide-block" data-guide="both">
+        <h4>Operações · time, perdas e formulário</h4>
+        <article class="guide-item">
+          <div class="dash-mock dash-shell">    <div class="two-col">
+      <div class="card" style="margin-bottom:0">
+        <div class="card-head"><div><h3>Ranking de produção dos seus usuários</h3><p class="sub" id="rank-usuarios-emp-sub">Corretores da Vitta Empreendimentos, não confundir com operador Hubfi</p></div></div>
+        <div class="demo-toggle">
+          <select class="field-select" id="rank-usuarios-emp-prop" style="width:auto; height:34px; padding:0 30px 0 10px; font-size:13px;" onchange="renderUsuariosEmpresaRanking()">
+            <option value="qtd">Propriedade: Quantidade</option>
+            <option value="vol">Propriedade: Volume</option>
+          </select>
+          <select class="field-select" id="rank-usuarios-emp-order" style="width:auto; height:34px; padding:0 30px 0 10px; font-size:13px;" onchange="renderUsuariosEmpresaRanking()">
+            <option value="desc">Ordem: Decrescente</option>
+            <option value="asc">Ordem: Crescente</option>
+          </select>
+        </div>
+        <table class="stage-table" id="rank-usuarios-emp-table">
+          <thead><tr><th>Usuário</th><th>Tratado</th><th>Ganho</th><th>Perdido</th><th>Taxa</th></tr></thead>
+          <tbody><tr><td>Marina Souza</td><td>61</td><td>44</td><td>14</td><td><span class="badge teal">72%</span></td></tr><tr><td>Pedro Aquino</td><td>53</td><td>37</td><td>11</td><td><span class="badge gray">37%</span></td></tr><tr><td>Júlia Ramos</td><td>46</td><td>22</td><td>15</td><td><span class="badge gray">22%</span></td></tr></tbody>
+        </table>
+      </div>
+      <div class="card" style="margin-bottom:0">
+        <div class="card-head">
+          <div><h3>Motivos de perda</h3><p class="sub">Top 5 sobre o total de perdidas no período, originadas pela sua empresa</p></div>
+          <button class="link-btn">Ver todos os motivos <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+          <button class="link-btn" style="margin-left:12px;">Ver por etapa <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+        </div>
+        <div class="demo-toggle" style="margin-bottom:12px;">
+          <select class="field-select" id="loss-prop-emp" style="width:auto; height:34px; padding:0 30px 0 10px; font-size:13px;" onchange="renderLossCardEmpresa()">
+            <option value="qty">Distribuição por quantidade</option>
+            <option value="vol">Distribuição por volume</option>
+          </select>
+        </div>
+        <div class="donut-row">
+          <div class="donut" id="loss-donut-emp" style="background: conic-gradient(#de3535 0.00% 33.96%, #e7b008 33.96% 60.97%, #00a395 60.97% 79.01%, #6b7280 79.01% 91.98%, #a78bfa 91.98% 96.93%, var(--neutral-200) 96.93% 100%);"><div class="donut-center"><div class="v" id="loss-donut-value-emp">848</div><div class="c">perdidas</div></div></div>
+          <div class="legend-list" id="loss-legend-emp"><div class="row clickable"><span class="dot" style="background:#de3535"></span><span class="name">Renda insuficiente</span><span class="val">34%</span></div><div class="row clickable"><span class="dot" style="background:#e7b008"></span><span class="name">Desistência do cliente</span><span class="val">27%</span></div><div class="row clickable"><span class="dot" style="background:#00a395"></span><span class="name">Documentação incompleta</span><span class="val">18%</span></div><div class="row clickable"><span class="dot" style="background:#6b7280"></span><span class="name">Taxa não competitiva</span><span class="val">13%</span></div><div class="row clickable"><span class="dot" style="background:#a78bfa"></span><span class="name">Restrição cadastral (SPC/Serasa)</span><span class="val">5%</span></div></div>
+        </div>
+      </div>
+    </div></div>
+          <div class="guide-notes cols-2">
+                        <div class="guide-copy">
+              <div class="guide-copy-head">
+                <span class="guide-num">06</span>
+                <h5>Ranking de produção</h5>
+              </div>
+              <div class="guide-pair">
+                <p class="guide-fact"><span class="guide-lbl">O que é</span>Quem do seu time tratou, ganhou e perdeu. Troca entre quantidade e volume, ordem crescente ou decrescente.</p>
+                <p class="guide-act"><span class="guide-lbl">O que fazer</span>Reconheça quem fecha e redistribua carteira de quem está parado. O ranking é da sua empresa, não da mesa interna da Hubfi.</p>
+              </div>
+            </div>
+                        <div class="guide-copy">
+              <div class="guide-copy-head">
+                <span class="guide-num n4">07</span>
+                <h5>Motivos de perda</h5>
+              </div>
+              <div class="guide-pair">
+                <p class="guide-fact"><span class="guide-lbl">O que é</span>Por que as operações caíram, em quantidade ou em volume. Os dois recortes contam histórias diferentes: volume mostra o prejuízo, quantidade mostra o padrão.</p>
+                <p class="guide-act"><span class="guide-lbl">O que fazer</span>Abra “ver por etapa” quando a perda se concentra numa fase. Ataque a causa (documentação, renda, desistência) em vez de cobrar o funil inteiro.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="guide-item" style="margin-top:12px">
+          <div class="dash-mock dash-shell">    <div class="card">
+      <div class="card-head">
+        <div><h3>Funil de preenchimento de formulário</h3><p class="sub">Clientes das suas equipes no período</p></div>
+        <select class="field-select" id="form-select-2" style="width:auto; height:34px; padding:0 30px 0 10px; font-size:13px;" onchange="renderFormFunnel(&#39;form-select-2&#39;,&#39;form-funnel-table-2&#39;)">
+          <option value="todos">Todos os formulários</option>
+          <option value="coleta">Formulário de Coleta de Dados</option>
+          <option value="documentacao">Formulário de Documentação Complementar</option>
+        </select>
+      </div>
+      <div class="table-scroll">
+      <table class="stage-table" id="form-funnel-table-2">
+        <thead><tr><th style="width:180px">Etapa</th><th style="width:144px"></th><th>Contagem</th><th>Conversão</th></tr></thead>
+        <tbody><tr class="clickable"><td>Enviados</td><td><div class="progress-track"><div class="progress-fill" style="width:100%"></div></div></td><td>200</td><td><span class="badge teal">100%</span></td></tr><tr class="clickable"><td>Respondido parcial</td><td><div class="progress-track"><div class="progress-fill" style="width:65%"></div></div></td><td>130</td><td><span class="badge gray">65%</span></td></tr><tr class="clickable"><td>Concluído</td><td><div class="progress-track"><div class="progress-fill" style="width:50%"></div></div></td><td>100</td><td><span class="badge teal">77%</span></td></tr></tbody>
+      </table>
+      </div>
+    </div></div>
+          <div class="guide-notes cols-1">
+                        <div class="guide-copy">
+              <div class="guide-copy-head">
+                <span class="guide-num">08</span>
+                <h5>Funil de formulário</h5>
+              </div>
+              <div class="guide-pair">
+                <p class="guide-fact"><span class="guide-lbl">O que é</span>O cliente parou no preenchimento? Enviado, respondido em parte, concluído. Dá para filtrar o formulário (coleta, documentação, etc.).</p>
+                <p class="guide-act"><span class="guide-lbl">O que fazer</span>Se muita gente fica em “parcial”, o gargalo não é o banco, é o formulário. Cobre o cliente ou simplifique o que está pedindo.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="guide-block" data-guide="admin">
+        <h4>Safra · só o Admin vê</h4>
+        <article class="guide-item">
+          <div class="dash-mock dash-shell" style="display:flex;flex-direction:column;gap:16px">
+                <div class="kpi-row cols-3">
+      <div class="kpi-card"><div class="kpi-head"><div class="kpi-chip teal"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg></div><div class="kpi-label">Operações nas safras mapeadas</div></div><div class="kpi-value">2.171</div><div class="kpi-sub">984 ganhas</div><div class="kpi-sub">319 perdidas</div></div>
+      <div class="kpi-card"><div class="kpi-head"><div class="kpi-chip green"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><rect x="2" y="6" width="20" height="12" rx="2"></rect><circle cx="12" cy="12" r="2"></circle><line x1="6" y1="12" x2="6.01" y2="12"></line><line x1="18" y1="12" x2="18.01" y2="12"></line></svg></div><div class="kpi-label">Volume total originado</div></div><div class="kpi-value">R$ 84,8M</div><div class="kpi-sub">R$ 55,1M ganho</div><div class="kpi-sub">R$ 17,0M perdido</div></div>
+      <div class="kpi-card"><div class="kpi-head"><div class="kpi-chip info"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></div><div class="kpi-label">Quantidade de safras</div></div><div class="kpi-value">18</div><div class="kpi-sub">17 fechadas, 1 em andamento</div></div>
+    </div>
+                <div class="card">
+      <div class="card-head">
+        <div><h3>Comparativo de safras</h3><p class="sub">Evolução mês a mês da propriedade selecionada · compare mais de um ano</p></div>
+        <select class="field-select" id="safra-chart-prop" style="width:auto; height:34px; padding:0 30px 0 10px; font-size:13px;" onchange="renderSafraChart()">
+          <option value="volGanha">Volume ganho</option>
+          <option value="volPerdida">Volume perdido</option>
+          <option value="qtyOriginada">Quantidade originada</option>
+          <option value="qtyGanha">Quantidade ganho</option>
+          <option value="qtyPerdida">Quantidade perdido</option>
+          <option value="tempoMin">Tempo mínimo</option>
+          <option value="tempoMedio">Tempo médio</option>
+          <option value="tempoMax">Tempo máximo</option>
+        </select>
+      </div>
+      <div class="demo-toggle" id="safra-year-toggle"><button class="" data-year="2025">2025</button><button class="active" data-year="2026">2026</button></div>
+      <div id="safra-chart"><svg viewBox="0 0 640 200" width="100%" style="max-width:100%; height:auto; overflow:visible;"><line x1="8" y1="174" x2="632" y2="174" stroke="var(--neutral-100)" stroke-width="1"></line><line x1="8" y1="121.33333333333334" x2="632" y2="121.33333333333334" stroke="var(--neutral-100)" stroke-width="1"></line><line x1="8" y1="68.66666666666667" x2="632" y2="68.66666666666667" stroke="var(--neutral-100)" stroke-width="1"></line><line x1="8" y1="16" x2="632" y2="16" stroke="var(--neutral-100)" stroke-width="1"></line><polyline points="8,45.25925925925927 64.72727272727272,39.40740740740742 121.45454545454545,16 178.1818181818182,33.55555555555557 234.9090909090909,124.25925925925927 291.6363636363636,147.66666666666666" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></polyline><circle cx="8" cy="45.25925925925927" r="4" fill="var(--primary)" stroke="#fff" stroke-width="2"><title>2026 · Jan: R$ 4,4M</title></circle><circle cx="64.72727272727272" cy="39.40740740740742" r="4" fill="var(--primary)" stroke="#fff" stroke-width="2"><title>2026 · Fev: R$ 4,6M</title></circle><circle cx="121.45454545454545" cy="16" r="4" fill="var(--primary)" stroke="#fff" stroke-width="2"><title>2026 · Mar: R$ 5,4M</title></circle><circle cx="178.1818181818182" cy="33.55555555555557" r="4" fill="var(--primary)" stroke="#fff" stroke-width="2"><title>2026 · Abr: R$ 4,8M</title></circle><circle cx="234.9090909090909" cy="124.25925925925927" r="4" fill="var(--primary)" stroke="#fff" stroke-width="2"><title>2026 · Mai: R$ 1,7M</title></circle><circle cx="291.6363636363636" cy="147.66666666666666" r="4" fill="var(--primary)" stroke="#fff" stroke-width="2"><title>2026 · Jun: R$ 900k</title></circle><text x="8" y="194" font-size="11" fill="var(--text-tertiary)" text-anchor="middle">Jan</text><text x="64.72727272727272" y="194" font-size="11" fill="var(--text-tertiary)" text-anchor="middle">Fev</text><text x="121.45454545454545" y="194" font-size="11" fill="var(--text-tertiary)" text-anchor="middle">Mar</text><text x="178.1818181818182" y="194" font-size="11" fill="var(--text-tertiary)" text-anchor="middle">Abr</text><text x="234.9090909090909" y="194" font-size="11" fill="var(--text-tertiary)" text-anchor="middle">Mai</text><text x="291.6363636363636" y="194" font-size="11" fill="var(--text-tertiary)" text-anchor="middle">Jun</text><text x="348.3636363636364" y="194" font-size="11" fill="var(--text-tertiary)" text-anchor="middle">Jul</text><text x="405.09090909090907" y="194" font-size="11" fill="var(--text-tertiary)" text-anchor="middle">Ago</text><text x="461.8181818181818" y="194" font-size="11" fill="var(--text-tertiary)" text-anchor="middle">Set</text><text x="518.5454545454545" y="194" font-size="11" fill="var(--text-tertiary)" text-anchor="middle">Out</text><text x="575.2727272727273" y="194" font-size="11" fill="var(--text-tertiary)" text-anchor="middle">Nov</text><text x="632" y="194" font-size="11" fill="var(--text-tertiary)" text-anchor="middle">Dez</text></svg></div>
+      <div id="safra-chart-legend" style="display:flex; gap:16px; margin-top:8px; font-size:12px; color:var(--text-secondary);"><span style="display:flex; align-items:center; gap:6px;"><span style="width:10px; height:10px; border-radius:50%; background:var(--primary); display:inline-block;"></span>2026</span></div>
+    </div>
+          </div>
+          <div class="guide-notes cols-2">
+                        <div class="guide-copy">
+              <div class="guide-copy-head">
+                <span class="guide-num">01</span>
+                <h5>Não misture o novo com o que já deveria ter fechado</h5>
+              </div>
+              <div class="guide-pair">
+                <p class="guide-fact"><span class="guide-lbl">O que é</span>Safra agrupa as operações pelo mês em que nasceram e acompanha essa turma até o fim. Comparação justa com o mesmo mês do ano passado.</p>
+                <p class="guide-act"><span class="guide-lbl">O que fazer</span>A foto do mês engana: mistura o que entrou ontem com o que está parado há 90 dias. Safra mostra se a sua empresa está convertendo melhor de verdade.</p>
+              </div>
+            </div>
+                        <div class="guide-copy">
+              <div class="guide-copy-head">
+                <span class="guide-num">02</span>
+                <h5>Comparativo de safras</h5>
+              </div>
+              <div class="guide-pair">
+                <p class="guide-fact"><span class="guide-lbl">O que é</span>Gráfico da propriedade escolhida: volume ganho, perdido, quantidade ou tempo. Dá para ligar mais de um ano na mesma tela.</p>
+                <p class="guide-act"><span class="guide-lbl">O que fazer</span>Se 2026 sobe mais rápido que 2025 no mesmo mês, a operação melhorou. Se o tempo médio cresce, o funil está engordando.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="guide-item" style="margin-top:12px">
+          <div class="dash-mock dash-shell">    <div class="card">
+      <div class="card-head"><div><h3>Detalhamento por safra</h3><p class="sub">Cada linha é uma coorte de operações abertas no mesmo período</p></div></div>
+      <div class="demo-toggle">
+        <select class="field-select" id="safra-sort-prop" style="width:auto; height:34px; padding:0 30px 0 10px; font-size:13px;" onchange="renderSafraTable()">
+          <option value="safra">Ordenar por: Safra</option>
+          <option value="originadas">Ordenar por: Originadas</option>
+          <option value="ganhas">Ordenar por: Ganhas</option>
+          <option value="perdidas">Ordenar por: Perdidas</option>
+          <option value="conversao">Ordenar por: Conversão</option>
+          <option value="tempoMin">Ordenar por: Tempo mínimo</option>
+          <option value="tempoMedio">Ordenar por: Tempo médio</option>
+          <option value="tempoMax">Ordenar por: Tempo máximo</option>
+        </select>
+        <select class="field-select" id="safra-sort-order" style="width:auto; height:34px; padding:0 30px 0 10px; font-size:13px;" onchange="renderSafraTable()">
+          <option value="desc">Ordem: Decrescente</option>
+          <option value="asc">Ordem: Crescente</option>
+        </select>
+      </div>
+      <table class="stage-table" id="safra-table">
+        <thead><tr><th>Safra</th><th>Originadas</th><th>Ganhas</th><th>Perdidas</th><th>Conversão</th><th>Tempo mínimo</th><th>Tempo médio</th><th>Tempo máximo</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Junho/2026</td><td>908<div class="cell-sub">R$ 5,4M</div></td><td>134<div class="cell-sub">R$ 900k</div></td><td>21<div class="cell-sub">R$ 130k</div></td><td><span class="badge slate">-</span></td><td>-</td><td>-</td><td>-</td><td><span class="badge slate">Em andamento</span></td></tr>
+          <tr><td>Maio/2026</td><td>20<div class="cell-sub">R$ 1,8M</div></td><td>18<div class="cell-sub">R$ 1,7M</div></td><td>2<div class="cell-sub">R$ 100k</div></td><td><span class="badge teal">90%</span></td><td>22 dias</td><td>71 dias</td><td>200 dias</td><td><span class="badge teal">Fechada</span></td></tr>
+          <tr><td>Abril/2026</td><td>96<div class="cell-sub">R$ 6,2M</div></td><td>71<div class="cell-sub">R$ 4,8M</div></td><td>18<div class="cell-sub">R$ 1,0M</div></td><td><span class="badge teal">74%</span></td><td>28 dias</td><td>92 dias</td><td>310 dias</td><td><span class="badge teal">Fechada</span></td></tr>
+          <tr><td>Março/2026</td><td>112<div class="cell-sub">R$ 7,1M</div></td><td>80<div class="cell-sub">R$ 5,4M</div></td><td>24<div class="cell-sub">R$ 1,2M</div></td><td><span class="badge teal">71%</span></td><td>31 dias</td><td>101 dias</td><td>360 dias</td><td><span class="badge teal">Fechada</span></td></tr>
+          <tr><td>Fevereiro/2026</td><td>104<div class="cell-sub">R$ 6,4M</div></td><td>69<div class="cell-sub">R$ 4,6M</div></td><td>29<div class="cell-sub">R$ 1,5M</div></td><td><span class="badge gray">66%</span></td><td>35 dias</td><td>108 dias</td><td>400 dias</td><td><span class="badge teal">Fechada</span></td></tr>
+        </tbody>
+      </table>
+      <div class="table-foot"><span>5 safras</span><div class="page-btns"><button disabled=""><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><polyline points="15 18 9 12 15 6"></polyline></svg></button><button disabled=""><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><polyline points="9 18 15 12 9 6"></polyline></svg></button></div></div>
+    </div></div>
+          <div class="guide-notes cols-1">
+                        <div class="guide-copy">
+              <div class="guide-copy-head">
+                <span class="guide-num">03</span>
+                <h5>Detalhamento por safra</h5>
+              </div>
+              <div class="guide-pair">
+                <p class="guide-fact"><span class="guide-lbl">O que é</span>Cada linha é uma turma: originadas, ganhas, perdidas, conversão, tempo mínimo/médio/máximo. Safra em andamento ainda não tem conversão fechada.</p>
+                <p class="guide-act"><span class="guide-lbl">O que fazer</span>Olhe as fechadas para a taxa real. A linha “em andamento” ainda vai mudar. Não use ela sozinha na reunião de resultado.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="guide-block" data-guide="both">
+        <h4>Produtos</h4>
+        <article class="guide-item">
+          <div class="dash-mock dash-shell" style="display:flex;flex-direction:column;gap:16px">
+                <div class="kpi-row cols-3">
+      <div class="kpi-card"><div class="kpi-head"><div class="kpi-chip teal"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><path d="M16.5 9.4 7.55 4.24"></path><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.29 7 12 12 20.71 7"></polyline><line x1="12" y1="22" x2="12" y2="12"></line></svg></div><div class="kpi-label">Total de produtos</div></div><div class="kpi-value">4</div><div class="kpi-sub">cadastrados na plataforma</div></div>
+      <div class="kpi-card"><div class="kpi-head"><div class="kpi-chip green"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><circle cx="12" cy="12" r="10"></circle><polyline points="9 12 12 15 16 10"></polyline></svg></div><div class="kpi-label">Ativos</div></div><div class="kpi-value">3</div><div class="kpi-sub">recebendo operações no período</div></div>
+      <div class="kpi-card"><div class="kpi-head"><div class="kpi-chip gray"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg></div><div class="kpi-label">Inativos</div></div><div class="kpi-value">1</div><div class="kpi-sub">sem operações no período</div></div>
+    </div>
+                <div class="card">
+      <div class="card-head"><div><h3>Produtos</h3><p class="sub">Comparativo de produção e conversão entre produtos, volume ao lado de cada quantidade</p></div></div>
+      <div class="demo-toggle">
+        <select class="field-select" id="produtos-sort-prop" style="width:auto; height:34px; padding:0 30px 0 10px; font-size:13px;" onchange="renderProdutosTable()">
+          <option value="produto">Ordenar por: Produto</option>
+          <option value="periodoQtd">Ordenar por: Operações no período</option>
+          <option value="andamentoQtd">Ordenar por: Em andamento</option>
+          <option value="convertidasQtd">Ordenar por: Convertidas</option>
+          <option value="ticket">Ordenar por: Ticket médio</option>
+          <option value="conversao">Ordenar por: Conversão</option>
+          <option value="status">Ordenar por: Status</option>
+        </select>
+        <select class="field-select" id="produtos-sort-order" style="width:auto; height:34px; padding:0 30px 0 10px; font-size:13px;" onchange="renderProdutosTable()">
+          <option value="desc">Ordem: Decrescente</option>
+          <option value="asc">Ordem: Crescente</option>
+        </select>
+      </div>
+      <table class="stage-table" id="produtos-table">
+        <thead><tr><th>Produto</th><th>Operações no período</th><th>Em andamento</th><th>Convertidas</th><th>Ticket médio</th><th>Conversão</th><th>Status</th></tr></thead>
+        <tbody><tr><td>Seguros</td><td>184<div class="cell-sub">102 originadas no período</div></td><td>90<div class="cell-sub">R$ 684k</div></td><td>58<div class="cell-sub">R$ 441k</div></td><td>R$ 8k</td><td><span class="badge teal">32%</span></td><td><span class="badge teal">Ativo</span></td></tr><tr><td>Financiamento Imobiliário · Aquisição</td><td>1.240<div class="cell-sub">620 originadas no período</div></td><td>760<div class="cell-sub">R$ 11,2M</div></td><td>372<div class="cell-sub">R$ 5,5M</div></td><td>R$ 15k</td><td><span class="badge teal">30%</span></td><td><span class="badge teal">Ativo</span></td></tr><tr><td>Financiamento · Portabilidade</td><td>0</td><td>0</td><td>0</td><td>-</td><td>-</td><td><span class="badge slate">Inativo</span></td></tr><tr><td>Consórcio · APE</td><td>412<div class="cell-sub">230 originadas no período</div></td><td>288<div class="cell-sub">R$ 3,6M</div></td><td>96<div class="cell-sub">R$ 1,2M</div></td><td>R$ 12k</td><td><span class="badge gray">23%</span></td><td><span class="badge teal">Ativo</span></td></tr></tbody>
+      </table>
+      <div class="table-foot"><span>Página 1 de 1</span><div class="page-btns"><button disabled=""><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><polyline points="15 18 9 12 15 6"></polyline></svg></button><button disabled=""><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><polyline points="9 18 15 12 9 6"></polyline></svg></button></div></div>
+    </div>
+          </div>
+          <div class="guide-notes cols-2">
+                        <div class="guide-copy">
+              <div class="guide-copy-head">
+                <span class="guide-num">01</span>
+                <h5>Total, ativos e inativos</h5>
+              </div>
+              <div class="guide-pair">
+                <p class="guide-fact"><span class="guide-lbl">O que é</span>Quantas linhas a sua empresa opera com a Hubfi. Ativo = recebeu operação no período. Inativo = cadastro sem movimento.</p>
+                <p class="guide-act"><span class="guide-lbl">O que fazer</span>Inativo não é “ruim” sozinho: pode ser uma linha que vocês pararam. O problema é ativo com conversão baixa ocupando o time.</p>
+              </div>
+            </div>
+                        <div class="guide-copy">
+              <div class="guide-copy-head">
+                <span class="guide-num">02</span>
+                <h5>Comparativo entre produtos</h5>
+              </div>
+              <div class="guide-pair">
+                <p class="guide-fact"><span class="guide-lbl">O que é</span>Produção e conversão na mesma régua: operações no período, em andamento, convertidas, ticket médio e taxa. Volume aparece ao lado da quantidade.</p>
+                <p class="guide-act"><span class="guide-lbl">O que fazer</span>Não olhe só a taxa. Seguros pode converter mais e trazer menos reais. Financiamento pode converter menos e puxar o resultado. Os dois números juntos decidem onde investir o time.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="guide-block" data-guide="both">
+        <h4>Usuários</h4>
+        <article class="guide-item">
+          <div class="dash-mock dash-shell" style="display:flex;flex-direction:column;gap:16px">
+                <div class="kpi-row cols-2">
+      <div class="kpi-card"><div class="kpi-head"><div class="kpi-chip teal"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div><div class="kpi-label">Usuários da base</div></div><div class="kpi-value">312</div><div class="kpi-sub">284 ativos · 18 inativos · 10 bloqueados</div></div>
+      <div class="kpi-card"><div class="kpi-head"><div class="kpi-chip info"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><circle cx="12" cy="12" r="10"></circle><polyline points="9 12 12 15 16 10"></polyline></svg></div><div class="kpi-label">Ativos no período selecionado <span class="th-info" title="Usuário é considerado ativo quando originou ou avançou pelo menos uma operação no período selecionado"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></span></div></div><div class="kpi-value">248</div><div class="kpi-sub">79% dos 312 usuários da base</div></div>
+    </div>
+                <div class="card hide-empresa">
+      <div class="card-head"><div><h3>Produção por usuário</h3><p class="sub" id="usuarios-sub">Usuários da Vitta Empreendimentos</p></div></div>
+      <div class="demo-toggle">
+        <select class="field-select" id="usuarios-sort-prop" style="width:auto; height:34px; padding:0 30px 0 10px; font-size:13px;" onchange="renderUsuariosTable()">
+          <option value="usuario">Ordenar por: Usuário</option>
+          <option value="periodoQtd">Ordenar por: Operações no período</option>
+          <option value="andamentoQtd">Ordenar por: Em andamento</option>
+          <option value="ganhasQtd">Ordenar por: Ganhas</option>
+          <option value="perdidasQtd">Ordenar por: Perdidas</option>
+          <option value="conversao">Ordenar por: Taxa de conversão</option>
+        </select>
+        <select class="field-select" id="usuarios-sort-order" style="width:auto; height:34px; padding:0 30px 0 10px; font-size:13px;" onchange="renderUsuariosTable()">
+          <option value="desc">Ordem: Decrescente</option>
+          <option value="asc">Ordem: Crescente</option>
+        </select>
+      </div>
+      <table class="stage-table" id="usuarios-table">
+        <thead><tr>
+          <th>Usuário</th>
+          <th class="empresa-col">Empresa</th>
+          <th>Operações no período</th>
+          <th>Em andamento</th>
+          <th>Ganhas</th>
+          <th>Perdidas</th>
+          <th>Taxa de conversão</th>
+          <th>Detalhes</th>
+        </tr></thead>
+        <tbody>
+          <tr><td>Marina Souza</td><td class="empresa-col">Vitta Empreendimentos</td><td>61<div class="cell-sub">R$ 4,4M</div></td><td>3<div class="cell-sub">R$ 216k</div></td><td>44<div class="cell-sub">R$ 3,2M</div></td><td>14<div class="cell-sub">R$ 1,0M</div></td><td><span class="badge teal">72%</span></td><td><button class="link-btn" type="button">Ver detalhes</button></td></tr>
+          <tr><td>Pedro Aquino</td><td class="empresa-col">Vitta Empreendimentos</td><td>53<div class="cell-sub">R$ 3,8M</div></td><td>5<div class="cell-sub">R$ 360k</div></td><td>37<div class="cell-sub">R$ 2,7M</div></td><td>11<div class="cell-sub">R$ 790k</div></td><td><span class="badge gray">37%</span></td><td><button class="link-btn" type="button">Ver detalhes</button></td></tr>
+          <tr><td>Júlia Ramos</td><td class="empresa-col">Vitta Empreendimentos</td><td>46<div class="cell-sub">R$ 3,1M</div></td><td>9<div class="cell-sub">R$ 610k</div></td><td>22<div class="cell-sub">R$ 1,5M</div></td><td>15<div class="cell-sub">R$ 980k</div></td><td><span class="badge gray">22%</span></td><td><button class="link-btn" type="button">Ver detalhes</button></td></tr>
+          <tr><td>Caio Bernardes</td><td class="empresa-col">Vitta Empreendimentos</td><td>41<div class="cell-sub">R$ 2,9M</div></td><td>6<div class="cell-sub">R$ 420k</div></td><td>22<div class="cell-sub">R$ 1,6M</div></td><td>13<div class="cell-sub">R$ 880k</div></td><td><span class="badge teal">54%</span></td><td><button class="link-btn" type="button">Ver detalhes</button></td></tr>
+        </tbody>
+      </table>
+      <div class="table-foot"><span>Página 1 de 1</span><div class="page-btns"><button disabled=""><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><polyline points="15 18 9 12 15 6"></polyline></svg></button><button><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><polyline points="9 18 15 12 9 6"></polyline></svg></button></div></div>
+          </div>
+          <div class="guide-notes cols-2">
+                        <div class="guide-copy">
+              <div class="guide-copy-head">
+                <span class="guide-num">01</span>
+                <h5>Base e quem de fato mexeu</h5>
+              </div>
+              <div class="guide-pair">
+                <p class="guide-fact"><span class="guide-lbl">O que é</span>Usuários cadastrados versus quem originou ou avançou pelo menos uma operação no período. Ter login não é estar ativo.</p>
+                <p class="guide-act"><span class="guide-lbl">O que fazer</span>Se a base é grande e o “ativos no período” é baixo, tem gente cadastrada sem produção. É o recorte para conversar com o time, não com a Hubfi.</p>
+              </div>
+            </div>
+                        <div class="guide-copy">
+              <div class="guide-copy-head">
+                <span class="guide-num">02</span>
+                <h5>Produção por usuário</h5>
+              </div>
+              <div class="guide-pair">
+                <p class="guide-fact"><span class="guide-lbl">O que é</span>A tabela da aba Usuários: operações no período, em andamento, ganhas, perdidas e taxa. Dá para ordenar por qualquer coluna.</p>
+                <p class="guide-act"><span class="guide-lbl">O que fazer</span>No Admin e no Gestor, esta lista é da sua empresa. Use para ver quem puxa volume e quem só ocupa carteira e filtrar por pessoa no topo da tela.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="guide-block" data-guide="both">
+        <h4>Como filtrar sem se perder</h4>
+        <article class="guide-item">
+          <div class="dash-mock dash-shell">
+    <div class="filter-bar">
+      <div class="filter-field">
+        <label>Mesa</label>
+        <div class="field"><span class="v">Todos</span><svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="#141414" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+      </div>
+      <div class="filter-field">
+        <label>Produto</label>
+        <select class="field-select">
+          <option value="todos">Todos</option>
+          <option value="financiamento-aquisicao">Financiamento Imobiliário · Aquisição</option>
+          <option value="consorcio-ape">Consórcio · APE</option>
+          <option value="seguros">Seguros</option>
+        </select>
+      </div>
+      <div class="filter-field is-locked">
+        <label>Empresa <svg class="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg></label>
+        <div class="field"><span class="v">Vitta Empreendimentos</span></div>
+      </div>
+      <div class="filter-field">
+        <label>Periodo</label>
+        <div class="field"><span class="v">Todos</span><svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="#141414" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+      </div>
+      <div class="filter-field">
+        <label>Usuario</label>
+        <div class="field"><span class="v">Todos</span><svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="#141414" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+      </div>
+    </div>
+</div>
+          <div class="guide-notes cols-1">
+                        <div class="guide-copy">
+              <div class="guide-copy-head">
+                <span class="guide-num">01</span>
+                <h5>O recorte é sempre da sua empresa</h5>
+              </div>
+              <div class="guide-pair">
+                <p class="guide-fact"><span class="guide-lbl">O que é</span>Admin e Gestor não comparam outras imobiliárias. Empresa fica travada na sua. Instituição financeira, quando aparece, vem agregada, sem ranking de velocidade entre bancos.</p>
+                <p class="guide-act"><span class="guide-lbl">O que fazer</span>Produto é o filtro que mais muda a tela: o funil deixa de ser genérico e mostra as etapas daquela linha. Período e usuário afinam o restante.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="mt-10 text-center">
+        <a class="btn-cta-primary" href="hubfi-painel-empresas.html#painel">
+          <span class="icn-wrap"><svg class="arr" fill="none" height="13" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="13"><path d="M5 12h14M13 5l7 7-7 7"></path></svg></span>
+          Voltar para o painel
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="page-signoff" id="contato">
+  <div class="page-signoff-inner">
+    <div class="page-signoff-grid">
+      <div>
+        <div class="page-signoff-mark"><i></i> Hubfi</div>
+        <h2>A inteligência de dados que a Hubfi <em>entrega para você.</em></h2>
+        <p class="page-signoff-lines">
+          <span>Plataforma inteligente para imobiliárias, corretores e construtoras.</span>
+          <span>Um hub financeiro completo para potencializar a sua rentabilidade.</span>
+          <span>O maior ecossistema de crédito imobiliário do Brasil.</span>
+        </p>
+        <p class="page-signoff-tag">Decisões mais rápidas. Mais negócios fechados.</p>
+      </div>
+      <aside class="page-signoff-aside">
+        <p>Quer ver o painel na sua operação? Fale com a Hubfi e a gente libera o acesso.</p>
+        <a class="btn-cta-white" href="mailto:contato@hubfi.com.br">
+          <span class="icn-wrap"><svg aria-hidden="true" fill="none" height="14" viewBox="0 0 24 24" width="14"><path d="M5 12h14" stroke="#FFF" stroke-linecap="round" stroke-width="2.5"></path><path d="M13 5l7 7-7 7" stroke="#7CCBB9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path></svg></span>
+          Falar com a Hubfi
+        </a>
+        <div class="page-signoff-meta">
+          <a href="mailto:contato@hubfi.com.br">contato@hubfi.com.br</a>
+          <a href="https://wa.me/553532928398">(35) 3292-8398</a>
+        </div>
+      </aside>
+    </div>
+    <div class="page-signoff-copy">
+      <span>Hubfi 2026 · Todos os direitos reservados</span>
+      <button onclick="window.scrollTo({top:0,behavior:'smooth'})" type="button">Voltar ao topo</button>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold:0.12 });
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  var GUIDE_COPY = {
+    admin: 'Você está lendo o painel do <b>Admin da empresa</b>: produção, safra, produtos e time da sua operação, sempre filtrado na sua empresa.',
+    gestor: 'Você está lendo o painel do <b>Gestor da empresa</b>: pipeline, pendências (de quem é a bola), produtos e time. Sem a aba Safra.'
+  };
+  function setGuideProfile(key, push){
+    document.querySelectorAll('#guiaSwitch .tab-card').forEach(function(btn){
+      btn.setAttribute('data-active', btn.getAttribute('data-guide-profile')===key ? 'true':'false');
+    });
+    document.querySelectorAll('#guia [data-guide]').forEach(function(el){
+      var g = el.getAttribute('data-guide');
+      el.hidden = !(g==='both' || g===key);
+    });
+    var intro = document.getElementById('guiaIntro');
+    if(intro) intro.innerHTML = GUIDE_COPY[key] || GUIDE_COPY.admin;
+    if(push !== false){
+      var url = new URL(location.href);
+      url.searchParams.set('perfil', key);
+      history.replaceState(null, '', url);
+    }
+  }
+  document.querySelectorAll('#guiaSwitch .tab-card').forEach(function(btn){
+    btn.addEventListener('click', function(){ setGuideProfile(btn.getAttribute('data-guide-profile')); });
+  });
+  (function init(){
+    var params = new URLSearchParams(location.search);
+    var hash = (location.hash || '').replace('#','');
+    var key = params.get('perfil') || hash || 'admin';
+    if(key !== 'gestor') key = 'admin';
+    setGuideProfile(key, false);
+  })();
+</script>
+</body>
+</html>

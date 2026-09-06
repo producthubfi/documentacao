@@ -1,0 +1,254 @@
+/* ============================================
+   01a — HEADER (nav + dropdown)
+   ============================================ */
+
+/* Wrapper relative pra ancorar o panel */
+.nav-dropdown {
+  position: relative;
+}
+
+#logo {width: 60%}
+
+
+
+/* Trigger herda o estilo do link normal mas adiciona chevron */
+.nav-dropdown__trigger {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 6px;
+  font-size: 14.5px;
+  font-weight: 500;
+  color: #262B3B;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+}
+.nav-dropdown__trigger:hover {
+  color: #0F1219;
+  background: #F4F5F7;
+}
+.nav-dropdown__trigger .chev {
+  transition: transform .2s;
+  color: #9CA3AF;
+}
+.nav-dropdown:hover .nav-dropdown__trigger,
+.nav-dropdown:focus-within .nav-dropdown__trigger {
+  color: #0F1219;
+  background: #F4F5F7;
+}
+.nav-dropdown:hover .nav-dropdown__trigger .chev,
+.nav-dropdown:focus-within .nav-dropdown__trigger .chev {
+  transform: rotate(180deg);
+  color: #0E8B7A;
+}
+
+/* Panel — fica fechado por padrão */
+.nav-dropdown__panel {
+  position: absolute;
+  top: 100%;
+  left: -8px;
+  margin-top: 8px;
+  width: 720px;
+  background: #FFFFFF;
+  border-radius: 14px;
+  box-shadow:
+    0 1px 0 rgba(15, 18, 25, 0.04),
+    0 8px 24px -4px rgba(15, 18, 25, 0.10),
+    0 16px 56px -12px rgba(15, 18, 25, 0.18);
+  ring: 1px solid #E5E7EB;
+  border: 1px solid #E5E7EB;
+  padding: 10px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: opacity .18s ease, transform .18s ease, visibility .18s;
+  pointer-events: none;
+  z-index: 60;
+}
+
+/* Bridge invisível entre trigger e panel pra hover não quebrar no gap */
+.nav-dropdown__panel::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 0;
+  right: 0;
+  height: 10px;
+}
+
+/* Estado aberto (hover ou foco interno) */
+.nav-dropdown:hover .nav-dropdown__panel,
+.nav-dropdown:focus-within .nav-dropdown__panel {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Layout interno do panel: 2 colunas (produtos + promo) */
+.nav-dropdown__grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 8px;
+}
+
+/* Coluna de produtos */
+.nav-dropdown__col-products {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Card individual de produto */
+.dropdown-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  transition: background .15s;
+  text-decoration: none;
+}
+.dropdown-card:hover {
+  background: #FAFBFB;
+}
+.dropdown-card__icon {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: #EBF7F4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .15s, transform .2s;
+}
+.dropdown-card:hover .dropdown-card__icon {
+  background: #D7EFE9;
+  transform: scale(1.05);
+}
+.dropdown-card__body {
+  flex: 1;
+  min-width: 0;
+  padding-top: 2px;
+}
+.dropdown-card__title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #0F1219;
+  margin-bottom: 2px;
+}
+.dropdown-card__title .arr-tiny {
+  opacity: 0;
+  transform: translateX(-3px);
+  transition: opacity .15s, transform .15s;
+  color: #0E8B7A;
+}
+.dropdown-card:hover .dropdown-card__title .arr-tiny {
+  opacity: 1;
+  transform: translateX(0);
+}
+.dropdown-card__desc {
+  font-size: 12px;
+  color: #6B7280;
+  line-height: 1.45;
+}
+
+/* Coluna promo do Copilot */
+.dropdown-promo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 18px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #053D38 0%, #08574F 100%);
+  color: #FFFFFF;
+  overflow: hidden;
+  text-decoration: none;
+}
+.dropdown-promo::after {
+  content: '';
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(124, 203, 185, 0.4) 0%, transparent 70%);
+  pointer-events: none;
+}
+.dropdown-promo__top {
+  position: relative;
+  z-index: 1;
+}
+.dropdown-promo__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #7CCBB9;
+  background: rgba(124, 203, 185, 0.12);
+  padding: 3px 7px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+.dropdown-promo__title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
+.dropdown-promo__desc {
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.45;
+}
+.dropdown-promo__cta {
+  position: relative;
+  z-index: 1;
+  margin-top: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #AEDFD3;
+  transition: color .15s, gap .15s;
+}
+.dropdown-promo:hover .dropdown-promo__cta {
+  color: #FFFFFF;
+  gap: 9px;
+}
+
+/* Footer do panel — divider + 2 links secundários */
+.nav-dropdown__foot {
+  margin-top: 6px;
+  padding: 10px 12px 4px;
+  border-top: 1px solid #F4F5F7;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-dropdown__foot-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #6B7280;
+  transition: color .15s;
+  text-decoration: none;
+}
+.nav-dropdown__foot-link:hover {
+  color: #0E8B7A;
+}

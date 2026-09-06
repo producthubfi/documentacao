@@ -1,0 +1,62 @@
+/* ============================================
+   01 — ICON SYSTEM (frame-icon)
+   Moldura dupla estilo Blox-like
+   ============================================ */
+
+/* M (44–48px) — usado em cards e features */
+.frame-icon {
+  display: inline-block;
+  border: 1px solid #D7EFE9;
+  border-radius: 12px;
+  padding: 4px;
+  background: transparent;
+}
+.frame-icon-inner {
+  background: #FFF;
+  border-radius: 8px;
+  width: 48px; height: 48px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow:
+    0 18px 10px rgba(8,87,79,.01),
+    0 6px 6px rgba(8,87,79,.04),
+    0 2px 4px rgba(8,87,79,.06);
+}
+
+/* S (28px) — section eyebrow médio */
+.frame-icon-sm {
+  display: inline-flex;
+  border: 1px solid #D7EFE9;
+  border-radius: 8px;
+  padding: 3px;
+  background: transparent;
+}
+.frame-icon-sm-inner {
+  background: #FFF;
+  border-radius: 5px;
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 4px rgba(8,87,79,.06);
+}
+
+/* XS (24px) — eyebrow compacto */
+.frame-icon-xs {
+    display: inline-flex;
+    border: 1px solid #D7EFE9;
+    border-radius: 32px;
+    overflow: hidden;
+    padding: 2px;
+    background: #fff;
+}
+.frame-icon-xs-inner {
+  background: #FFF;
+  border-radius: 5px;
+  width: 24px; height: 24px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 4px rgba(8,87,79,.06);
+}
+
+/* Variante DARK (fundos escuros) */
+.frame-icon--dark { border-color: rgba(255,255,255,.14); }
+.frame-icon--dark .frame-icon-inner,
+.frame-icon--dark .frame-icon-sm-inner,
+.frame-icon--dark .frame-icon-xs-inner { background: #FFF; }

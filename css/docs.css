@@ -276,32 +276,9 @@ textarea {
   font-weight: 500;
 }
 
-.docs-nav-group--proto {
-  padding-top: 8px;
-}
-
-.docs-nav a.docs-nav-proto {
-  gap: 10px;
-  min-height: 40px;
-  padding: 0 10px;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #3d3f3f;
-}
-
-.docs-nav a.docs-nav-proto:hover {
-  color: #141414;
-}
-
-.docs-nav a.docs-nav-proto.is-active {
-  color: #008a7e;
-}
-
-.docs-nav a.docs-nav-proto .docs-ico {
-  width: 28px;
-  height: 28px;
+.docs-nav-group--end {
+  margin-top: 8px;
+  padding-top: 14px;
 }
 
 .docs-main {

@@ -16,9 +16,11 @@
     return window.hfIconBox ? window.hfIconBox(name) : "";
   }
 
-  function navGroup(label, icon, links) {
+  function navGroup(label, icon, links, extraClass) {
     return (
-      '<div class="docs-nav-group"><p class="docs-nav-label">' +
+      '<div class="docs-nav-group' +
+      (extraClass ? " " + extraClass : "") +
+      '"><p class="docs-nav-label">' +
       iconBox(icon) +
       "<span>" +
       label +
@@ -28,23 +30,52 @@
     );
   }
 
+  var PROTO_NAV = [
+    { slug: "prototipos", label: "Briefings" },
+    { slug: "abertura-operacao", label: "Abertura de operação" },
+    { slug: "cadastro-cliente", label: "Cadastro de cliente" },
+    { slug: "edicao-cliente", label: "Edição de cliente" },
+    { slug: "link-publico", label: "Link público" },
+    { slug: "formulario-publico", label: "Formulário público" },
+    { slug: "detalhes-operacao", label: "Detalhes da operação" },
+    { slug: "operacao-outro-canal", label: "Operação encerrada" },
+    { slug: "dashboard-operacoes", label: "Dashboard de operações" },
+    { href: "extensao/", label: "Extensão · Itaú" },
+    { href: "extensao/spec.html", label: "Spec · 5 bancos" },
+    { href: "dashboards/hubfi-painel-empresas.html", label: "Painel empresas" },
+    { href: "dashboards/como-ler.html", label: "Como ler os dados" },
+  ];
+
   function protoMatch(q) {
     if (!q) return true;
-    var keys = ["protótipos", "prototipos", "briefing", "unicidade", "pausado", "pausa"];
+    var keys = [
+      "protótipos",
+      "prototipos",
+      "briefing",
+      "unicidade",
+      "pausado",
+      "pausa",
+      "extensão",
+      "extensao",
+      "itau",
+      "itaú",
+      "spec",
+      "bancos",
+    ];
     return keys.some(function (key) {
       return key.indexOf(q) !== -1;
     });
   }
 
+  function protoItemMatch(item, q) {
+    if (!q) return true;
+    var hay = (item.label + " " + (item.slug || "") + " " + (item.href || "")).toLowerCase();
+    return hay.indexOf(q) !== -1 || protoMatch(q);
+  }
+
   function renderNav() {
     var q = filter && filter.value ? filter.value.toLowerCase().trim() : "";
     var html = navGroup("Documentação", "book-open", '<a href="#/" data-slug="home">Visão geral</a>');
-    html +=
-      '<div class="docs-nav-group docs-nav-group--proto"' +
-      (protoMatch(q) ? "" : ' hidden') +
-      '><a href="#/prototipos" data-slug="prototipos" class="docs-nav-proto">' +
-      iconBox("layers-2") +
-      "<span>PROTÓTIPOS</span></a></div>";
     if (catalog.foundations && catalog.foundations.length) {
       var fLinks = "";
       var fVisible = 0;
@@ -84,6 +115,23 @@
       });
       if (!q || visible) html += navGroup(group.label, group.icon, links);
     });
+    var protoLinks = "";
+    var protoVisible = 0;
+    PROTO_NAV.forEach(function (item) {
+      var match = protoItemMatch(item, q);
+      if (match) protoVisible += 1;
+      protoLinks +=
+        '<a href="' +
+        (item.href || "#/" + item.slug) +
+        '" data-slug="' +
+        (item.slug || "") +
+        '"' +
+        (match ? "" : ' class="is-hidden"') +
+        ">" +
+        item.label +
+        "</a>";
+    });
+    if (!q || protoVisible) html += navGroup("Protótipos", "layers-2", protoLinks, "docs-nav-group--end");
     nav.innerHTML = html;
     highlight();
   }
@@ -91,12 +139,9 @@
   function highlight() {
     var current = slug();
     if (current !== "home" && !catalog.pages[current]) current = "home";
-    var page = catalog.pages[current];
-    var protoOn = current === "prototipos" || !!(page && page.section === "Telas");
     nav.querySelectorAll("a").forEach(function (link) {
       var slugAttr = link.getAttribute("data-slug");
-      var active = slugAttr === "prototipos" ? protoOn : slugAttr === current;
-      link.classList.toggle("is-active", active);
+      link.classList.toggle("is-active", !!slugAttr && slugAttr === current);
     });
   }
 

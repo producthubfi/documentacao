@@ -15,6 +15,11 @@ Protótipo da extensão (Itaú + spec dos 5 bancos):
 - [http://localhost/hubfi-components/extensao/](http://localhost/hubfi-components/extensao/)
 - [http://localhost/hubfi-components/extensao/spec.html](http://localhost/hubfi-components/extensao/spec.html)
 
+Landing do painel para empresas e guia de leitura:
+
+- [http://localhost/hubfi-components/dashboards/hubfi-painel-empresas.html](http://localhost/hubfi-components/dashboards/hubfi-painel-empresas.html)
+- [http://localhost/hubfi-components/dashboards/como-ler.html](http://localhost/hubfi-components/dashboards/como-ler.html)
+
 ## O que está em código
 
 Todos os componentes do arquivo Figma, com variantes:

@@ -1,0 +1,432 @@
+/* ============================================
+   04 — HERO
+   Mesh background, gridlines, copilot-logo, sidebar
+   ============================================ */
+
+.mesh-hero {
+  background:
+    radial-gradient(50% 45% at 92% 8%, rgba(14,139,122,.18), transparent 65%),
+    radial-gradient(45% 50% at 0% 28%, rgba(14,139,122,.10), transparent 65%),
+    linear-gradient(180deg, #F2F9F7 0%, #FFF 90%);
+}
+.gridlines {
+  background-image:
+    linear-gradient(to right, rgba(14,139,122,.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(14,139,122,.06) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+/* Copilot logo (badge gradient teal) */
+.copilot-logo {
+  position: relative;
+  width: 48px; height: 48px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #0E8B7A 0%, #08574F 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 22px; color: #FFF;
+  letter-spacing: -.02em;
+}
+.copilot-logo::after {
+  content: '';
+  position: absolute; top: 8px; right: 8px;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #7CCBB9;
+  box-shadow: 0 0 8px rgba(124,203,185,.8);
+}
+.copilot-logo-sm    { width: 36px; height: 36px; border-radius: 8px; font-size: 16px; }
+.copilot-logo-sm::after { width: 4px; height: 4px; top: 6px; right: 6px; }
+.copilot-logo-xs    { width: 28px; height: 28px; border-radius: 7px; font-size: 13px; }
+.copilot-logo-xs::after { width: 3px; height: 3px; top: 5px; right: 5px; }
+
+/* Sidebar nav items */
+.side-nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 7px 10px;
+  border-radius: 7px;
+  font-size: 12.5px; font-weight: 500; color: #6B7280;
+  transition: all .15s;
+  cursor: pointer; position: relative;
+}
+.side-nav-item:hover { background: #F4F5F7; color: #0F1219; }
+.side-nav-item.active {
+  background: #EBF7F4;
+  color: #0A7165; font-weight: 600;
+}
+.side-nav-item.active::before {
+  content: '';
+  position: absolute; left: -13px; top: 50%;
+  transform: translateY(-50%);
+  width: 3px; height: 18px;
+  background: #0E8B7A;
+  border-radius: 0 2px 2px 0;
+}
+.side-nav-item .icn { flex-shrink: 0; color: currentColor; }
+.side-nav-item .badge {
+  margin-left: auto;
+  font-size: 9.5px; font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 5px;
+  background: #EBF7F4; color: #0A7165;
+}
+.side-nav-item.active .badge { background: #0E8B7A; color: #fff; }
+
+/* ════════════════════════════════════════════
+   Sidebar RAIL (fino) — apenas ícones
+   ════════════════════════════════════════════ */
+.side-rail-item {
+  position: relative;
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6B7280;
+  transition: background .15s, color .15s;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.side-rail-item:hover {
+  background: #F4F5F7;
+  color: #0F1219;
+}
+.side-rail-item.active {
+  background: #EBF7F4;
+  color: #0A7165;
+}
+.side-rail-item.active::before {
+  content: '';
+  position: absolute;
+  left: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px; height: 18px;
+  background: #0E8B7A;
+  border-radius: 0 2px 2px 0;
+}
+.side-rail-item .icn { color: currentColor; }
+
+.side-rail-badge {
+  position: absolute;
+  top: 1px; right: 1px;
+  min-width: 14px; height: 14px;
+  padding: 0 3px;
+  border-radius: 7px;
+  background: #DC2626;
+  color: #FFF;
+  font-size: 9px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  letter-spacing: 0;
+  pointer-events: none;
+}
+.side-rail-badge--num { background: #0F1219; }
+.side-rail-badge--ai  { background: #0E8B7A; padding: 0 4px; font-size: 8px; }
+
+.side-rail-divider {
+  width: 24px;
+  height: 1px;
+  background: #E5E7EB;
+  margin: 4px 0;
+  flex-shrink: 0;
+}
+
+
+
+/*------ ANIMACAO ------*/
+
+/* ============================================================
+   MOCKUP HERO — Cena 6 (Reenviar formulário → WhatsApp + sucesso)
+   Adições pro arquivo css/09-produtos.css (cole no fim).
+
+   IMPORTANTE: este arquivo SUBSTITUI o CSS adicional anterior.
+   Se você já colou o antigo (com .op-todo, .op-cursor, .op-wa-*,
+   .op-toast), REMOVA-O do 09-produtos.css antes de colar este —
+   procure pelo comentário "MOCKUP — Cena 6 (Reenviar formulário..."
+   e apague tudo dali até o fim do arquivo.
+   ============================================================ */
+
+/* ===== Item "Reenviar formulário" (estados pro cursor ghost) ===== */
+.hero-todo-item.is-hover {
+  background: rgba(14, 139, 122, 0.06) !important;
+  border-color: rgba(14, 139, 122, 0.30) !important;
+}
+.hero-todo-item.is-hover .hero-todo-num {
+  background: rgba(14, 139, 122, 0.16) !important;
+  color: #08574F !important;
+}
+.hero-todo-item.is-active {
+  background: rgba(14, 139, 122, 0.12) !important;
+  border-color: rgba(14, 139, 122, 0.45) !important;
+  box-shadow: 0 0 0 3px rgba(14, 139, 122, 0.12);
+  transform: scale(0.992);
+}
+.hero-todo-item.is-active .hero-todo-num {
+  background: #0E8B7A !important;
+  color: white !important;
+}
+
+
+
+.float-delay {
+    border-bottom: 1px solid #009688;
+}
+
+/* ===== Cursor ghost ===== */
+.hero-cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  z-index: 50;
+  opacity: 0;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.22));
+  transition: transform .82s cubic-bezier(.45,.0,.15,1), opacity .25s ease;
+  transform: translate(0, 0);
+  will-change: transform;
+}
+.hero-cursor.is-visible { opacity: 1; }
+.hero-cursor svg { display: block; }
+
+.hero-cursor-ripple {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(14, 139, 122, 0.45);
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  pointer-events: none;
+}
+.hero-cursor.is-clicking .hero-cursor-ripple {
+  animation: heroCursorClick .42s ease-out forwards;
+}
+@keyframes heroCursorClick {
+  0%   { transform: translate(-50%, -50%) scale(0);   opacity: 0.7; }
+  60%  { transform: translate(-50%, -50%) scale(2.6); opacity: 0.25; }
+  100% { transform: translate(-50%, -50%) scale(3.4); opacity: 0; }
+}
+.hero-cursor.is-clicking svg { animation: heroCursorPress .28s ease-out; }
+@keyframes heroCursorPress {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(0.82); }
+}
+
+/* ===== WhatsApp PiP (canto direito do mockup hero) ===== */
+.hero-wa-pip {
+  position: absolute;
+  top: 38%;
+  right: 24px;
+  width: 240px;
+  z-index: 30;
+  background: #ECE5DD;
+  border-radius: 12px;
+  box-shadow:
+    0 24px 48px -12px rgba(15, 23, 42, 0.32),
+    0 8px 16px -4px rgba(15, 23, 42, 0.16),
+    0 0 0 1px rgba(15, 23, 42, 0.06);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateX(28px) scale(0.94);
+  transition: opacity .42s cubic-bezier(.4,0,.2,1), transform .56s cubic-bezier(.34,1.3,.64,1);
+  pointer-events: none;
+}
+.hero-wa-pip.is-visible {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+}
+
+.hero-wa-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 11px;
+  background: #075E54;
+  color: white;
+}
+.hero-wa-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.hero-wa-info { flex: 1; min-width: 0; }
+.hero-wa-name {
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 1.1;
+  color: white;
+}
+.hero-wa-status {
+  font-size: 9.5px;
+  color: rgba(255,255,255,0.78);
+  margin-top: 1px;
+}
+.hero-wa-icn { color: rgba(255,255,255,0.7); flex-shrink: 0; }
+
+.hero-wa-chat {
+  padding: 11px 10px 13px;
+  min-height: 110px;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255,255,255,0.4) 0%, transparent 50%),
+    radial-gradient(circle at 70% 60%, rgba(255,255,255,0.3) 0%, transparent 50%),
+    #ECE5DD;
+}
+.hero-wa-day {
+  text-align: center;
+  font-size: 9px;
+  color: #5C6B73;
+  background: rgba(255,255,255,0.6);
+  border-radius: 6px;
+  padding: 2px 6px;
+  width: fit-content;
+  margin: 0 auto 8px;
+}
+
+.hero-wa-bubble {
+  background: #DCF8C6;
+  border-radius: 8px 8px 2px 8px;
+  padding: 8px 10px 6px;
+  max-width: 92%;
+  margin-left: auto;
+  font-size: 10.5px;
+  line-height: 1.4;
+  color: #1A1F2E;
+  box-shadow: 0 1px 0.5px rgba(0,0,0,0.08);
+  opacity: 0;
+  transform: translateY(8px) scale(0.92);
+  transition: opacity .36s ease-out, transform .36s cubic-bezier(.34,1.3,.64,1);
+}
+.hero-wa-bubble.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+.hero-wa-bubble-text { color: #1A1F2E; }
+.hero-wa-bubble-text b { font-weight: 700; }
+.hero-wa-bubble-link {
+  margin-top: 4px;
+  font-size: 10px;
+  color: #075E54;
+  text-decoration: underline;
+  text-decoration-color: rgba(7, 94, 84, 0.4);
+  word-break: break-all;
+}
+.hero-wa-bubble-meta {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 4px;
+}
+.hero-wa-time {
+  font-size: 8.5px;
+  color: #92A09A;
+  letter-spacing: 0.02em;
+}
+.hero-wa-checks {
+  color: #92A09A;
+  transition: color .35s ease;
+}
+.hero-wa-checks.is-read {
+  color: #34B7F1;
+}
+
+/* ===== Modal de sucesso (centralizado no #heroMockup) ===== */
+.hero-toast {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .35s ease, background .35s ease, backdrop-filter .35s ease;
+}
+.hero-toast.is-visible {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+.hero-toast-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px 14px 16px;
+  background: white;
+  border-radius: 14px;
+  box-shadow:
+    0 28px 56px -14px rgba(15, 23, 42, 0.36),
+    0 10px 20px -6px rgba(15, 23, 42, 0.18),
+    0 0 0 1px rgba(15, 23, 42, 0.05);
+  max-width: 320px;
+  transform: scale(0.9) translateY(8px);
+  transition: transform .42s cubic-bezier(.34,1.3,.64,1);
+}
+.hero-toast.is-visible .hero-toast-card {
+  transform: scale(1) translateY(0);
+}
+
+.hero-toast-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #14B8A6 0%, #0E8B7A 100%);
+  color: white;
+  flex-shrink: 0;
+  box-shadow: 0 6px 12px -2px rgba(14, 139, 122, 0.45);
+}
+
+.hero-toast-text { min-width: 0; }
+.hero-toast-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1A1F2E;
+  line-height: 1.2;
+}
+.hero-toast-desc {
+  font-size: 11px;
+  color: #6B7280;
+  margin-top: 3px;
+  line-height: 1.35;
+}
+
+/* ===== Reduced motion ===== */
+@media (prefers-reduced-motion: reduce) {
+  .hero-cursor,
+  .hero-wa-pip,
+  .hero-wa-bubble,
+  .hero-toast,
+  .hero-toast-card {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* ===== Responsivo: esconder cursor e PiP em telas estreitas ===== */
+@media (max-width: 1023px) {
+  .hero-wa-pip { display: none; }
+  .hero-cursor { display: none; }
+}

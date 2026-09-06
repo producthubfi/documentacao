@@ -1,0 +1,827 @@
+/* ============================================
+   09 — PRODUTOS (tabs + 3 mockups)
+   ============================================ */
+
+   section#produtos {
+       background: #ffffff00;
+    padding-top: 0;
+    margin-top: -21px;
+}
+
+#produtos h2 {    margin-top: 48px;}
+
+.tabs-nav {
+  display: inline-flex;
+  padding: 8px;
+  background: #FFF;
+  border-radius: 14px;
+  gap: 6px;
+  border: 1px solid #E5E7EB;
+  box-shadow: 0 1px 3px rgba(15,18,25,.04), 0 12px 24px -8px rgba(15,18,25,.06);
+}
+.tab-card {
+  position: relative;
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 22px;
+  border-radius: 10px;
+  transition: background .25s, color .2s;
+  min-width: 230px;
+  text-align: left;
+  cursor: pointer;
+}
+.tab-card:hover { background: #F7FBFA; }
+.tab-card[data-active="true"] {
+  background: linear-gradient(135deg, #0E8B7A 0%, #08574F 100%);
+  color: #fff;
+  box-shadow: 0 6px 20px -4px rgba(14,139,122,.35);
+}
+.tab-card[data-active="true"] .tab-icon       { background: rgba(255,255,255,.18); }
+.tab-card[data-active="true"] .tab-icon svg   { stroke: #FFF; }
+.tab-card[data-active="true"] .tab-meta       { color: rgba(255,255,255,.85); }
+.tab-card[data-active="true"] .tab-arrow      { opacity: 1; transform: translateX(0); }
+.tab-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  background: #EBF7F4;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .2s;
+  flex-shrink: 0;
+}
+.tab-icon svg { stroke: #0E8B7A; transition: stroke .2s; }
+
+/* Acento dual-color (segundo path) — adapta ao estado ativo/inativo */
+.tab-icon-accent-stroke {
+  stroke: #3DB29C;
+  transition: stroke .2s;
+}
+.tab-card[data-active="true"] .tab-icon-accent-stroke {
+  stroke: #AEDFD3;
+}
+.tab-arrow {
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: all .2s;
+  flex-shrink: 0;
+}
+
+.tab-pane { display: none; }
+.tab-pane[data-active="true"] {
+  display: grid;
+  animation: tabIn .55s cubic-bezier(.22,1,.36,1) both;
+}
+.tab-mockup {
+  animation: mockIn .65s cubic-bezier(.22,1,.36,1) both;
+  animation-delay: .12s;
+}
+.mockup-hover { transition: transform .4s cubic-bezier(.22,1,.36,1); }
+.mockup-hover:hover { transform: translateY(-4px); }
+
+
+/* ============================================================================
+   ADIÇÕES PARA css/09-produtos.css
+   ----------------------------------------------------------------------------
+   Cole TUDO ABAIXO no FINAL do arquivo css/09-produtos.css.
+   O HTML antigo "Comparador de propostas" no index.html é substituído
+   pelo SNIPPET-mockup.html. O JS de loop está no fim daquele snippet.
+   ============================================================================ */
+
+/* ---------- Container ---------- */
+.op-mockup{
+  display:grid;
+  grid-template-columns:60px 1fr;
+  background:#FFF;
+  border:1px solid #E5E7EB;
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 1px 3px rgba(15,18,25,.04),0 24px 48px -16px rgba(15,18,25,.10);
+  min-height:480px;
+  font-family:'Manrope','Inter',system-ui,sans-serif;
+  color:#1A1F2E;
+}
+
+/* ============== SIDEBAR FINO 60px ============== */
+.op-rail{
+  display:flex;flex-direction:column;align-items:center;
+  background:#FAFBFC;border-right:1px solid #EEF0F3;
+  padding:12px 0;gap:6px;
+}
+.op-rail-logo{
+  width:36px;height:36px;border-radius:8px;
+  background:#1A1F2E;color:#FFF;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Instrument Serif',serif;font-style:italic;font-size:18px;
+}
+.op-rail-divider{width:24px;height:1px;background:#E5E7EB;margin:4px 0}
+.op-rail-fab{
+  width:36px;height:36px;border-radius:8px;
+  background:linear-gradient(135deg,#0E8B7A 0%,#08574F 100%);
+  color:#FFF;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 10px -2px rgba(14,139,122,.4);
+}
+.op-rail-item{
+  position:relative;width:36px;height:36px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  color:#6B7280;transition:background .2s,color .2s;
+}
+.op-rail-item--active{background:#EBF7F4;color:#0E8B7A}
+.op-rail-item--active .op-rail-stripe{
+  position:absolute;left:-12px;top:9px;width:3px;height:18px;
+  background:#0E8B7A;border-radius:0 2px 2px 0;
+}
+.op-rail-spacer{flex:1}
+.op-rail-avatar{
+  width:30px;height:30px;border-radius:50%;
+  background:linear-gradient(135deg,#14B8A6,#0E8B7A);
+  color:#FFF;font-size:11px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;
+  border:2px solid #FFF;box-shadow:0 0 0 1px rgba(14,139,122,.2);
+}
+
+/* ============== ÁREA PRINCIPAL ============== */
+.op-main{display:flex;flex-direction:column;min-width:0}
+
+/* Header */
+.op-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 22px;border-bottom:1px solid #EEF0F3;
+}
+.op-breadcrumb{display:flex;align-items:center;gap:8px;font-size:12px;color:#6B7280;font-weight:500}
+.op-breadcrumb-active{color:#1A1F2E;font-weight:600}
+.op-breadcrumb svg{color:#C5CAD2}
+.op-header-actions{display:flex;align-items:center;gap:10px}
+.op-pill-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  height:24px;padding:0 10px;border-radius:999px;
+  background:#FFF7ED;border:1px solid #FED7AA;
+  color:#C2410C;font-size:11px;font-weight:600;
+}
+.op-pulse{
+  width:6px;height:6px;border-radius:50%;background:#EC7000;
+  box-shadow:0 0 0 0 rgba(236,112,0,.6);
+  animation:opPulse 1.6s infinite;
+}
+@keyframes opPulse{
+  0%{box-shadow:0 0 0 0 rgba(236,112,0,.55)}
+  70%{box-shadow:0 0 0 6px rgba(236,112,0,0)}
+  100%{box-shadow:0 0 0 0 rgba(236,112,0,0)}
+}
+.op-icon-btn{
+  width:26px;height:26px;border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  color:#6B7280;background:transparent;border:none;cursor:pointer;
+}
+
+/* ============== STEPPER ============== */
+.op-stepper{
+  display:flex;align-items:center;gap:6px;
+  padding:18px 22px;border-bottom:1px solid #EEF0F3;
+  background:linear-gradient(180deg,#FCFDFD,#FFF);
+}
+.op-step{display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0}
+.op-step-dot{
+  position:relative;
+  width:26px;height:26px;border-radius:50%;
+  background:#FFF;border:1.5px solid #D7DBE3;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .35s cubic-bezier(.22,1,.36,1);
+}
+.op-step-num{font-size:11px;font-weight:600;color:#9CA3AF;transition:color .25s,opacity .25s}
+.op-step-check{
+  color:#FFF;position:absolute;
+  opacity:0;transform:scale(.6);
+  transition:opacity .25s,transform .25s;
+}
+.op-step-label{
+  font-size:10.5px;font-weight:500;color:#9CA3AF;
+  transition:color .25s,font-weight .25s;letter-spacing:.01em;
+}
+.op-step-line{
+  flex:1;height:1.5px;background:#E5E7EB;border-radius:2px;
+  position:relative;overflow:hidden;
+}
+.op-step-line::after{
+  content:'';position:absolute;inset:0;
+  background:#0E8B7A;transform:scaleX(0);transform-origin:left;
+  transition:transform .5s cubic-bezier(.22,1,.36,1);
+}
+
+/* Estados */
+.op-step.is-current .op-step-dot{
+  background:#0E8B7A;border-color:#0E8B7A;
+  box-shadow:0 0 0 4px rgba(14,139,122,.15);
+}
+.op-step.is-current .op-step-num{color:#FFF}
+.op-step.is-current .op-step-label{color:#0E8B7A;font-weight:600}
+
+.op-step.is-done .op-step-dot{
+  background:#0E8B7A;border-color:#0E8B7A;
+  box-shadow:0 0 0 0 rgba(14,139,122,0);
+}
+.op-step.is-done .op-step-num{opacity:0}
+.op-step.is-done .op-step-check{opacity:1;transform:scale(1)}
+.op-step.is-done .op-step-label{color:#1A1F2E;font-weight:500}
+
+.op-step-line.is-done::after{transform:scaleX(1)}
+
+/* ============== PANES ============== */
+.op-content{
+  flex:1;padding:22px;position:relative;
+  min-height:236px;background:#FFF;
+}
+.op-pane{
+  position:absolute;inset:22px;
+  opacity:0;visibility:hidden;
+  transform:translateY(8px);
+  transition:opacity .4s,transform .4s,visibility .4s;
+  pointer-events:none;
+}
+.op-pane.is-active{
+  opacity:1;visibility:visible;transform:translateY(0);pointer-events:auto;
+}
+.op-pane-title{font-size:13px;font-weight:600;color:#1A1F2E;margin-bottom:14px}
+
+/* Field */
+.op-field{margin-bottom:12px}
+.op-field label{
+  display:block;font-size:11px;font-weight:500;color:#6B7280;
+  margin-bottom:6px;letter-spacing:.01em;
+}
+.op-input{
+  display:flex;align-items:center;gap:8px;
+  height:38px;padding:0 12px;
+  background:#FFF;border:1px solid #D7DBE3;border-radius:8px;
+  font-size:13px;color:#1A1F2E;
+  transition:border-color .2s,box-shadow .2s;
+}
+.op-input.is-focused{
+  border-color:#0E8B7A;
+  box-shadow:0 0 0 3px rgba(14,139,122,.12);
+}
+.op-input--select{justify-content:space-between}
+.op-input-text{flex:1;white-space:nowrap;overflow:hidden;display:inline-block}
+
+/* Caret só aparece no input em foco/typing */
+.op-caret{
+  display:inline-block;width:1px;background:#0E8B7A;height:14px;
+  opacity:0;animation:opCaret 1s infinite;
+}
+.op-input.is-focused .op-caret,
+.op-input.is-typing .op-caret{opacity:1}
+@keyframes opCaret{0%,100%{opacity:1}50%{opacity:0}}
+
+/* Cliente card */
+.op-client-card{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 14px;border-radius:10px;
+  background:#F4F9F7;border:1px solid #D7EFE9;
+  opacity:0;transform:translateY(6px);
+  transition:opacity .35s,transform .35s;
+}
+.op-client-card.is-revealed{opacity:1;transform:translateY(0)}
+.op-client-avatar{
+  width:34px;height:34px;border-radius:50%;
+  background:linear-gradient(135deg,#0E8B7A,#08574F);
+  color:#FFF;font-size:11px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+}
+.op-client-info{flex:1;min-width:0}
+.op-client-name{font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
+.op-client-meta{font-size:11px;color:#6B7280;margin-top:2px}
+.op-client-tick{color:#0E8B7A;flex-shrink:0}
+
+/* Tag */
+.op-tag{
+  display:inline-flex;align-items:center;
+  height:18px;padding:0 7px;border-radius:999px;
+  font-size:10px;font-weight:600;letter-spacing:.02em;
+}
+.op-tag--green{background:#DCFCE7;color:#15803D}
+.op-tag--teal{background:#CCFBF1;color:#0E8B7A}
+.op-tag--orange{background:#FFEDD5;color:#C2410C}
+
+/* Produto */
+.op-product-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.op-product-chip{
+  position:relative;
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;
+  background:#FFF;border:1px solid #E5E7EB;border-radius:10px;
+  font-size:12.5px;font-weight:500;color:#1A1F2E;
+  transition:all .25s;
+}
+.op-product-chip.is-selected{
+  border-color:#0E8B7A;background:#F4F9F7;
+  box-shadow:0 0 0 3px rgba(14,139,122,.08);
+}
+.op-product-icon{
+  width:28px;height:28px;border-radius:8px;
+  background:#F4F5F7;color:#6B7280;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.op-product-icon--teal{background:#EBF7F4;color:#0E8B7A}
+.op-product-tick{
+  margin-left:auto;color:#0E8B7A;
+  opacity:0;transform:scale(.6);
+  transition:opacity .25s,transform .25s;
+}
+.op-product-chip.is-selected .op-product-tick{opacity:1;transform:scale(1)}
+
+/* Banner Fast */
+.op-fast-banner{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;margin-bottom:14px;
+  background:linear-gradient(90deg,#FFF7ED 0%,#FFFAF3 100%);
+  border:1px solid #FED7AA;border-radius:10px;
+}
+.op-fast-icon{
+  width:26px;height:26px;border-radius:7px;
+  background:#EC7000;color:#FFF;
+  display:flex;align-items:center;justify-content:center;font-size:14px;
+}
+.op-fast-text{display:flex;flex-direction:column;flex:1;line-height:1.25}
+.op-fast-text strong{font-size:12px;color:#1A1F2E}
+.op-fast-text span{font-size:10.5px;color:#6B7280}
+
+.op-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.op-field--sm .op-input{height:34px;font-size:12px}
+
+/* Loading */
+.op-loading-bar{
+  height:4px;background:#EEF0F3;border-radius:2px;overflow:hidden;
+  opacity:0;transition:opacity .3s;
+}
+.op-loading-bar.is-loading{opacity:1}
+.op-loading-fill{
+  height:100%;width:0;
+  background:linear-gradient(90deg,#0E8B7A,#14B8A6);
+  border-radius:2px;
+}
+.op-loading-bar.is-loading .op-loading-fill{
+  animation:opLoadFill 1.6s ease-in-out forwards;
+}
+@keyframes opLoadFill{0%{width:0}100%{width:100%}}
+
+/* Comunicação */
+.op-comm-options{display:grid;gap:10px}
+.op-comm-card{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:12px 14px;border:1px solid #E5E7EB;border-radius:10px;
+  background:#FFF;transition:all .25s;
+}
+.op-comm-card.is-selected{border-color:#0E8B7A;background:#F4F9F7}
+.op-comm-radio{
+  width:16px;height:16px;border-radius:50%;
+  border:1.5px solid #D7DBE3;flex-shrink:0;margin-top:2px;
+  display:flex;align-items:center;justify-content:center;
+  transition:border-color .25s;
+}
+.op-comm-card.is-selected .op-comm-radio{border-color:#0E8B7A}
+.op-comm-radio span{
+  width:8px;height:8px;border-radius:50%;background:#0E8B7A;
+  opacity:0;transform:scale(.4);transition:opacity .25s,transform .25s;
+}
+.op-comm-card.is-selected .op-comm-radio span{opacity:1;transform:scale(1)}
+.op-comm-body{flex:1;min-width:0}
+.op-comm-head{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600}
+.op-comm-desc{font-size:11px;color:#6B7280;margin-top:3px;line-height:1.4}
+
+/* Sucesso */
+.op-success{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  height:100%;padding:8px 0;gap:8px;
+}
+.op-success-ring{
+  width:56px;height:56px;border-radius:50%;
+  background:linear-gradient(135deg,#0E8B7A,#08574F);
+  color:#FFF;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 0 8px rgba(14,139,122,.10),0 0 0 16px rgba(14,139,122,.05);
+  transform:scale(0);opacity:0;
+}
+.op-pane.is-active .op-success-ring{
+  animation:opSuccessIn .65s cubic-bezier(.22,1.6,.5,1) forwards;
+}
+@keyframes opSuccessIn{
+  0%{transform:scale(0);opacity:0}
+  60%{transform:scale(1.08);opacity:1}
+  100%{transform:scale(1);opacity:1}
+}
+.op-success-title{
+  font-size:15px;font-weight:700;margin-top:4px;
+  opacity:0;transform:translateY(6px);
+}
+.op-success-meta{
+  font-size:11.5px;color:#6B7280;
+  opacity:0;transform:translateY(6px);
+}
+.op-pane.is-active .op-success-title{
+  animation:opFadeUp .4s ease-out .35s forwards;
+}
+.op-pane.is-active .op-success-meta{
+  animation:opFadeUp .4s ease-out .5s forwards;
+}
+@keyframes opFadeUp{ to{opacity:1;transform:translateY(0)} }
+.op-success-pipeline{
+  display:flex;gap:4px;margin-top:10px;
+  padding:6px;background:#F4F5F7;border-radius:8px;
+  opacity:0;
+}
+.op-pane.is-active .op-success-pipeline{
+  animation:opFade .4s ease-out .7s forwards;
+}
+@keyframes opFade{ to{opacity:1} }
+.op-pipeline-step{
+  font-size:10px;font-weight:600;
+  padding:5px 9px;border-radius:5px;
+  background:transparent;color:#9CA3AF;
+}
+.op-pipeline-step--done{background:#DCFCE7;color:#15803D}
+.op-pipeline-step--current{
+  background:#0E8B7A;color:#FFF;
+  box-shadow:0 1px 3px rgba(14,139,122,.3);
+}
+
+/* Footer */
+.op-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 22px;border-top:1px solid #EEF0F3;background:#FAFBFC;
+}
+.op-btn-ghost{
+  height:34px;padding:0 14px;border-radius:7px;
+  background:transparent;border:1px solid #E5E7EB;
+  font-size:12.5px;font-weight:600;color:#6B7280;cursor:pointer;
+}
+.op-btn-primary{
+  display:inline-flex;align-items:center;gap:8px;
+  height:34px;padding:0 14px;border-radius:7px;
+  background:linear-gradient(135deg,#0E8B7A 0%,#08574F 100%);
+  border:none;color:#FFF;font-size:12.5px;font-weight:600;cursor:pointer;
+  box-shadow:0 4px 10px -2px rgba(14,139,122,.4);
+  transition:transform .15s,box-shadow .15s;
+}
+.op-btn-primary:hover{
+  transform:translateY(-1px);
+  box-shadow:0 6px 14px -2px rgba(14,139,122,.5);
+}
+
+/* ============== REDUCED MOTION ============== */
+@media (prefers-reduced-motion: reduce){
+  .op-mockup *, .op-mockup *::after, .op-mockup *::before{
+    animation:none !important;transition:none !important;
+  }
+  .op-pane[data-pane="5"]{opacity:1;visibility:visible;transform:none;pointer-events:auto}
+  .op-pane:not([data-pane="5"]){opacity:0;visibility:hidden}
+}
+
+/* ============== RESPONSIVO ============== */
+@media (max-width: 720px){
+  .op-mockup{min-height:520px}
+  .op-stepper{padding:14px 14px;gap:4px}
+  .op-step-label{font-size:9.5px}
+  .op-content{padding:16px}
+  .op-pane{inset:16px}
+  .op-form-grid{grid-template-columns:1fr}
+  .op-product-grid{grid-template-columns:1fr}
+}
+
+
+/* ============================================================
+   MOTIONS — Marketplace, Portabilidade & Realtime cards
+   Cole TUDO no fim do css/09-produtos.css
+   (depois do bloco de Cena 6 do hero, se já estiver lá)
+   ============================================================ */
+
+/* ===== Cursor ghost reutilizável (mkt + port + rt) ===== */
+.ghost-cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  z-index: 60;
+  opacity: 0;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.22));
+  transition: transform .68s cubic-bezier(.45,.0,.15,1), opacity .25s ease;
+  transform: translate(0, 0);
+  will-change: transform;
+}
+.ghost-cursor.is-visible { opacity: 1; }
+.ghost-cursor svg { display: block; }
+
+.ghost-cursor-ripple {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(14, 139, 122, 0.5);
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  pointer-events: none;
+}
+.ghost-cursor.is-clicking .ghost-cursor-ripple {
+  animation: ghostCursorClick .42s ease-out forwards;
+}
+@keyframes ghostCursorClick {
+  0%   { transform: translate(-50%, -50%) scale(0);   opacity: 0.7; }
+  60%  { transform: translate(-50%, -50%) scale(2.6); opacity: 0.25; }
+  100% { transform: translate(-50%, -50%) scale(3.4); opacity: 0; }
+}
+.ghost-cursor.is-clicking svg { animation: ghostCursorPress .28s ease-out; }
+@keyframes ghostCursorPress {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(0.82); }
+}
+
+/* ============================================================
+   MARKETPLACE — hover state nos cards (Porto/Bradesco/Itaú)
+   ============================================================ */
+.mkt-card {
+  transition: box-shadow .28s ease, border-color .28s ease, transform .28s ease, background .28s ease;
+  position: relative;
+}
+.mkt-card.is-hover {
+  box-shadow:
+    0 0 0 2px rgba(14, 139, 122, 0.55),
+    0 8px 24px -8px rgba(14, 139, 122, 0.25);
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, rgba(20, 184, 166, 0.04) 0%, transparent 60%);
+}
+
+/* CTA "Adquirir top" pulse após click */
+.mkt-cta {
+  position: relative;
+  overflow: visible;
+}
+.mkt-cta.is-pulse::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 6px;
+  border: 2px solid #14B8A6;
+  opacity: 0;
+  animation: mktCtaPulse .9s ease-out;
+  pointer-events: none;
+}
+@keyframes mktCtaPulse {
+  0%   { transform: scale(1);    opacity: 0.8; }
+  100% { transform: scale(1.4);  opacity: 0; }
+}
+
+/* ============================================================
+   PORTABILIDADE — pulse no card "Após portar"
+   ============================================================ */
+.port-after {
+  transition: transform .35s cubic-bezier(.34,1.3,.64,1), box-shadow .35s ease;
+}
+.port-after.is-pulse {
+  transform: scale(1.025);
+  box-shadow:
+    0 16px 40px -12px rgba(14, 139, 122, 0.45),
+    0 0 0 3px rgba(20, 184, 166, 0.18);
+}
+
+/* ============================================================
+   REALTIME — hover state nos stat cards (cursor loop)
+   ============================================================ */
+.rt-stat-card {
+  transition: transform .35s cubic-bezier(.34,1.3,.64,1), box-shadow .35s ease, border-color .35s ease;
+  position: relative;
+}
+.rt-stat-card.is-hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 18px 40px -12px rgba(14, 139, 122, 0.22),
+    0 6px 12px -4px rgba(15, 23, 42, 0.06),
+    0 0 0 1px rgba(14, 139, 122, 0.25);
+}
+.rt-stat-card.is-hover .frame-icon {
+  transform: scale(1.08);
+  transition: transform .35s cubic-bezier(.34,1.3,.64,1);
+}
+
+/* ============================================================
+   Reduced motion
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .ghost-cursor,
+  .mkt-card,
+  .mkt-cta,
+  .port-after,
+  .rt-stat-card,
+  .rt-stat-card .frame-icon,
+  [data-mkt-bar],
+  .port-chart-line,
+  .port-chart-fill,
+  .port-chart-dot {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* ============================================================
+   Responsivo: esconder cursores em telas estreitas
+   ============================================================ */
+@media (max-width: 768px) {
+  [data-mkt-cursor],
+  [data-port-cursor],
+  [data-rt-cursor] { display: none; }
+}
+
+/* ============================================================
+   SECTION BRIDGE — Mark "h." com motion sequence
+   ============================================================
+   Cena 1: Linhas crescem das pontas pro centro (0.15s → 1.10s)
+   Cena 2: Badge "h." materializa com spring scale (0.65s → 1.45s)
+   Cena 3: Glow flash teal one-shot (0.85s → 2.25s)
+   Cena 4 (loop infinito após 2s):
+     - Ripple ring teal expandindo (2 anéis defasados)
+     - Dot "." pulsando com cor mais vibrante
+   ============================================================ */
+
+.bridge {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  isolation: isolate; background: none;    margin-top: -21px;
+  padding: 0;z-index: 99999;
+}
+
+/* Variantes de gradient bg adaptativas */
+.bridge--paper-to-dark {
+  background: linear-gradient(to bottom, #FAFBFB 0%, #FAFBFB 30%, #1A1F2E 80%, #0B0E14 100%);
+  padding: 80px 24px;
+}
+.bridge--dark-to-white {
+  background: linear-gradient(to bottom, #0B0E14 0%, #1A1F2E 22%, #FFFFFF 80%, #FFFFFF 100%);
+  padding: 80px 24px;
+}
+.bridge--white-to-paper {
+ 
+}
+.bridge--paper-to-deep {
+  background: linear-gradient(to bottom, #FAFBFB 0%, #FAFBFB 30%, #1A1F2E 80%, #0B0E14 100%);
+  padding: 80px 24px;
+}
+
+.bridge-mark-rule {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+  max-width: 1024px;
+}
+
+/* ===== CENA 1: Linhas crescem das pontas pro centro ===== */
+.bridge-mark-line {
+  flex: 1;
+  height: 1px;
+  transform: scaleX(0);
+  transition: transform .95s cubic-bezier(.4, 0, .2, 1);
+  transition-delay: .15s;
+  background: linear-gradient(to right,
+    transparent 0%,
+    rgba(127, 130, 140, 0.30) 30%,
+    rgba(127, 130, 140, 0.30) 70%,
+    transparent 100%
+  );
+}
+.bridge-mark-line:first-child  { transform-origin: left center; }
+.bridge-mark-line:last-child   { transform-origin: right center; }
+.bridge.in .bridge-mark-line   { transform: scaleX(1); }
+
+/* Linha mais escura em fundo claro */
+.bridge--white-to-paper .bridge-mark-line {
+  background: linear-gradient(to right,
+    transparent 0%,
+    rgba(15, 18, 25, 0.16) 30%,
+    rgba(15, 18, 25, 0.16) 70%,
+    transparent 100%
+  );
+}
+
+/* ===== CENA 2: Badge entrada com spring scale + opacity ===== */
+.bridge-mark-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: #FFFFFF;
+  box-shadow:
+    0 8px 20px -6px rgba(15, 23, 42, 0.18),
+    0 2px 6px -2px rgba(15, 23, 42, 0.08),
+    0 0 0 1px rgba(15, 23, 42, 0.06);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 17px;
+  color: #0B0E14;
+  flex-shrink: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  position: relative;
+  z-index: 1;
+
+  opacity: 0;
+  transform: scale(0.4);
+  transition:
+    opacity .55s ease-out,
+    transform .8s cubic-bezier(.34, 1.56, .64, 1);
+  transition-delay: .65s;
+}
+.bridge.in .bridge-mark-badge {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ===== CENA 3: Glow flash teal one-shot ===== */
+.bridge.in .bridge-mark-badge {
+  animation: bridgeBadgeFlash 1.4s ease-out .85s 1;
+}
+@keyframes bridgeBadgeFlash {
+  0% {
+    box-shadow:
+      0 8px 20px -6px rgba(15, 23, 42, 0.18),
+      0 2px 6px -2px rgba(15, 23, 42, 0.08),
+      0 0 0 1px rgba(15, 23, 42, 0.06);
+  }
+  35% {
+    box-shadow:
+      0 0 0 6px rgba(14, 139, 122, 0.12),
+      0 0 36px 4px rgba(14, 139, 122, 0.45),
+      0 8px 20px -6px rgba(15, 23, 42, 0.18),
+      0 2px 6px -2px rgba(15, 23, 42, 0.08),
+      0 0 0 1px rgba(14, 139, 122, 0.45);
+  }
+  100% {
+    box-shadow:
+      0 8px 20px -6px rgba(15, 23, 42, 0.18),
+      0 2px 6px -2px rgba(15, 23, 42, 0.08),
+      0 0 0 1px rgba(15, 23, 42, 0.06);
+  }
+}
+
+/* ===== CENA 4 — Loop infinito: ripple rings expandindo ===== */
+.bridge-mark-badge::before,
+.bridge-mark-badge::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1.5px solid rgba(14, 139, 122, 0.7);
+  opacity: 0;
+  pointer-events: none;
+}
+.bridge.in .bridge-mark-badge::before {
+  animation: bridgeRipple 2.6s ease-out 2.0s infinite;
+}
+.bridge.in .bridge-mark-badge::after {
+  animation: bridgeRipple 2.6s ease-out 3.3s infinite;
+}
+@keyframes bridgeRipple {
+  0%   { transform: scale(1);    opacity: 0; }
+  15%  { opacity: 0.55; }
+  100% { transform: scale(1.85); opacity: 0; }
+}
+
+/* ===== CENA 4 — Loop infinito: dot "." pulsa com cor ===== */
+.bridge-mark-dot {
+  display: inline-block;
+  color: #0E8B7A;
+  margin-left: -1px;
+  transform-origin: center;
+}
+.bridge.in .bridge-mark-dot {
+  animation: bridgeDotBreath 2.6s ease-in-out 2.0s infinite;
+}
+@keyframes bridgeDotBreath {
+  0%, 100% { transform: scale(1);    color: #0E8B7A; }
+  50%      { transform: scale(1.30); color: #14B8A6; }
+}
+
+/* ===== Reduced motion ===== */
+@media (prefers-reduced-motion: reduce) {
+  .bridge-mark-line,
+  .bridge-mark-badge,
+  .bridge-mark-dot {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+  .bridge-mark-badge::before,
+  .bridge-mark-badge::after { display: none; }
+}
+
+/* ===== Mobile ===== */
+@media (max-width: 640px) {
+  .bridge { padding: 36px 20px; }
+  .bridge--paper-to-dark,
+  .bridge--dark-to-white,
+  .bridge--paper-to-deep { padding: 60px 20px; }
+  .bridge-mark-rule { gap: 12px; max-width: 320px; }
+  .bridge-mark-badge { width: 40px; height: 40px; font-size: 15px; }
+}

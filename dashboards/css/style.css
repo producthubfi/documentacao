@@ -1,0 +1,25 @@
+/* MASTER — importa todos os módulos na ordem correta */
+@import url('00-base.css');
+@import url('01-icons.css');
+@import url('01a-header.css');
+@import url('02-buttons.css');
+@import url('03-section-header.css');
+@import url('04-hero.css');
+@import url('05-logos.css');
+@import url('05a-logos-bancos.css ');
+@import url('06-hubfi-hoje.css');
+@import url('07-copilot.css');
+@import url('08-row4.css');
+@import url('09-produtos.css');
+@import url('10-bento.css');
+@import url('11-para-quem.css');
+@import url('12-footer.css');
+@import url('13-dinheiro-mesa.css');
+@import url('14-solucoes.css');
+
+
+
+
+/* Landingpage imobiliarias -----*/
+
+@import url('imobiliarias.css');
