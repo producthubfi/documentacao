@@ -53,7 +53,7 @@ tailwind.config = { theme: { extend: {
   .page-signoff{ position:relative; overflow:hidden; background:linear-gradient(135deg,#08574F 0%,#053D38 55%,#022B27 100%); color:#fff; }
   .page-signoff::before{ content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(174,223,211,.32),transparent); }
   .page-signoff::after{ content:''; position:absolute; top:-180px; right:-80px; width:520px; height:520px; background:radial-gradient(circle,rgba(124,203,185,.14),transparent 65%); pointer-events:none; }
-  .page-signoff-inner{ position:relative; max-width:1280px; margin:0 auto; padding:56px 48px 28px; }
+  .page-signoff-inner{ position:relative; max-width:1600px; margin:0 auto; padding:56px 48px 28px; }
   .page-signoff-grid{ display:grid; grid-template-columns:1.4fr .8fr; gap:56px; align-items:end; }
   .page-signoff-mark{ display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:#7CCBB9; margin-bottom:18px; }
   .page-signoff-mark i{ width:18px; height:1px; background:#7CCBB9; display:block; }
@@ -233,11 +233,12 @@ tailwind.config = { theme: { extend: {
   .viz-table td b{ color:var(--primary); }
 </style>
 </head>
-<body class="bg-white text-ink-900">
+<body class="bg-white text-ink-900 lp-deck">
 
+<div class="lp-chrome">
 <!-- ===== BARRA DE ANUNCIO ===== -->
 <div class="bg-ink-950 text-white text-[13px]">
-  <div class="max-w-[1280px] mx-auto px-6 h-10 flex items-center justify-center gap-3">
+  <div class="max-w-[1600px] mx-auto px-6 h-10 flex items-center justify-center gap-3">
     <span class="inline-flex items-center gap-1.5 rounded-md bg-teal-500 text-white px-2 py-0.5 text-[11px] font-bold tracking-wider uppercase">Novo</span>
     <span class="text-white/85"><b class="text-white">Novo painel para parceiros</b> agora dentro da sua operação financeira</span>
     <a class="hidden sm:inline-flex items-center gap-1 text-teal-300 hover:text-teal-200 font-semibold" href="#painel">Ver por dentro
@@ -247,8 +248,8 @@ tailwind.config = { theme: { extend: {
 </div>
 
 <!-- ===== HEADER ===== -->
-<header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-paper-200">
-  <div class="max-w-[1280px] mx-auto px-6 h-[68px] flex items-center justify-between">
+<header class="bg-white/90 backdrop-blur-md border-b border-paper-200">
+  <div class="max-w-[1600px] mx-auto px-6 h-[68px] flex items-center justify-between">
     <div class="flex items-center gap-10">
       <a class="flex items-center gap-2.5 shrink-0" href="index.html"><img src="images/hubfi.png" id="logo" alt="Hubfi"></a>
       <nav class="hidden lg:flex items-center gap-1">
@@ -268,24 +269,38 @@ tailwind.config = { theme: { extend: {
     </div>
   </div>
 </header>
+</div>
+
+<nav class="lp-dots" aria-label="Navegação das seções"></nav>
+<button class="lp-next" type="button" aria-label="Próxima seção">
+  <svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" viewBox="0 0 24 24" width="18"><path d="M6 9l6 6 6-6"></path></svg>
+</button>
 
 <!-- ===== HERO ===== -->
-<section class="relative overflow-hidden mesh-hero">
+<section class="lp-slide relative overflow-hidden mesh-hero" id="inicio" data-slide="Início">
   <div class="absolute inset-0 gridlines opacity-60 pointer-events-none"></div>
-  <div class="relative max-w-[1280px] mx-auto px-6 pt-16 pb-16 lg:pt-20 lg:pb-24">
-    <div class="reveal max-w-[920px] mx-auto text-center">
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-white ring-1 ring-teal-100 shadow-soft text-[12.5px] font-medium text-teal-700 mb-7">
+  <div class="lp-slide-inner relative">
+    <div class="lp-hero-grid">
+    <div class="reveal lp-hero-copy">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-white ring-1 ring-teal-100 shadow-soft text-[12.5px] font-medium text-teal-700 mb-5">
         <span class="w-5 h-5 rounded-md bg-teal-500 text-white inline-flex items-center justify-center text-[11px] font-bold">N</span>
         <span>Novidades Hubfi</span>
       </div>
-      <h1 class="text-[34px] md:text-[44px] lg:text-[52px] leading-[1.08] font-bold text-ink-950">A inteligência de dados que a Hubfi <br/> <span class="text-teal-500">entrega para você.</span></h1>
-      <p class="mt-6 text-[18px] text-ink-500 leading-relaxed max-w-[780px] mx-auto">
+      <h1 class="text-[34px] md:text-[44px] lg:text-[48px] leading-[1.08] font-bold text-ink-950">A inteligência de dados que a Hubfi <span class="text-teal-500">entrega para você.</span></h1>
+      <p class="mt-5 text-[17px] text-ink-500 leading-relaxed max-w-[520px]">
         Um dashboard completo para acompanhar resultados, identificar oportunidades e tomar decisões com muito mais clareza.
       </p>
+      <div class="mt-7 flex flex-wrap items-center gap-3">
+        <a class="btn-cta-primary" href="#painel">
+          <span class="icn-wrap"><svg class="arr" fill="none" height="13" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="13"><path d="M5 12h14M13 5l7 7-7 7"></path></svg></span>
+          Ver o painel
+        </a>
+        <a class="btn-ghost inline-flex items-center h-10 px-3 rounded-md text-[14.5px] font-medium" href="como-ler.html">Como ler os dados</a>
+      </div>
     </div>
 
     <!-- ===== MOCKUP: painel de Operações, idêntico ao dashboard ===== -->
-    <div class="reveal mt-14 lg:mt-16 relative max-w-[980px] mx-auto">
+    <div class="reveal relative lp-hero-mock">
       <div class="absolute -inset-6 -z-10 rounded-[20px] bg-gradient-to-tr from-teal-200/40 via-teal-100/30 to-transparent blur-3xl"></div>
       <div class="rounded-lg bg-white ring-1 ring-paper-200 shadow-3d overflow-hidden">
         <div class="h-10 px-4 flex items-center gap-2 border-b border-paper-200 bg-paper-50">
@@ -333,11 +348,11 @@ tailwind.config = { theme: { extend: {
               </div>
             </div>
             <div class="funnel-chart">
-              <div class="funnel-bar"><div class="tag ok">1.240</div><div class="fill ok" style="height:150px"></div></div>
-              <div class="funnel-bar"><div class="tag att">820</div><div class="fill att" style="height:99px"></div></div>
-              <div class="funnel-bar"><div class="tag crit"><span class="gargalo-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></span>410</div><div class="fill crit" style="height:49px"></div></div>
-              <div class="funnel-bar"><div class="tag crit">180</div><div class="fill crit" style="height:22px"></div></div>
-              <div class="funnel-bar"><div class="tag ok">90</div><div class="fill ok" style="height:14px"></div></div>
+              <div class="funnel-bar"><div class="tag ok">1.240</div><div class="fill ok" style="height:88px"></div></div>
+              <div class="funnel-bar"><div class="tag att">820</div><div class="fill att" style="height:58px"></div></div>
+              <div class="funnel-bar"><div class="tag crit"><span class="gargalo-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></span>410</div><div class="fill crit" style="height:29px"></div></div>
+              <div class="funnel-bar"><div class="tag crit">180</div><div class="fill crit" style="height:13px"></div></div>
+              <div class="funnel-bar"><div class="tag ok">90</div><div class="fill ok" style="height:9px"></div></div>
             </div>
             <div class="funnel-labels"><span>Pré-cadastro</span><span>Em análise</span><span>Proposta</span><span>Formalização</span><span>Finalizado</span></div>
           </div>
@@ -345,13 +360,15 @@ tailwind.config = { theme: { extend: {
         </div>
       </div>
     </div>
+    </div>
   </div>
 </section>
 
 <!-- ===== NUMEROS (kpi-cards idênticos ao dashboard) ===== -->
-<section class="py-20 lg:py-24 bg-paper-50 relative overflow-hidden">
+<section class="lp-slide bg-paper-50 relative overflow-hidden" id="numeros" data-slide="Números">
   <div class="absolute inset-0 pointer-events-none"><div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[380px] rounded-full bg-teal-100/30 blur-3xl"></div></div>
-  <div class="relative max-w-[1280px] mx-auto px-6">
+  <div class="lp-slide-inner relative">
+  <div class="max-w-[1600px] mx-auto w-full">
     <div class="reveal text-center max-w-[780px] mx-auto mb-12">
       <div class="section-eyebrow mb-5">
         <span class="frame-icon-xs"><span class="frame-icon-xs-inner"><svg fill="none" height="14" viewBox="0 0 24 24" width="14"><path d="M13 2L4.5 13.5h7L11 22l8.5-11.5h-7L13 2z" stroke="#0A7165" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7"></path><circle cx="11" cy="13" fill="#3DB29C" r="1.6"></circle></svg></span></span>
@@ -385,15 +402,17 @@ tailwind.config = { theme: { extend: {
       </div>
     </div>
   </div>
+  </div>
 </section>
 
 <!-- ===== RECURSOS ===== -->
-<section class="py-24 lg:py-28 bg-white relative overflow-hidden" id="recursos">
+<section class="lp-slide bg-white relative overflow-hidden" id="recursos" data-slide="Recursos">
   <div class="absolute inset-0 pointer-events-none">
     <div class="absolute top-20 -left-32 w-96 h-96 rounded-full bg-teal-100/40 blur-3xl"></div>
     <div class="absolute bottom-20 -right-32 w-96 h-96 rounded-full bg-teal-200/30 blur-3xl"></div>
   </div>
-  <div class="max-w-[1280px] mx-auto px-6 relative">
+  <div class="lp-slide-inner relative">
+  <div class="max-w-[1600px] mx-auto w-full">
     <div class="max-w-[780px] mx-auto text-center mb-14 reveal">
       <div class="section-eyebrow mb-5">
         <span class="frame-icon-xs"><span class="frame-icon-xs-inner"><svg fill="none" height="14" viewBox="0 0 24 24" width="14"><rect height="7" rx="1.2" stroke="#0A7165" stroke-width="1.7" width="7" x="3" y="3"></rect><rect height="7" rx="1.2" stroke="#0A7165" stroke-width="1.7" width="7" x="14" y="3"></rect><rect height="7" rx="1.2" stroke="#0A7165" stroke-width="1.7" width="7" x="3" y="14"></rect><rect height="7" rx="1.2" stroke="#3DB29C" stroke-width="1.9" width="7" x="14" y="14"></rect></svg></span></span>
@@ -436,11 +455,13 @@ tailwind.config = { theme: { extend: {
       </div>
     </div>
   </div>
+  </div>
 </section>
 
 <!-- ===== POR DENTRO DO PAINEL (tabs das 4 páginas) ===== -->
-<section class="py-24 lg:py-28 bg-paper-50 relative overflow-hidden" id="painel">
-  <div class="max-w-[1280px] mx-auto px-6 relative">
+<section class="lp-slide bg-paper-50 relative overflow-hidden" id="painel" data-slide="Painel">
+  <div class="lp-slide-inner relative">
+  <div class="max-w-[1600px] mx-auto w-full">
     <div class="max-w-[840px] mx-auto text-center mb-12 reveal">
       <div class="section-eyebrow mb-5">
         <span class="frame-icon-xs"><span class="frame-icon-xs-inner"><svg fill="none" height="14" viewBox="0 0 24 24" width="14"><rect height="16" rx="2" stroke="#0A7165" stroke-width="1.7" width="18" x="3" y="4"></rect><path d="M3 9h18" stroke="#0A7165" stroke-width="1.7"></path><circle cx="6.5" cy="6.5" fill="#3DB29C" r="1.1"></circle></svg></span></span>
@@ -632,7 +653,7 @@ tailwind.config = { theme: { extend: {
       </div>
     </div>
 
-    <div class="mt-12 text-center reveal">
+    <div class="mt-12 text-center reveal lp-hide-in-slide">
       <p class="text-[15.5px] text-ink-500 mb-5">Admin e Gestor não veem a mesma tela. Abra o guia e leia cada card no seu perfil.</p>
       <a class="btn-cta-primary" href="como-ler.html">
         <span class="icn-wrap"><svg class="arr" fill="none" height="13" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="13"><path d="M5 12h14M13 5l7 7-7 7"></path></svg></span>
@@ -640,11 +661,13 @@ tailwind.config = { theme: { extend: {
       </a>
     </div>
   </div>
+  </div>
 </section>
 
 <!-- ===== PERFIS DE ACESSO ===== -->
-<section class="py-24 lg:py-28 bg-white relative overflow-hidden" id="perfis">
-  <div class="max-w-[1280px] mx-auto px-6 relative">
+<section class="lp-slide bg-white relative overflow-hidden" id="perfis" data-slide="Perfis">
+  <div class="lp-slide-inner relative">
+  <div class="max-w-[1600px] mx-auto w-full">
     <div class="max-w-[780px] mx-auto text-center mb-14 reveal">
       <div class="section-eyebrow mb-5">
         <span class="frame-icon-xs"><span class="frame-icon-xs-inner"><svg fill="none" height="14" viewBox="0 0 24 24" width="14"><circle cx="9" cy="7" r="3.2" stroke="#0A7165" stroke-width="1.7"></circle><path d="M2.5 20v-1.5a4 4 0 0 1 4-4H11" stroke="#0A7165" stroke-linecap="round" stroke-width="1.7"></path><circle cx="17" cy="9" fill="#3DB29C" r="1.6"></circle></svg></span></span>
@@ -718,11 +741,13 @@ tailwind.config = { theme: { extend: {
       </div>
     </div>
   </div>
+  </div>
 </section>
 
 <!-- ===== COMO FUNCIONA ===== -->
-<section class="py-24 lg:py-28 bg-paper-50" id="como-funciona">
-  <div class="max-w-[1280px] mx-auto px-6">
+<section class="lp-slide bg-paper-50" id="como-funciona" data-slide="Como funciona">
+  <div class="lp-slide-inner">
+  <div class="max-w-[1600px] mx-auto w-full">
     <div class="max-w-[780px] mx-auto text-center mb-14 reveal">
       <div class="section-eyebrow mb-5">
         <span class="frame-icon-xs"><span class="frame-icon-xs-inner"><svg fill="none" height="14" viewBox="0 0 24 24" width="14"><path d="M13 2L4.5 13.5h7L11 22l8.5-11.5h-7L13 2z" stroke="#0A7165" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7"></path><circle cx="11" cy="13" fill="#3DB29C" r="1.6"></circle></svg></span></span>
@@ -749,10 +774,11 @@ tailwind.config = { theme: { extend: {
       </div>
     </div>
   </div>
+  </div>
 </section>
 
 <!-- ===== FOOTER ===== -->
-<footer class="page-signoff" id="contato">
+<footer class="page-signoff lp-slide" id="contato" data-slide="Contato">
   <div class="page-signoff-inner">
     <div class="page-signoff-grid">
       <div>
@@ -806,5 +832,6 @@ tailwind.config = { theme: { extend: {
     });
   });
 </script>
+<script src="js/lp-slides.js"></script>
 </body>
 </html>

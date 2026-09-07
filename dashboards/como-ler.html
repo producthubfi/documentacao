@@ -372,7 +372,7 @@ tailwind.config = { theme: { extend: {
   .dash-mock .card, .dash-mock .kpi-row{ margin-bottom:0; }
   .dash-mock .hide-empresa .empresa-col, .dash-mock.hide-empresa .empresa-col{ display:none; }
   .dash-mock .funnel-chart, .dash-mock .card{ overflow:visible; }
-  #guia [hidden]{ display:none !important; }
+  #guiaPage [hidden]{ display:none !important; }
   nav a.is-current{ color:#0F1219; background:#EBF7F4; }
   @media (max-width:860px){
     .guide-compare{ grid-template-columns:1fr; }
@@ -380,8 +380,9 @@ tailwind.config = { theme: { extend: {
   }
 </style>
 </head>
-<body class="bg-paper-50 text-ink-900">
+<body class="bg-paper-50 text-ink-900 lp-deck lp-deck-guia">
 
+<div class="lp-chrome">
 <div class="bg-ink-950 text-white text-[13px]">
   <div class="max-w-[1440px] mx-auto px-6 h-10 flex items-center justify-center gap-3">
     <span class="inline-flex items-center gap-1.5 rounded-md bg-teal-500 text-white px-2 py-0.5 text-[11px] font-bold tracking-wider uppercase">Guia</span>
@@ -392,7 +393,7 @@ tailwind.config = { theme: { extend: {
   </div>
 </div>
 
-<header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-paper-200">
+<header class="bg-white/90 backdrop-blur-md border-b border-paper-200">
   <div class="max-w-[1440px] mx-auto px-6 h-[68px] flex items-center justify-between">
     <div class="flex items-center gap-10">
       <a class="flex items-center gap-2.5 shrink-0" href="hubfi-painel-empresas.html"><img src="images/hubfi.png" id="logo" alt="Hubfi"></a>
@@ -412,11 +413,17 @@ tailwind.config = { theme: { extend: {
     </div>
   </div>
 </header>
+</div>
+
+<nav class="lp-dots" aria-label="Navegação das seções"></nav>
+<button class="lp-next" type="button" aria-label="Próxima seção">
+  <svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" viewBox="0 0 24 24" width="18"><path d="M6 9l6 6 6-6"></path></svg>
+</button>
 
 <main id="guiaPage">
-  <section class="relative overflow-hidden">
+  <section class="lp-slide relative overflow-hidden" id="inicio" data-slide="Início">
     <div class="absolute inset-0 pointer-events-none"><div class="absolute top-0 left-1/2 -translate-x-1/2 w-[640px] h-[380px] rounded-full bg-teal-100/40 blur-3xl"></div></div>
-    <div class="relative max-w-[1440px] mx-auto px-6 pt-16 pb-6 lg:pt-20">
+    <div class="lp-slide-inner relative">
       <div class="max-w-[780px] mx-auto text-center reveal">
         <div class="section-eyebrow mb-5 justify-center">
           <span class="frame-icon-xs"><span class="frame-icon-xs-inner"><svg fill="none" height="14" viewBox="0 0 24 24" width="14"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="#0A7165" stroke-width="1.7"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke="#0A7165" stroke-width="1.7"></path></svg></span></span>
@@ -428,9 +435,7 @@ tailwind.config = { theme: { extend: {
     </div>
   </section>
 
-  <section class="pb-24">
-    <div class="max-w-[1440px] mx-auto px-6" id="guia">
-      <div class="guia-tabs-wrap">
+  <div class="guia-tabs-wrap" id="guia">
         <div class="tabs-nav" id="guiaSwitch" role="tablist" aria-label="Perfil do guia">
           <button class="tab-card" type="button" data-guide-profile="admin" data-active="true">
             <span class="tab-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="M7 15l4-4 3 3 5-6"></path></svg></span>
@@ -443,8 +448,11 @@ tailwind.config = { theme: { extend: {
             <svg class="tab-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"></path></svg>
           </button>
         </div>
-      </div>
+  </div>
 
+  <section class="lp-slide" id="visoes" data-slide="2 visões">
+    <div class="lp-slide-inner">
+      <div class="max-w-[1440px] mx-auto w-full">
       <div class="guide-compare">
         <article class="guide-role">
           <span class="who-chip admin">Admin da empresa</span>
@@ -477,9 +485,13 @@ tailwind.config = { theme: { extend: {
           <span class="guide-page">Usuários</span>
         </div>
       </div>
+      </div>
+    </div>
+  </section>
 
-
-      <div class="guide-block" data-guide="both">
+      <section class="lp-slide lp-slide-guide guide-block" data-guide="both" data-slide="4 números">
+        <div class="lp-slide-inner">
+        <div class="max-w-[1440px] mx-auto w-full">
         <h4>Operações · os 4 números de cima</h4>
         <article class="guide-item">
           <div class="dash-mock dash-shell">    <div class="kpi-row">
@@ -531,9 +543,13 @@ tailwind.config = { theme: { extend: {
             </div>
           </div>
         </article>
-      </div>
+        </div>
+        </div>
+      </section>
 
-      <div class="guide-block" data-guide="both">
+      <section class="lp-slide lp-slide-guide guide-block" data-guide="both" data-slide="Funil">
+        <div class="lp-slide-inner">
+        <div class="max-w-[1440px] mx-auto w-full">
         <h4>Operações · funil e SLA</h4>
         <article class="guide-item">
           <div class="dash-mock dash-shell">    <div class="card">
@@ -547,7 +563,7 @@ tailwind.config = { theme: { extend: {
         </div>
       </div>
       <p class="filter-note" style="margin:0 0 4px;">Passe o mouse sobre uma coluna do funil para ver o detalhe da etapa.</p>
-      <div class="funnel-chart" id="funnel-chart"><div class="funnel-bar"><div class="tag ok">1.240</div><div class="fill ok" style="height:210px"></div><div class="stage-popover"><div class="pop-head"><span class="name">Pré-cadastro</span><span class="badge teal">Dentro do prazo</span></div><div class="pop-stats"><span>1.240 operações</span><span>R$ 18,4M</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--error)"></span>Crítica</span><span class="val">0</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--warning)"></span>Atenção</span><span class="val">0</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--primary)"></span>Dentro do prazo</span><span class="val">1240</span></div></div></div><div class="funnel-bar"><div class="tag att">820</div><div class="fill att" style="height:139px"></div><div class="stage-popover"><div class="pop-head"><span class="name">Em análise</span><span class="badge amber">Atenção</span></div><div class="pop-stats"><span>820 operações</span><span>R$ 12,1M</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--error)"></span>Crítica</span><span class="val">0</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--warning)"></span>Atenção</span><span class="val">90</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--primary)"></span>Dentro do prazo</span><span class="val">730</span></div></div></div><div class="funnel-bar"><div class="tag crit"><span class="gargalo-icon"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></span>410</div><div class="fill crit" style="height:69px"></div><div class="stage-popover"><div class="pop-head"><span class="name">Proposta</span><span class="badge red">Gargalo</span></div><div class="pop-callout"><span class="ic">i</span><span>Entra em gargalo quando 50% ou mais das operações nesta etapa estão em Atenção ou Crítica.</span></div><div class="pop-stats"><span>410 operações</span><span>R$ 6,4M</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--error)"></span>Crítica</span><span class="val">15</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--warning)"></span>Atenção</span><span class="val">190</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--primary)"></span>Dentro do prazo</span><span class="val">205</span></div></div></div><div class="funnel-bar"><div class="tag crit">180</div><div class="fill crit" style="height:30px"></div><div class="stage-popover"><div class="pop-head"><span class="name">Formalização</span><span class="badge red">Crítica</span></div><div class="pop-stats"><span>180 operações</span><span>R$ 2,8M</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--error)"></span>Crítica</span><span class="val">2</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--warning)"></span>Atenção</span><span class="val">20</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--primary)"></span>Dentro do prazo</span><span class="val">158</span></div></div></div><div class="funnel-bar"><div class="tag ok">90</div><div class="fill ok" style="height:20px"></div><div class="stage-popover"><div class="pop-head"><span class="name">Finalizado</span><span class="badge teal">Dentro do prazo</span></div><div class="pop-stats"><span>90 operações</span><span>R$ 1,4M</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--error)"></span>Crítica</span><span class="val">0</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--warning)"></span>Atenção</span><span class="val">0</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--primary)"></span>Dentro do prazo</span><span class="val">90</span></div></div></div></div>
+      <div class="funnel-chart" id="funnel-chart"><div class="funnel-bar"><div class="tag ok">1.240</div><div class="fill ok" style="height:85%"></div><div class="stage-popover"><div class="pop-head"><span class="name">Pré-cadastro</span><span class="badge teal">Dentro do prazo</span></div><div class="pop-stats"><span>1.240 operações</span><span>R$ 18,4M</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--error)"></span>Crítica</span><span class="val">0</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--warning)"></span>Atenção</span><span class="val">0</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--primary)"></span>Dentro do prazo</span><span class="val">1240</span></div></div></div><div class="funnel-bar"><div class="tag att">820</div><div class="fill att" style="height:56%"></div><div class="stage-popover"><div class="pop-head"><span class="name">Em análise</span><span class="badge amber">Atenção</span></div><div class="pop-stats"><span>820 operações</span><span>R$ 12,1M</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--error)"></span>Crítica</span><span class="val">0</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--warning)"></span>Atenção</span><span class="val">90</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--primary)"></span>Dentro do prazo</span><span class="val">730</span></div></div></div><div class="funnel-bar"><div class="tag crit"><span class="gargalo-icon"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></span>410</div><div class="fill crit" style="height:28%"></div><div class="stage-popover"><div class="pop-head"><span class="name">Proposta</span><span class="badge red">Gargalo</span></div><div class="pop-callout"><span class="ic">i</span><span>Entra em gargalo quando 50% ou mais das operações nesta etapa estão em Atenção ou Crítica.</span></div><div class="pop-stats"><span>410 operações</span><span>R$ 6,4M</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--error)"></span>Crítica</span><span class="val">15</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--warning)"></span>Atenção</span><span class="val">190</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--primary)"></span>Dentro do prazo</span><span class="val">205</span></div></div></div><div class="funnel-bar"><div class="tag crit">180</div><div class="fill crit" style="height:12%"></div><div class="stage-popover"><div class="pop-head"><span class="name">Formalização</span><span class="badge red">Crítica</span></div><div class="pop-stats"><span>180 operações</span><span>R$ 2,8M</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--error)"></span>Crítica</span><span class="val">2</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--warning)"></span>Atenção</span><span class="val">20</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--primary)"></span>Dentro do prazo</span><span class="val">158</span></div></div></div><div class="funnel-bar"><div class="tag ok">90</div><div class="fill ok" style="height:8%"></div><div class="stage-popover"><div class="pop-head"><span class="name">Finalizado</span><span class="badge teal">Dentro do prazo</span></div><div class="pop-stats"><span>90 operações</span><span>R$ 1,4M</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--error)"></span>Crítica</span><span class="val">0</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--warning)"></span>Atenção</span><span class="val">0</span></div><div class="pop-status-row"><span class="lbl"><span class="dot" style="background:var(--primary)"></span>Dentro do prazo</span><span class="val">90</span></div></div></div></div>
       <div class="funnel-labels" id="funnel-labels"><span>Pré-cadastro</span><span>Em análise</span><span>Proposta</span><span>Formalização</span><span>Finalizado</span></div>
     </div></div>
           <div class="guide-notes cols-1">
@@ -563,9 +579,13 @@ tailwind.config = { theme: { extend: {
             </div>
           </div>
         </article>
-      </div>
+        </div>
+        </div>
+      </section>
 
-      <div class="guide-block" data-guide="gestor">
+      <section class="lp-slide lp-slide-guide guide-block" data-guide="gestor" data-slide="Pendências">
+        <div class="lp-slide-inner">
+        <div class="max-w-[1440px] mx-auto w-full">
         <h4>Operações · só o Gestor vê</h4>
         <article class="guide-item">
           <div class="dash-mock dash-shell">    <div class="card">
@@ -600,9 +620,13 @@ tailwind.config = { theme: { extend: {
             </div>
           </div>
         </article>
-      </div>
+        </div>
+        </div>
+      </section>
 
-      <div class="guide-block" data-guide="both">
+      <section class="lp-slide lp-slide-guide guide-block" data-guide="both" data-slide="Time e perdas">
+        <div class="lp-slide-inner">
+        <div class="max-w-[1440px] mx-auto w-full">
         <h4>Operações · time, perdas e formulário</h4>
         <article class="guide-item">
           <div class="dash-mock dash-shell">    <div class="two-col">
@@ -664,7 +688,15 @@ tailwind.config = { theme: { extend: {
             </div>
           </div>
         </article>
-        <article class="guide-item" style="margin-top:12px">
+        </div>
+        </div>
+      </section>
+
+      <section class="lp-slide lp-slide-guide guide-block" data-guide="both" data-slide="Formulário">
+        <div class="lp-slide-inner">
+        <div class="max-w-[1440px] mx-auto w-full">
+        <h4>Operações · funil de formulário</h4>
+        <article class="guide-item">
           <div class="dash-mock dash-shell">    <div class="card">
       <div class="card-head">
         <div><h3>Funil de preenchimento de formulário</h3><p class="sub">Clientes das suas equipes no período</p></div>
@@ -694,9 +726,13 @@ tailwind.config = { theme: { extend: {
             </div>
           </div>
         </article>
-      </div>
+        </div>
+        </div>
+      </section>
 
-      <div class="guide-block" data-guide="admin">
+      <section class="lp-slide lp-slide-guide guide-block" data-guide="admin" data-slide="Safra">
+        <div class="lp-slide-inner">
+        <div class="max-w-[1440px] mx-auto w-full">
         <h4>Safra · só o Admin vê</h4>
         <article class="guide-item">
           <div class="dash-mock dash-shell" style="display:flex;flex-direction:column;gap:16px">
@@ -747,7 +783,15 @@ tailwind.config = { theme: { extend: {
             </div>
           </div>
         </article>
-        <article class="guide-item" style="margin-top:12px">
+        </div>
+        </div>
+      </section>
+
+      <section class="lp-slide lp-slide-guide guide-block" data-guide="admin" data-slide="Safras mês a mês">
+        <div class="lp-slide-inner">
+        <div class="max-w-[1440px] mx-auto w-full">
+        <h4>Safra · detalhamento</h4>
+        <article class="guide-item">
           <div class="dash-mock dash-shell">    <div class="card">
       <div class="card-head"><div><h3>Detalhamento por safra</h3><p class="sub">Cada linha é uma coorte de operações abertas no mesmo período</p></div></div>
       <div class="demo-toggle">
@@ -791,9 +835,13 @@ tailwind.config = { theme: { extend: {
             </div>
           </div>
         </article>
-      </div>
+        </div>
+        </div>
+      </section>
 
-      <div class="guide-block" data-guide="both">
+      <section class="lp-slide lp-slide-guide guide-block" data-guide="both" data-slide="Produtos">
+        <div class="lp-slide-inner">
+        <div class="max-w-[1440px] mx-auto w-full">
         <h4>Produtos</h4>
         <article class="guide-item">
           <div class="dash-mock dash-shell" style="display:flex;flex-direction:column;gap:16px">
@@ -849,9 +897,13 @@ tailwind.config = { theme: { extend: {
             </div>
           </div>
         </article>
-      </div>
+        </div>
+        </div>
+      </section>
 
-      <div class="guide-block" data-guide="both">
+      <section class="lp-slide lp-slide-guide guide-block" data-guide="both" data-slide="Usuários">
+        <div class="lp-slide-inner">
+        <div class="max-w-[1440px] mx-auto w-full">
         <h4>Usuários</h4>
         <article class="guide-item">
           <div class="dash-mock dash-shell" style="display:flex;flex-direction:column;gap:16px">
@@ -918,9 +970,13 @@ tailwind.config = { theme: { extend: {
             </div>
           </div>
         </article>
-      </div>
+        </div>
+        </div>
+      </section>
 
-      <div class="guide-block" data-guide="both">
+      <section class="lp-slide lp-slide-guide guide-block" data-guide="both" data-slide="Filtros">
+        <div class="lp-slide-inner">
+        <div class="max-w-[1440px] mx-auto w-full">
         <h4>Como filtrar sem se perder</h4>
         <article class="guide-item">
           <div class="dash-mock dash-shell">
@@ -965,19 +1021,12 @@ tailwind.config = { theme: { extend: {
             </div>
           </div>
         </article>
-      </div>
-
-      <div class="mt-10 text-center">
-        <a class="btn-cta-primary" href="hubfi-painel-empresas.html#painel">
-          <span class="icn-wrap"><svg class="arr" fill="none" height="13" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="13"><path d="M5 12h14M13 5l7 7-7 7"></path></svg></span>
-          Voltar para o painel
-        </a>
-      </div>
-    </div>
-  </section>
+        </div>
+        </div>
+      </section>
 </main>
 
-<footer class="page-signoff" id="contato">
+<footer class="page-signoff lp-slide" id="contato" data-slide="Contato">
   <div class="page-signoff-inner">
     <div class="page-signoff-grid">
       <div>
@@ -1023,7 +1072,7 @@ tailwind.config = { theme: { extend: {
     document.querySelectorAll('#guiaSwitch .tab-card').forEach(function(btn){
       btn.setAttribute('data-active', btn.getAttribute('data-guide-profile')===key ? 'true':'false');
     });
-    document.querySelectorAll('#guia [data-guide]').forEach(function(el){
+    document.querySelectorAll('#guiaPage [data-guide]').forEach(function(el){
       var g = el.getAttribute('data-guide');
       el.hidden = !(g==='both' || g===key);
     });
@@ -1034,6 +1083,7 @@ tailwind.config = { theme: { extend: {
       url.searchParams.set('perfil', key);
       history.replaceState(null, '', url);
     }
+    if(window.HubfiSlides) window.HubfiSlides.refresh();
   }
   document.querySelectorAll('#guiaSwitch .tab-card').forEach(function(btn){
     btn.addEventListener('click', function(){ setGuideProfile(btn.getAttribute('data-guide-profile')); });
@@ -1046,5 +1096,6 @@ tailwind.config = { theme: { extend: {
     setGuideProfile(key, false);
   })();
 </script>
+<script src="js/lp-slides.js"></script>
 </body>
 </html>

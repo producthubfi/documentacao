@@ -1,0 +1,396 @@
+/* ============================================
+   15 — LANDING SLIDES
+   Cada seção ocupa 100% da tela, com snap
+   ============================================ */
+
+:root {
+  --lp-banner: 40px;
+  --lp-header: 68px;
+  --lp-chrome: calc(var(--lp-banner) + var(--lp-header));
+}
+
+html.lp-deck {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  overflow-y: scroll;
+}
+
+body.lp-deck {
+  overflow-x: hidden;
+}
+
+.lp-chrome {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+}
+
+.lp-chrome header {
+  position: relative;
+  top: auto;
+}
+
+.lp-slide {
+  height: 100dvh;
+  height: 100vh;
+  min-height: 100dvh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding-top: var(--lp-chrome);
+  overflow: hidden;
+  position: relative;
+}
+
+.lp-slide-inner {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  overflow: auto;
+  overscroll-behavior-y: contain;
+  display: flex;
+  flex-direction: column;
+  justify-content: safe center;
+  padding: 16px 40px 48px;
+  box-sizing: border-box;
+}
+
+.lp-slide-inner > .max-w-\[1280px\],
+.lp-slide-inner > .max-w-\[1440px\],
+.lp-slide-inner > .max-w-\[1600px\] {
+  width: 100%;
+}
+
+/* Hero: copy + mockup no mesmo slide */
+.lp-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(260px, .62fr) minmax(0, 1.38fr);
+  gap: 48px;
+  align-items: center;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+.lp-hero-mock {
+  min-width: 0;
+  width: 100%;
+}
+
+.lp-hero-copy {
+  text-align: left;
+}
+
+.lp-hero-copy h1 {
+  font-size: clamp(28px, 3.4vw, 46px);
+}
+
+.lp-hero-copy p {
+  margin-left: 0 !important;
+}
+
+.lp-hero-mock .funnel-chart {
+  height: 108px;
+}
+
+.lp-hero-mock .kpi-card {
+  padding: 12px;
+  gap: 8px;
+}
+
+.lp-hero-mock .kpi-value {
+  font-size: 18px;
+}
+
+.lp-hero-mock .kpi-sub.pause {
+  display: none;
+}
+
+/* Dots laterais */
+.lp-dots {
+  position: fixed;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.lp-dot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  color: #9CA3AF;
+}
+
+.lp-dot i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #D1D5DD;
+  display: block;
+  transition: transform .2s, background .2s, width .2s, border-radius .2s;
+}
+
+.lp-dot span {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  opacity: 0;
+  transform: translateX(6px);
+  transition: opacity .2s, transform .2s;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.lp-dot:hover span,
+.lp-dot.is-active span,
+.lp-dot:focus-visible span {
+  opacity: 1;
+  transform: none;
+}
+
+.lp-dot.is-active i {
+  width: 22px;
+  border-radius: 99px;
+  background: #0E8B7A;
+}
+
+.lp-dot:focus-visible {
+  outline: 2px solid #0E8B7A;
+  outline-offset: 3px;
+  border-radius: 99px;
+}
+
+/* Seta próxima */
+.lp-next {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  z-index: 60;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #D7EFE9;
+  background: #fff;
+  color: #0A7165;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 8px 20px -12px rgba(8,55,45,.35);
+  animation: lpBounce 1.8s ease-in-out infinite;
+}
+
+.lp-next[hidden] {
+  display: none !important;
+}
+
+.lp-next:hover {
+  background: #EBF7F4;
+}
+
+@keyframes lpBounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(5px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.lp-deck { scroll-behavior: auto; }
+  .lp-next { animation: none; }
+  .reveal { opacity: 1; transform: none; }
+}
+
+/* Compactar seções densas para caber no slide */
+.lp-slide .section-eyebrow { margin-bottom: 12px !important; }
+.lp-slide h2 {
+  font-size: clamp(26px, 3.2vw, 40px) !important;
+  line-height: 1.08 !important;
+}
+.lp-slide .mb-12,
+.lp-slide .mb-14 { margin-bottom: 22px !important; }
+.lp-slide#painel .pane-copy h3 { font-size: clamp(24px, 2.6vw, 32px); margin: 12px 0 10px; }
+.lp-slide#painel .tab-pane[data-active="true"] { gap: 36px; }
+.lp-slide#painel .funnel-chart { height: 110px; }
+.lp-slide .feature-card,
+.lp-slide .profile-card,
+.lp-slide .step-card { padding: 20px; }
+.lp-slide .profile-list { margin-top: 12px; gap: 7px; }
+.lp-slide .mini-widget { padding-top: 14px; }
+
+/* Footer como slide */
+footer.lp-slide.page-signoff {
+  justify-content: center;
+}
+footer.lp-slide .page-signoff-inner {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 28px;
+  padding-bottom: 72px;
+  max-width: 1600px;
+  width: 100%;
+}
+
+/* Como ler: tabs compactas; altura real vem do JS (--lp-tabs) */
+body.lp-deck-guia {
+  --lp-tabs: 80px;
+}
+
+body.lp-deck-guia .lp-slide {
+  padding-top: calc(var(--lp-chrome) + var(--lp-tabs));
+}
+
+body.lp-deck-guia .guia-tabs-wrap {
+  position: fixed;
+  top: var(--lp-chrome);
+  left: 0;
+  right: 0;
+  z-index: 45;
+  margin: 0;
+  padding: 8px 24px;
+}
+
+body.lp-deck-guia #guiaPage .tab-card {
+  min-width: 220px;
+  padding: 8px 12px;
+}
+
+body.lp-deck-guia .lp-slide-guide .lp-slide-inner {
+  justify-content: stretch;
+  padding: 12px 32px 56px;
+  overflow: hidden;
+}
+
+body.lp-deck-guia .lp-slide-guide .lp-slide-inner > div {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+body.lp-deck-guia .lp-slide-guide .guide-compare {
+  margin-bottom: 12px;
+}
+
+body.lp-deck-guia .lp-slide-guide .guide-item {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+body.lp-deck-guia .lp-slide-guide .dash-shell {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 12px !important;
+}
+
+body.lp-deck-guia .lp-slide-guide .dash-shell > .card,
+body.lp-deck-guia .lp-slide-guide .dash-shell > .kpi-row + .card,
+body.lp-deck-guia .lp-slide-guide .dash-mock.dash-shell .card {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+body.lp-deck-guia .lp-slide-guide .dash-mock .funnel-chart {
+  flex: 1;
+  height: auto !important;
+  min-height: 200px;
+  overflow: visible;
+}
+
+body.lp-deck-guia .lp-slide-guide .dash-mock .funnel-bar {
+  height: 100%;
+}
+
+body.lp-deck-guia .lp-slide-guide .dash-mock .funnel-bar .fill {
+  max-height: calc(100% - 36px);
+}
+
+body.lp-deck-guia .lp-slide-guide .dash-mock .kpi-row {
+  gap: 8px !important;
+  margin-bottom: 8px !important;
+  flex: none;
+}
+body.lp-deck-guia .lp-slide-guide .dash-mock .kpi-card {
+  padding: 10px !important;
+  gap: 6px !important;
+}
+body.lp-deck-guia .lp-slide-guide .dash-mock .kpi-value { font-size: 16px !important; }
+body.lp-deck-guia .lp-slide-guide .dash-mock .card {
+  padding: 12px 14px !important;
+  margin-bottom: 0 !important;
+}
+body.lp-deck-guia .lp-slide-guide .dash-mock .card-head { margin-bottom: 8px !important; flex: none; }
+body.lp-deck-guia .lp-slide-guide .dash-mock .stage-table td { padding: 7px 8px !important; }
+body.lp-deck-guia .lp-slide-guide .dash-mock .table-scroll {
+  flex: 1;
+  min-height: 0;
+  max-height: none;
+  overflow: auto;
+}
+body.lp-deck-guia .lp-slide-guide .guide-notes {
+  flex: none;
+  padding: 8px !important;
+  gap: 6px !important;
+}
+body.lp-deck-guia .lp-slide-guide .guide-copy { padding: 8px 10px !important; gap: 6px !important; }
+body.lp-deck-guia .lp-slide-guide .guide-fact,
+body.lp-deck-guia .lp-slide-guide .guide-act { font-size: 12.5px !important; padding: 8px 10px !important; }
+body.lp-deck-guia .lp-slide-guide h4 { margin-bottom: 8px !important; flex: none; }
+body.lp-deck-guia .lp-slide-guide .guide-block { margin-bottom: 0; }
+
+.lp-slide#painel .lp-hide-in-slide { display: none; }
+
+@media (max-width: 960px) {
+  .lp-hero-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .lp-hero-copy { text-align: center; }
+  .lp-dots { right: 10px; }
+  .lp-dot span { display: none; }
+}
+
+@media (max-width: 899px) {
+  html.lp-deck { scroll-snap-type: y proximity; }
+  .lp-slide {
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+  .lp-slide-inner {
+    overflow: visible;
+    justify-content: flex-start;
+    padding-top: 28px;
+    padding-bottom: 48px;
+  }
+  .lp-hero-mock .kpi-sub.pause { display: block; }
+}
+
+@media (max-height: 820px) {
+  .lp-slide .mini-widget { display: none; }
+  .lp-hero-mock .dm-card { display: none; }
+  .lp-slide .profile-card { padding: 16px; }
+}
