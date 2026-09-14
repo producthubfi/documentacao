@@ -283,7 +283,9 @@ h1,h2,h3{letter-spacing:-.03em}
 /* ---------- PILARES (Bloxs tabs) ---------- */
 .pil{padding:112px 0;background:#fff;position:relative}
 .pil .center{text-align:center;max-width:820px;margin:0 auto}
-.tabs{display:grid;grid-template-columns:repeat(5,1fr);margin-top:48px;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#fff;box-shadow:0 1px 2px rgba(15,18,25,.03)}
+.tabs-car{position:relative;margin-top:48px}
+.tarrow,.tdots,.tabs button small{display:none}
+.tabs{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#fff;box-shadow:0 1px 2px rgba(15,18,25,.03)}
 .tabs button{display:flex;flex-direction:column;align-items:center;gap:10px;padding:22px 14px 20px;border-left:1px solid var(--line);font-size:14px;font-weight:600;color:#6B7280;position:relative;transition:.25s;background:#fff}
 .tabs button:first-child{border-left:0}
 .tabs button i{width:40px;height:40px;border-radius:50%;background:#F4F5F7;display:grid;place-items:center;color:#9CA3AF;transition:.25s}
@@ -570,6 +572,7 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
   .plat .kpis{grid-template-columns:1fr 1fr}.plat .kpis div:nth-child(3){display:none}
   .plat .main{overflow-x:auto}.plat table{min-width:440px}
   .fc,.stage.in .fc{position:relative;inset:auto;width:auto;margin:12px auto 0;max-width:360px;animation:none;opacity:1}
+  .fc-1{display:none}
   .prob-grid{grid-template-columns:1fr}
   .prob-left{border-right:0;border-bottom:1px solid var(--line)}
   .dor-list button:after{right:auto;left:-27px}
@@ -582,7 +585,8 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
   .chip{display:none}.chip.k{display:inline-flex}
   .pane>*{min-width:0}
   .virada-copy{padding-top:40px}
-  .tabs{grid-template-columns:repeat(5,minmax(120px,1fr));overflow-x:auto}
+  .tabs{grid-template-columns:repeat(5,minmax(0,1fr))}
+  .tabs button{padding:18px 8px 16px;font-size:12.5px}
   .pil-panel{padding:28px 22px}
   .float-card,.pane.on .float-card{position:static;width:auto;margin:14px 16px 16px;animation:none;opacity:1}
   .sol-grid>*{min-width:0}
@@ -623,8 +627,19 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
   .pt{padding:24px 20px 20px}
   .concl-copy,.concl-cells>div{padding:22px 20px}
   .orbit{height:300px}
-  .tabs{grid-template-columns:repeat(5,minmax(112px,1fr));margin-top:32px}
-  .tabs button{padding:16px 10px;font-size:12.5px}
+  .tabs-car{margin-top:28px;padding-bottom:22px}
+  .tabs{grid-template-columns:1fr;margin:0 44px;border-radius:18px}
+  .tabs button{display:none}
+  .tabs button.on{display:flex;flex-direction:row;align-items:center;gap:14px;padding:14px 16px;text-align:left;border-left:0;font-size:14.5px;animation:tabIn .4s cubic-bezier(.22,1,.36,1) both}
+  .tabs button.on:after{left:16px;right:16px}
+  .tabs button.on span{flex:1;min-width:0}
+  .tabs button.on small{display:block;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#0E8B7A;margin-left:auto;white-space:nowrap}
+  .tarrow{display:grid;place-items:center;position:absolute;top:50%;transform:translateY(calc(-50% - 11px));width:36px;height:36px;border-radius:50%;background:#fff;border:1px solid var(--line);color:#0F1219;box-shadow:0 8px 20px -12px rgba(15,18,25,.4);z-index:2}
+  .tprev{left:0}.tprev svg{transform:rotate(180deg)}.tnext{right:0}
+  .tarrow:active{background:#EBF7F4;color:#0E8B7A}
+  .tdots{display:flex;justify-content:center;gap:6px;position:absolute;left:0;right:0;bottom:0}
+  .tdots i{width:6px;height:6px;border-radius:50%;background:#D5DBD9;transition:.25s}
+  .tdots i.on{width:18px;border-radius:3px;background:#0E8B7A}
   .pil-panel{padding:20px 16px}
   .pane h3{font-size:22px}
   .cta .big{font-size:30px}
@@ -1046,12 +1061,17 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
       <p class="lead">A Hubfi não substitui o que você já faz. Ela amplia sua capacidade, com menos esforço.</p>
     </div>
 
-    <div class="tabs reveal" data-tabs>
-      <button class="on" data-t="1"><i><svg><use href="#i-plug"/></svg></i>Infraestrutura pronta</button>
-      <button data-t="2"><i><svg><use href="#i-grid"/></svg></i>Plataforma integrada</button>
-      <button data-t="3"><i><svg><use href="#i-bank"/></svg></i>Bancos e produtos</button>
-      <button data-t="4"><i><svg><use href="#i-headset"/></svg></i>Suporte especializado</button>
-      <button data-t="5"><i><svg><use href="#i-trend"/></svg></i>Monetização da carteira</button>
+    <div class="tabs-car reveal">
+      <button class="tarrow tprev" type="button" aria-label="Pilar anterior"><svg width="14" height="14"><use href="#i-arrow"/></svg></button>
+      <div class="tabs" data-tabs>
+        <button class="on" data-t="1"><i><svg><use href="#i-plug"/></svg></i><span>Infraestrutura pronta</span><small>01 / 05</small></button>
+        <button data-t="2"><i><svg><use href="#i-grid"/></svg></i><span>Plataforma integrada</span><small>02 / 05</small></button>
+        <button data-t="3"><i><svg><use href="#i-bank"/></svg></i><span>Bancos e produtos</span><small>03 / 05</small></button>
+        <button data-t="4"><i><svg><use href="#i-headset"/></svg></i><span>Suporte especializado</span><small>04 / 05</small></button>
+        <button data-t="5"><i><svg><use href="#i-trend"/></svg></i><span>Monetização da carteira</span><small>05 / 05</small></button>
+      </div>
+      <button class="tarrow tnext" type="button" aria-label="Próximo pilar"><svg width="14" height="14"><use href="#i-arrow"/></svg></button>
+      <div class="tdots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></div>
     </div>
 
     <div class="pil-panel reveal">
@@ -1410,13 +1430,25 @@ let dorIdx=1,dorTimer=setInterval(()=>{dorIdx=dorIdx%5+1;document.querySelector(
 document.querySelector('[data-dores]').addEventListener('pointerdown',e=>{clearInterval(dorTimer);e.currentTarget.classList.add('manual');},{once:true});
 
 // pilares (Bloxs)
-document.querySelectorAll('[data-tabs] button').forEach(b=>b.addEventListener('click',()=>{
-  document.querySelectorAll('[data-tabs] button').forEach(x=>x.classList.toggle('on',x===b));
+const tabBtns=[...document.querySelectorAll('[data-tabs] button')],tabDots=[...document.querySelectorAll('.tdots i')];
+function goTab(t){
+  t=((t-1+tabBtns.length)%tabBtns.length)+1;
+  tabBtns.forEach(x=>x.classList.toggle('on',+x.dataset.t===t));
+  tabDots.forEach((d,i)=>d.classList.toggle('on',i+1===t));
   document.querySelectorAll('.pil-panel .pane').forEach(p=>{
-    const on=p.dataset.pane===b.dataset.t;p.classList.toggle('on',on);
+    const on=+p.dataset.pane===t;p.classList.toggle('on',on);
     if(on){p.querySelectorAll('.bars div, .lane .bar i').forEach(el=>{el.style.animation='none';el.offsetHeight;el.style.animation='';});}
   });
-}));
+}
+const curTab=()=>+document.querySelector('[data-tabs] button.on').dataset.t;
+tabBtns.forEach(b=>b.addEventListener('click',()=>goTab(+b.dataset.t)));
+document.querySelector('.tprev').addEventListener('click',()=>goTab(curTab()-1));
+document.querySelector('.tnext').addEventListener('click',()=>goTab(curTab()+1));
+// swipe no mobile (tabs e painel)
+(()=>{let x0=null;const area=document.querySelector('.pil');
+  area.addEventListener('touchstart',e=>{x0=e.touches[0].clientX;},{passive:true});
+  area.addEventListener('touchend',e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)>50&&innerWidth<=640)goTab(curTab()+(dx<0?1:-1));},{passive:true});
+})();
 
 // count-up (Blueprintt números)
 const fmt=(v,dec)=>v.toLocaleString('pt-BR',{minimumFractionDigits:dec,maximumFractionDigits:dec});
