@@ -129,7 +129,7 @@ h1,h2,h3{letter-spacing:-.03em}
 .plat th{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#6B7280;text-align:left;padding:9px 12px;border-bottom:1px solid #E6ECEA;background:#F7F9F8}
 .plat td{padding:9px 12px;border-bottom:1px solid #EEF2F1;white-space:nowrap}
 .plat tr:last-child td{border-bottom:0}
-.plat td img{width:16px;height:16px;vertical-align:middle;margin-right:6px}
+.plat td img{display:inline-block;width:16px;height:16px;vertical-align:middle;margin-right:6px}
 .plat tr.hl td{background:#FFF8F8}
 .fc{color:var(--ink);text-align:left}
 .fc-1{width:250px;right:-10px;top:60px;animation:floatY 6.5s ease-in-out infinite}
@@ -570,9 +570,12 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
   .plat{width:100%}
   .plat .app{grid-template-columns:1fr}.plat .side{display:none}
   .plat .kpis{grid-template-columns:1fr 1fr}.plat .kpis div:nth-child(3){display:none}
-  .plat .main{overflow-x:auto}.plat table{min-width:440px}
+  .plat .main{overflow:hidden;padding:16px 14px 16px}
+  .plat table{min-width:0;table-layout:fixed}
+  .plat th,.plat td{padding:9px 8px;overflow:hidden;text-overflow:ellipsis}
+  .plat td img{width:14px;height:14px;margin-right:4px}
   .fc,.stage.in .fc{position:relative;inset:auto;width:auto;margin:12px auto 0;max-width:360px;animation:none;opacity:1}
-  .fc-1{display:none}
+  .fc-1,.fc-2{display:none}
   .prob-grid{grid-template-columns:1fr}
   .prob-left{border-right:0;border-bottom:1px solid var(--line)}
   .dor-list button:after{right:auto;left:-27px}
@@ -606,6 +609,9 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
 
 @media(max-width:640px){
   .wrap{padding:0 18px}
+  .plat th:nth-child(3),.plat td:nth-child(3){display:none}
+  .plat th:nth-child(1){width:24%}.plat th:nth-child(2){width:34%}.plat th:nth-child(4){width:42%}
+  .plat .tag{font-size:9.5px;padding:3px 7px}
   .hdr.is-float{padding:10px 12px}.hdr.is-float .hdr-in{padding:0 8px 0 16px;height:58px}
   .sec,.prob,.pil,.agora{padding:80px 0}
   .merc{padding:80px 0 32px}.perdas{padding:32px 0 80px}.sol{padding:80px 0}.cta{padding:88px 0 80px}
