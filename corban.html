@@ -79,9 +79,10 @@ h1,h2,h3{letter-spacing:-.03em}
 .sec-head.even .lead{max-width:none}
 .lead-2l span,.lead-2l b{display:block;white-space:nowrap}
 .lead-2l b{margin-top:2px}
-@media(max-width:1100px){.lead-2l span,.lead-2l b{white-space:normal}}
+@media(max-width:1200px){.lead-2l span,.lead-2l b{white-space:normal}}
 .dark .lead{color:rgba(255,255,255,.68)}
-@media(max-width:900px){.sec-head{grid-template-columns:1fr;gap:18px}.sec-head>:last-child{padding-top:0}}
+@media(max-width:1080px){.sec-head.even{grid-template-columns:1fr;gap:18px}.sec-head.even>:last-child{padding-top:0}}
+@media(max-width:900px){.sec-head,.sec-head.even{grid-template-columns:1fr;gap:18px}.sec-head>:last-child{padding-top:0}}
 
 /* ---------- HERO (Paytrack) ---------- */
 .hero{position:relative;color:#fff;background:radial-gradient(60% 50% at 50% 0%,rgba(14,139,122,.45),transparent 65%),radial-gradient(40% 50% at 0% 100%,rgba(61,178,156,.18),transparent 60%),linear-gradient(170deg,#043A35 0%,#022B27 55%,#0B0E14 100%);padding:140px 0 0}
@@ -583,13 +584,61 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
   .virada-copy{padding-top:40px}
   .tabs{grid-template-columns:repeat(5,minmax(120px,1fr));overflow-x:auto}
   .pil-panel{padding:28px 22px}
-  .float-card{right:0;top:-18px}
+  .float-card,.pane.on .float-card{position:static;width:auto;margin:14px 16px 16px;animation:none;opacity:1}
+  .sol-grid>*{min-width:0}
+  .net{grid-template-columns:repeat(2,1fr);gap:10px;padding:0}
+  .net svg.lines{display:none}
+  .tile.core-t{display:none}
+  .tile{min-height:120px;padding:16px 14px 14px}
+  .alert{display:flex;align-items:flex-start;gap:14px;padding:18px 20px}
+  .alert p{font-size:15px;max-width:none;text-align:left}
   .photo-ui{padding:0}
   .photo-ui .ui,.photo-ui.in .ui{position:relative;top:auto;width:auto;margin-bottom:14px;animation:none;opacity:1}
   .checkcard,.photo-ui.in .checkcard{position:relative;width:auto;margin-top:14px;animation:none;opacity:1}
   .diffs{grid-template-columns:1fr}
   .hero:after,.sol:before,.agora:before{display:none}
   .hdr .nav{display:none}
+}
+
+@media(max-width:640px){
+  .wrap{padding:0 18px}
+  .hdr.is-float{padding:10px 12px}.hdr.is-float .hdr-in{padding:0 8px 0 16px;height:58px}
+  .sec,.prob,.pil,.agora{padding:80px 0}
+  .merc{padding:80px 0 32px}.perdas{padding:32px 0 80px}.sol{padding:80px 0}.cta{padding:88px 0 80px}
+  .hero{padding-top:108px}
+  .hero h1{font-size:27px;max-width:none}
+  .hero .lead{font-size:14.5px}
+  .hero-actions{gap:14px}
+  .hero-links{gap:6px;margin-top:22px}
+  .hero-links a{height:32px;font-size:12px;padding:0 12px 0 5px}
+  .hero-links a i{width:22px;height:22px}
+  .stage{margin-top:28px;margin-bottom:-50px}
+  .logos{padding-top:84px}
+  .h2{font-size:24px}
+  .lead{font-size:14.5px}
+  .prob-left{padding:22px 20px}
+  .prob-mid{padding:22px 20px}
+  .stat{padding:20px}
+  .stat .num{font-size:40px}
+  .pt{padding:24px 20px 20px}
+  .concl-copy,.concl-cells>div{padding:22px 20px}
+  .orbit{height:300px}
+  .tabs{grid-template-columns:repeat(5,minmax(112px,1fr));margin-top:32px}
+  .tabs button{padding:16px 10px;font-size:12.5px}
+  .pil-panel{padding:20px 16px}
+  .pane h3{font-size:22px}
+  .cta .big{font-size:30px}
+  .cta .sub{font-size:16px}
+  .pts{gap:20px}
+  .ccard{padding:20px 18px 12px;min-height:0}
+  .ccard .box{padding:18px 16px 16px}
+  .ccard .note{font-size:11.5px}
+  footer .cols{grid-template-columns:1fr;gap:28px}
+  footer{padding:48px 0 28px}
+  .alert{margin-top:32px}
+  .alert i{width:34px;height:34px;flex-shrink:0}
+  .chip{padding:8px 12px 8px 8px;font-size:12px}
+  .to-top{height:36px}
 }
 </style>
 </head>
