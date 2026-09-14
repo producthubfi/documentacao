@@ -8,7 +8,7 @@
     cpf: "52998224725",
     name: "Lucas Augusto",
     email: "lucasaugusto@hubfi.com.br",
-    phone: "62996026603",
+    phone: "62996986604",
   };
 
   var COMPANY = {
