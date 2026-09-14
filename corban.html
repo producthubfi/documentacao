@@ -5,7 +5,7 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Hubfi para correspondentes bancários</title>
 <meta name="description" content="A Hubfi conecta correspondentes bancários a bancos privados, produtos financeiros complementares e suporte especializado."/>
-<link rel="icon" href="images/icon.png"/>
+<link rel="icon" href="dashboards/images/icon.png"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
@@ -20,9 +20,9 @@ tailwind.config = { theme: { extend: {
   }
 }}};
 </script>
-<link href="css/00-base.css" rel="stylesheet"/>
-<link href="css/02-buttons.css" rel="stylesheet"/>
-<link href="css/05-logos.css" rel="stylesheet"/>
+<link href="dashboards/css/00-base.css" rel="stylesheet"/>
+<link href="dashboards/css/02-buttons.css" rel="stylesheet"/>
+<link href="dashboards/css/05-logos.css" rel="stylesheet"/>
 <style>
 :root{--teal:#0E8B7A;--teal-d:#053D38;--ink:#0F1219;--line:#E6ECEA}
 .text-teal-500{font-weight:inherit}
@@ -626,8 +626,8 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
 <!-- HEADER flutuante -->
 <header class="hdr" id="hdr">
   <div class="hdr-in">
-    <a href="#topo" class="logo-w"><img src="images/hubfi-dark.png" alt="Hubfi"></a>
-    <a href="#topo" class="logo-d"><img src="images/hubfi.png" alt="Hubfi"></a>
+    <a href="#topo" class="logo-w"><img src="dashboards/images/hubfi-dark.png" alt="Hubfi"></a>
+    <a href="#topo" class="logo-d"><img src="dashboards/images/hubfi.png" alt="Hubfi"></a>
     <nav class="nav flex items-center gap-1">
       <a href="#problema">O problema</a>
       <a href="#mercado">O mercado</a>
@@ -667,7 +667,7 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
         <div class="bar"><i></i><i></i><i></i><div class="url"><svg width="10" height="10"><use href="#i-shield"/></svg>app.hubfi.com.br/mesa</div></div>
         <div class="app">
           <aside class="side">
-            <img src="images/hubfi-dark.png" alt="Hubfi">
+            <img src="dashboards/images/hubfi-dark.png" alt="Hubfi">
             <nav>
               <a class="on"><svg><use href="#i-grid"/></svg>Mesa</a>
               <a><svg><use href="#i-file"/></svg>Operações</a>
@@ -687,11 +687,11 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
             <table>
               <thead><tr><th>Cliente</th><th>Banco</th><th>Valor</th><th>Status</th></tr></thead>
               <tbody>
-                <tr class="hl"><td>Silva</td><td><img src="images/logos/caixa.svg" alt="">Caixa</td><td>R$ 420 mil</td><td><span class="tag red">Negado</span></td></tr>
-                <tr><td>Silva</td><td><img src="images/logos/itau.svg" alt="">Itaú</td><td>R$ 420 mil</td><td><span class="tag ok">Em análise</span></td></tr>
-                <tr><td>Costa</td><td><img src="images/logos/bradesco.svg" alt="">Bradesco</td><td>R$ 610 mil</td><td><span class="tag ok">Aprovado</span></td></tr>
+                <tr class="hl"><td>Silva</td><td><img src="dashboards/images/logos/caixa.svg" alt="">Caixa</td><td>R$ 420 mil</td><td><span class="tag red">Negado</span></td></tr>
+                <tr><td>Silva</td><td><img src="dashboards/images/logos/itau.svg" alt="">Itaú</td><td>R$ 420 mil</td><td><span class="tag ok">Em análise</span></td></tr>
+                <tr><td>Costa</td><td><img src="dashboards/images/logos/bradesco.svg" alt="">Bradesco</td><td>R$ 610 mil</td><td><span class="tag ok">Aprovado</span></td></tr>
                 <tr><td>Costa</td><td>Home equity</td><td>R$ 150 mil</td><td><span class="tag wt">Proposta</span></td></tr>
-                <tr><td>Melo</td><td><img src="images/logos/santander.svg" alt="">Santander</td><td>R$ 380 mil</td><td><span class="tag ok">Formalização</span></td></tr>
+                <tr><td>Melo</td><td><img src="dashboards/images/logos/santander.svg" alt="">Santander</td><td>R$ 380 mil</td><td><span class="tag ok">Formalização</span></td></tr>
               </tbody>
             </table>
           </div>
@@ -731,30 +731,30 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
   <div class="wrap">
     <p><span>Bancos privados e produtos que passam a estar <b>na sua mesa</b></span></p>
     <div class="marquee-mask overflow-hidden mt-4"><div class="flex marquee-track items-center">
-      <div class="bank-logo"><img src="images/logos/itau.svg" alt="Itaú"><span></span></div>
-      <div class="bank-logo"><img src="images/logos/bradesco.svg" alt="Bradesco"><span></span></div>
-      <div class="bank-logo"><img src="images/logos/santander.svg" alt="Santander"><span></span></div>
-      <div class="bank-logo"><img src="images/logos/caixa.svg" alt="Caixa"><span></span></div>
-      <div class="bank-logo"><img src="images/logos/bancodobrasil.svg" alt="Banco do Brasil"><span></span></div>
-      <div class="bank-logo"><img src="images/logos/inter.svg" alt="Inter"><span></span></div>
-      <div class="bank-logo"><img src="images/logos/btg.svg" alt="BTG"><span></span></div>
-      <div class="bank-logo"><img src="images/logos/safra.svg" alt="Safra"><span></span></div>
-      <div class="bank-logo"><img src="images/logos/sicoob.svg" alt="Sicoob"><span></span></div>
-      <div class="bank-logo"><img src="images/logos/pan.svg" alt="Pan"><span></span></div>
-      <div class="bank-logo"><img src="images/logos/c6.svg" alt="C6"><span></span></div>
-      <div class="bank-logo"><img src="images/logos/bv.svg" alt="BV"><span></span></div>
-      <div class="bank-logo"><img src="images/logos/itau.svg" alt="Itaú"><span></span></div>
-      <div class="bank-logo"><img src="images/logos/bradesco.svg" alt="Bradesco"><span></span></div>
-      <div class="bank-logo"><img src="images/logos/santander.svg" alt="Santander"><span></span></div>
-      <div class="bank-logo"><img src="images/logos/caixa.svg" alt="Caixa"><span></span></div>
-      <div class="bank-logo"><img src="images/logos/bancodobrasil.svg" alt="Banco do Brasil"><span></span></div>
-      <div class="bank-logo"><img src="images/logos/inter.svg" alt="Inter"><span></span></div>
-      <div class="bank-logo"><img src="images/logos/btg.svg" alt="BTG"><span></span></div>
-      <div class="bank-logo"><img src="images/logos/safra.svg" alt="Safra"><span></span></div>
-      <div class="bank-logo"><img src="images/logos/sicoob.svg" alt="Sicoob"><span></span></div>
-      <div class="bank-logo"><img src="images/logos/pan.svg" alt="Pan"><span></span></div>
-      <div class="bank-logo"><img src="images/logos/c6.svg" alt="C6"><span></span></div>
-      <div class="bank-logo"><img src="images/logos/bv.svg" alt="BV"><span></span></div>
+      <div class="bank-logo"><img src="dashboards/images/logos/itau.svg" alt="Itaú"><span></span></div>
+      <div class="bank-logo"><img src="dashboards/images/logos/bradesco.svg" alt="Bradesco"><span></span></div>
+      <div class="bank-logo"><img src="dashboards/images/logos/santander.svg" alt="Santander"><span></span></div>
+      <div class="bank-logo"><img src="dashboards/images/logos/caixa.svg" alt="Caixa"><span></span></div>
+      <div class="bank-logo"><img src="dashboards/images/logos/bancodobrasil.svg" alt="Banco do Brasil"><span></span></div>
+      <div class="bank-logo"><img src="dashboards/images/logos/inter.svg" alt="Inter"><span></span></div>
+      <div class="bank-logo"><img src="dashboards/images/logos/btg.svg" alt="BTG"><span></span></div>
+      <div class="bank-logo"><img src="dashboards/images/logos/safra.svg" alt="Safra"><span></span></div>
+      <div class="bank-logo"><img src="dashboards/images/logos/sicoob.svg" alt="Sicoob"><span></span></div>
+      <div class="bank-logo"><img src="dashboards/images/logos/pan.svg" alt="Pan"><span></span></div>
+      <div class="bank-logo"><img src="dashboards/images/logos/c6.svg" alt="C6"><span></span></div>
+      <div class="bank-logo"><img src="dashboards/images/logos/bv.svg" alt="BV"><span></span></div>
+      <div class="bank-logo"><img src="dashboards/images/logos/itau.svg" alt="Itaú"><span></span></div>
+      <div class="bank-logo"><img src="dashboards/images/logos/bradesco.svg" alt="Bradesco"><span></span></div>
+      <div class="bank-logo"><img src="dashboards/images/logos/santander.svg" alt="Santander"><span></span></div>
+      <div class="bank-logo"><img src="dashboards/images/logos/caixa.svg" alt="Caixa"><span></span></div>
+      <div class="bank-logo"><img src="dashboards/images/logos/bancodobrasil.svg" alt="Banco do Brasil"><span></span></div>
+      <div class="bank-logo"><img src="dashboards/images/logos/inter.svg" alt="Inter"><span></span></div>
+      <div class="bank-logo"><img src="dashboards/images/logos/btg.svg" alt="BTG"><span></span></div>
+      <div class="bank-logo"><img src="dashboards/images/logos/safra.svg" alt="Safra"><span></span></div>
+      <div class="bank-logo"><img src="dashboards/images/logos/sicoob.svg" alt="Sicoob"><span></span></div>
+      <div class="bank-logo"><img src="dashboards/images/logos/pan.svg" alt="Pan"><span></span></div>
+      <div class="bank-logo"><img src="dashboards/images/logos/c6.svg" alt="C6"><span></span></div>
+      <div class="bank-logo"><img src="dashboards/images/logos/bv.svg" alt="BV"><span></span></div>
     </div></div>
   </div>
 </section>
@@ -790,9 +790,9 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
           <h3>Dependência de um único banco</h3>
           <p>Sem alternativa quando ele trava, entra em greve ou muda as regras.</p>
           <div class="mini">
-            <div class="r"><div class="l"><img src="images/logos/caixa.svg" alt=""><b>Caixa</b></div><span class="tag wt">Em greve</span></div>
-            <div class="r"><div class="l"><img src="images/logos/itau.svg" alt="" style="filter:grayscale(1);opacity:.5"><span class="text-ink-400">Itaú</span></div><span class="tag gr">Sem acesso</span></div>
-            <div class="r"><div class="l"><img src="images/logos/bradesco.svg" alt="" style="filter:grayscale(1);opacity:.5"><span class="text-ink-400">Bradesco</span></div><span class="tag gr">Sem acesso</span></div>
+            <div class="r"><div class="l"><img src="dashboards/images/logos/caixa.svg" alt=""><b>Caixa</b></div><span class="tag wt">Em greve</span></div>
+            <div class="r"><div class="l"><img src="dashboards/images/logos/itau.svg" alt="" style="filter:grayscale(1);opacity:.5"><span class="text-ink-400">Itaú</span></div><span class="tag gr">Sem acesso</span></div>
+            <div class="r"><div class="l"><img src="dashboards/images/logos/bradesco.svg" alt="" style="filter:grayscale(1);opacity:.5"><span class="text-ink-400">Bradesco</span></div><span class="tag gr">Sem acesso</span></div>
             <div class="r"><div class="l"><b>Sua esteira</b></div><span class="tag red">Parada</span></div>
           </div>
         </div>
@@ -823,9 +823,9 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
           <h3>Dificuldade de acessar bancos privados</h3>
           <p>Sem estrutura, operar com o privado é caro, lento e desorganizado.</p>
           <div class="mini">
-            <div class="r"><div class="l"><img src="images/logos/itau.svg" alt=""><b>Itaú</b></div><span class="tag gr">Negociação individual</span></div>
-            <div class="r"><div class="l"><img src="images/logos/bradesco.svg" alt=""><b>Bradesco</b></div><span class="tag gr">Novo CNPJ</span></div>
-            <div class="r"><div class="l"><img src="images/logos/santander.svg" alt=""><b>Santander</b></div><span class="tag gr">Esteira do zero</span></div>
+            <div class="r"><div class="l"><img src="dashboards/images/logos/itau.svg" alt=""><b>Itaú</b></div><span class="tag gr">Negociação individual</span></div>
+            <div class="r"><div class="l"><img src="dashboards/images/logos/bradesco.svg" alt=""><b>Bradesco</b></div><span class="tag gr">Novo CNPJ</span></div>
+            <div class="r"><div class="l"><img src="dashboards/images/logos/santander.svg" alt=""><b>Santander</b></div><span class="tag gr">Esteira do zero</span></div>
           </div>
         </div>
         <div class="dor-pane" data-p="5">
@@ -843,7 +843,7 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
       </div>
 
       <div class="prob-photo">
-        <img src="images/corban/corban-atendimento-feliz.png" alt="Correspondente sorrindo atendendo um casal feliz">
+        <img src="dashboards/images/corban/corban-atendimento-feliz.png" alt="Correspondente sorrindo atendendo um casal feliz">
         <div class="badge"><span>Operação sólida</span><b style="color:#C23030">Travada em um banco</b></div>
       </div>
     </div>
@@ -902,8 +902,8 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
         <a class="go" href="#pilares" aria-label="Ver como a Hubfi resolve"><svg width="13" height="13"><use href="#i-arrow"/></svg></a>
         <div class="mini">
           <div class="hdm"><span>Ficha #8841 · Silva</span><span class="tag red">Negado</span></div>
-          <div class="r"><div class="l"><img src="images/logos/caixa.svg" alt=""><b>Caixa</b></div><span class="text-ink-400 text-[12px]">Renda fora da política</span></div>
-          <div class="r"><div class="l"><img src="images/logos/itau.svg" alt="" style="filter:grayscale(1);opacity:.45"><span class="text-ink-400">Itaú</span></div><span class="tag gr">Aprovaria</span></div>
+          <div class="r"><div class="l"><img src="dashboards/images/logos/caixa.svg" alt=""><b>Caixa</b></div><span class="text-ink-400 text-[12px]">Renda fora da política</span></div>
+          <div class="r"><div class="l"><img src="dashboards/images/logos/itau.svg" alt="" style="filter:grayscale(1);opacity:.45"><span class="text-ink-400">Itaú</span></div><span class="tag gr">Aprovaria</span></div>
           <div class="r"><div class="l"><b>Alternativa</b></div><span class="tag red">Nenhuma</span></div>
         </div>
       </article>
@@ -914,8 +914,8 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
         <a class="go" href="#solucoes" aria-label="Ver soluções"><svg width="13" height="13"><use href="#i-arrow"/></svg></a>
         <div class="mini">
           <div class="hdm"><span>Pedido do cliente</span><span>Sua mesa</span></div>
-          <div class="r"><div class="l"><img src="images/logos/itau.svg" alt=""><b>Itaú</b></div><span class="tag red">Não opera</span></div>
-          <div class="r"><div class="l"><img src="images/logos/santander.svg" alt=""><b>Santander</b></div><span class="tag red">Não opera</span></div>
+          <div class="r"><div class="l"><img src="dashboards/images/logos/itau.svg" alt=""><b>Itaú</b></div><span class="tag red">Não opera</span></div>
+          <div class="r"><div class="l"><img src="dashboards/images/logos/santander.svg" alt=""><b>Santander</b></div><span class="tag red">Não opera</span></div>
           <div class="r"><div class="l"><b>Comissão</b></div><span class="tag gr">Vai com o cliente</span></div>
         </div>
       </article>
@@ -961,12 +961,12 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
       <g class="spin"><path class="arc" d="M 550 270 A 280 280 0 0 1 800 420" fill="none"/></g>
       <g class="spin" style="animation-direction:reverse;animation-duration:90s"><path class="arc" d="M 160 550 A 390 390 0 0 1 300 260" fill="none"/></g>
     </svg>
-    <div class="core"><img src="images/hubfi.png" alt="Hubfi"></div>
+    <div class="core"><img src="dashboards/images/hubfi.png" alt="Hubfi"></div>
 
-    <div class="chip k" style="left:18%;top:20%"><i><img src="images/logos/itau.svg" alt=""></i>Itaú</div>
-    <div class="chip" style="left:8%;top:44%;--d:1s"><i><img src="images/logos/bradesco.svg" alt=""></i>Bradesco</div>
+    <div class="chip k" style="left:18%;top:20%"><i><img src="dashboards/images/logos/itau.svg" alt=""></i>Itaú</div>
+    <div class="chip" style="left:8%;top:44%;--d:1s"><i><img src="dashboards/images/logos/bradesco.svg" alt=""></i>Bradesco</div>
     <div class="chip dim" style="left:26%;top:8%;--d:2s"><i><svg width="15" height="15"><use href="#i-home"/></svg></i>Home equity</div>
-    <div class="chip k" style="right:16%;top:16%;--d:.6s"><i><img src="images/logos/santander.svg" alt=""></i>Santander</div>
+    <div class="chip k" style="right:16%;top:16%;--d:.6s"><i><img src="dashboards/images/logos/santander.svg" alt=""></i>Santander</div>
     <div class="chip dim" style="right:6%;top:40%;--d:1.8s"><i><svg width="15" height="15"><use href="#i-repeat"/></svg></i>Portabilidade</div>
     <div class="chip dark" style="left:14%;top:70%;--d:.3s"><i><svg width="15" height="15"><use href="#i-headset"/></svg></i>Suporte especializado</div>
     <div class="chip dark k" style="right:14%;top:66%;--d:1.4s"><i><svg width="15" height="15"><use href="#i-grid"/></svg></i>Plataforma integrada</div>
@@ -1024,14 +1024,14 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
           <div class="body">
             <div class="ttl">Instituições conectadas <span>Plugado</span></div>
             <div class="rack">
-              <div><img src="images/logos/caixa.svg" alt=""><b>Caixa</b>Ativa</div>
-              <div><img src="images/logos/itau.svg" alt=""><b>Itaú</b>Ativa</div>
-              <div><img src="images/logos/bradesco.svg" alt=""><b>Bradesco</b>Ativa</div>
-              <div><img src="images/logos/santander.svg" alt=""><b>Santander</b>Ativa</div>
-              <div><img src="images/logos/inter.svg" alt=""><b>Inter</b>Ativa</div>
-              <div><img src="images/logos/btg.svg" alt=""><b>BTG</b>Ativa</div>
-              <div class="wait"><img src="images/logos/safra.svg" alt=""><b>Safra</b>Habilitando</div>
-              <div class="wait"><img src="images/logos/bancodobrasil.svg" alt=""><b>BB</b>Habilitando</div>
+              <div><img src="dashboards/images/logos/caixa.svg" alt=""><b>Caixa</b>Ativa</div>
+              <div><img src="dashboards/images/logos/itau.svg" alt=""><b>Itaú</b>Ativa</div>
+              <div><img src="dashboards/images/logos/bradesco.svg" alt=""><b>Bradesco</b>Ativa</div>
+              <div><img src="dashboards/images/logos/santander.svg" alt=""><b>Santander</b>Ativa</div>
+              <div><img src="dashboards/images/logos/inter.svg" alt=""><b>Inter</b>Ativa</div>
+              <div><img src="dashboards/images/logos/btg.svg" alt=""><b>BTG</b>Ativa</div>
+              <div class="wait"><img src="dashboards/images/logos/safra.svg" alt=""><b>Safra</b>Habilitando</div>
+              <div class="wait"><img src="dashboards/images/logos/bancodobrasil.svg" alt=""><b>BB</b>Habilitando</div>
             </div>
           </div>
           <div class="float-card">
@@ -1201,7 +1201,7 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
         <div class="tile"><span class="n">02</span><i><svg><use href="#i-coins"/></svg></i><div><b>Home equity</b><small>Crédito com garantia de imóvel</small></div></div>
         <div class="tile"><span class="n">03</span><i><svg><use href="#i-repeat"/></svg></i><div><b>Consórcios</b><small>Imóvel e carta</small></div></div>
         <div class="tile"><span class="n">04</span><i><svg><use href="#i-shield"/></svg></i><div><b>Seguros imobiliários</b><small>No ato da operação</small></div></div>
-        <div class="tile core-t"><img src="images/hubfi.png" alt="Hubfi"></div>
+        <div class="tile core-t"><img src="dashboards/images/hubfi.png" alt="Hubfi"></div>
         <div class="tile"><span class="n">05</span><i><svg><use href="#i-layers"/></svg></i><div><b>Crédito estruturado</b><small>Fora do padrão</small></div></div>
         <div class="tile"><span class="n">06</span><i><svg><use href="#i-branch"/></svg></i><div><b>Portabilidade de crédito</b><small>Contrato existente</small></div></div>
         <div class="tile"><span class="n">07</span><i><svg><use href="#i-trend"/></svg></i><div><b>Refinanciamento</b><small>Troca de condição</small></div></div>
@@ -1225,14 +1225,14 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
         </div>
       </div>
       <div class="photo-ui reveal">
-        <div class="ph"><img src="images/corban/corban-mulher-escritorio.png" alt="Correspondente sorrindo enquanto trabalha no escritório"></div>
+        <div class="ph"><img src="dashboards/images/corban/corban-mulher-escritorio.png" alt="Correspondente sorrindo enquanto trabalha no escritório"></div>
         <div class="ui">
           <div class="h">Status da esteira <span><i></i><i></i><i></i></span></div>
           <div class="mt-3">
-            <div class="lane stop"><img src="images/logos/caixa.svg" alt=""><div><b class="text-[13px]">Caixa</b><div class="bar"><i></i></div></div><span class="st" style="color:#C23030">Parada</span></div>
-            <div class="lane"><img src="images/logos/itau.svg" alt=""><div><b class="text-[13px]">Itaú</b><div class="bar"><i style="width:82%"></i></div></div><span class="st" style="color:#0A7165">Operando</span></div>
-            <div class="lane"><img src="images/logos/bradesco.svg" alt=""><div><b class="text-[13px]">Bradesco</b><div class="bar"><i style="width:64%"></i></div></div><span class="st" style="color:#0A7165">Operando</span></div>
-            <div class="lane"><img src="images/logos/santander.svg" alt=""><div><b class="text-[13px]">Santander</b><div class="bar"><i style="width:71%"></i></div></div><span class="st" style="color:#0A7165">Operando</span></div>
+            <div class="lane stop"><img src="dashboards/images/logos/caixa.svg" alt=""><div><b class="text-[13px]">Caixa</b><div class="bar"><i></i></div></div><span class="st" style="color:#C23030">Parada</span></div>
+            <div class="lane"><img src="dashboards/images/logos/itau.svg" alt=""><div><b class="text-[13px]">Itaú</b><div class="bar"><i style="width:82%"></i></div></div><span class="st" style="color:#0A7165">Operando</span></div>
+            <div class="lane"><img src="dashboards/images/logos/bradesco.svg" alt=""><div><b class="text-[13px]">Bradesco</b><div class="bar"><i style="width:64%"></i></div></div><span class="st" style="color:#0A7165">Operando</span></div>
+            <div class="lane"><img src="dashboards/images/logos/santander.svg" alt=""><div><b class="text-[13px]">Santander</b><div class="bar"><i style="width:71%"></i></div></div><span class="st" style="color:#0A7165">Operando</span></div>
           </div>
         </div>
         <div class="checkcard"><i><svg width="12" height="12"><use href="#i-check"/></svg></i>Quem opera com múltiplas soluções continua atendendo.</div>
@@ -1273,7 +1273,7 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
         </div>
       </div>
       <aside class="ccard reveal">
-        <div class="brand"><img src="images/hubfi.png" alt="Hubfi"></div>
+        <div class="brand"><img src="dashboards/images/hubfi.png" alt="Hubfi"></div>
         <h3>Vamos entender<span>a sua operação?</span></h3>
         <div class="box">
           <b>Para correspondentes que querem</b>
@@ -1292,7 +1292,7 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
   <div class="wrap">
     <div class="cols">
       <div>
-        <img src="images/hubfi-dark.png" alt="Hubfi">
+        <img src="dashboards/images/hubfi-dark.png" alt="Hubfi">
         <p>Infraestrutura financeira e operacional para correspondentes bancários.</p>
       </div>
       <div>

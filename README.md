@@ -20,6 +20,7 @@ Landing do painel para empresas e guia de leitura:
 - [http://localhost/hubfi-components/dashboards/hubfi-painel-empresas.html](http://localhost/hubfi-components/dashboards/hubfi-painel-empresas.html)
 - [http://localhost/hubfi-components/dashboards/como-ler.html](http://localhost/hubfi-components/dashboards/como-ler.html)
 - [http://localhost/hubfi-components/dashboards/capital-insider.html](http://localhost/hubfi-components/dashboards/capital-insider.html)
+- [http://localhost/hubfi-components/corban.html](http://localhost/hubfi-components/corban.html)
 
 ## O que está em código
 

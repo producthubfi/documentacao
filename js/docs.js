@@ -45,6 +45,7 @@
     { href: "dashboards/hubfi-painel-empresas.html", label: "Painel empresas" },
     { href: "dashboards/como-ler.html", label: "Como ler os dados" },
     { href: "dashboards/capital-insider.html", label: "Capital Insider" },
+    { href: "corban.html", label: "LP Correspondentes" },
   ];
 
   function protoMatch(q) {
