@@ -289,19 +289,28 @@ a.bank-logo{text-decoration:none;color:inherit}
 .pil{padding:112px 0;background:#fff;position:relative}
 .pil .h2 span{white-space:nowrap}
 @media(max-width:900px){.pil .h2 span{white-space:normal}}
-.tabs-car{position:relative;margin-top:48px}
-.tarrow,.tdots,.tabs button small{display:none}
-.tabs{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#fff;box-shadow:0 1px 2px rgba(15,18,25,.03)}
-.tabs button{display:flex;flex-direction:column;align-items:center;gap:10px;padding:22px 14px 20px;border-left:1px solid var(--line);font-size:14px;font-weight:600;color:#6B7280;position:relative;transition:.25s;background:#fff}
-.tabs button:first-child{border-left:0}
-.tabs button i{width:40px;height:40px;border-radius:50%;background:#F4F5F7;display:grid;place-items:center;color:#9CA3AF;transition:.25s}
+.tabs-car{position:relative;margin-top:40px;background:#F7F9F8;border:1px solid var(--line);border-radius:24px;padding:22px 20px 20px}
+.tabs-kicker{display:flex;align-items:center;justify-content:center;gap:8px;font-size:11.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#0E8B7A;margin-bottom:18px}
+.tabs-kicker:before,.tabs-kicker:after{content:"";height:1px;width:48px;background:linear-gradient(90deg,transparent,#AEDFD3)}
+.tabs-kicker:after{background:linear-gradient(90deg,#AEDFD3,transparent)}
+.tarrow,.tdots{display:none}
+.tabs{display:grid;grid-template-columns:repeat(5,1fr);position:relative;overflow:visible;background:transparent;border:0;box-shadow:none;--p:0%}
+.tabs:before,.tabs:after{content:"";position:absolute;left:10%;right:10%;top:40px;height:2px;border-radius:2px;pointer-events:none}
+.tabs:before{background:#E5E7EB}
+.tabs:after{right:auto;width:var(--p);background:#0E8B7A;transition:width .45s cubic-bezier(.22,1,.36,1)}
+.tabs button{display:flex;flex-direction:column;align-items:center;gap:8px;padding:0 8px;border:0;background:transparent;font-size:13.5px;font-weight:600;color:#6B7280;position:relative;z-index:1;transition:.25s}
+.tabs button span{text-align:center;line-height:1.25;max-width:11.5em}
+.tabs button small{display:block;font-size:10px;font-weight:800;letter-spacing:.14em;color:#9CA3AF;line-height:1}
+.tabs button i{width:44px;height:44px;border-radius:50%;background:#fff;border:2px solid #E5E7EB;display:grid;place-items:center;color:#9CA3AF;transition:.25s}
 .tabs button i svg{width:18px;height:18px}
-.tabs button:after{content:"";position:absolute;left:24px;right:24px;bottom:0;height:3px;border-radius:3px 3px 0 0;background:transparent;transition:.25s}
-.tabs button:hover{background:#FAFBFB;color:#0F1219}
-.tabs button.on{color:#0F1219;background:linear-gradient(180deg,#fff,#F3FAF8)}
-.tabs button.on i{background:#0E8B7A;color:#fff;box-shadow:0 10px 20px -10px rgba(14,139,122,.7)}
-.tabs button.on:after{background:#0E8B7A}
-.tabs.auto button.on:after{transition:none;transform-origin:left;animation:growW 5s linear both}
+.tabs button:hover{color:#0F1219}
+.tabs button:hover i{border-color:#AEDFD3;color:#0E8B7A}
+.tabs button.done{color:#08574F}
+.tabs button.done small{color:#0E8B7A}
+.tabs button.done i{background:#0E8B7A;border-color:#0E8B7A;color:#fff}
+.tabs button.on{color:#0F1219}
+.tabs button.on small{color:#0E8B7A}
+.tabs button.on i{background:#0E8B7A;border-color:#0E8B7A;color:#fff;box-shadow:0 0 0 5px rgba(14,139,122,.16)}
 .pil-panel{margin-top:22px;border-radius:28px;background:linear-gradient(180deg,#F7FBFA,#EEF6F3);padding:52px 52px 48px;position:relative;overflow:hidden}
 .pil-panel:before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(14,139,122,.14) 1px,transparent 1px);background-size:18px 18px;mask-image:radial-gradient(ellipse at 100% 100%,black,transparent 60%);-webkit-mask-image:radial-gradient(ellipse at 100% 100%,black,transparent 60%);pointer-events:none}
 .pane{display:none;grid-template-columns:1fr 1.05fr;gap:48px;align-items:center;position:relative}
@@ -412,7 +421,7 @@ a.bank-logo{text-decoration:none;color:inherit}
 .lane .bar i{position:absolute;left:0;top:0;bottom:0;border-radius:3px;background:#0E8B7A;animation:growW 1.2s cubic-bezier(.22,1,.36,1) both;transform-origin:left}
 .lane.stop .bar i{background:#C23030;width:22%}
 .lane .st{font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase}
-.checkcard{position:absolute;left:0;bottom:40px;width:340px;background:#fff;border-radius:16px;border:1px solid var(--line);box-shadow:0 30px 60px -30px rgba(15,18,25,.45);padding:14px 16px;display:flex;gap:12px;align-items:flex-start;font-size:13.5px;line-height:1.5;color:#374151;animation:floatY 6s ease-in-out infinite;animation-delay:1.5s}
+.checkcard{position:absolute;left:2%;bottom:2%;width:340px;background:#fff;border-radius:16px;border:1px solid var(--line);box-shadow:0 30px 60px -30px rgba(15,18,25,.45);padding:14px 16px;display:flex;gap:12px;align-items:flex-start;font-size:13.5px;line-height:1.5;color:#374151;animation:floatY 6s ease-in-out infinite;animation-delay:1.5s}
 .checkcard i{width:24px;height:24px;border-radius:50%;background:#0E8B7A;color:#fff;display:grid;place-items:center;flex-shrink:0}
 .alert{margin-top:44px;display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;border-left:4px solid #0E8B7A;background:#fff;border-radius:0 18px 18px 0;padding:22px 26px;box-shadow:0 20px 40px -32px rgba(15,18,25,.3)}
 .alert i{width:40px;height:40px;border-radius:12px;background:#EBF7F4;display:grid;place-items:center;color:#0E8B7A}
@@ -425,6 +434,7 @@ a.bank-logo{text-decoration:none;color:inherit}
 .cta .big .g{display:block;font-weight:300;color:rgba(255,255,255,.6)}
 .cta .sub{margin-top:28px;font-size:clamp(17px,1.5vw,21px);line-height:1.45;letter-spacing:-.01em;max-width:30em;color:rgba(255,255,255,.5)}
 .cta .sub b{color:#fff;font-weight:500}
+.cta .sub span{display:block}
 .cta .rule{height:1px;background:rgba(255,255,255,.12);margin:40px 0 36px}
 .pts{display:grid;grid-template-columns:1fr 1fr;gap:28px 48px}
 .pt2 .t{display:flex;align-items:center;gap:12px;font-size:14.5px;font-weight:600;color:#fff}
@@ -597,7 +607,7 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
   .pane>*{min-width:0}
   .virada-copy{padding-top:40px}
   .tabs{grid-template-columns:repeat(5,minmax(0,1fr))}
-  .tabs button{padding:18px 8px 16px;font-size:12.5px}
+  .tabs button{font-size:12px}
   .pil-panel{padding:28px 22px}
   .float-card,.pane.on .float-card{position:static;width:auto;margin:14px 16px 16px;animation:none;opacity:1}
   .sol-grid>*{min-width:0}
@@ -641,19 +651,16 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
   .pt{padding:24px 20px 20px}
   .concl-copy,.concl-cells>div{padding:22px 20px}
   .orbit{height:300px}
-  .tabs-car{margin-top:28px;padding-bottom:22px}
-  .tabs{grid-template-columns:1fr;margin:0 44px;border-radius:18px}
-  .tabs button{display:none}
-  .tabs button.on{display:flex;flex-direction:row;align-items:center;gap:14px;padding:14px 16px;text-align:left;border-left:0;font-size:14.5px;animation:tabIn .4s cubic-bezier(.22,1,.36,1) both}
-  .tabs button.on:after{left:16px;right:16px}
-  .tabs button.on span{flex:1;min-width:0}
-  .tabs button.on small{display:block;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#0E8B7A;margin-left:auto;white-space:nowrap}
-  .tarrow{display:grid;place-items:center;position:absolute;top:50%;transform:translateY(calc(-50% - 11px));width:36px;height:36px;border-radius:50%;background:#fff;border:1px solid var(--line);color:#0F1219;box-shadow:0 8px 20px -12px rgba(15,18,25,.4);z-index:2}
+  .tabs-car{margin-top:28px;padding:18px 10px 42px}
+  .tabs-kicker:before,.tabs-kicker:after{width:24px}
+  .tabs{margin:0 36px}
+  .tabs:before,.tabs:after{top:34px}
+  .tabs button{padding:0 2px}
+  .tabs button span{font-size:0;height:0;overflow:hidden}
+  .tabs button.on span{font-size:12.5px;height:auto;overflow:visible;position:absolute;left:50%;bottom:-28px;transform:translateX(-50%);white-space:normal;width:max-content;max-width:140px;line-height:1.2}
+  .tarrow{display:grid;place-items:center;position:absolute;top:50%;transform:translateY(calc(-50% + 8px));width:36px;height:36px;border-radius:50%;background:#fff;border:1px solid var(--line);color:#0F1219;box-shadow:0 8px 20px -12px rgba(15,18,25,.4);z-index:2}
   .tprev{left:0}.tprev svg{transform:rotate(180deg)}.tnext{right:0}
   .tarrow:active{background:#EBF7F4;color:#0E8B7A}
-  .tdots{display:flex;justify-content:center;gap:6px;position:absolute;left:0;right:0;bottom:0}
-  .tdots i{width:6px;height:6px;border-radius:50%;background:#D5DBD9;transition:.25s}
-  .tdots i.on{width:18px;border-radius:3px;background:#0E8B7A}
   .pil-panel{padding:20px 16px}
   .pane h3{font-size:22px}
   .cta .big{font-size:30px}
@@ -970,7 +977,8 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
 <section class="perdas">
   <div class="wrap">
     <div class="reveal">
-      <div class="text-[11.5px] font-extrabold tracking-[.16em] uppercase text-teal-600">Três situações em que o correspondente perde hoje</div>
+      <span class="pill-tag"><i><svg><use href="#i-alert"/></svg></i>Três situações</span>
+      <h2 class="h2 mt-5"><span>Três situações em que o correspondente</span><span class="g">perde hoje.</span></h2>
     </div>
     <div class="pt-grid reveal-stagger">
       <article class="pt">
@@ -988,7 +996,7 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
       <article class="pt">
         <div class="ic"><svg width="18" height="18"><use href="#i-users"/></svg></div>
         <h3><small>02</small>O cliente já chega decidido pelo banco privado</h3>
-        <p>Ele já pesquisou e quer Itaú, Bradesco ou Santander. Se você não opera com eles, o cliente vai embora, e a comissão junto.</p>
+        <p>Ele já pesquisou e quer Itaú, Bradesco ou Santander. Se você não opera com eles, o cliente pode perder hoje.</p>
         <a class="go" href="#solucoes" aria-label="Ver soluções"><svg width="13" height="13"><use href="#i-arrow"/></svg></a>
         <div class="mini">
           <div class="hdm"><span>Pedido do cliente</span><span>Sua mesa</span></div>
@@ -1076,13 +1084,14 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
     </div>
 
     <div class="tabs-car reveal">
+      <div class="tabs-kicker">Esteira da operação</div>
       <button class="tarrow tprev" type="button" aria-label="Passo anterior"><svg width="14" height="14"><use href="#i-arrow"/></svg></button>
       <div class="tabs auto" data-tabs>
-        <button class="on" data-t="1"><i><svg><use href="#i-bank"/></svg></i><span>Múltiplos bancos</span><small>01 / 05</small></button>
-        <button data-t="2"><i><svg><use href="#i-chart"/></svg></i><span>Melhor proposta</span><small>02 / 05</small></button>
-        <button data-t="3"><i><svg><use href="#i-file"/></svg></i><span>Encaminhar</span><small>03 / 05</small></button>
-        <button data-t="4"><i><svg><use href="#i-headset"/></svg></i><span>Hubfi opera</span><small>04 / 05</small></button>
-        <button data-t="5"><i><svg><use href="#i-trend"/></svg></i><span>Comissão</span><small>05 / 05</small></button>
+        <button class="on" data-t="1"><small>01</small><i><svg><use href="#i-bank"/></svg></i><span>Simule em<br>múltiplos bancos</span></button>
+        <button data-t="2"><small>02</small><i><svg><use href="#i-chart"/></svg></i><span>Compare e escolha<br>a proposta</span></button>
+        <button data-t="3"><small>03</small><i><svg><use href="#i-file"/></svg></i><span>Encaminhe<br>a proposta</span></button>
+        <button data-t="4"><small>04</small><i><svg><use href="#i-headset"/></svg></i><span>A Hubfi faz<br>o operacional</span></button>
+        <button data-t="5"><small>05</small><i><svg><use href="#i-trend"/></svg></i><span>Você recebe<br>a comissão</span></button>
       </div>
       <button class="tarrow tnext" type="button" aria-label="Próximo passo"><svg width="14" height="14"><use href="#i-arrow"/></svg></button>
       <div class="tdots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></div>
@@ -1260,7 +1269,7 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
       <div class="reveal">
         <span class="pill-tag dark"><i><svg><use href="#i-layers"/></svg></i>O que você passa a ter acesso</span>
         <h2 class="h2 w mt-5"><span>Soluções que sua carteira</span><span class="g">está pedindo.</span></h2>
-        <p class="lead mt-5">Produtos integrados à sua operação, sem construir cada relação do zero.</p>
+        <p class="lead mt-5">Produtos integrados à sua operação,<br>sem construir cada relação do zero.</p>
         <a class="btn-cta-white mt-9" href="https://wa.me/5581995269860?text=Ol%C3%A1%2C%20vi%20a%20p%C3%A1gina%20da%20Hubfi%20e%20quero%20saber%20mais%20sobre%20as%20solu%C3%A7%C3%B5es%20para%20correspondentes."><span class="icn-wrap"><svg width="15" height="15"><use href="#i-arrow"/></svg></span>Quero conhecer a Hubfi</a>
       </div>
       <div class="net reveal-stagger">
@@ -1314,7 +1323,7 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
     <div class="cta-grid">
       <div class="reveal">
         <h2 class="big">Pronto para operar com<span class="g">muito mais capacidade?</span></h2>
-        <p class="sub"><b>Se você reconheceu uma das situações acima, já sabe: a resposta não está em trabalhar mais.</b> Está em operar com estrutura.</p>
+        <p class="sub"><b>Se você reconheceu uma das situações acima, já sabe: a resposta não está em trabalhar mais.</b><span>Está em operar com estrutura.</span></p>
         <div class="rule"></div>
         <div class="pts">
           <div class="pt2">
@@ -1430,7 +1439,8 @@ if(tabsEl){
 const tabBtns=[...document.querySelectorAll('[data-tabs] button')],tabDots=[...document.querySelectorAll('.tdots i')];
 function goTab(t){
   t=((t-1+tabBtns.length)%tabBtns.length)+1;
-  tabBtns.forEach(x=>x.classList.toggle('on',+x.dataset.t===t));
+  tabBtns.forEach(x=>{const n=+x.dataset.t;x.classList.toggle('on',n===t);x.classList.toggle('done',n<t);});
+  tabsEl.style.setProperty('--p',((t-1)/Math.max(1,tabBtns.length-1)*80)+'%');
   tabDots.forEach((d,i)=>d.classList.toggle('on',i+1===t));
   document.querySelectorAll('.pil-panel .pane').forEach(p=>{
     const on=+p.dataset.pane===t;p.classList.toggle('on',on);
