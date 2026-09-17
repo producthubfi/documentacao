@@ -160,8 +160,9 @@ h1,h2,h3{letter-spacing:-.03em}
 .logos p:before,.logos p:after{content:"";flex:0 0 120px;height:1px;background:linear-gradient(90deg,transparent,#E6ECEA)}
 .logos p:after{background:linear-gradient(90deg,#E6ECEA,transparent)}
 .logos p b{color:#0F1219;font-weight:700}
-.bank-logo{padding:0 22px;height:64px}
-.bank-logo img{width:36px;height:36px}
+.bank-logo{padding:0 18px;height:64px}
+a.bank-logo{text-decoration:none;color:inherit}
+.bank-logo img{width:auto;height:32px;max-width:120px;object-fit:contain}
 .bank-logo span{display:none}
 
 /* ---------- PROBLEMA (Sqala) ---------- */
@@ -198,7 +199,7 @@ h1,h2,h3{letter-spacing:-.03em}
 .callout{margin-top:auto;padding-top:22px;display:flex;gap:12px;align-items:flex-start;border-top:1px solid #EEF2F1;font-size:14px;color:#374151;line-height:1.55}
 .callout i{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#0E8B7A,#08574F);display:grid;place-items:center;color:#fff;flex-shrink:0}
 .prob-photo{position:relative;background:linear-gradient(180deg,#D7EFE9,#EBF7F4);overflow:hidden}
-.prob-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:30% 40%}
+.prob-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 38%}
 .prob-photo:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 65%,rgba(5,61,56,.45))}
 .prob-photo .badge{position:absolute;left:16px;right:16px;bottom:16px;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-radius:14px;padding:10px 12px;font-size:12.5px;display:flex;justify-content:space-between;align-items:center;gap:8px}
 .prob-close{margin-top:40px;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;padding:24px 28px;border-radius:20px;background:#0B0E14;color:#fff}
@@ -212,18 +213,18 @@ h1,h2,h3{letter-spacing:-.03em}
 .merc .vlines i{border-left:1px dashed #DDE5E2}
 .merc .vlines i:last-child{border-right:1px dashed #DDE5E2}
 .stat-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:44px;position:relative}
-.stat{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px 26px 22px;box-shadow:0 1px 2px rgba(15,18,25,.03),0 24px 50px -40px rgba(15,18,25,.3);display:flex;flex-direction:column;gap:14px;position:relative;overflow:hidden;transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s,border-color .35s}
+.stat{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px 26px 22px;box-shadow:0 1px 2px rgba(15,18,25,.03),0 24px 50px -40px rgba(15,18,25,.3);display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;position:relative;overflow:hidden;transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s,border-color .35s}
 .stat:hover{transform:translateY(-4px);border-color:#AEDFD3;box-shadow:0 1px 2px rgba(15,18,25,.03),0 30px 60px -36px rgba(14,139,122,.35)}
 .stat:before{content:"";position:absolute;right:-30px;top:-30px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(14,139,122,.12),transparent 70%)}
-.stat .ico{display:flex;gap:6px;margin-bottom:6px}
+.stat .ico{display:flex;gap:6px;margin-bottom:6px;justify-content:center}
 .stat .ico i{width:32px;height:32px;border-radius:9px;border:1px solid var(--line);background:#fff;display:grid;place-items:center;color:#C7CDD3}
 .stat .ico i svg{width:14px;height:14px}
 .stat .ico i.on{background:#EBF7F4;border-color:#AEDFD3;color:#0E8B7A;box-shadow:0 6px 14px -8px rgba(14,139,122,.6)}
-.stat .top{display:flex;align-items:baseline;gap:14px}
+.stat .top{display:flex;align-items:baseline;justify-content:center;gap:14px}
 .stat .num{font-size:clamp(38px,3.6vw,50px);font-weight:800;letter-spacing:-.05em;line-height:1;color:#0F1219;white-space:nowrap}
 .stat .num em{font-style:normal;color:#0E8B7A;font-weight:700;font-size:.6em;margin-right:2px}
 .stat .lbl{font-size:14.5px;line-height:1.55;color:#4B5563}
-.stat .src{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#0E8B7A;margin-top:auto}
+.stat .src{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#0E8B7A;margin-top:auto}
 .stat .src:before{content:"";width:6px;height:6px;border-radius:50%;background:#0E8B7A}
 .merc-foot{display:flex;justify-content:space-between;align-items:center;margin-top:34px;font-size:14px;color:#374151;gap:16px;flex-wrap:wrap}
 .merc-foot .l{display:flex;align-items:center;gap:10px}
@@ -295,6 +296,7 @@ h1,h2,h3{letter-spacing:-.03em}
 .tabs button.on{color:#0F1219;background:linear-gradient(180deg,#fff,#F3FAF8)}
 .tabs button.on i{background:#0E8B7A;color:#fff;box-shadow:0 10px 20px -10px rgba(14,139,122,.7)}
 .tabs button.on:after{background:#0E8B7A}
+.tabs.auto button.on:after{transition:none;transform-origin:left;animation:growW 5s linear both}
 .pil-panel{margin-top:22px;border-radius:28px;background:linear-gradient(180deg,#F7FBFA,#EEF6F3);padding:52px 52px 48px;position:relative;overflow:hidden}
 .pil-panel:before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(14,139,122,.14) 1px,transparent 1px);background-size:18px 18px;mask-image:radial-gradient(ellipse at 100% 100%,black,transparent 60%);-webkit-mask-image:radial-gradient(ellipse at 100% 100%,black,transparent 60%);pointer-events:none}
 .pane{display:none;grid-template-columns:1fr 1.05fr;gap:48px;align-items:center;position:relative}
@@ -369,12 +371,13 @@ h1,h2,h3{letter-spacing:-.03em}
 .net svg.lines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .net svg.lines line{stroke:rgba(124,203,185,.55);stroke-width:1.2;stroke-dasharray:3 6;animation:dash 14s linear infinite}
 @keyframes dash{to{stroke-dashoffset:-180}}
-.tile{position:relative;border-radius:20px;background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.12);padding:18px 16px 16px;min-height:132px;display:flex;flex-direction:column;justify-content:space-between;transition:.3s cubic-bezier(.22,1,.36,1);backdrop-filter:blur(6px)}
+.tile{position:relative;border-radius:20px;background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.12);padding:18px 16px 16px;min-height:132px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;transition:.3s cubic-bezier(.22,1,.36,1);backdrop-filter:blur(6px)}
 .tile:hover{transform:translateY(-5px);border-color:rgba(124,203,185,.6);background:linear-gradient(180deg,rgba(124,203,185,.16),rgba(255,255,255,.05));box-shadow:0 30px 60px -30px rgba(124,203,185,.5)}
 .tile i{width:38px;height:38px;border-radius:11px;background:rgba(124,203,185,.12);border:1px solid rgba(124,203,185,.22);display:grid;place-items:center;color:#7CCBB9}
 .tile i svg{width:18px;height:18px}
-.tile b{display:block;font-size:14.5px;font-weight:700;line-height:1.25;margin-top:14px}
-.tile small{display:block;font-size:11.5px;color:rgba(255,255,255,.55);margin-top:4px;transition:color .3s}
+.tile b{display:block;font-size:14.5px;font-weight:700;line-height:1.25;margin-top:14px;text-align:center}
+.tile small{display:block;font-size:11.5px;color:rgba(255,255,255,.55);margin-top:4px;text-align:center;transition:color .3s}
+.tile > div{width:100%}
 .tile:hover small{color:#AEDFD3}
 .tile:hover i{background:rgba(124,203,185,.25);color:#fff}
 .tile .n{position:absolute;top:14px;right:14px;font-size:10.5px;font-weight:700;letter-spacing:.08em;color:rgba(255,255,255,.3)}
@@ -393,7 +396,7 @@ h1,h2,h3{letter-spacing:-.03em}
 .acc p{font-size:15px;line-height:1.7;color:#4B5563;margin-top:6px}
 .photo-ui{position:relative;padding:0 0 0 70px}
 .photo-ui .ph{border-radius:24px;overflow:hidden;height:520px;box-shadow:0 40px 80px -40px rgba(5,61,56,.5)}
-.photo-ui .ph img{width:100%;height:100%;object-fit:cover;object-position:50% 12%;transform:scaleX(-1)}
+.photo-ui .ph img{width:100%;height:100%;object-fit:cover;object-position:50% 18%}
 .photo-ui .ui{position:absolute;left:0;top:64px;width:300px;background:#fff;border-radius:18px;border:1px solid var(--line);box-shadow:0 30px 60px -30px rgba(15,18,25,.45);padding:16px;animation:floatY 7s ease-in-out infinite}
 .photo-ui .ui .h{font-size:12.5px;font-weight:700;display:flex;justify-content:space-between;align-items:center}
 .photo-ui .ui .h span{display:flex;gap:4px}.photo-ui .ui .h span i{width:6px;height:6px;border-radius:50%;background:#E5E7EB}
@@ -433,7 +436,7 @@ h1,h2,h3{letter-spacing:-.03em}
 .ccard .note{margin-top:14px;font-size:12px;color:#8A8F98;padding:0 6px}
 @media(max-width:900px){.pts{grid-template-columns:1fr}.ccard{min-height:420px}}
 
-footer{background:#06090F;color:rgba(255,255,255,.55);padding:64px 0 36px;font-size:12.5px;line-height:1.7;border-top:1px solid rgba(255,255,255,.06)}
+footer{background:#022B27;color:rgba(255,255,255,.55);padding:64px 0 36px;font-size:12.5px;line-height:1.7;border-top:1px solid rgba(124,203,185,.12)}
 footer .cols{display:grid;grid-template-columns:1.4fr .8fr .8fr max-content;gap:40px;padding-bottom:36px;border-bottom:1px solid rgba(255,255,255,.08);align-items:start}
 footer .cols img{height:24px}
 footer .cols p{color:rgba(255,255,255,.7);margin-top:14px;font-size:14px;max-width:26em}
@@ -803,27 +806,29 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
       <div class="bank-logo"><img src="dashboards/images/logos/itau.svg" alt="Itaú"><span></span></div>
       <div class="bank-logo"><img src="dashboards/images/logos/bradesco.svg" alt="Bradesco"><span></span></div>
       <div class="bank-logo"><img src="dashboards/images/logos/santander.svg" alt="Santander"><span></span></div>
-      <div class="bank-logo"><img src="dashboards/images/logos/caixa.svg" alt="Caixa"><span></span></div>
       <div class="bank-logo"><img src="dashboards/images/logos/bancodobrasil.svg" alt="Banco do Brasil"><span></span></div>
       <div class="bank-logo"><img src="dashboards/images/logos/inter.svg" alt="Inter"><span></span></div>
-      <div class="bank-logo"><img src="dashboards/images/logos/btg.svg" alt="BTG"><span></span></div>
       <div class="bank-logo"><img src="dashboards/images/logos/safra.svg" alt="Safra"><span></span></div>
-      <div class="bank-logo"><img src="dashboards/images/logos/sicoob.svg" alt="Sicoob"><span></span></div>
-      <div class="bank-logo"><img src="dashboards/images/logos/pan.svg" alt="Pan"><span></span></div>
       <div class="bank-logo"><img src="dashboards/images/logos/c6.svg" alt="C6"><span></span></div>
       <div class="bank-logo"><img src="dashboards/images/logos/bv.svg" alt="BV"><span></span></div>
+      <a class="bank-logo" href="https://www.allianz.com.br/" target="_blank" rel="noopener"><img src="dashboards/images/logos/allianz.svg" alt="Allianz"><span></span></a>
+      <a class="bank-logo" href="https://www.tokiomarine.com.br/" target="_blank" rel="noopener"><img src="dashboards/images/logos/tokio.svg" alt="Tokio Marine"><span></span></a>
+      <a class="bank-logo" href="https://hsconsorcios.com.br/" target="_blank" rel="noopener"><img src="dashboards/images/logos/hs.svg" alt="HS Consórcios"><span></span></a>
+      <a class="bank-logo" href="https://www.cnpconsorcio.com.br/" target="_blank" rel="noopener"><img src="dashboards/images/logos/cnp.svg" alt="CNP Consórcio"><span></span></a>
+      <a class="bank-logo" href="https://www.cashme.com.br/" target="_blank" rel="noopener"><img src="dashboards/images/logos/cashme.svg" alt="CashMe"><span></span></a>
       <div class="bank-logo"><img src="dashboards/images/logos/itau.svg" alt="Itaú"><span></span></div>
       <div class="bank-logo"><img src="dashboards/images/logos/bradesco.svg" alt="Bradesco"><span></span></div>
       <div class="bank-logo"><img src="dashboards/images/logos/santander.svg" alt="Santander"><span></span></div>
-      <div class="bank-logo"><img src="dashboards/images/logos/caixa.svg" alt="Caixa"><span></span></div>
       <div class="bank-logo"><img src="dashboards/images/logos/bancodobrasil.svg" alt="Banco do Brasil"><span></span></div>
       <div class="bank-logo"><img src="dashboards/images/logos/inter.svg" alt="Inter"><span></span></div>
-      <div class="bank-logo"><img src="dashboards/images/logos/btg.svg" alt="BTG"><span></span></div>
       <div class="bank-logo"><img src="dashboards/images/logos/safra.svg" alt="Safra"><span></span></div>
-      <div class="bank-logo"><img src="dashboards/images/logos/sicoob.svg" alt="Sicoob"><span></span></div>
-      <div class="bank-logo"><img src="dashboards/images/logos/pan.svg" alt="Pan"><span></span></div>
       <div class="bank-logo"><img src="dashboards/images/logos/c6.svg" alt="C6"><span></span></div>
       <div class="bank-logo"><img src="dashboards/images/logos/bv.svg" alt="BV"><span></span></div>
+      <a class="bank-logo" href="https://www.allianz.com.br/" target="_blank" rel="noopener"><img src="dashboards/images/logos/allianz.svg" alt="Allianz"><span></span></a>
+      <a class="bank-logo" href="https://www.tokiomarine.com.br/" target="_blank" rel="noopener"><img src="dashboards/images/logos/tokio.svg" alt="Tokio Marine"><span></span></a>
+      <a class="bank-logo" href="https://hsconsorcios.com.br/" target="_blank" rel="noopener"><img src="dashboards/images/logos/hs.svg" alt="HS Consórcios"><span></span></a>
+      <a class="bank-logo" href="https://www.cnpconsorcio.com.br/" target="_blank" rel="noopener"><img src="dashboards/images/logos/cnp.svg" alt="CNP Consórcio"><span></span></a>
+      <a class="bank-logo" href="https://www.cashme.com.br/" target="_blank" rel="noopener"><img src="dashboards/images/logos/cashme.svg" alt="CashMe"><span></span></a>
     </div></div>
   </div>
 </section>
@@ -908,11 +913,10 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
             <div class="r"><div class="l"><b>Faturamento</b></div><span class="tag gr">Igual</span></div>
           </div>
         </div>
-        <div class="callout"><i><svg width="16" height="16"><use href="#i-alert"/></svg></i><span>O cliente ficou mais exigente, as imobiliárias mais seletivas. Quem não acompanhou está perdendo espaço.</span></div>
       </div>
 
       <div class="prob-photo">
-        <img src="dashboards/images/corban/corban-atendimento-feliz.png" alt="Correspondente sorrindo atendendo um casal feliz">
+        <img src="dashboards/images/corban/corban-atendimento-feliz.png" alt="Time Hubfi reunido em reunião de trabalho">
         <div class="badge"><span>Operação sólida</span><b style="color:#C23030">Travada em um banco</b></div>
       </div>
     </div>
@@ -1069,7 +1073,7 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
 
     <div class="tabs-car reveal">
       <button class="tarrow tprev" type="button" aria-label="Pilar anterior"><svg width="14" height="14"><use href="#i-arrow"/></svg></button>
-      <div class="tabs" data-tabs>
+      <div class="tabs auto" data-tabs>
         <button class="on" data-t="1"><i><svg><use href="#i-plug"/></svg></i><span>Infraestrutura pronta</span><small>01 / 05</small></button>
         <button data-t="2"><i><svg><use href="#i-grid"/></svg></i><span>Plataforma integrada</span><small>02 / 05</small></button>
         <button data-t="3"><i><svg><use href="#i-bank"/></svg></i><span>Bancos e produtos</span><small>03 / 05</small></button>
@@ -1272,9 +1276,9 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
           <line x1="100" y1="365" x2="300" y2="220"/><line x1="300" y1="365" x2="300" y2="220"/><line x1="500" y1="365" x2="300" y2="220"/>
         </svg>
         <div class="tile"><span class="n">01</span><i><svg><use href="#i-home"/></svg></i><div><b>Financiamento imobiliário privado</b><small>Itaú · Bradesco · Santander</small></div></div>
-        <div class="tile"><span class="n">02</span><i><svg><use href="#i-coins"/></svg></i><div><b>Home equity</b><small>Crédito com garantia de imóvel</small></div></div>
-        <div class="tile"><span class="n">03</span><i><svg><use href="#i-repeat"/></svg></i><div><b>Consórcios</b><small>Imóvel e carta</small></div></div>
-        <div class="tile"><span class="n">04</span><i><svg><use href="#i-shield"/></svg></i><div><b>Seguros imobiliários</b><small>No ato da operação</small></div></div>
+        <div class="tile"><span class="n">02</span><i><svg><use href="#i-coins"/></svg></i><div><b>Home equity</b><small>CashMe</small></div></div>
+        <div class="tile"><span class="n">03</span><i><svg><use href="#i-repeat"/></svg></i><div><b>Consórcios</b><small>HS · CNP</small></div></div>
+        <div class="tile"><span class="n">04</span><i><svg><use href="#i-shield"/></svg></i><div><b>Seguros imobiliários</b><small>Allianz · Tokio Marine</small></div></div>
         <div class="tile core-t"><img src="dashboards/images/hubfi.png" alt="Hubfi"></div>
         <div class="tile"><span class="n">05</span><i><svg><use href="#i-layers"/></svg></i><div><b>Crédito estruturado</b><small>Fora do padrão</small></div></div>
         <div class="tile"><span class="n">06</span><i><svg><use href="#i-branch"/></svg></i><div><b>Portabilidade de crédito</b><small>Contrato existente</small></div></div>
@@ -1299,7 +1303,7 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
         </div>
       </div>
       <div class="photo-ui reveal">
-        <div class="ph"><img src="dashboards/images/corban/corban-mulher-computador.png" alt="Correspondente concentrada trabalhando no computador"></div>
+        <div class="ph"><img src="dashboards/images/corban/corban-mulher-computador.png" alt="Profissional Hubfi sorrindo ao trabalhar no notebook"></div>
         <div class="ui">
           <div class="h">Status da esteira <span><i></i><i></i><i></i></span></div>
           <div class="mt-3">
@@ -1447,13 +1451,16 @@ function goTab(t){
   });
 }
 const curTab=()=>+document.querySelector('[data-tabs] button.on').dataset.t;
-tabBtns.forEach(b=>b.addEventListener('click',()=>goTab(+b.dataset.t)));
-document.querySelector('.tprev').addEventListener('click',()=>goTab(curTab()-1));
-document.querySelector('.tnext').addEventListener('click',()=>goTab(curTab()+1));
+const tabsEl=document.querySelector('[data-tabs]');
+let tabTimer=setInterval(()=>goTab(curTab()+1),5000);
+function stopTabsAuto(){clearInterval(tabTimer);tabsEl.classList.remove('auto');}
+tabBtns.forEach(b=>b.addEventListener('click',()=>{stopTabsAuto();goTab(+b.dataset.t);}));
+document.querySelector('.tprev').addEventListener('click',()=>{stopTabsAuto();goTab(curTab()-1);});
+document.querySelector('.tnext').addEventListener('click',()=>{stopTabsAuto();goTab(curTab()+1);});
 // swipe no mobile (tabs e painel)
 (()=>{let x0=null;const area=document.querySelector('.pil');
   area.addEventListener('touchstart',e=>{x0=e.touches[0].clientX;},{passive:true});
-  area.addEventListener('touchend',e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)>50&&innerWidth<=640)goTab(curTab()+(dx<0?1:-1));},{passive:true});
+  area.addEventListener('touchend',e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)>50&&innerWidth<=640){stopTabsAuto();goTab(curTab()+(dx<0?1:-1));}},{passive:true});
 })();
 
 // count-up (Blueprintt números)
