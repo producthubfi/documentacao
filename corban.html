@@ -285,18 +285,10 @@ a.bank-logo{text-decoration:none;color:inherit}
 .virada-copy .fin{display:inline-flex;align-items:center;gap:10px;margin-top:22px;font-size:13.5px;white-space:nowrap;padding:10px 18px 10px 10px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(124,203,185,.25);font-weight:700;color:#fff}
 .virada-copy .fin i{width:32px;height:32px;border-radius:50%;background:#0E8B7A;display:grid;place-items:center;color:#fff}
 
-/* ---------- PILARES (Bloxs tabs) ---------- */
-.pil{padding:112px 0;background:#F7F9F8;position:relative}
-.pil .center{text-align:center;max-width:720px;margin:0 auto}
-.pil .center .h2{margin-top:20px}
-.pil .center .lead{margin-top:14px}
-.flow{display:flex;flex-wrap:wrap;justify-content:center;gap:18px;margin-top:48px}
-.fcard{flex:1 1 280px;max-width:340px;background:#fff;border:1px solid var(--line);border-radius:24px;padding:14px 14px 22px;box-shadow:0 1px 2px rgba(15,18,25,.03),0 24px 50px -40px rgba(15,18,25,.28);display:flex;flex-direction:column}
-.fcard .viz{border-radius:18px;background:#D7EFE9;overflow:hidden;aspect-ratio:1721/1396}
-.fcard .viz img{width:100%;height:100%;object-fit:cover;display:block}
-.fcard p{text-align:center;font-size:15.5px;line-height:1.45;font-weight:600;color:#111;margin-top:16px;padding:0 8px}
-.fcard p em{font-style:normal;color:#0E8B7A}
-.flow-cta{display:flex;justify-content:center;margin-top:36px}
+/* ---------- COMO FUNCIONA (Bloxs tabs) ---------- */
+.pil{padding:112px 0;background:#fff;position:relative}
+.pil .h2 span{white-space:nowrap}
+@media(max-width:900px){.pil .h2 span{white-space:normal}}
 .tabs-car{position:relative;margin-top:48px}
 .tarrow,.tdots,.tabs button small{display:none}
 .tabs{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#fff;box-shadow:0 1px 2px rgba(15,18,25,.03)}
@@ -340,7 +332,7 @@ a.bank-logo{text-decoration:none;color:inherit}
 .cells{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .cell{border:1px solid var(--line);border-radius:14px;padding:12px;background:#fff}
 .cell .t{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:700}
-.cell .t i{width:22px;height:22px;border-radius:7px;background:#EBF7F4;display:grid;place-items:center;color:#0E8B7A}
+.cell .t i img{width:14px;height:14px}
 .cell .sk{margin-top:10px;display:flex;align-items:center;gap:6px}
 .cell .sk b{width:18px;height:18px;border-radius:50%;background:#E5E7EB;display:block}
 .cell .sk s{flex:1;height:6px;border-radius:3px;background:#EEF2F1;text-decoration:none;display:block}
@@ -597,7 +589,6 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
   .dor-list button:after{right:auto;left:-27px}
   .prob-photo{min-height:280px}
   .stat-cards,.pt-grid{grid-template-columns:1fr}
-  .fcard{flex:1 1 100%;max-width:420px}
   .concl-in{grid-template-columns:1fr}
   .concl-copy{border-right:0;border-bottom:1px solid rgba(255,255,255,.1)}
   .orbit{height:380px}
@@ -1073,39 +1064,190 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
   </div>
 </section>
 
-<!-- ===== COMO FUNCIONA · jornada ===== -->
+<!-- ===== COMO FUNCIONA · Bloxs tabs ===== -->
 <section class="pil" id="pilares">
   <div class="wrap">
-    <div class="center reveal">
-      <span class="pill-tag"><i><svg><use href="#i-grid"/></svg></i>Como funciona</span>
-      <h2 class="h2"><span>Do cliente na mesa</span><span class="g">à comissão na conta.</span></h2>
+    <div class="sec-head reveal">
+      <div>
+        <span class="pill-tag"><i><svg><use href="#i-grid"/></svg></i>Como funciona</span>
+        <h2 class="h2 mt-5"><span>Do cliente na mesa à comissão na conta.</span></h2>
+      </div>
       <p class="lead">A Hubfi não substitui o que você já faz. Ela amplia sua capacidade, com menos esforço.</p>
     </div>
 
-    <div class="flow reveal-stagger">
-      <article class="fcard">
-        <div class="viz"><img src="dashboards/images/corban/passo-1.png" alt=""></div>
-        <p>Simule em segundos <em>condições de crédito</em> em múltiplos bancos.</p>
-      </article>
-      <article class="fcard">
-        <div class="viz"><img src="dashboards/images/corban/passo-2.png" alt=""></div>
-        <p>Compare e escolha a <em>proposta mais vantajosa</em> com o cliente.</p>
-      </article>
-      <article class="fcard">
-        <div class="viz"><img src="dashboards/images/corban/passo-3.png" alt=""></div>
-        <p>Encaminhe a proposta <em>direto da sua mesa</em>, na mesma esteira.</p>
-      </article>
-      <article class="fcard">
-        <div class="viz"><img src="dashboards/images/corban/passo-4.png" alt=""></div>
-        <p><em>A Hubfi faz o operacional:</em> atendimento, análise, documentação e formalização.</p>
-      </article>
-      <article class="fcard">
-        <div class="viz"><img src="dashboards/images/corban/passo-5.png" alt=""></div>
-        <p>Você recebe a comissão e <em>segue monetizando</em> no pós-venda.</p>
-      </article>
+    <div class="tabs-car reveal">
+      <button class="tarrow tprev" type="button" aria-label="Passo anterior"><svg width="14" height="14"><use href="#i-arrow"/></svg></button>
+      <div class="tabs auto" data-tabs>
+        <button class="on" data-t="1"><i><svg><use href="#i-bank"/></svg></i><span>Múltiplos bancos</span><small>01 / 05</small></button>
+        <button data-t="2"><i><svg><use href="#i-chart"/></svg></i><span>Melhor proposta</span><small>02 / 05</small></button>
+        <button data-t="3"><i><svg><use href="#i-file"/></svg></i><span>Encaminhar</span><small>03 / 05</small></button>
+        <button data-t="4"><i><svg><use href="#i-headset"/></svg></i><span>Hubfi opera</span><small>04 / 05</small></button>
+        <button data-t="5"><i><svg><use href="#i-trend"/></svg></i><span>Comissão</span><small>05 / 05</small></button>
+      </div>
+      <button class="tarrow tnext" type="button" aria-label="Próximo passo"><svg width="14" height="14"><use href="#i-arrow"/></svg></button>
+      <div class="tdots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></div>
     </div>
-    <div class="flow-cta reveal">
-      <a class="btn-cta-primary" href="https://wa.me/5581995269860?text=Ol%C3%A1%2C%20vi%20a%20p%C3%A1gina%20da%20Hubfi%20e%20quero%20saber%20mais%20sobre%20as%20solu%C3%A7%C3%B5es%20para%20correspondentes."><span class="icn-wrap"><svg width="15" height="15"><use href="#i-arrow"/></svg></span>Falar com um especialista</a>
+
+    <div class="pil-panel reveal">
+      <div class="pane on" data-pane="1">
+        <div>
+          <div class="k">Passo 01</div>
+          <h3>Simule em segundos condições de crédito em múltiplos bancos</h3>
+          <p>Itaú, Bradesco, Santander e Inter na mesma mesa. Sem abrir CNPJ, sem negociar banco a banco.</p>
+          <ul>
+            <li><i><svg><use href="#i-check"/></svg></i><span><b>Sem novos CNPJs</b>Sua operação entra como está.</span></li>
+            <li><i><svg><use href="#i-check"/></svg></i><span><b>Instituições já conectadas</b>Você simula e encaminha na hora.</span></li>
+          </ul>
+          <a class="btn-cta-primary mt-8" href="https://wa.me/5581995269860?text=Ol%C3%A1%2C%20vi%20a%20p%C3%A1gina%20da%20Hubfi%20e%20quero%20saber%20mais%20sobre%20as%20solu%C3%A7%C3%B5es%20para%20correspondentes."><span class="icn-wrap"><svg width="15" height="15"><use href="#i-arrow"/></svg></span>Falar com um especialista</a>
+        </div>
+        <div class="win">
+          <div class="bar"><i></i><i></i><i></i><div class="url"><svg width="10" height="10"><use href="#i-shield"/></svg>app.hubfi.com.br/infra</div></div>
+          <div class="body">
+            <div class="ttl">Instituições conectadas <span>Plugado</span></div>
+            <div class="rack">
+              <div><img src="dashboards/images/logos/itau.svg" alt=""><b>Itaú</b>Ativa</div>
+              <div><img src="dashboards/images/logos/bradesco.svg" alt=""><b>Bradesco</b>Ativa</div>
+              <div><img src="dashboards/images/logos/santander.svg" alt=""><b>Santander</b>Ativa</div>
+              <div><img src="dashboards/images/logos/inter.svg" alt=""><b>Inter</b>Ativa</div>
+              <div><img src="dashboards/images/logos/safra.svg" alt=""><b>Safra</b>Ativa</div>
+              <div><img src="dashboards/images/logos/c6.svg" alt=""><b>C6</b>Ativa</div>
+              <div class="wait"><img src="dashboards/images/logos/bv.svg" alt=""><b>BV</b>Habilitando</div>
+              <div class="wait"><img src="dashboards/images/logos/bancodobrasil.svg" alt=""><b>BB</b>Habilitando</div>
+            </div>
+          </div>
+          <div class="float-card">
+            <div class="h">Sua operação <span>Hoje</span></div>
+            <div class="v">CNPJ atual · sem abrir outro</div>
+            <div class="r"><span>Esteira</span><b>Pronta</b></div>
+            <div class="r"><span>Contratos</span><b>Já negociados</b></div>
+          </div>
+        </div>
+      </div>
+      <div class="pane" data-pane="2">
+        <div>
+          <div class="k">Passo 02</div>
+          <h3>Compare e escolha a proposta mais vantajosa com o cliente</h3>
+          <p>Várias vias na mesma esteira. Você mostra as condições e fecha a que faz sentido para o perfil.</p>
+          <ul>
+            <li><i><svg><use href="#i-check"/></svg></i><span><b>Bancos privados lado a lado</b>Itaú, Bradesco e Santander no mesmo lugar.</span></li>
+            <li><i><svg><use href="#i-check"/></svg></i><span><b>Cliente não sai da mesa</b>A comparação acontece com você.</span></li>
+          </ul>
+          <a class="btn-cta-primary mt-8" href="https://wa.me/5581995269860?text=Ol%C3%A1%2C%20vi%20a%20p%C3%A1gina%20da%20Hubfi%20e%20quero%20saber%20mais%20sobre%20as%20solu%C3%A7%C3%B5es%20para%20correspondentes."><span class="icn-wrap"><svg width="15" height="15"><use href="#i-arrow"/></svg></span>Falar com um especialista</a>
+        </div>
+        <div class="win">
+          <div class="bar"><i></i><i></i><i></i><div class="url"><svg width="10" height="10"><use href="#i-shield"/></svg>app.hubfi.com.br/produtos</div></div>
+          <div class="body">
+            <div class="ttl">Propostas para o cliente Silva <span>3 vias</span></div>
+            <div class="cells">
+              <div class="cell"><div class="t">Itaú<i><img src="dashboards/images/logos/itau.svg" alt=""></i></div><div class="mt-2 text-[11px] text-ink-400">R$ 420 mil</div><span class="tag ok mt-2 inline-block">Melhor taxa</span></div>
+              <div class="cell"><div class="t">Bradesco<i><img src="dashboards/images/logos/bradesco.svg" alt=""></i></div><div class="mt-2 text-[11px] text-ink-400">R$ 420 mil</div><span class="tag gr mt-2 inline-block">Em análise</span></div>
+              <div class="cell"><div class="t">Santander<i><img src="dashboards/images/logos/santander.svg" alt=""></i></div><div class="mt-2 text-[11px] text-ink-400">R$ 400 mil</div><span class="tag gr mt-2 inline-block">Disponível</span></div>
+            </div>
+          </div>
+          <div class="float-card">
+            <div class="h">Escolha com o cliente <span>Hoje</span></div>
+            <div class="v">A proposta mais vantajosa</div>
+            <div class="r"><span>Via</span><b>Itaú</b></div>
+            <div class="r"><span>Status</span><b>Pronta para enviar</b></div>
+          </div>
+        </div>
+      </div>
+      <div class="pane" data-pane="3">
+        <div>
+          <div class="k">Passo 03</div>
+          <h3>Encaminhe a proposta direto da sua mesa, na mesma esteira</h3>
+          <p>O cliente não vai embora. Se um banco negar, você rerroteia sem perder a operação.</p>
+          <ul>
+            <li><i><svg><use href="#i-check"/></svg></i><span><b>Esteira e documentos</b>Status e pendências visíveis.</span></li>
+            <li><i><svg><use href="#i-check"/></svg></i><span><b>Nova via na hora</b>Mesmo cliente, outro banco.</span></li>
+          </ul>
+          <a class="btn-cta-primary mt-8" href="https://wa.me/5581995269860?text=Ol%C3%A1%2C%20vi%20a%20p%C3%A1gina%20da%20Hubfi%20e%20quero%20saber%20mais%20sobre%20as%20solu%C3%A7%C3%B5es%20para%20correspondentes."><span class="icn-wrap"><svg width="15" height="15"><use href="#i-arrow"/></svg></span>Falar com um especialista</a>
+        </div>
+        <div class="win">
+          <div class="bar"><i></i><i></i><i></i><div class="url"><svg width="10" height="10"><use href="#i-shield"/></svg>app.hubfi.com.br/operacoes/8841</div></div>
+          <div class="body">
+            <div class="ttl">Operação #8841 · Silva <span>Em análise</span></div>
+            <div class="stepper">
+              <div class="done"><i><svg width="12" height="12"><use href="#i-check"/></svg></i>Cadastro</div>
+              <div class="done"><i><svg width="12" height="12"><use href="#i-check"/></svg></i>Documentos</div>
+              <div class="cur"><i>3</i>Análise</div>
+              <div><i>4</i>Proposta</div>
+              <div><i>5</i>Formalização</div>
+            </div>
+            <div class="cells">
+              <div class="cell"><div class="t">Documentos<i><svg width="11" height="11"><use href="#i-file"/></svg></i></div><div class="sk"><b></b><s></s></div><div class="sk"><b></b><s></s></div></div>
+              <div class="cell"><div class="t">Pendências<i><svg width="11" height="11"><use href="#i-alert"/></svg></i></div><div class="sk"><b></b><s></s></div></div>
+              <div class="cell"><div class="t">Performance<i><svg width="11" height="11"><use href="#i-chart"/></svg></i></div><div class="sk"><b></b><s></s></div><div class="sk"><b></b><s></s></div></div>
+            </div>
+          </div>
+          <div class="float-card">
+            <div class="h">Negado no Inter <span>Nova via</span></div>
+            <div class="v">Mesmo cliente. Outro banco.</div>
+            <div class="r"><span>Origem</span><b>Inter</b></div>
+            <div class="r"><span>Destino</span><b>Itaú</b></div>
+          </div>
+        </div>
+      </div>
+      <div class="pane" data-pane="4">
+        <div>
+          <div class="k">Passo 04</div>
+          <h3>A Hubfi faz o operacional: atendimento, análise, documentação e formalização</h3>
+          <p>Especialistas técnicos, operacionais e comerciais para você não resolver sozinho os gargalos do dia a dia.</p>
+          <ul>
+            <li><i><svg><use href="#i-check"/></svg></i><span><b>Técnico e operacional</b>Esteira, documentos e retorno do banco.</span></li>
+            <li><i><svg><use href="#i-check"/></svg></i><span><b>Você não monta backoffice</b>A Hubfi opera o processo.</span></li>
+          </ul>
+          <a class="btn-cta-primary mt-8" href="https://wa.me/5581995269860?text=Ol%C3%A1%2C%20vi%20a%20p%C3%A1gina%20da%20Hubfi%20e%20quero%20saber%20mais%20sobre%20as%20solu%C3%A7%C3%B5es%20para%20correspondentes."><span class="icn-wrap"><svg width="15" height="15"><use href="#i-arrow"/></svg></span>Falar com um especialista</a>
+        </div>
+        <div class="win">
+          <div class="bar"><i></i><i></i><i></i><div class="url"><svg width="10" height="10"><use href="#i-shield"/></svg>app.hubfi.com.br/suporte</div></div>
+          <div class="body">
+            <div class="ttl">Especialista Hubfi <span>Online</span></div>
+            <div class="chat">
+              <div class="me">Silva foi negado no Inter por renda. Consigo outra via para esse cliente?</div>
+              <div class="hb">Consegue. Encaminhei para o Itaú com a mesma documentação. Já está na esteira em análise.</div>
+              <div class="me">E o seguro do imóvel, ofereço agora ou depois da aprovação?</div>
+              <div class="hb">Agora. Fica vinculado à operação e você não perde o momento.</div>
+              <div class="who"><b></b>Especialista respondeu em 2 min</div>
+            </div>
+          </div>
+          <div class="float-card">
+            <div class="h">Time de especialistas <span>Disponível</span></div>
+            <div class="v">Técnico · Operacional · Comercial</div>
+            <div class="avs"><span>IZ</span><span>RA</span><span>MT</span><span>+</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="pane" data-pane="5">
+        <div>
+          <div class="k">Passo 05</div>
+          <h3>Você recebe a comissão e segue monetizando no pós-venda</h3>
+          <p>Seguro, home equity e consórcio na carteira que você já tem. Mais faturamento sem recaptar na mesma proporção.</p>
+          <ul>
+            <li><i><svg><use href="#i-check"/></svg></i><span><b>Mesma carteira</b>Mais oportunidades por cliente.</span></li>
+            <li><i><svg><use href="#i-check"/></svg></i><span><b>Comissão na conta</b>E receita no relacionamento depois da venda.</span></li>
+          </ul>
+          <a class="btn-cta-primary mt-8" href="https://wa.me/5581995269860?text=Ol%C3%A1%2C%20vi%20a%20p%C3%A1gina%20da%20Hubfi%20e%20quero%20saber%20mais%20sobre%20as%20solu%C3%A7%C3%B5es%20para%20correspondentes."><span class="icn-wrap"><svg width="15" height="15"><use href="#i-arrow"/></svg></span>Falar com um especialista</a>
+        </div>
+        <div class="win">
+          <div class="bar"><i></i><i></i><i></i><div class="url"><svg width="10" height="10"><use href="#i-shield"/></svg>app.hubfi.com.br/carteira</div></div>
+          <div class="body" style="padding-bottom:44px">
+            <div class="ttl">Receita por cliente <span>Mesma carteira</span></div>
+            <div class="bars">
+              <div><em>1 produto</em><span>Só financiamento</span></div>
+              <div><em>2 produtos</em><span>+ privado</span></div>
+              <div><em>3 produtos</em><span>+ home equity</span></div>
+              <div><em>4 produtos</em><span>+ seguro</span></div>
+            </div>
+          </div>
+          <div class="float-card">
+            <div class="h">Carteira atual <span>Sem recaptar</span></div>
+            <div class="v">Mais oportunidades por cliente</div>
+            <div class="r"><span>Captação</span><b>Igual</b></div>
+            <div class="r"><span>Produtos por cliente</span><b>Mais</b></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
