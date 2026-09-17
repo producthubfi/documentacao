@@ -160,9 +160,10 @@ h1,h2,h3{letter-spacing:-.03em}
 .logos p:before,.logos p:after{content:"";flex:0 0 120px;height:1px;background:linear-gradient(90deg,transparent,#E6ECEA)}
 .logos p:after{background:linear-gradient(90deg,#E6ECEA,transparent)}
 .logos p b{color:#0F1219;font-weight:700}
-.bank-logo{padding:0 18px;height:64px}
+.logos .marquee-track{gap:48px}
+.logos .bank-logo,.logos a.bank-logo{padding:0;width:auto;min-width:0;height:64px;justify-content:center;gap:0}
 a.bank-logo{text-decoration:none;color:inherit}
-.bank-logo img{width:auto;height:32px;max-width:120px;object-fit:contain}
+.logos .bank-logo img{width:auto;height:28px;max-width:none;object-fit:contain}
 .bank-logo span{display:none}
 
 /* ---------- PROBLEMA (Sqala) ---------- */
@@ -236,7 +237,7 @@ a.bank-logo{text-decoration:none;color:inherit}
 .pt{background:#fff;border:1px solid var(--line);border-radius:24px;padding:30px 28px 24px;position:relative;overflow:hidden;display:flex;flex-direction:column;transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s}
 .pt:hover{transform:translateY(-4px);box-shadow:0 30px 60px -40px rgba(15,18,25,.35)}
 .pt:before{content:"";position:absolute;inset:0;background:radial-gradient(60% 80% at 100% 0%,rgba(14,139,122,.08),transparent 60%);pointer-events:none}
-.pt .ic{width:40px;height:40px;border-radius:12px;background:#EBF7F4;display:grid;place-items:center;color:#0E8B7A;margin-bottom:18px}
+.pt .ic{width:40px;height:40px;border-radius:12px;background:#FDF2F2;display:grid;place-items:center;color:#C23030;margin-bottom:18px}
 .pt .mini{margin-top:auto;padding-top:0}
 .pt p{margin-bottom:22px}
 .pt h3{font-size:19px;font-weight:800;line-height:1.2}
@@ -274,16 +275,28 @@ a.bank-logo{text-decoration:none;color:inherit}
 .chip{position:absolute;display:inline-flex;align-items:center;gap:10px;padding:10px 14px 10px 10px;border-radius:14px;background:rgba(255,255,255,.96);border:1px solid var(--line);box-shadow:0 18px 40px -22px rgba(15,18,25,.4);font-size:13px;font-weight:600;color:#0F1219;white-space:nowrap;animation:floatY 6s ease-in-out infinite}
 .chip i{width:30px;height:30px;border-radius:9px;background:#EBF7F4;display:grid;place-items:center;color:#0E8B7A;overflow:hidden}
 .chip i img{width:20px;height:20px}
-.chip.dim{opacity:.55;transform:scale(.92)}
-.chip.dark{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12);color:#fff}
-.chip.dark i{background:rgba(124,203,185,.15);color:#7CCBB9}
+.chip.dim:not(.dark){opacity:.55;transform:scale(.92)}
+/* chip dark: preto no fundo claro, branco no fundo escuro */
+.chip.dark,.chip.dark.dim{background:#0F1219;border-color:#0F1219;color:#fff}
+.chip.dark i{background:rgba(255,255,255,.12);color:#fff}
+.orbit .chip.dark,.orbit .chip.dark.dim{background:#fff;border-color:#fff;color:#0F1219;box-shadow:0 18px 40px -22px rgba(15,18,25,.4)}
+.orbit .chip.dark i{background:#EBF7F4;color:#0E8B7A}
 .virada-copy{position:relative;color:#fff;padding:10px 24px 104px}
 .virada-copy .fin{display:inline-flex;align-items:center;gap:10px;margin-top:22px;font-size:13.5px;white-space:nowrap;padding:10px 18px 10px 10px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(124,203,185,.25);font-weight:700;color:#fff}
 .virada-copy .fin i{width:32px;height:32px;border-radius:50%;background:#0E8B7A;display:grid;place-items:center;color:#fff}
 
 /* ---------- PILARES (Bloxs tabs) ---------- */
-.pil{padding:112px 0;background:#fff;position:relative}
-.pil .center{text-align:center;max-width:820px;margin:0 auto}
+.pil{padding:112px 0;background:#F7F9F8;position:relative}
+.pil .center{text-align:center;max-width:720px;margin:0 auto}
+.pil .center .h2{margin-top:20px}
+.pil .center .lead{margin-top:14px}
+.flow{display:flex;flex-wrap:wrap;justify-content:center;gap:18px;margin-top:48px}
+.fcard{flex:1 1 280px;max-width:340px;background:#fff;border:1px solid var(--line);border-radius:24px;padding:14px 14px 22px;box-shadow:0 1px 2px rgba(15,18,25,.03),0 24px 50px -40px rgba(15,18,25,.28);display:flex;flex-direction:column}
+.fcard .viz{border-radius:18px;background:#D7EFE9;overflow:hidden;aspect-ratio:1721/1396}
+.fcard .viz img{width:100%;height:100%;object-fit:cover;display:block}
+.fcard p{text-align:center;font-size:15.5px;line-height:1.45;font-weight:600;color:#111;margin-top:16px;padding:0 8px}
+.fcard p em{font-style:normal;color:#0E8B7A}
+.flow-cta{display:flex;justify-content:center;margin-top:36px}
 .tabs-car{position:relative;margin-top:48px}
 .tarrow,.tdots,.tabs button small{display:none}
 .tabs{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#fff;box-shadow:0 1px 2px rgba(15,18,25,.03)}
@@ -394,7 +407,7 @@ a.bank-logo{text-decoration:none;color:inherit}
 .acc>div i svg{width:16px;height:16px}
 .acc b{display:block;font-size:16px;font-weight:700}
 .acc p{font-size:15px;line-height:1.7;color:#4B5563;margin-top:6px}
-.photo-ui{position:relative;padding:0 0 0 70px}
+.photo-ui{position:relative;padding:0}
 .photo-ui .ph{border-radius:24px;overflow:hidden;height:520px;box-shadow:0 40px 80px -40px rgba(5,61,56,.5)}
 .photo-ui .ph img{width:100%;height:100%;object-fit:cover;object-position:50% 18%}
 .photo-ui .ui{position:absolute;left:0;top:64px;width:300px;background:#fff;border-radius:18px;border:1px solid var(--line);box-shadow:0 30px 60px -30px rgba(15,18,25,.45);padding:16px;animation:floatY 7s ease-in-out infinite}
@@ -584,6 +597,7 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
   .dor-list button:after{right:auto;left:-27px}
   .prob-photo{min-height:280px}
   .stat-cards,.pt-grid{grid-template-columns:1fr}
+  .fcard{flex:1 1 100%;max-width:420px}
   .concl-in{grid-template-columns:1fr}
   .concl-copy{border-right:0;border-bottom:1px solid rgba(255,255,255,.1)}
   .orbit{height:380px}
@@ -971,12 +985,12 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
       <article class="pt">
         <div class="ic"><svg width="18" height="18"><use href="#i-x"/></svg></div>
         <h3><small>01</small>O cliente é negado na Caixa</h3>
-        <p>Renda, limite ou perfil de risco: a Caixa nega e a operação inteira se perde. O banco privado aprovaria. Sem acesso, sem alternativa.</p>
+        <p>Renda, limite ou perfil de risco: a Caixa nega e a operação inteira se perde. O banco privado pode aprovar. Sem acesso, sem alternativa.</p>
         <a class="go" href="#pilares" aria-label="Ver como a Hubfi resolve"><svg width="13" height="13"><use href="#i-arrow"/></svg></a>
         <div class="mini">
           <div class="hdm"><span>Ficha #8841 · Silva</span><span class="tag red">Negado</span></div>
           <div class="r"><div class="l"><img src="dashboards/images/logos/inter.svg" alt=""><b>Inter</b></div><span class="text-ink-400 text-[12px]">Renda fora da política</span></div>
-          <div class="r"><div class="l"><img src="dashboards/images/logos/itau.svg" alt="" style="filter:grayscale(1);opacity:.45"><span class="text-ink-400">Itaú</span></div><span class="tag gr">Aprovaria</span></div>
+          <div class="r"><div class="l"><img src="dashboards/images/logos/itau.svg" alt="" style="filter:grayscale(1);opacity:.45"><span class="text-ink-400">Itaú</span></div><span class="tag gr">Pode aprovar</span></div>
           <div class="r"><div class="l"><b>Alternativa</b></div><span class="tag red">Nenhuma</span></div>
         </div>
       </article>
@@ -989,7 +1003,7 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
           <div class="hdm"><span>Pedido do cliente</span><span>Sua mesa</span></div>
           <div class="r"><div class="l"><img src="dashboards/images/logos/itau.svg" alt=""><b>Itaú</b></div><span class="tag red">Não opera</span></div>
           <div class="r"><div class="l"><img src="dashboards/images/logos/santander.svg" alt=""><b>Santander</b></div><span class="tag red">Não opera</span></div>
-          <div class="r"><div class="l"><b>Comissão</b></div><span class="tag gr">Vai com o cliente</span></div>
+          <div class="r"><div class="l"><b>Comissão</b></div><span class="tag red">Corban perde</span></div>
         </div>
       </article>
       <article class="pt">
@@ -1043,7 +1057,7 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
     <div class="chip dark" style="left:12%;top:66%;--d:.3s"><i><svg width="15" height="15"><use href="#i-home"/></svg></i>Home equity</div>
     <div class="chip dark" style="right:10%;top:66%;--d:1.4s"><i><svg width="15" height="15"><use href="#i-repeat"/></svg></i>Portabilidade</div>
     <div class="chip dark k" style="left:20%;top:82%;--d:2.2s"><i><svg width="15" height="15"><use href="#i-coins"/></svg></i>Consórcio</div>
-    <div class="chip dark dim" style="right:18%;top:82%;--d:.9s"><i><svg width="15" height="15"><use href="#i-shield"/></svg></i>Seguro imobiliário</div>
+    <div class="chip dark dim" style="right:18%;top:82%;--d:.9s"><i><svg width="15" height="15"><use href="#i-shield"/></svg></i>Seguro</div>
   </div></div>
   <div class="wrap virada-copy reveal dark">
     <div class="sec-head">
@@ -1059,200 +1073,39 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
   </div>
 </section>
 
-<!-- ===== 5 PILARES · Bloxs tabs ===== -->
+<!-- ===== COMO FUNCIONA · jornada ===== -->
 <section class="pil" id="pilares">
   <div class="wrap">
-    <div class="sec-head reveal">
-      <div>
-        <span class="pill-tag"><i><svg><use href="#i-grid"/></svg></i>Como funciona</span>
-        <h2 class="h2 mt-5"><span>Uma plataforma. Cinco pilares.</span><span class="g">Uma operação muito mais completa.</span></h2>
-      </div>
+    <div class="center reveal">
+      <span class="pill-tag"><i><svg><use href="#i-grid"/></svg></i>Como funciona</span>
+      <h2 class="h2"><span>Do cliente na mesa</span><span class="g">à comissão na conta.</span></h2>
       <p class="lead">A Hubfi não substitui o que você já faz. Ela amplia sua capacidade, com menos esforço.</p>
     </div>
 
-    <div class="tabs-car reveal">
-      <button class="tarrow tprev" type="button" aria-label="Pilar anterior"><svg width="14" height="14"><use href="#i-arrow"/></svg></button>
-      <div class="tabs auto" data-tabs>
-        <button class="on" data-t="1"><i><svg><use href="#i-plug"/></svg></i><span>Infraestrutura pronta</span><small>01 / 05</small></button>
-        <button data-t="2"><i><svg><use href="#i-grid"/></svg></i><span>Plataforma integrada</span><small>02 / 05</small></button>
-        <button data-t="3"><i><svg><use href="#i-bank"/></svg></i><span>Bancos e produtos</span><small>03 / 05</small></button>
-        <button data-t="4"><i><svg><use href="#i-headset"/></svg></i><span>Suporte especializado</span><small>04 / 05</small></button>
-        <button data-t="5"><i><svg><use href="#i-trend"/></svg></i><span>Monetização da carteira</span><small>05 / 05</small></button>
-      </div>
-      <button class="tarrow tnext" type="button" aria-label="Próximo pilar"><svg width="14" height="14"><use href="#i-arrow"/></svg></button>
-      <div class="tdots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+    <div class="flow reveal-stagger">
+      <article class="fcard">
+        <div class="viz"><img src="dashboards/images/corban/passo-1.png" alt=""></div>
+        <p>Simule em segundos <em>condições de crédito</em> em múltiplos bancos.</p>
+      </article>
+      <article class="fcard">
+        <div class="viz"><img src="dashboards/images/corban/passo-2.png" alt=""></div>
+        <p>Compare e escolha a <em>proposta mais vantajosa</em> com o cliente.</p>
+      </article>
+      <article class="fcard">
+        <div class="viz"><img src="dashboards/images/corban/passo-3.png" alt=""></div>
+        <p>Encaminhe a proposta <em>direto da sua mesa</em>, na mesma esteira.</p>
+      </article>
+      <article class="fcard">
+        <div class="viz"><img src="dashboards/images/corban/passo-4.png" alt=""></div>
+        <p><em>A Hubfi faz o operacional:</em> atendimento, análise, documentação e formalização.</p>
+      </article>
+      <article class="fcard">
+        <div class="viz"><img src="dashboards/images/corban/passo-5.png" alt=""></div>
+        <p>Você recebe a comissão e <em>segue monetizando</em> no pós-venda.</p>
+      </article>
     </div>
-
-    <div class="pil-panel reveal">
-      <!-- 1 -->
-      <div class="pane on" data-pane="1">
-        <div>
-          <div class="k">Pilar 01</div>
-          <h3>Infraestrutura operacional pronta</h3>
-          <p>Uma estrutura que antes só grandes players montavam, pronta para você plugar a sua operação.</p>
-          <ul>
-            <li><i><svg><use href="#i-check"/></svg></i><span><b>Sem novos CNPJs</b>Sua operação entra como está.</span></li>
-            <li><i><svg><use href="#i-check"/></svg></i><span><b>Sem negociar banco a banco</b>Instituições já conectadas.</span></li>
-          </ul>
-          <a class="btn-cta-primary mt-8" href="https://wa.me/5581995269860?text=Ol%C3%A1%2C%20vi%20a%20p%C3%A1gina%20da%20Hubfi%20e%20quero%20saber%20mais%20sobre%20as%20solu%C3%A7%C3%B5es%20para%20correspondentes."><span class="icn-wrap"><svg width="15" height="15"><use href="#i-arrow"/></svg></span>Falar com um especialista</a>
-        </div>
-        <div class="win">
-          <div class="bar"><i></i><i></i><i></i><div class="url"><svg width="10" height="10"><use href="#i-shield"/></svg>app.hubfi.com.br/infra</div></div>
-          <div class="body">
-            <div class="ttl">Instituições conectadas <span>Plugado</span></div>
-            <div class="rack">
-              <div><img src="dashboards/images/logos/itau.svg" alt=""><b>Itaú</b>Ativa</div>
-              <div><img src="dashboards/images/logos/bradesco.svg" alt=""><b>Bradesco</b>Ativa</div>
-              <div><img src="dashboards/images/logos/santander.svg" alt=""><b>Santander</b>Ativa</div>
-              <div><img src="dashboards/images/logos/inter.svg" alt=""><b>Inter</b>Ativa</div>
-              <div><img src="dashboards/images/logos/safra.svg" alt=""><b>Safra</b>Ativa</div>
-              <div><img src="dashboards/images/logos/c6.svg" alt=""><b>C6</b>Ativa</div>
-              <div class="wait"><img src="dashboards/images/logos/bv.svg" alt=""><b>BV</b>Habilitando</div>
-              <div class="wait"><img src="dashboards/images/logos/bancodobrasil.svg" alt=""><b>BB</b>Habilitando</div>
-            </div>
-          </div>
-          <div class="float-card">
-            <div class="h">Sua operação <span>Hoje</span></div>
-            <div class="v">CNPJ atual · sem abrir outro</div>
-            <div class="r"><span>Esteira</span><b>Pronta</b></div>
-            <div class="r"><span>Contratos</span><b>Já negociados</b></div>
-          </div>
-        </div>
-      </div>
-      <!-- 2 -->
-      <div class="pane" data-pane="2">
-        <div>
-          <div class="k">Pilar 02</div>
-          <h3>Plataforma tecnológica integrada</h3>
-          <p>Operações, documentos, timeline e performance em um único lugar, com controle real de cada processo.</p>
-          <ul>
-            <li><i><svg><use href="#i-check"/></svg></i><span><b>Esteira e documentos</b>Status e pendências visíveis.</span></li>
-            <li><i><svg><use href="#i-check"/></svg></i><span><b>Timeline e performance</b>Quem moveu cada etapa, quando.</span></li>
-          </ul>
-          <a class="btn-cta-primary mt-8" href="https://wa.me/5581995269860?text=Ol%C3%A1%2C%20vi%20a%20p%C3%A1gina%20da%20Hubfi%20e%20quero%20saber%20mais%20sobre%20as%20solu%C3%A7%C3%B5es%20para%20correspondentes."><span class="icn-wrap"><svg width="15" height="15"><use href="#i-arrow"/></svg></span>Falar com um especialista</a>
-        </div>
-        <div class="win">
-          <div class="bar"><i></i><i></i><i></i><div class="url"><svg width="10" height="10"><use href="#i-shield"/></svg>app.hubfi.com.br/operacoes/8841</div></div>
-          <div class="body">
-            <div class="ttl">Operação #8841 · Silva <span>Em análise</span></div>
-            <div class="stepper">
-              <div class="done"><i><svg width="12" height="12"><use href="#i-check"/></svg></i>Cadastro</div>
-              <div class="done"><i><svg width="12" height="12"><use href="#i-check"/></svg></i>Documentos</div>
-              <div class="cur"><i>3</i>Análise</div>
-              <div><i>4</i>Proposta</div>
-              <div><i>5</i>Formalização</div>
-            </div>
-            <div class="cells">
-              <div class="cell"><div class="t">Documentos<i><svg width="11" height="11"><use href="#i-file"/></svg></i></div><div class="sk"><b></b><s></s></div><div class="sk"><b></b><s></s></div></div>
-              <div class="cell"><div class="t">Pendências<i><svg width="11" height="11"><use href="#i-alert"/></svg></i></div><div class="sk"><b></b><s></s></div></div>
-              <div class="cell"><div class="t">Performance<i><svg width="11" height="11"><use href="#i-chart"/></svg></i></div><div class="sk"><b></b><s></s></div><div class="sk"><b></b><s></s></div></div>
-            </div>
-          </div>
-          <div class="float-card">
-            <div class="h">Timeline <span>hoje</span></div>
-            <div class="tl mt-2">
-              <div><i><svg><use href="#i-check"/></svg></i><span>Proposta aberta</span><b>09:12</b></div>
-              <div><i><svg><use href="#i-check"/></svg></i><span>Negada por renda</span><b>11:40</b></div>
-              <div><i><svg><use href="#i-arrow"/></svg></i><span>Rerroteada · Itaú</span><b>11:47</b></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- 3 -->
-      <div class="pane" data-pane="3">
-        <div>
-          <div class="k">Pilar 03</div>
-          <h3>Acesso a bancos privados e múltiplos produtos</h3>
-          <p>Financiamento privado, home equity, consórcio, seguro e crédito estruturado integrados à sua operação.</p>
-          <ul>
-            <li><i><svg><use href="#i-check"/></svg></i><span><b>Bancos privados</b>Itaú, Bradesco e Santander na mesma esteira.</span></li>
-            <li><i><svg><use href="#i-check"/></svg></i><span><b>Produtos complementares</b>Home equity, consórcio, seguro.</span></li>
-          </ul>
-          <a class="btn-cta-primary mt-8" href="https://wa.me/5581995269860?text=Ol%C3%A1%2C%20vi%20a%20p%C3%A1gina%20da%20Hubfi%20e%20quero%20saber%20mais%20sobre%20as%20solu%C3%A7%C3%B5es%20para%20correspondentes."><span class="icn-wrap"><svg width="15" height="15"><use href="#i-arrow"/></svg></span>Falar com um especialista</a>
-        </div>
-        <div class="win">
-          <div class="bar"><i></i><i></i><i></i><div class="url"><svg width="10" height="10"><use href="#i-shield"/></svg>app.hubfi.com.br/produtos</div></div>
-          <div class="body">
-            <div class="ttl">Produtos para o cliente Silva <span>5 disponíveis</span></div>
-            <div class="cells">
-              <div class="cell"><div class="t">Financiamento<i><svg width="11" height="11"><use href="#i-home"/></svg></i></div><div class="mt-2 text-[11px] text-ink-400">Itaú · Bradesco · Santander</div><span class="tag ok mt-2 inline-block">Em análise</span></div>
-              <div class="cell"><div class="t">Home equity<i><svg width="11" height="11"><use href="#i-coins"/></svg></i></div><div class="mt-2 text-[11px] text-ink-400">Crédito com garantia</div><span class="tag gr mt-2 inline-block">Disponível</span></div>
-              <div class="cell"><div class="t">Consórcio<i><svg width="11" height="11"><use href="#i-repeat"/></svg></i></div><div class="mt-2 text-[11px] text-ink-400">Imóvel</div><span class="tag gr mt-2 inline-block">Disponível</span></div>
-              <div class="cell"><div class="t">Seguro<i><svg width="11" height="11"><use href="#i-shield"/></svg></i></div><div class="mt-2 text-[11px] text-ink-400">Imobiliário</div><span class="tag gr mt-2 inline-block">Disponível</span></div>
-              <div class="cell"><div class="t">Crédito estruturado<i><svg width="11" height="11"><use href="#i-layers"/></svg></i></div><div class="mt-2 text-[11px] text-ink-400">Fora do padrão</div><span class="tag gr mt-2 inline-block">Disponível</span></div>
-              <div class="cell"><div class="t">Portabilidade<i><svg width="11" height="11"><use href="#i-repeat"/></svg></i></div><div class="mt-2 text-[11px] text-ink-400">Contrato existente</div><span class="tag gr mt-2 inline-block">Disponível</span></div>
-            </div>
-          </div>
-          <div class="float-card">
-            <div class="h">Negado no Inter <span>Nova via</span></div>
-            <div class="v">Mesmo cliente. Outro banco.</div>
-            <div class="r"><span>Origem</span><b>Inter</b></div>
-            <div class="r"><span>Destino</span><b>Itaú</b></div>
-          </div>
-        </div>
-      </div>
-      <!-- 4 -->
-      <div class="pane" data-pane="4">
-        <div>
-          <div class="k">Pilar 04</div>
-          <h3>Suporte especializado</h3>
-          <p>Especialistas técnicos, operacionais e comerciais para você não resolver sozinho os gargalos do dia a dia.</p>
-          <ul>
-            <li><i><svg><use href="#i-check"/></svg></i><span><b>Técnico e operacional</b>Esteira, documentos e retorno do banco.</span></li>
-            <li><i><svg><use href="#i-check"/></svg></i><span><b>Comercial</b>Como encaixar a Hubfi na sua operação.</span></li>
-          </ul>
-          <a class="btn-cta-primary mt-8" href="https://wa.me/5581995269860?text=Ol%C3%A1%2C%20vi%20a%20p%C3%A1gina%20da%20Hubfi%20e%20quero%20saber%20mais%20sobre%20as%20solu%C3%A7%C3%B5es%20para%20correspondentes."><span class="icn-wrap"><svg width="15" height="15"><use href="#i-arrow"/></svg></span>Falar com um especialista</a>
-        </div>
-        <div class="win">
-          <div class="bar"><i></i><i></i><i></i><div class="url"><svg width="10" height="10"><use href="#i-shield"/></svg>app.hubfi.com.br/suporte</div></div>
-          <div class="body">
-            <div class="ttl">Especialista Hubfi <span>Online</span></div>
-            <div class="chat">
-              <div class="me">Silva foi negado no Inter por renda. Consigo outra via para esse cliente?</div>
-              <div class="hb">Consegue. Encaminhei para o Itaú com a mesma documentação. Já está na esteira em análise.</div>
-              <div class="me">E o seguro do imóvel, ofereço agora ou depois da aprovação?</div>
-              <div class="hb">Agora. Fica vinculado à operação e você não perde o momento.</div>
-              <div class="who"><b></b>Especialista respondeu em 2 min</div>
-            </div>
-          </div>
-          <div class="float-card">
-            <div class="h">Time de especialistas <span>Disponível</span></div>
-            <div class="v">Técnico · Operacional · Comercial</div>
-            <div class="avs"><span>IZ</span><span>RA</span><span>MT</span><span>+</span></div>
-          </div>
-        </div>
-      </div>
-      <!-- 5 -->
-      <div class="pane" data-pane="5">
-        <div>
-          <div class="k">Pilar 05</div>
-          <h3>Monetização ampliada da carteira</h3>
-          <p>Múltiplas oportunidades na carteira que você já tem. Mais faturamento sem captar na mesma proporção.</p>
-          <ul>
-            <li><i><svg><use href="#i-check"/></svg></i><span><b>Mesma carteira</b>Mais oportunidades por cliente.</span></li>
-            <li><i><svg><use href="#i-check"/></svg></i><span><b>Sem recaptar</b>O faturamento cresce antes do custo.</span></li>
-          </ul>
-          <a class="btn-cta-primary mt-8" href="https://wa.me/5581995269860?text=Ol%C3%A1%2C%20vi%20a%20p%C3%A1gina%20da%20Hubfi%20e%20quero%20saber%20mais%20sobre%20as%20solu%C3%A7%C3%B5es%20para%20correspondentes."><span class="icn-wrap"><svg width="15" height="15"><use href="#i-arrow"/></svg></span>Falar com um especialista</a>
-        </div>
-        <div class="win">
-          <div class="bar"><i></i><i></i><i></i><div class="url"><svg width="10" height="10"><use href="#i-shield"/></svg>app.hubfi.com.br/carteira</div></div>
-          <div class="body" style="padding-bottom:44px">
-            <div class="ttl">Receita por cliente <span>Mesma carteira</span></div>
-            <div class="bars">
-              <div><em>1 produto</em><span>Só financiamento</span></div>
-              <div><em>2 produtos</em><span>+ privado</span></div>
-              <div><em>3 produtos</em><span>+ home equity</span></div>
-              <div><em>4 produtos</em><span>+ seguro</span></div>
-            </div>
-          </div>
-          <div class="float-card">
-            <div class="h">Carteira atual <span>Sem recaptar</span></div>
-            <div class="v">Mais oportunidades por cliente</div>
-            <div class="r"><span>Captação</span><b>Igual</b></div>
-            <div class="r"><span>Produtos por cliente</span><b>Mais</b></div>
-          </div>
-        </div>
-      </div>
+    <div class="flow-cta reveal">
+      <a class="btn-cta-primary" href="https://wa.me/5581995269860?text=Ol%C3%A1%2C%20vi%20a%20p%C3%A1gina%20da%20Hubfi%20e%20quero%20saber%20mais%20sobre%20as%20solu%C3%A7%C3%B5es%20para%20correspondentes."><span class="icn-wrap"><svg width="15" height="15"><use href="#i-arrow"/></svg></span>Falar com um especialista</a>
     </div>
   </div>
 </section>
@@ -1303,15 +1156,6 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
       </div>
       <div class="photo-ui reveal">
         <div class="ph"><img src="dashboards/images/corban/corban-mulher-computador.png" alt="Profissional Hubfi sorrindo ao trabalhar no notebook"></div>
-        <div class="ui">
-          <div class="h">Status da esteira <span><i></i><i></i><i></i></span></div>
-          <div class="mt-3">
-            <div class="lane stop"><img src="dashboards/images/logos/inter.svg" alt=""><div><b class="text-[13px]">Inter</b><div class="bar"><i></i></div></div><span class="st" style="color:#C23030">Parada</span></div>
-            <div class="lane"><img src="dashboards/images/logos/itau.svg" alt=""><div><b class="text-[13px]">Itaú</b><div class="bar"><i style="width:82%"></i></div></div><span class="st" style="color:#0A7165">Operando</span></div>
-            <div class="lane"><img src="dashboards/images/logos/bradesco.svg" alt=""><div><b class="text-[13px]">Bradesco</b><div class="bar"><i style="width:64%"></i></div></div><span class="st" style="color:#0A7165">Operando</span></div>
-            <div class="lane"><img src="dashboards/images/logos/santander.svg" alt=""><div><b class="text-[13px]">Santander</b><div class="bar"><i style="width:71%"></i></div></div><span class="st" style="color:#0A7165">Operando</span></div>
-          </div>
-        </div>
         <div class="checkcard"><i><svg width="12" height="12"><use href="#i-check"/></svg></i>Quem opera com múltiplas soluções continua atendendo.</div>
       </div>
     </div>
@@ -1438,7 +1282,9 @@ document.querySelectorAll('[data-dores] .dor-list button').forEach(b=>b.addEvent
 let dorIdx=1,dorTimer=setInterval(()=>{dorIdx=dorIdx%5+1;document.querySelector(`[data-dores] .dor-list button[data-d="${dorIdx}"]`)?.click();},4200);
 document.querySelector('[data-dores]').addEventListener('pointerdown',e=>{clearInterval(dorTimer);e.currentTarget.classList.add('manual');},{once:true});
 
-// pilares (Bloxs)
+// pilares (jornada — tabs só se existirem)
+const tabsEl=document.querySelector('[data-tabs]');
+if(tabsEl){
 const tabBtns=[...document.querySelectorAll('[data-tabs] button')],tabDots=[...document.querySelectorAll('.tdots i')];
 function goTab(t){
   t=((t-1+tabBtns.length)%tabBtns.length)+1;
@@ -1450,17 +1296,16 @@ function goTab(t){
   });
 }
 const curTab=()=>+document.querySelector('[data-tabs] button.on').dataset.t;
-const tabsEl=document.querySelector('[data-tabs]');
 let tabTimer=setInterval(()=>goTab(curTab()+1),5000);
 function stopTabsAuto(){clearInterval(tabTimer);tabsEl.classList.remove('auto');}
 tabBtns.forEach(b=>b.addEventListener('click',()=>{stopTabsAuto();goTab(+b.dataset.t);}));
-document.querySelector('.tprev').addEventListener('click',()=>{stopTabsAuto();goTab(curTab()-1);});
-document.querySelector('.tnext').addEventListener('click',()=>{stopTabsAuto();goTab(curTab()+1);});
-// swipe no mobile (tabs e painel)
+document.querySelector('.tprev')?.addEventListener('click',()=>{stopTabsAuto();goTab(curTab()-1);});
+document.querySelector('.tnext')?.addEventListener('click',()=>{stopTabsAuto();goTab(curTab()+1);});
 (()=>{let x0=null;const area=document.querySelector('.pil');
   area.addEventListener('touchstart',e=>{x0=e.touches[0].clientX;},{passive:true});
   area.addEventListener('touchend',e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)>50&&innerWidth<=640){stopTabsAuto();goTab(curTab()+(dx<0?1:-1));}},{passive:true});
 })();
+}
 
 // count-up (Blueprintt números)
 const fmt=(v,dec)=>v.toLocaleString('pt-BR',{minimumFractionDigits:dec,maximumFractionDigits:dec});
