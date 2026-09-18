@@ -103,39 +103,56 @@ h1,h2,h3{letter-spacing:-.03em}
 /* a janela da plataforma atravessa a borda do hero e entra na seção branca */
 .stage{position:relative;width:100%;max-width:1040px;margin-top:64px;margin-bottom:-120px;z-index:2}
 /* janela da plataforma */
-.plat{position:relative;margin:0 auto;width:880px;max-width:100%;text-align:left;background:#fff;border-radius:18px;color:var(--ink);box-shadow:0 60px 120px -40px rgba(0,0,0,.75),0 0 0 1px rgba(255,255,255,.1),0 0 0 10px rgba(255,255,255,.04),0 0 0 22px rgba(255,255,255,.02);overflow:hidden}
-.plat .bar{display:flex;align-items:center;gap:8px;height:42px;padding:0 16px;background:#F7F9F8;border-bottom:1px solid #E6ECEA}
-.plat .bar i{width:10px;height:10px;border-radius:50%;background:#DDE3E0}
-.plat .bar .url{margin-left:10px;height:26px;flex:1;max-width:280px;border-radius:8px;background:#fff;border:1px solid #E6ECEA;font-size:11.5px;color:#6B7280;display:flex;align-items:center;gap:6px;padding:0 10px}
-.plat .app{display:grid;grid-template-columns:190px 1fr;min-height:400px}
-.plat .side{background:#0B0E14;color:#fff;padding:18px 14px}
-.plat .side img{width:74px;height:auto}
-.plat .side nav{margin-top:22px;display:flex;flex-direction:column;gap:4px}
-.plat .side nav a{display:flex;align-items:center;gap:9px;font-size:12px;color:rgba(255,255,255,.6);padding:8px 10px;border-radius:9px}
-.plat .side nav a.on{background:rgba(124,203,185,.14);color:#fff}
-.plat .side nav a svg{width:14px;height:14px;color:#7CCBB9}
-.plat .side .me{margin-top:40px;display:flex;align-items:center;gap:8px;font-size:11px;color:rgba(255,255,255,.7)}
-.plat .side .me b{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#0E8B7A,#08574F);display:grid;place-items:center;font-size:9px;color:#fff}
-.plat .main{padding:18px 20px 20px;background:#FAFBFB}
-.plat .main .hd{display:flex;justify-content:space-between;align-items:center}
-.plat .main .hd b{font-size:15px}
-.plat .main .hd span{font-size:11px;font-weight:700;color:#0A7165;background:#EBF7F4;padding:4px 9px;border-radius:999px}
-.plat .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
-.plat .kpis div{background:#fff;border:1px solid #E6ECEA;border-radius:12px;padding:10px 12px}
-.plat .kpis s{display:block;text-decoration:none;font-size:10.5px;color:#6B7280}
-.plat .kpis b{display:block;font-size:19px;letter-spacing:-.04em;margin-top:2px}
-.plat .kpis small{font-size:10px;color:#0A7165;font-weight:700}
-.plat table{width:100%;margin-top:14px;border-collapse:collapse;font-size:11.5px;background:#fff;border:1px solid #E6ECEA;border-radius:12px;overflow:hidden}
-.plat th{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#6B7280;text-align:left;padding:9px 12px;border-bottom:1px solid #E6ECEA;background:#F7F9F8}
-.plat td{padding:9px 12px;border-bottom:1px solid #EEF2F1;white-space:nowrap}
+.plat{position:relative;margin:0 auto;width:920px;max-width:100%;text-align:left;background:#fff;border-radius:20px;color:var(--ink);box-shadow:0 18px 40px -28px rgba(2,43,39,.28),0 6px 18px -12px rgba(2,43,39,.12),0 0 0 1px rgba(255,255,255,.14);overflow:hidden}
+.plat .bar{display:flex;align-items:center;gap:7px;height:40px;padding:0 16px;background:#F7F9F8;border-bottom:1px solid #EEF2F1}
+.plat .bar i{width:9px;height:9px;border-radius:50%;background:#DDE3E0}
+.plat .bar i:nth-child(1){background:#E8C4C4}.plat .bar i:nth-child(2){background:#E8D9B0}.plat .bar i:nth-child(3){background:#C5DCCF}
+.plat .bar .url{margin-left:8px;height:24px;flex:1;max-width:260px;border-radius:7px;background:#fff;border:1px solid #E6ECEA;font-size:11px;color:#6B7280;display:flex;align-items:center;gap:6px;padding:0 10px}
+.plat .app{display:grid;grid-template-columns:176px 1fr;min-height:428px}
+.plat .side{background:#071210;color:#fff;padding:20px 14px 16px;display:flex;flex-direction:column}
+.plat .side img{width:70px;height:auto}
+.plat .side nav{margin-top:26px;display:flex;flex-direction:column;gap:2px}
+.plat .side nav a{display:flex;align-items:center;gap:9px;font-size:12.5px;font-weight:500;color:rgba(255,255,255,.55);padding:9px 10px;border-radius:10px}
+.plat .side nav a.on{background:#0E8B7A;color:#fff}
+.plat .side nav a svg{width:14px;height:14px;color:#7CCBB9;flex-shrink:0}
+.plat .side nav a.on svg{color:#fff}
+.plat .side .me{margin-top:auto;display:flex;align-items:center;gap:10px;font-size:12px;font-weight:600;color:#fff;padding:10px 8px 2px;border-top:1px solid rgba(255,255,255,.08)}
+.plat .side .me span{display:block;font-size:10.5px;color:rgba(255,255,255,.45);font-weight:500;margin-top:1px}
+.plat .side .me b{width:28px;height:28px;border-radius:8px;background:#0E8B7A;display:grid;place-items:center;font-size:9px;color:#fff;flex-shrink:0}
+.plat .main{padding:22px 22px 18px;background:#F7F9F8;display:grid;overflow:hidden}
+.plat .view{grid-area:1/1;min-width:0;transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1)}
+.plat .view-mesa{opacity:1;transform:none}
+.plat .view-ops{opacity:0;transform:translateX(28px);pointer-events:none}
+.plat.is-ops .view-mesa{opacity:0;transform:translateX(-28px);pointer-events:none}
+.plat.is-ops .view-ops{opacity:1;transform:none;pointer-events:auto}
+.plat .ops-filters{display:flex;gap:6px;margin-top:14px}
+.plat .ops-filters span{font-size:11px;font-weight:600;padding:5px 10px;border-radius:999px;background:#fff;border:1px solid #E6ECEA;color:#6B7280}
+.plat .ops-filters span.on{background:#EBF7F4;border-color:#AEDFD3;color:#0A7165}
+.plat .main .hd{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.plat .main .hd b{display:block;font-size:16px;letter-spacing:-.03em}
+.plat .main .hd em{display:block;font-style:normal;font-size:11.5px;color:#6B7280;margin-top:3px;font-weight:500}
+.plat .main .hd span{font-size:11px;font-weight:700;color:#0A7165;background:#EBF7F4;padding:5px 10px;border-radius:999px;white-space:nowrap}
+.plat .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+.plat .kpis div{background:#fff;border:1px solid #E6ECEA;border-radius:14px;padding:12px 14px;transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s,border-color .35s}
+.plat .kpis s{display:block;text-decoration:none;font-size:11px;color:#6B7280;font-weight:500}
+.plat .kpis b{display:block;font-size:22px;letter-spacing:-.045em;margin-top:4px;line-height:1.1;transform-origin:left center;transition:color .3s,transform .3s}
+.plat .kpis small{display:inline-block;font-size:10.5px;color:#0A7165;font-weight:700;margin-top:6px;background:#EBF7F4;padding:2px 7px;border-radius:999px}
+.plat table{width:100%;margin-top:16px;border-collapse:collapse;font-size:12.5px;background:#fff;border:1px solid #E6ECEA;border-radius:14px;overflow:hidden}
+.plat th{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9CA3AF;text-align:left;padding:11px 14px;border-bottom:1px solid #EEF2F1;background:#fff}
+.plat td{padding:11px 14px;border-bottom:1px solid #F3F5F4;white-space:nowrap;color:#374151}
 .plat tr:last-child td{border-bottom:0}
-.plat td img{display:inline-block;width:16px;height:16px;vertical-align:middle;margin-right:6px}
-.plat tr.hl td{background:#FFF8F8}
+.plat td img,.plat td svg.prod{display:block;width:18px;height:18px;flex-shrink:0}
+.plat .cli,.plat .bk{display:inline-flex;align-items:center;gap:8px}
+.plat .cli{font-weight:600;color:#0F1219}
+.plat .cli i{width:24px;height:24px;border-radius:7px;background:#F4F5F7;color:#6B7280;font-style:normal;font-size:9px;font-weight:800;display:grid;place-items:center;letter-spacing:.02em}
+.plat tr.hl td{background:#FFFBFB}
+.plat tr.hl .cli i{background:#FDF2F2;color:#C23030}
+.plat .bk svg.prod{color:#0E8B7A;background:#EBF7F4;border-radius:5px;padding:3px;box-sizing:content-box}
 .fc{color:var(--ink);text-align:left}
-.fc-1{width:250px;right:-10px;top:60px;animation:floatY 6.5s ease-in-out infinite}
-.fc-2{width:270px;left:-10px;bottom:40px;animation:floatY 7.5s ease-in-out infinite;animation-delay:1.2s}
-.fc-3{right:10px;bottom:-14px;left:auto;top:auto;padding:10px 12px;display:flex;align-items:center;gap:10px;border-radius:14px;animation:floatY 5.8s ease-in-out infinite;animation-delay:2.4s}
-.fc{position:absolute;background:#fff;border-radius:18px;color:var(--ink);box-shadow:0 34px 70px -30px rgba(0,0,0,.6),0 0 0 1px rgba(15,18,25,.04);overflow:hidden}
+.fc-1{width:248px;right:-6px;top:56px;animation:floatY 6.5s ease-in-out infinite}
+.fc-2{width:264px;left:-6px;bottom:36px;animation:floatY 7.5s ease-in-out infinite;animation-delay:1.2s}
+.fc-3{right:14px;bottom:-10px;left:auto;top:auto;padding:10px 14px;display:flex;align-items:center;gap:10px;border-radius:14px;animation:floatY 5.8s ease-in-out infinite;animation-delay:2.4s}
+.fc{position:absolute;background:#fff;border-radius:16px;color:var(--ink);box-shadow:0 14px 32px -22px rgba(15,18,25,.28),0 0 0 1px rgba(15,18,25,.05);overflow:hidden}
 .fc .hd{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-bottom:1px solid #EEF2F1;font-size:12.5px;font-weight:700}
 .fc .bd{padding:12px 14px}
 .fc .ln{display:flex;justify-content:space-between;gap:12px;font-size:12.5px;padding:6px 0;border-top:1px dashed #E8EEEC}
@@ -143,7 +160,8 @@ h1,h2,h3{letter-spacing:-.03em}
 .fc .ln span{color:#6B7280}
 .fc-3 i{width:30px;height:30px;border-radius:9px;background:#EBF7F4;display:grid;place-items:center;color:#0E8B7A}
 .fc-3 small{display:block;font-size:10.5px;color:#6B7280}
-.fc-3 b{font-size:13px}
+.fc-3 b{font-size:13px;display:flex;align-items:center;gap:7px}
+.fc-3 b:after{content:"";width:7px;height:7px;border-radius:50%;background:#0E8B7A;box-shadow:0 0 0 4px rgba(14,139,122,.16)}
 .stamp{font-size:9.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#C23030;border:1.5px solid #C23030;padding:3px 7px;border-radius:6px;transform:rotate(-6deg)}
 .route{display:grid;grid-template-columns:1fr 20px 1fr;gap:8px;align-items:center;margin-bottom:8px}
 .route div{background:#F4F7F6;border-radius:12px;padding:9px 10px}
@@ -496,6 +514,19 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
 /* hero: janela da plataforma ganha vida */
 .stage .plat .kpis>div,.stage .plat tbody tr{opacity:0;transform:translateX(-10px);transition:opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1)}
 .stage.in .plat .kpis>div,.stage.in .plat tbody tr{opacity:1;transform:none}
+.stage.in .plat .kpis>div.hot,.stage.in .plat .kpis>div:hover{transform:translateY(-4px);border-color:#AEDFD3;box-shadow:0 14px 28px -16px rgba(14,139,122,.5)}
+.stage.in .plat .kpis>div.hot b,.stage.in .plat .kpis>div:hover b{color:#0E8B7A;transform:scale(1.08)}
+.plat tbody tr{transition:background .3s}
+.plat tbody tr.hot td{background:#F4FBFA}
+.plat .side nav a.hot{background:rgba(255,255,255,.1);color:#fff}
+.plat-cursor{position:absolute;left:0;top:0;z-index:8;width:24px;height:24px;pointer-events:none;opacity:0;transition:transform .7s cubic-bezier(.22,1,.36,1),opacity .35s;filter:drop-shadow(0 6px 10px rgba(15,18,25,.35));will-change:transform}
+.plat-cursor svg{display:block;width:24px;height:24px;transform-origin:4px 2px;transition:transform .12s ease-out}
+.plat-cursor .rip{position:absolute;left:-2px;top:-2px;width:16px;height:16px;border-radius:50%;border:2px solid rgba(14,139,122,.55);opacity:0;pointer-events:none}
+.plat-cursor.click svg{transform:scale(.82)}
+.plat-cursor.click .rip{animation:platRipple .45s ease-out}
+@keyframes platRipple{from{transform:scale(.35);opacity:.85}to{transform:scale(2.4);opacity:0}}
+@media(max-width:1080px){.plat-cursor{display:none}}
+@media(prefers-reduced-motion:reduce){.plat-cursor{display:none!important}}
 .stage.in .plat .kpis>div:nth-child(1){transition-delay:0.45s}
 .stage.in .plat .kpis>div:nth-child(2){transition-delay:0.55s}
 .stage.in .plat .kpis>div:nth-child(3){transition-delay:0.65s}
@@ -595,7 +626,8 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
   .plat .main{overflow:hidden;padding:16px 14px 16px}
   .plat table{min-width:0;table-layout:fixed}
   .plat th,.plat td{padding:9px 8px;overflow:hidden;text-overflow:ellipsis}
-  .plat td img{width:14px;height:14px;margin-right:4px}
+  .plat td img{width:14px;height:14px;margin-right:0}
+  .plat .cli i{display:none}
   .fc,.stage.in .fc{position:relative;inset:auto;width:auto;margin:12px auto 0;max-width:360px;animation:none;opacity:1}
   .fc-1,.fc-2{display:none}
   .prob-grid{grid-template-columns:1fr}
@@ -634,6 +666,7 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
   .plat th:nth-child(3),.plat td:nth-child(3){display:none}
   .plat th:nth-child(1){width:24%}.plat th:nth-child(2){width:34%}.plat th:nth-child(4){width:42%}
   .plat .tag{font-size:9.5px;padding:3px 7px}
+  .plat .cli i{display:none}
   .hdr.is-float{padding:10px 12px}.hdr.is-float .hdr-in{padding:0 8px 0 16px;height:58px}
   .sec,.prob,.pil,.agora{padding:80px 0}
   .merc{padding:80px 0 32px}.perdas{padding:32px 0 80px}.sol{padding:80px 0}.cta{padding:88px 0 80px}
@@ -756,43 +789,75 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
 
     <div class="stage reveal">
       <div class="plat">
-        <div class="bar"><i></i><i></i><i></i><div class="url"><svg width="10" height="10"><use href="#i-shield"/></svg>app.hubfi.com.br/mesa</div></div>
+        <div class="bar"><i></i><i></i><i></i><div class="url"><svg width="10" height="10"><use href="#i-shield"/></svg><span class="path">app.hubfi.com.br/mesa</span></div></div>
         <div class="app">
           <aside class="side">
             <img src="dashboards/images/hubfi-dark.png" alt="Hubfi">
             <nav>
-              <a class="on"><svg><use href="#i-grid"/></svg>Mesa</a>
-              <a><svg><use href="#i-file"/></svg>Operações</a>
+              <a class="on" data-view="mesa"><svg><use href="#i-grid"/></svg>Mesa</a>
+              <a data-view="ops"><svg><use href="#i-file"/></svg>Operações</a>
               <a><svg><use href="#i-bank"/></svg>Bancos</a>
               <a><svg><use href="#i-layers"/></svg>Produtos</a>
               <a><svg><use href="#i-headset"/></svg>Suporte</a>
             </nav>
-            <div class="me"><b>LC</b>Lucas · Correspondente</div>
+            <div class="me"><b>LC</b><div>Lucas<span>Correspondente</span></div></div>
           </aside>
           <div class="main">
-            <div class="hd"><b>Mesa de hoje</b><span>4 bancos ativos</span></div>
-            <div class="kpis">
-              <div><s>Operações ativas</s><b data-count="14">14</b><small>+3 hoje</small></div>
-              <div><s>Rerroteadas</s><b data-count="5">5</b><small>de negadas</small></div>
-              <div><s>Produtos por cliente</s><b data-count="2,4">2,4</b><small>na carteira</small></div>
+            <div class="view view-mesa on">
+              <div class="hd">
+                <div>
+                  <b>Mesa de hoje</b>
+                  <em>5 operações em andamento</em>
+                </div>
+                <span>4 bancos ativos</span>
+              </div>
+              <div class="kpis">
+                <div><s>Operações ativas</s><b data-count="14">14</b><small>+3 hoje</small></div>
+                <div><s>Rerroteadas</s><b data-count="5">5</b><small>de negadas</small></div>
+                <div><s>Produtos / cliente</s><b data-count="2,4">2,4</b><small>na carteira</small></div>
+              </div>
+              <table>
+                <thead><tr><th>Cliente</th><th>Banco</th><th>Valor</th><th>Status</th></tr></thead>
+                <tbody>
+                  <tr class="hl"><td><span class="cli"><i>AS</i>Ana Silva</span></td><td><span class="bk"><img src="dashboards/images/logos/inter.svg" alt="">Inter</span></td><td>R$ 420 mil</td><td><span class="tag red">Negado</span></td></tr>
+                  <tr><td><span class="cli"><i>AS</i>Ana Silva</span></td><td><span class="bk"><img src="dashboards/images/logos/itau.svg" alt="">Itaú</span></td><td>R$ 420 mil</td><td><span class="tag wt">Em análise</span></td></tr>
+                  <tr><td><span class="cli"><i>JC</i>João Costa</span></td><td><span class="bk"><img src="dashboards/images/logos/bradesco.svg" alt="">Bradesco</span></td><td>R$ 610 mil</td><td><span class="tag ok">Aprovado</span></td></tr>
+                  <tr><td><span class="cli"><i>JC</i>João Costa</span></td><td><span class="bk"><svg class="prod" width="14" height="14"><use href="#i-home"/></svg>Home equity</span></td><td>R$ 150 mil</td><td><span class="tag wt">Proposta</span></td></tr>
+                  <tr><td><span class="cli"><i>CM</i>Carla Melo</span></td><td><span class="bk"><img src="dashboards/images/logos/santander.svg" alt="">Santander</span></td><td>R$ 380 mil</td><td><span class="tag ok">Formalização</span></td></tr>
+                </tbody>
+              </table>
             </div>
-            <table>
-              <thead><tr><th>Cliente</th><th>Banco</th><th>Valor</th><th>Status</th></tr></thead>
-              <tbody>
-                <tr class="hl"><td>Silva</td><td><img src="dashboards/images/logos/inter.svg" alt="">Inter</td><td>R$ 420 mil</td><td><span class="tag red">Negado</span></td></tr>
-                <tr><td>Silva</td><td><img src="dashboards/images/logos/itau.svg" alt="">Itaú</td><td>R$ 420 mil</td><td><span class="tag ok">Em análise</span></td></tr>
-                <tr><td>Costa</td><td><img src="dashboards/images/logos/bradesco.svg" alt="">Bradesco</td><td>R$ 610 mil</td><td><span class="tag ok">Aprovado</span></td></tr>
-                <tr><td>Costa</td><td>Home equity</td><td>R$ 150 mil</td><td><span class="tag wt">Proposta</span></td></tr>
-                <tr><td>Melo</td><td><img src="dashboards/images/logos/santander.svg" alt="">Santander</td><td>R$ 380 mil</td><td><span class="tag ok">Formalização</span></td></tr>
-              </tbody>
-            </table>
+            <div class="view view-ops">
+              <div class="hd">
+                <div>
+                  <b>Operações</b>
+                  <em>Esteira da semana</em>
+                </div>
+                <span>12 na esteira</span>
+              </div>
+              <div class="ops-filters"><span class="on">Todas</span><span>Em análise</span><span>Aprovadas</span></div>
+              <table>
+                <thead><tr><th>Cliente</th><th>Banco</th><th>Valor</th><th>Status</th></tr></thead>
+                <tbody>
+                  <tr><td><span class="cli"><i>AS</i>Ana Silva</span></td><td><span class="bk"><img src="dashboards/images/logos/itau.svg" alt="">Itaú</span></td><td>R$ 420 mil</td><td><span class="tag wt">Em análise</span></td></tr>
+                  <tr><td><span class="cli"><i>JC</i>João Costa</span></td><td><span class="bk"><img src="dashboards/images/logos/bradesco.svg" alt="">Bradesco</span></td><td>R$ 610 mil</td><td><span class="tag ok">Aprovado</span></td></tr>
+                  <tr><td><span class="cli"><i>CM</i>Carla Melo</span></td><td><span class="bk"><img src="dashboards/images/logos/santander.svg" alt="">Santander</span></td><td>R$ 380 mil</td><td><span class="tag ok">Formalização</span></td></tr>
+                  <tr><td><span class="cli"><i>PN</i>Pedro Nunes</span></td><td><span class="bk"><img src="dashboards/images/logos/inter.svg" alt="">Inter</span></td><td>R$ 275 mil</td><td><span class="tag gr">Enviado</span></td></tr>
+                  <tr><td><span class="cli"><i>MD</i>Marina Dias</span></td><td><span class="bk"><img src="dashboards/images/logos/itau.svg" alt="">Itaú</span></td><td>R$ 510 mil</td><td><span class="tag wt">Pendência</span></td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
+      </div>
+      <div class="plat-cursor" aria-hidden="true">
+        <i class="rip"></i>
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4.2 3.1 20 13.4l-7.1.2 4.1 8.2-2.9 1.4-4.1-8.3L4 18.8Z" fill="#fff" stroke="#0F1219" stroke-width="1.5" stroke-linejoin="round"/></svg>
       </div>
       <article class="fc fc-1">
         <div class="hd">Proposta #8841 <span class="stamp">Negado</span></div>
         <div class="bd">
-          <div class="ln"><span>Cliente</span><b>Silva · Recife</b></div>
+          <div class="ln"><span>Cliente</span><b>Ana Silva · Recife</b></div>
           <div class="ln"><span>Valor</span><b>R$ 420 mil</b></div>
           <div class="ln"><span>Via</span><b>Somente Inter</b></div>
           <div class="ln"><span>Resultado</span><b style="color:#C23030">Operação perdida</b></div>
@@ -806,7 +871,7 @@ footer .legal{padding-top:22px;font-size:12px;color:rgba(255,255,255,.4)}
             <svg width="16" height="16"><use href="#i-arrow"/></svg>
             <div><s>Destino</s><b>Itaú</b></div>
           </div>
-          <div class="ln"><span>Mesmo cliente</span><b>Silva #8841</b></div>
+          <div class="ln"><span>Mesmo cliente</span><b>Ana Silva #8841</b></div>
           <div class="okbtn">Atender quem ia embora</div>
         </div>
       </article>
@@ -1426,6 +1491,71 @@ let fbReady=false;
 function revealFallback(){if(!fbReady)return;const lim=window.scrollY+innerHeight-30;revealEls.forEach(el=>{if(!el.classList.contains('in')&&el.getBoundingClientRect().top+window.scrollY<lim)el.classList.add('in');});}
 requestAnimationFrame(()=>requestAnimationFrame(()=>{document.querySelector('.hero-copy').classList.add('in');setTimeout(()=>document.querySelector('.stage').classList.add('in'),350);fbReady=true;revealFallback();}));
 onScroll();
+
+// demo da mesa: cursor, hover nos números e troca para Operações
+(function(){
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const stage=document.querySelector('.stage');
+  const plat=stage.querySelector('.plat');
+  const cursor=stage.querySelector('.plat-cursor');
+  if(!plat||!cursor)return;
+  const path=plat.querySelector('.path');
+  const kpis=[...plat.querySelectorAll('.view-mesa .kpis > div')];
+  const navMesa=plat.querySelector('[data-view="mesa"]');
+  const navOps=plat.querySelector('[data-view="ops"]');
+  const opsRows=[...plat.querySelectorAll('.view-ops tbody tr')];
+  const wait=ms=>new Promise(r=>setTimeout(r,ms));
+  const desktop=()=>innerWidth>1080;
+  function go(el,ox=.62,oy=.55){
+    if(!el||!desktop())return;
+    const s=stage.getBoundingClientRect(),r=el.getBoundingClientRect();
+    cursor.style.transform=`translate(${r.left-s.left+r.width*ox}px,${r.top-s.top+r.height*oy}px)`;
+  }
+  async function click(){
+    cursor.classList.add('click');
+    await wait(240);
+    cursor.classList.remove('click');
+  }
+  function hotKpi(el){kpis.forEach(k=>k.classList.toggle('hot',k===el));}
+  function hotRow(el){opsRows.forEach(r=>r.classList.toggle('hot',r===el));}
+  function hotNav(el){[navMesa,navOps].forEach(n=>n&&n.classList.toggle('hot',n===el));}
+  function show(name){
+    plat.classList.toggle('is-ops',name==='ops');
+    navMesa.classList.toggle('on',name==='mesa');
+    navOps.classList.toggle('on',name==='ops');
+    if(path)path.textContent=name==='ops'?'app.hubfi.com.br/operacoes':'app.hubfi.com.br/mesa';
+  }
+  async function loop(){
+    hotKpi(null);hotRow(null);hotNav(null);show('mesa');
+    if(!desktop()){cursor.style.opacity='0';await wait(2800);return loop();}
+    const pr=plat.getBoundingClientRect(),sr=stage.getBoundingClientRect();
+    cursor.style.transition='none';
+    cursor.style.transform=`translate(${pr.right-sr.left-40}px,${pr.top-sr.top+24}px)`;
+    cursor.offsetHeight;
+    cursor.style.transition='';
+    cursor.style.opacity='1';
+    await wait(480);
+    go(kpis[0]);await wait(740);hotKpi(kpis[0]);await wait(920);
+    go(kpis[1]);hotKpi(kpis[1]);await wait(920);
+    if(kpis[2]&&getComputedStyle(kpis[2]).display!=='none'){go(kpis[2]);hotKpi(kpis[2]);await wait(860);}
+    hotKpi(null);
+    hotNav(navOps);go(navOps,.78,.5);await wait(720);
+    await click();
+    hotNav(null);show('ops');
+    await wait(680);
+    if(opsRows[0]){go(opsRows[0],.42,.5);hotRow(opsRows[0]);await wait(900);}
+    if(opsRows[2]){go(opsRows[2],.52,.5);hotRow(opsRows[2]);await wait(900);}
+    hotRow(null);
+    hotNav(navMesa);go(navMesa,.78,.5);await wait(700);
+    await click();
+    hotNav(null);show('mesa');
+    await wait(1500);
+    cursor.style.opacity='0';
+    await wait(700);
+    loop();
+  }
+  setTimeout(loop,2600);
+})();
 
 // scrollspy do menu
 const navLinks=[...document.querySelectorAll('.hdr .nav a')];
