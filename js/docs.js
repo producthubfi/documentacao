@@ -16,36 +16,129 @@
     return window.hfIconBox ? window.hfIconBox(name) : "";
   }
 
-  function navGroup(label, icon, links, extraClass) {
+  function navIco(name) {
+    if (!window.hfIcon) return "";
+    return '<span class="docs-nav-ico" aria-hidden="true">' + window.hfIcon(name, 16) + "</span>";
+  }
+
+  var ITEM_ICONS = {
+    home: "house",
+    cores: "palette",
+    tipografia: "type",
+    icones: "smile",
+    logos: "hexagon",
+    search: "search",
+    input: "text-cursor-input",
+    textarea: "text",
+    select: "chevrons-up-down",
+    checkbox: "square-check",
+    radio: "circle-dot",
+    switch: "toggle-right",
+    label: "tag",
+    upload: "upload",
+    button: "mouse-pointer-click",
+    chip: "badge",
+    "select-button": "panel-top",
+    alert: "circle-alert",
+    badge: "award",
+    toast: "bell",
+    tooltip: "message-circle",
+    progress: "loader",
+    skeleton: "rectangle-horizontal",
+    accordion: "chevrons-down-up",
+    breadcrumb: "ellipsis",
+    tabs: "layout-panel-top",
+    pagination: "chevrons-left-right",
+    header: "panel-top",
+    sidebar: "panel-left",
+    stepper: "list-ordered",
+    "dropdown-menu": "menu",
+    modal: "app-window",
+    dialog: "message-square",
+    popover: "square-mouse-pointer",
+    sheet: "panel-bottom",
+    avatar: "circle-user",
+    card: "rectangle-horizontal",
+    "card-select": "layout-grid",
+    "card-file": "file",
+    "card-comments": "messages-square",
+    table: "table-2",
+    "list-item": "list",
+    separator: "minus",
+    slider: "sliders-horizontal",
+    operations: "kanban",
+    section: "layout-dashboard",
+    "rich-text": "pilcrow",
+    prototipos: "clipboard-list",
+    "abertura-operacao": "plus",
+    "cadastro-cliente": "user-plus",
+    "edicao-cliente": "user-round-pen",
+    "link-publico": "link",
+    "formulario-publico": "clipboard-pen",
+    "detalhes-operacao": "file-search",
+    "operacao-outro-canal": "circle-off",
+    "dashboard-operacoes": "layout-dashboard",
+  };
+
+  function itemIcon(slug, fallback) {
+    return ITEM_ICONS[slug] || fallback || "file";
+  }
+
+  var openGroups = {};
+  var tocOnScroll = null;
+
+  function navLink(href, slugAttr, label, icon, hidden) {
     return (
-      '<div class="docs-nav-group' +
-      (extraClass ? " " + extraClass : "") +
-      '"><p class="docs-nav-label">' +
-      iconBox(icon) +
+      '<a href="' +
+      href +
+      '" data-slug="' +
+      slugAttr +
+      '"' +
+      (hidden ? ' class="is-hidden"' : "") +
+      ">" +
+      navIco(icon) +
       "<span>" +
       label +
-      "</span></p>" +
+      "</span></a>"
+    );
+  }
+
+  function navGroup(id, label, links, extraClass, forceOpen) {
+    var open = !!forceOpen;
+    return (
+      '<div class="docs-nav-group' +
+      (open ? " is-open" : "") +
+      (extraClass ? " " + extraClass : "") +
+      '" data-group="' +
+      id +
+      '"><button type="button" class="docs-nav-toggle" aria-expanded="' +
+      (open ? "true" : "false") +
+      '"><span>' +
+      label +
+      "</span>" +
+      (window.hfIcon ? window.hfIcon("chevron-down", 16) : "") +
+      '</button><div class="docs-nav-list">' +
       links +
-      "</div>"
+      "</div></div>"
     );
   }
 
   var PROTO_NAV = [
-    { slug: "prototipos", label: "Briefings" },
-    { slug: "abertura-operacao", label: "Abertura de operação" },
-    { slug: "cadastro-cliente", label: "Cadastro de cliente" },
-    { slug: "edicao-cliente", label: "Edição de cliente" },
-    { slug: "link-publico", label: "Link público" },
-    { slug: "formulario-publico", label: "Formulário público" },
-    { slug: "detalhes-operacao", label: "Detalhes da operação" },
-    { slug: "operacao-outro-canal", label: "Operação encerrada" },
-    { slug: "dashboard-operacoes", label: "Dashboard de operações" },
-    { href: "extensao/", label: "Extensão · Itaú" },
-    { href: "extensao/spec.html", label: "Spec · 5 bancos" },
-    { href: "dashboards/hubfi-painel-empresas.html", label: "Painel empresas" },
-    { href: "dashboards/como-ler.html", label: "Como ler os dados" },
-    { href: "dashboards/capital-insider.html", label: "Capital Insider" },
-    { href: "corban.html", label: "LP Correspondentes" },
+    { slug: "prototipos", label: "Briefings", icon: "clipboard-list" },
+    { slug: "abertura-operacao", label: "Abertura de operação", icon: "plus" },
+    { slug: "cadastro-cliente", label: "Cadastro de cliente", icon: "user-plus" },
+    { slug: "edicao-cliente", label: "Edição de cliente", icon: "user-round-pen" },
+    { slug: "link-publico", label: "Link público", icon: "link" },
+    { slug: "formulario-publico", label: "Formulário público", icon: "clipboard-pen" },
+    { slug: "detalhes-operacao", label: "Detalhes da operação", icon: "file-search" },
+    { slug: "operacao-outro-canal", label: "Operação encerrada", icon: "circle-off" },
+    { slug: "dashboard-operacoes", label: "Dashboard de operações", icon: "layout-dashboard" },
+    { href: "extensao/", label: "Extensão · Itaú", icon: "puzzle" },
+    { href: "extensao/spec.html", label: "Spec · 5 bancos", icon: "list-checks" },
+    { href: "dashboards/hubfi-painel-empresas.html", label: "Painel empresas", icon: "building-2" },
+    { href: "dashboards/como-ler.html", label: "Como ler os dados", icon: "chart-line" },
+    { href: "dashboards/capital-insider.html", label: "Capital Insider", icon: "mic" },
+    { href: "corban.html", label: "LP Correspondentes", icon: "store" },
   ];
 
   function protoMatch(q) {
@@ -77,65 +170,74 @@
 
   function renderNav() {
     var q = filter && filter.value ? filter.value.toLowerCase().trim() : "";
-    var html = navGroup("Documentação", "book-open", '<a href="#/" data-slug="home">Visão geral</a>');
+    var current = slug();
+    var html = "";
+
+    html += navGroup(
+      "docs",
+      "Documentação",
+      navLink("#/", "home", "Visão geral", "house", !!(q && "visão geral documentacao documentação visao".indexOf(q) === -1)),
+      "",
+      !q ? current === "home" || !!openGroups.docs : true
+    );
+
     if (catalog.foundations && catalog.foundations.length) {
       var fLinks = "";
       var fVisible = 0;
+      var fActive = false;
       catalog.foundations.forEach(function (item) {
         var match = !q || item[0].indexOf(q) !== -1 || item[1].toLowerCase().indexOf(q) !== -1;
         if (match) fVisible += 1;
-        fLinks +=
-          '<a href="#/' +
-          item[0] +
-          '" data-slug="' +
-          item[0] +
-          '"' +
-          (match ? "" : ' class="is-hidden"') +
-          ">" +
-          item[1] +
-          "</a>";
+        if (item[0] === current) fActive = true;
+        fLinks += navLink("#/" + item[0], item[0], item[1], item[2] || itemIcon(item[0], "swatch-book"), !match);
       });
-      if (!q || fVisible) html += navGroup("Foundations", "swatch-book", fLinks);
+      if (!q || fVisible) html += navGroup("foundations", "Foundations", fLinks, "", !q ? fActive || !!openGroups.foundations : true);
     }
     catalog.groups.forEach(function (group) {
       if (group.nav === "single" || group.id === "prototipos") return;
       var links = "";
       var visible = 0;
+      var active = false;
       group.items.forEach(function (item) {
         var match = !q || item[0].indexOf(q) !== -1 || item[1].toLowerCase().indexOf(q) !== -1;
         if (match) visible += 1;
-        links +=
-          '<a href="#/' +
-          item[0] +
-          '" data-slug="' +
-          item[0] +
-          '"' +
-          (match ? "" : ' class="is-hidden"') +
-          ">" +
-          item[1] +
-          "</a>";
+        if (item[0] === current) active = true;
+        links += navLink("#/" + item[0], item[0], item[1], itemIcon(item[0], group.icon), !match);
       });
-      if (!q || visible) html += navGroup(group.label, group.icon, links);
+      if (!q || visible) html += navGroup(group.id, group.label, links, "", !q ? active || !!openGroups[group.id] : true);
     });
     var protoLinks = "";
     var protoVisible = 0;
+    var protoActive = false;
     PROTO_NAV.forEach(function (item) {
       var match = protoItemMatch(item, q);
       if (match) protoVisible += 1;
-      protoLinks +=
-        '<a href="' +
-        (item.href || "#/" + item.slug) +
-        '" data-slug="' +
-        (item.slug || "") +
-        '"' +
-        (match ? "" : ' class="is-hidden"') +
-        ">" +
-        item.label +
-        "</a>";
+      if (item.slug && item.slug === current) protoActive = true;
+      protoLinks += navLink(
+        item.href || "#/" + item.slug,
+        item.slug || "",
+        item.label,
+        item.icon || "layers-2",
+        !match
+      );
     });
-    if (!q || protoVisible) html += navGroup("Protótipos", "layers-2", protoLinks, "docs-nav-group--end");
+    if (!q || protoVisible) html += navGroup("prototipos", "Protótipos", protoLinks, "docs-nav-group--end", !q ? protoActive || !!openGroups.prototipos : true);
     nav.innerHTML = html;
     highlight();
+    bindNav();
+  }
+
+  function bindNav() {
+    nav.querySelectorAll(".docs-nav-toggle").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var group = btn.closest(".docs-nav-group");
+        if (!group) return;
+        var open = group.classList.toggle("is-open");
+        btn.setAttribute("aria-expanded", open ? "true" : "false");
+        var id = group.getAttribute("data-group");
+        if (id) openGroups[id] = open;
+      });
+    });
   }
 
   function highlight() {
@@ -145,6 +247,88 @@
       var slugAttr = link.getAttribute("data-slug");
       link.classList.toggle("is-active", !!slugAttr && slugAttr === current);
     });
+    nav.querySelectorAll(".docs-nav-group").forEach(function (group) {
+      if (!group.querySelector("a.is-active")) return;
+      group.classList.add("is-open");
+      var btn = group.querySelector(".docs-nav-toggle");
+      if (btn) btn.setAttribute("aria-expanded", "true");
+    });
+  }
+
+  function headingId(text, index) {
+    var id =
+      String(text || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, "") || "sec";
+    return "docs-" + id + (index ? "-" + index : "");
+  }
+
+  function renderToc(isScreen) {
+    var toc = document.getElementById("docs-toc");
+    var main = document.querySelector(".docs-main");
+    if (tocOnScroll) {
+      window.removeEventListener("scroll", tocOnScroll);
+      tocOnScroll = null;
+    }
+    if (!toc || !main) return;
+    if (isScreen) {
+      toc.hidden = true;
+      toc.innerHTML = "";
+      main.classList.remove("docs-main--toc");
+      return;
+    }
+    var headings = Array.prototype.slice.call(stage.querySelectorAll(".docs-h2"));
+    if (headings.length < 2) {
+      toc.hidden = true;
+      toc.innerHTML = "";
+      main.classList.remove("docs-main--toc");
+      return;
+    }
+    var used = {};
+    var html =
+      '<p class="docs-toc__title">' +
+      navIco("align-left") +
+      "<span>Nesta página</span></p>";
+    headings.forEach(function (heading, index) {
+      var text = heading.textContent.trim();
+      var id = headingId(text, 0);
+      if (used[id]) id = headingId(text, index + 1);
+      used[id] = true;
+      heading.id = id;
+      html +=
+        '<a href="#/' +
+        slug() +
+        '" data-toc="' +
+        id +
+        '">' +
+        text +
+        "</a>";
+    });
+    toc.innerHTML = html;
+    toc.hidden = false;
+    main.classList.add("docs-main--toc");
+    var links = toc.querySelectorAll("a[data-toc]");
+    toc.onclick = function (event) {
+      var link = event.target.closest("a[data-toc]");
+      if (!link) return;
+      event.preventDefault();
+      var target = document.getElementById(link.getAttribute("data-toc"));
+      if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+    tocOnScroll = function () {
+      var current = headings[0];
+      headings.forEach(function (heading) {
+        if (heading.getBoundingClientRect().top <= 88) current = heading;
+      });
+      links.forEach(function (link) {
+        link.classList.toggle("is-active", !!(current && link.getAttribute("data-toc") === current.id));
+      });
+    };
+    window.addEventListener("scroll", tocOnScroll, { passive: true });
+    tocOnScroll();
   }
 
   function render() {
@@ -203,7 +387,9 @@
     document.title = isHome ? "HubFi DS · Documentação" : page.title + " · HubFi DS";
     highlight();
     bind();
+    renderToc(!!(isScreen && !isHome));
     window.scrollTo(0, 0);
+    if (tocOnScroll) tocOnScroll();
   }
 
   // Agrupa as variações de um preview em abas. Sem isso os exemplos viram um
