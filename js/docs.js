@@ -104,7 +104,7 @@
   }
 
   function navGroup(id, label, links, extraClass, forceOpen) {
-    var open = !!forceOpen;
+    var open = forceOpen !== false && openGroups[id] !== false;
     return (
       '<div class="docs-nav-group' +
       (open ? " is-open" : "") +
@@ -116,7 +116,7 @@
       '"><span>' +
       label +
       "</span>" +
-      (window.hfIcon ? window.hfIcon("chevron-down", 16) : "") +
+      (window.hfIcon ? window.hfIcon("chevron-down", 14) : "") +
       '</button><div class="docs-nav-list">' +
       links +
       "</div></div>"
@@ -178,7 +178,7 @@
       "Documentação",
       navLink("#/", "home", "Visão geral", "house", !!(q && "visão geral documentacao documentação visao".indexOf(q) === -1)),
       "",
-      !q ? current === "home" || !!openGroups.docs : true
+      !q ? openGroups.docs !== false : true
     );
 
     if (catalog.foundations && catalog.foundations.length) {
@@ -191,7 +191,7 @@
         if (item[0] === current) fActive = true;
         fLinks += navLink("#/" + item[0], item[0], item[1], item[2] || itemIcon(item[0], "swatch-book"), !match);
       });
-      if (!q || fVisible) html += navGroup("foundations", "Foundations", fLinks, "", !q ? fActive || !!openGroups.foundations : true);
+      if (!q || fVisible) html += navGroup("foundations", "Foundations", fLinks, "", !q ? openGroups.foundations !== false : true);
     }
     catalog.groups.forEach(function (group) {
       if (group.nav === "single" || group.id === "prototipos") return;
@@ -204,7 +204,7 @@
         if (item[0] === current) active = true;
         links += navLink("#/" + item[0], item[0], item[1], itemIcon(item[0], group.icon), !match);
       });
-      if (!q || visible) html += navGroup(group.id, group.label, links, "", !q ? active || !!openGroups[group.id] : true);
+      if (!q || visible) html += navGroup(group.id, group.label, links, "", !q ? openGroups[group.id] !== false : true);
     });
     var protoLinks = "";
     var protoVisible = 0;
@@ -221,7 +221,7 @@
         !match
       );
     });
-    if (!q || protoVisible) html += navGroup("prototipos", "Protótipos", protoLinks, "docs-nav-group--end", !q ? protoActive || !!openGroups.prototipos : true);
+    if (!q || protoVisible) html += navGroup("prototipos", "Protótipos", protoLinks, "docs-nav-group--end", !q ? openGroups.prototipos !== false : true);
     nav.innerHTML = html;
     highlight();
     bindNav();
