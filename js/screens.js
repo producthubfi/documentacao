@@ -1843,7 +1843,7 @@
           '<section class="hf-wiki-home__mock hf-wiki-kanban-mock" aria-label="Demonstração animada do Kanban de operações">' +
           '<div class="hf-wiki-home__mock-glow" aria-hidden="true"></div>' +
           '<div class="hf-wiki-home__mock-frame">' +
-          '<iframe class="hf-wiki-home__mock-iframe hf-wiki-kanban-mock__iframe" src="assets/wiki/kanban-mock/index.html?v=3" title="Mockup animado do Kanban Hubfi" loading="eager" scrolling="no"></iframe>' +
+          '<iframe class="hf-wiki-home__mock-iframe hf-wiki-kanban-mock__iframe" src="assets/wiki/kanban-mock/index.html?v=4" title="Mockup animado do Kanban Hubfi" loading="eager" scrolling="no"></iframe>' +
           "</div></section>" +
           '<div class="hf-wiki-home__divider bridge bridge--mark bridge--white-to-paper" aria-hidden="true">' +
           '<div class="bridge-mark-rule">' +
