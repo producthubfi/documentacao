@@ -1834,8 +1834,8 @@
           wikiFrameIcon("spark") +
           '<span class="hf-wiki__chip-label">Central de ajuda</span>' +
           '<span class="hf-wiki__chip-meta">Hubfi · set/2026</span></div>' +
-          "<h2>Operar crédito com clareza.<br><span>Sem slides. Sem adivinhação.</span></h2>" +
-          "<p>Documentação completa das funcionalidades da Hubfi: do dashboard ao kanban, cadastros e operações. Feita para imobiliárias, assessorias e quem fecha negócio.</p>" +
+          "<h2>Ajuda para usar a Hubfi no dia a dia.<br><span>Respostas claras.</span><br><span>Sem depender de treinamento.</span></h2>" +
+          "<p>Guias práticos das funcionalidades: dashboard, kanban, cadastros e operações. Feito para imobiliárias, assessorias e quem precisa resolver na hora.</p>" +
           '<div class="hf-wiki-home__cta">' +
           '<button class="hf-wiki-home__btn hf-wiki-home__btn--primary" type="button" data-wiki-href="' +
           wikiProto("tour-dashboard") +
