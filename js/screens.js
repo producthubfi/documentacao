@@ -10,6 +10,8 @@
     "https://www.figma.com/design/C9RP2qnls5pDBjMSEdhT1n/Untitled?node-id=5-5689";
   var FIGMA_DASH =
     "https://www.figma.com/design/6GPvl7jqcGdcwaCCx9kyOI/Dashboard-de-opera%C3%A7%C3%B5es?node-id=3109-36103";
+  var FIGMA_KANBAN =
+    "https://www.figma.com/design/LQfnfvRTFm2AZ9qwTWsQEk/Nova-opera%C3%A7%C3%A3o?node-id=8501-45420";
 
   function ico(name, size) {
     return window.hfIcon ? window.hfIcon(name, size || 20) : "";
@@ -1252,6 +1254,240 @@
     );
   }
 
+  function kAsset(name, w, h) {
+    return (
+      '<img src="assets/screen/kanban/' +
+      name +
+      '.svg" width="' +
+      w +
+      '" height="' +
+      h +
+      '" alt="">'
+    );
+  }
+
+  function kanbanTemp(nivel) {
+    var file = nivel === "baixa" ? "temp-baixa" : nivel === "media" ? "temp-media" : "temp-alta";
+    return (
+      '<span class="hf-kcard__temp" aria-hidden="true">' +
+      kAsset(file, 16, 16) +
+      "</span>"
+    );
+  }
+
+  function kanbanTag(kind, label) {
+    if (kind === "paused") {
+      return (
+        '<span class="hf-kcard__tag hf-kcard__tag--paused">' +
+        kAsset("pause", 12, 12) +
+        "<span>" +
+        label +
+        "</span></span>"
+      );
+    }
+    if (kind === "draft") {
+      return (
+        '<span class="hf-kcard__tag hf-kcard__tag--draft">' +
+        kAsset("pencil", 12, 12) +
+        "<span>" +
+        label +
+        "</span></span>"
+      );
+    }
+    return "";
+  }
+
+  function kanbanCard(opts) {
+    var flags = [];
+    if (opts.paused) flags.push("paused");
+    if (opts.draft) flags.push("draft");
+    var tag = "";
+    if (opts.paused) tag = kanbanTag("paused", opts.paused);
+    else if (opts.draft) tag = kanbanTag("draft", "Rascunho");
+    return (
+      '<article class="hf-kcard" data-k-flags="' +
+      flags.join(" ") +
+      '">' +
+      '<div class="hf-kcard__head"><span class="hf-kcard__id">' +
+      opts.id +
+      "</span>" +
+      tag +
+      kanbanTemp(opts.temp || "alta") +
+      "</div>" +
+      '<div class="hf-kcard__body"><p class="hf-kcard__name">' +
+      opts.name +
+      '</p><p class="hf-kcard__product">' +
+      opts.product +
+      "</p></div>" +
+      '<div class="hf-kcard__foot"><p class="hf-kcard__value">' +
+      opts.value +
+      '</p><div class="hf-kcard__meta"><span class="hf-kcard__days">' +
+      opts.days +
+      '</span><span class="hf-kcard__avatar">' +
+      opts.avatar +
+      "</span></div></div></article>"
+    );
+  }
+
+  function kanbanCol(opts) {
+    var cards = (opts.cards || [])
+      .map(function (c) {
+        return kanbanCard(c);
+      })
+      .join("");
+    return (
+      '<section class="hf-kcol" data-k-tom="' +
+      (opts.tom || "neutro") +
+      '">' +
+      '<header class="hf-kcol__head">' +
+      '<span class="hf-kcol__dot" aria-hidden="true">' +
+      kAsset("dot-" + (opts.tom || "neutro"), 8, 8) +
+      "</span>" +
+      '<span class="hf-kcol__name">' +
+      opts.name +
+      '</span><span class="hf-kcol__count">' +
+      opts.count +
+      '</span><span class="hf-kcol__spacer"></span>' +
+      '<span class="hf-kcol__sum">' +
+      opts.sum +
+      "</span></header>" +
+      '<div class="hf-kcol__cards">' +
+      cards +
+      "</div></section>"
+    );
+  }
+
+  function kanbanQuick(label, count, selected) {
+    return (
+      '<button class="hf-kquick' +
+      (selected ? " is-selected" : "") +
+      '" type="button" data-k-quick="' +
+      label.toLowerCase() +
+      '"><span class="hf-kquick__label">' +
+      label +
+      '</span><span class="hf-kquick__count">' +
+      count +
+      "</span></button>"
+    );
+  }
+
+  function kanbanScreen() {
+    var sidebar =
+      typeof ui.appSidebar === "function" ? ui.appSidebar("operacoes", "fit collapsed") : "";
+
+    var crumb =
+      '<nav class="hf-crumb">' +
+      '<button class="hf-crumb__home" type="button" data-nav-toggle aria-expanded="false" aria-label="Expandir menu">' +
+      kAsset("panel-left", 20, 20) +
+      "</button>" +
+      '<span class="hf-crumb__div"></span>' +
+      "<span>Operações</span></nav>";
+
+    var header =
+      '<header class="hf-kboard__pagehead">' +
+      '<div class="hf-kboard__titles"><h1 class="hf-kboard__title">Operações</h1>' +
+      '<p class="hf-kboard__sub">Acompanhe cada operação da entrada à finalização</p></div>' +
+      '<button class="hf-btn hf-btn--primary hf-kboard__cta" type="button">' +
+      kAsset("plus", 20, 20) +
+      "Nova Operação</button></header>";
+
+    var toolbar =
+      '<div class="hf-kboard__toolbar">' +
+      '<label class="hf-kboard__search"><span class="hf-kboard__search-ico" aria-hidden="true">' +
+      kAsset("search", 16, 16) +
+      '</span><input type="search" placeholder="Buscar por código, cliente ou responsável" aria-label="Buscar operações"></label>' +
+      '<div class="hf-kboard__quicks" data-k-quicks>' +
+      kanbanQuick("Todas", "2.790", true) +
+      kanbanQuick("Pausadas", "12", false) +
+      kanbanQuick("Rascunhos", "8", false) +
+      "</div>" +
+      '<div class="hf-kboard__view" role="group" aria-label="Visão">' +
+      '<button class="hf-kboard__view-btn is-active" type="button" aria-label="Kanban" aria-pressed="true">' +
+      kAsset("view-kanban", 16, 16) +
+      '</button><button class="hf-kboard__view-btn" type="button" aria-label="Lista" aria-pressed="false">' +
+      kAsset("view-lista", 16, 16) +
+      "</button></div>" +
+      '<button class="hf-btn hf-btn--ghost hf-kboard__filters" type="button">Filtros</button>' +
+      '<button class="hf-btn hf-btn--ghost hf-btn--icon hf-kboard__export" type="button" aria-label="Exportar">' +
+      kAsset("download", 20, 20) +
+      "</button></div>";
+
+    var board =
+      '<div class="hf-kboard__cols" data-k-board>' +
+      kanbanCol({
+        name: "Pré-cadastro",
+        count: "1.126",
+        sum: "R$ 793,8 mi",
+        tom: "neutro",
+        cards: [
+          { id: "OP-002897", name: "Rafael Cavalcanti Teixeira Gomes", product: "Home Equity", value: "R$ 100.000,00", days: "2d", avatar: "RC", temp: "alta" },
+          { id: "OP-002969", name: "Lucas Augusto Costa Godoi", product: "Financiamento Imobiliário", value: "R$ 450.000,00", days: "37d", avatar: "LA", temp: "media", paused: "Pausada até 11/10" },
+          { id: "OP-002968", name: "Mauricio Lima", product: "Financiamento Imobiliário", value: "R$ 878.100,00", days: "1d", avatar: "ML", temp: "media", draft: true },
+          { id: "OP-002967", name: "Aila Maria de Alencar Barreto", product: "Financiamento de Veículos", value: "R$ 39.000,00", days: "5d", avatar: "AM", temp: "baixa" },
+        ],
+      }) +
+      kanbanCol({
+        name: "Em análise",
+        count: "560",
+        sum: "R$ 554,5 mi",
+        tom: "atencao",
+        cards: [
+          { id: "OP-002890", name: "Mauricio Lima Teste", product: "Financiamento Imobiliário", value: "R$ 500.000,00", days: "1d", avatar: "ML", temp: "alta" },
+          { id: "OP-002954", name: "Ricardo Paz dos Santos Filho", product: "Home Equity", value: "R$ 670.000,00", days: "3d", avatar: "RP", temp: "alta" },
+          { id: "OP-002778", name: "Geiza Ribeiro da Silva Sousa", product: "Financiamento Imobiliário", value: "R$ 15.000,00", days: "12d", avatar: "GR", temp: "baixa", paused: "Pausada até 04/10" },
+          { id: "OP-002959", name: "Victor Tavares de Souza Lopes", product: "Consórcio", value: "R$ 400.000,00", days: "7d", avatar: "VT", temp: "media" },
+        ],
+      }) +
+      kanbanCol({
+        name: "Proposta",
+        count: "584",
+        sum: "R$ 57,9 mi",
+        tom: "progresso",
+        cards: [
+          { id: "OP-001477", name: "Aila Maria de Alencar Barreto", product: "Plano de Saúde", value: "R$ 4.000,00", days: "2d", avatar: "AM", temp: "media" },
+          { id: "OP-000588", name: "Wellington Andrade", product: "Financiamento de Veículos", value: "R$ 40.908,00", days: "9d", avatar: "WA", temp: "alta" },
+          { id: "OP-002496", name: "Thiago Rebouças Correia", product: "Seguro de Vida", value: "R$ 654,24", days: "4d", avatar: "TR", temp: "baixa" },
+          { id: "OP-001003", name: "Alberto Cassiano Barbosa", product: "Seguro Auto", value: "R$ 4.445,07", days: "21d", avatar: "AC", temp: "media", paused: "Pausada até 18/10" },
+        ],
+      }) +
+      kanbanCol({
+        name: "Formalização",
+        count: "36",
+        sum: "R$ 2,4 mi",
+        tom: "progresso",
+        cards: [
+          { id: "OP-002766", name: "Raposo Teste", product: "Financiamento Imobiliário", value: "R$ 8.000,34", days: "6d", avatar: "RT", temp: "alta" },
+          { id: "OP-000661", name: "Luiz Felipe Rocha Bezerra", product: "Financiamento de Veículos", value: "R$ 89.999,73", days: "15d", avatar: "LF", temp: "media" },
+          { id: "OP-002542", name: "João Leal", product: "Financiamento Imobiliário", value: "R$ 213.610,53", days: "28d", avatar: "JL", temp: "baixa", paused: "Pausada até 30/09" },
+          { id: "OP-002453", name: "Patricia Andrade de Sales", product: "Consórcio", value: "R$ 293.832,00", days: "3d", avatar: "PA", temp: "alta" },
+        ],
+      }) +
+      kanbanCol({
+        name: "Finalizado",
+        count: "484",
+        sum: "R$ 22,5 mi",
+        tom: "concluido",
+        cards: [
+          { id: "OP-000371", name: "Nanci Eckermann", product: "Home Equity", value: "R$ 50.000,00", days: "2d", avatar: "NE", temp: "alta" },
+          { id: "OP-001441", name: "Clean Terceirização", product: "Seguro Garantia", value: "R$ 798,31", days: "1d", avatar: "CT", temp: "media" },
+          { id: "OP-002016", name: "Cynthia Freire Cottard", product: "Remessa Cambial", value: "R$ 120.000,00", days: "4d", avatar: "CF", temp: "media" },
+          { id: "OP-002725", name: "Ricardo Paz dos Santos Filho", product: "Consórcio", value: "R$ 25.000.000,00", days: "9d", avatar: "RP", temp: "alta" },
+        ],
+      }) +
+      "</div>";
+
+    return (
+      '<div class="docs-screen docs-screen--kanban" data-k-root>' +
+      sidebar +
+      '<div class="hf-kboard">' +
+      crumb +
+      header +
+      toolbar +
+      board +
+      "</div></div>"
+    );
+  }
+
   function chipIco() {
     return (
       '<span class="hf-chipcard__ico" aria-hidden="true"><img src="assets/screen/open/chip-ico.svg" width="16" height="16" alt=""></span>'
@@ -2327,12 +2563,13 @@
           note: "Sem ação ao fim da cadência. Motivo distinto da perda real.",
           href: "#/detalhes-operacao?demo=auto_lost",
         },
+        {
+          label: "Listagem (RF-PAUSA-01)",
+          note: "Kanban com filtro Todas / Pausadas / Rascunhos.",
+          href: "#/kanban-operacoes?view=pausadas",
+        },
       ],
       pending: [
-        {
-          title: "Listagem (RF-PAUSA-01)",
-          note: "Kanban e tabela sem pausadas por padrão, com filtro. Fora deste protótipo.",
-        },
         {
           title: "Mensagem de Slack (RF-PAUSA-04)",
           note: "Lembrete no canal do operador. Fora deste protótipo.",
@@ -2432,6 +2669,23 @@
     ],
     html: function () {
       return dashScreen();
+    },
+  };
+
+  catalog.pages["kanban-operacoes"] = {
+    title: "Kanban de operações",
+    lead: "Board por etapa — busca, filtros rápidos, pausadas e rascunhos.",
+    node: "8501-45420",
+    figmaFile: FIGMA_KANBAN,
+    wide: true,
+    section: "Telas",
+    scenarios: [
+      { label: "Todas", note: "Visão completa do funil.", href: "#/kanban-operacoes" },
+      { label: "Pausadas", note: "Só operações com pausa.", href: "#/kanban-operacoes?view=pausadas" },
+      { label: "Rascunhos", note: "Só rascunhos.", href: "#/kanban-operacoes?view=rascunhos" },
+    ],
+    html: function () {
+      return kanbanScreen();
     },
   };
 
@@ -2764,11 +3018,43 @@
     paint({ smooth: false });
   }
 
+  function bindKanban(root) {
+    var shell = root.querySelector("[data-k-root]");
+    if (!shell) return;
+
+    function applyFilter(view) {
+      var key = String(view || "todas").toLowerCase();
+      shell.querySelectorAll("[data-k-quick]").forEach(function (btn) {
+        var on = btn.getAttribute("data-k-quick") === key;
+        btn.classList.toggle("is-selected", on);
+      });
+      shell.querySelectorAll(".hf-kcard").forEach(function (card) {
+        var flags = " " + (card.getAttribute("data-k-flags") || "") + " ";
+        var show =
+          key === "todas" ||
+          (key === "pausadas" && flags.indexOf(" paused ") !== -1) ||
+          (key === "rascunhos" && flags.indexOf(" draft ") !== -1);
+        card.hidden = !show;
+      });
+    }
+
+    shell.querySelectorAll("[data-k-quick]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        applyFilter(btn.getAttribute("data-k-quick"));
+      });
+    });
+
+    var qs = location.hash.split("?")[1] || "";
+    var viewQ = qs.match(/(?:^|&)view=([^&]+)/);
+    applyFilter(viewQ ? decodeURIComponent(viewQ[1]) : "todas");
+  }
+
   window.HF_SCREENS = {
     bind: function (root) {
       bindOcr(root);
       bindOpen(root);
       bindOpDetail(root);
+      bindKanban(root);
       if (window.HF_IDENTITY && typeof window.HF_IDENTITY.bind === "function") {
         window.HF_IDENTITY.bind(root);
       }

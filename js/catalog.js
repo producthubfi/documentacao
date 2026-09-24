@@ -2357,6 +2357,7 @@
       "operacao-outro-canal": '<div class="docs-screen-thumb"><strong>OP encerrada</strong><span>Motivo só no backoffice</span></div>',
       "detalhes-operacao": '<div class="docs-screen-thumb"><strong>OP-000000</strong><span>Nome cliente</span></div>',
       "dashboard-operacoes": '<div class="docs-screen-thumb"><strong>Dashboard</strong><span>Visão estratégica</span></div>',
+      "kanban-operacoes": '<div class="docs-screen-thumb"><strong>Kanban</strong><span>Operações por etapa</span></div>',
     };
     return map[slug] || "";
   }
