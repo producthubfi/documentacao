@@ -1254,6 +1254,255 @@
     );
   }
 
+  function wikiNavItem(id, label, active) {
+    return (
+      '<button class="hf-wiki__nav-item' +
+      (active ? " is-active" : "") +
+      '" type="button" data-wiki-nav="' +
+      id +
+      '">' +
+      label +
+      "</button>"
+    );
+  }
+
+  function wikiNavGroup(label, items) {
+    return (
+      '<div class="hf-wiki__nav-group"><p class="hf-wiki__nav-label">' +
+      label +
+      "</p>" +
+      items.join("") +
+      "</div>"
+    );
+  }
+
+  function wikiStep(n, title, text) {
+    return (
+      '<li class="hf-wiki__step"><span class="hf-wiki__step-n">' +
+      n +
+      "</span><div><strong>" +
+      title +
+      "</strong><p>" +
+      text +
+      "</p></div></li>"
+    );
+  }
+
+  function wikiCallout(title, text) {
+    return (
+      '<aside class="hf-wiki__callout"><strong>' +
+      title +
+      "</strong><p>" +
+      text +
+      "</p></aside>"
+    );
+  }
+
+  function wikiArticle(id, active, html) {
+    return (
+      '<article class="hf-wiki__article' +
+      (active ? " is-active" : "") +
+      '" data-wiki-article="' +
+      id +
+      '"' +
+      (active ? "" : " hidden") +
+      ">" +
+      html +
+      "</article>"
+    );
+  }
+
+  function wikiScreen() {
+    var sidebar =
+      typeof ui.appSidebar === "function" ? ui.appSidebar("operacoes", "fit collapsed") : "";
+
+    var crumb =
+      '<nav class="hf-crumb">' +
+      '<button class="hf-crumb__home" type="button" data-nav-toggle aria-expanded="false" aria-label="Expandir menu">' +
+      ico("panel-left", 20) +
+      "</button>" +
+      '<span class="hf-crumb__div"></span>' +
+      "<span>Central de ajuda</span></nav>";
+
+    var header =
+      "<header>" +
+      '<h1 class="docs-dash-title">Central de ajuda</h1>' +
+      '<p class="docs-dash-sub">Documentação das telas e novidades da plataforma — no lugar do modal de slides</p></header>';
+
+    var wikiNav =
+      '<aside class="hf-wiki__nav" aria-label="Tópicos">' +
+      '<label class="hf-wiki__search">' +
+      ico("search", 16) +
+      '<input type="search" placeholder="Buscar tópico" aria-label="Buscar tópico" data-wiki-search></label>' +
+      wikiNavGroup("Começar", [
+        wikiNavItem("inicio", "O que há de novo", true),
+        wikiNavItem("como-usar", "Como usar esta central"),
+      ]) +
+      wikiNavGroup("Dashboards", [
+        wikiNavItem("dashboard", "Dashboard de operações"),
+        wikiNavItem("como-ler", "Como ler os indicadores"),
+      ]) +
+      wikiNavGroup("Operações", [
+        wikiNavItem("kanban", "Kanban de operações"),
+        wikiNavItem("pausado", "Status Pausado"),
+        wikiNavItem("abertura", "Abertura de operação"),
+      ]) +
+      wikiNavGroup("Cadastros", [
+        wikiNavItem("unicidade", "Unicidade de cliente"),
+      ]) +
+      "</aside>";
+
+    var articles =
+      wikiArticle(
+        "inicio",
+        true,
+        '<p class="hf-wiki__eyebrow">Setembro 2026</p>' +
+          "<h2>O que há de novo</h2>" +
+          "<p>Em vez do modal com slides, esta central concentra o que mudou na plataforma. Cada tópico explica a tela, o porquê e o que fazer no dia a dia.</p>" +
+          '<div class="hf-wiki__cards">' +
+          '<a class="hf-wiki__card" href="#/wiki-sistema?topic=dashboard" data-wiki-jump="dashboard"><span class="hf-wiki__card-tag">Novo</span><strong>Dashboard de operações</strong><span>Funil, conversão e indicadores em uma visão estratégica.</span></a>' +
+          '<a class="hf-wiki__card" href="#/wiki-sistema?topic=kanban" data-wiki-jump="kanban"><span class="hf-wiki__card-tag">Novo</span><strong>Kanban de operações</strong><span>Board por etapa com filtros Todas, Pausadas e Rascunhos.</span></a>' +
+          '<a class="hf-wiki__card" href="#/wiki-sistema?topic=pausado" data-wiki-jump="pausado"><span class="hf-wiki__card-tag">Atualizado</span><strong>Status Pausado</strong><span>Pendência temporária fora do SLA, com data de retorno.</span></a>' +
+          "</div>" +
+          wikiCallout(
+            "Por que mudamos",
+            "O modal de novidades acumulava slides e ficava difícil de consultar depois. Aqui cada funcionalidade tem um artigo permanente, buscável e atualizável."
+          )
+      ) +
+      wikiArticle(
+        "como-usar",
+        false,
+        "<h2>Como usar esta central</h2>" +
+          "<p>Use a barra lateral para navegar entre tópicos. A busca filtra os itens do menu. Os artigos ficam nesta área, sem popup.</p>" +
+          "<ul class=\"hf-wiki__steps\">" +
+          wikiStep("1", "Escolha o tópico", "No menu à esquerda, abra o grupo e clique no artigo.") +
+          wikiStep("2", "Leia no ritmo", "Cada página tem contexto, passos e o que evitar.") +
+          wikiStep("3", "Volte quando precisar", "A central fica no produto — não some como o modal antigo.") +
+          "</ul>"
+      ) +
+      wikiArticle(
+        "dashboard",
+        false,
+        '<p class="hf-wiki__eyebrow">Dashboards</p>' +
+          "<h2>Dashboard de operações</h2>" +
+          "<p>Visão estratégica da plataforma: pipeline, funil, conversão, perdas e desempenho por usuário. Substitui a necessidade de “explicar o painel” em slides.</p>" +
+          "<h3>O que você encontra</h3>" +
+          "<ul class=\"hf-wiki__list\">" +
+          "<li><strong>KPIs de pipeline</strong> — originado, ativo, ganho e perdido, com ticket médio.</li>" +
+          "<li><strong>Funil</strong> — distribuição por etapa e conversão entre etapas.</li>" +
+          "<li><strong>Abas</strong> — Operações, Safra, Empresas, Produtos e Usuários.</li>" +
+          "<li><strong>Filtros</strong> — mesa, produto, empresa, período, operador e usuário.</li>" +
+          "</ul>" +
+          "<h3>Como ler rápido</h3>" +
+          "<ul class=\"hf-wiki__steps\">" +
+          wikiStep("1", "Comece pelos KPIs", "Veja volume e ticket. Pipeline ativo mostra o que ainda está em jogo.") +
+          wikiStep("2", "Olhe o funil", "Identifique onde o volume trava — análise, proposta ou formalização.") +
+          wikiStep("3", "Ajuste os filtros", "Restrinja por mesa ou período antes de concluir.") +
+          "</ul>" +
+          wikiCallout(
+            "Protótipo",
+            'Abra a tela completa em <a href="#/dashboard-operacoes">Dashboard de operações</a>.'
+          )
+      ) +
+      wikiArticle(
+        "como-ler",
+        false,
+        "<h2>Como ler os indicadores</h2>" +
+          "<p>Cada card do dashboard responde a uma pergunta. Use esta referência em vez de slides soltos.</p>" +
+          '<div class="hf-wiki__table-wrap"><table class="hf-wiki__table"><thead><tr><th>Indicador</th><th>Significa</th><th>Ação típica</th></tr></thead><tbody>' +
+          "<tr><td>Pipeline originado</td><td>Volume que entrou no período</td><td>Comparar com meta de captação</td></tr>" +
+          "<tr><td>Pipeline ativo</td><td>Operações ainda em andamento</td><td>Priorizar o que está parado</td></tr>" +
+          "<tr><td>Pipeline ganho</td><td>Fechamentos confirmados</td><td>Validar ticket e produto</td></tr>" +
+          "<tr><td>Pipeline perdido</td><td>Volume que saiu sem fechamento</td><td>Ver motivos de perda</td></tr>" +
+          "<tr><td>Conversão</td><td>% que avança entre etapas</td><td>Atacar o gargalo do funil</td></tr>" +
+          "</tbody></table></div>" +
+          wikiCallout(
+            "Guia estendido",
+            'Há também o material externo <a href="dashboards/como-ler.html" target="_blank" rel="noreferrer">Como ler os dados</a> para Admin e Gestor da empresa.'
+          )
+      ) +
+      wikiArticle(
+        "kanban",
+        false,
+        '<p class="hf-wiki__eyebrow">Operações</p>' +
+          "<h2>Kanban de operações</h2>" +
+          "<p>Board por etapa: Pré-cadastro, Em análise, Proposta, Formalização e Finalizado. Cada card mostra código, cliente, produto, valor, tempo e responsável.</p>" +
+          "<h3>Filtros rápidos</h3>" +
+          "<ul class=\"hf-wiki__list\">" +
+          "<li><strong>Todas</strong> — visão completa do funil.</li>" +
+          "<li><strong>Pausadas</strong> — só operações com pausa (fora do SLA).</li>" +
+          "<li><strong>Rascunhos</strong> — operações ainda não enviadas.</li>" +
+          "</ul>" +
+          wikiCallout(
+            "Protótipo",
+            'Veja o board em <a href="#/kanban-operacoes">Kanban de operações</a>.'
+          )
+      ) +
+      wikiArticle(
+        "pausado",
+        false,
+        "<h2>Status Pausado</h2>" +
+          "<p>Use quando a operação tem pendência temporária. A operação sai das filas ativas, o tempo pausado não conta no SLA e a cadência de lembretes começa a partir da data de retorno.</p>" +
+          "<ul class=\"hf-wiki__steps\">" +
+          wikiStep("1", "Pausar", "Informe motivo e data de retorno.") +
+          wikiStep("2", "Acompanhar", "Busque com o filtro Pausadas no Kanban.") +
+          wikiStep("3", "Retomar ou estender", "Volta para Em andamento ou define nova data.") +
+          wikiStep("4", "Sem ação", "Após a cadência, vira Perdido por pausa vencida.") +
+          "</ul>" +
+          wikiCallout(
+            "Protótipo",
+            'Simule em <a href="#/detalhes-operacao?demo=paused">Detalhes da operação · Pausado</a>.'
+          )
+      ) +
+      wikiArticle(
+        "abertura",
+        false,
+        "<h2>Abertura de operação</h2>" +
+          "<p>Documento é a identidade. A ficha é única na empresa e reaproveitada entre colegas. Outra empresa cadastra o mesmo CPF em silêncio.</p>" +
+          "<ul class=\"hf-wiki__list\">" +
+          "<li>PF pede CPF; PJ pede CNPJ.</li>" +
+          "<li>Sem documento válido, não avança.</li>" +
+          "<li>CPF já na empresa reaproveita a ficha, mesmo criado por outro usuário.</li>" +
+          "<li>Documento do corretor é recusado.</li>" +
+          "</ul>" +
+          wikiCallout(
+            "Protótipo",
+            'Fluxo em <a href="#/abertura-operacao">Abertura de operação</a>.'
+          )
+      ) +
+      wikiArticle(
+        "unicidade",
+        false,
+        "<h2>Unicidade de cliente por empresa</h2>" +
+          "<p>O mesmo documento não cria fichas duplicadas dentro da empresa. Entre empresas, cada uma cadastra de forma independente, sem mencionar a outra.</p>" +
+          "<ul class=\"hf-wiki__list\">" +
+          "<li>Cadastro bloqueia se o documento já existe na empresa.</li>" +
+          "<li>Edição com colisão de documento é barrada.</li>" +
+          "<li>Formulário público sem documento não identifica o cliente.</li>" +
+          "</ul>" +
+          wikiCallout(
+            "Protótipo",
+            'Cenários em <a href="#/cadastro-cliente?demo=empresa">Cadastro de cliente</a> e <a href="#/edicao-cliente?demo=colisao">Edição de cliente</a>.'
+          )
+      );
+
+    return (
+      '<div class="docs-screen docs-screen--wiki docs-screen--dash" data-wiki-root>' +
+      sidebar +
+      '<div class="docs-screen__main">' +
+      '<div class="docs-screen__top">' +
+      crumb +
+      header +
+      "</div>" +
+      '<div class="docs-screen__body docs-screen__body--wiki">' +
+      '<div class="hf-wiki">' +
+      wikiNav +
+      '<div class="hf-wiki__content" data-wiki-content>' +
+      articles +
+      "</div></div></div></div></div>"
+    );
+  }
+
   function kAsset(name, w, h) {
     return (
       '<img src="assets/screen/kanban/' +
@@ -2689,6 +2938,22 @@
     },
   };
 
+  catalog.pages["wiki-sistema"] = {
+    title: "Central de ajuda",
+    lead: "Wiki das telas e novidades — substitui o modal de slides.",
+    wide: true,
+    section: "Telas",
+    scenarios: [
+      { label: "O que há de novo", note: "Resumo das funcionalidades recentes.", href: "#/wiki-sistema" },
+      { label: "Dashboard", note: "Como usar o dashboard de operações.", href: "#/wiki-sistema?topic=dashboard" },
+      { label: "Kanban", note: "Board, filtros e pausadas.", href: "#/wiki-sistema?topic=kanban" },
+      { label: "Pausado", note: "Pendência temporária fora do SLA.", href: "#/wiki-sistema?topic=pausado" },
+    ],
+    html: function () {
+      return wikiScreen();
+    },
+  };
+
   function bindOpDetail(root) {
     var shell = root.querySelector("[data-op-detail]");
     if (!shell) return;
@@ -3049,12 +3314,70 @@
     applyFilter(viewQ ? decodeURIComponent(viewQ[1]) : "todas");
   }
 
+  function bindWiki(root) {
+    var shell = root.querySelector("[data-wiki-root]");
+    if (!shell) return;
+
+    function showTopic(id) {
+      var key = String(id || "inicio");
+      var found = false;
+      shell.querySelectorAll("[data-wiki-article]").forEach(function (article) {
+        var on = article.getAttribute("data-wiki-article") === key;
+        if (on) found = true;
+        article.classList.toggle("is-active", on);
+        article.hidden = !on;
+      });
+      if (!found) {
+        showTopic("inicio");
+        return;
+      }
+      shell.querySelectorAll("[data-wiki-nav]").forEach(function (btn) {
+        btn.classList.toggle("is-active", btn.getAttribute("data-wiki-nav") === key);
+      });
+      var content = shell.querySelector("[data-wiki-content]");
+      if (content) content.scrollTop = 0;
+    }
+
+    shell.querySelectorAll("[data-wiki-nav]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        showTopic(btn.getAttribute("data-wiki-nav"));
+      });
+    });
+
+    shell.querySelectorAll("[data-wiki-jump]").forEach(function (link) {
+      link.addEventListener("click", function (event) {
+        event.preventDefault();
+        showTopic(link.getAttribute("data-wiki-jump"));
+      });
+    });
+
+    var search = shell.querySelector("[data-wiki-search]");
+    if (search) {
+      search.addEventListener("input", function () {
+        var q = String(search.value || "").toLowerCase().trim();
+        shell.querySelectorAll("[data-wiki-nav]").forEach(function (btn) {
+          var label = String(btn.textContent || "").toLowerCase();
+          btn.hidden = !!(q && label.indexOf(q) === -1);
+        });
+        shell.querySelectorAll(".hf-wiki__nav-group").forEach(function (group) {
+          var visible = group.querySelectorAll("[data-wiki-nav]:not([hidden])").length;
+          group.hidden = !visible;
+        });
+      });
+    }
+
+    var qs = location.hash.split("?")[1] || "";
+    var topicQ = qs.match(/(?:^|&)topic=([^&]+)/);
+    showTopic(topicQ ? decodeURIComponent(topicQ[1]) : "inicio");
+  }
+
   window.HF_SCREENS = {
     bind: function (root) {
       bindOcr(root);
       bindOpen(root);
       bindOpDetail(root);
       bindKanban(root);
+      bindWiki(root);
       if (window.HF_IDENTITY && typeof window.HF_IDENTITY.bind === "function") {
         window.HF_IDENTITY.bind(root);
       }

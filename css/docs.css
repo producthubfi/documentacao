@@ -4366,3 +4366,311 @@ textarea {
     width: 100%;
   }
 }
+
+/* Central de ajuda / wiki do sistema */
+.docs-screen--wiki .docs-screen__body--wiki {
+  padding: 0;
+  gap: 0;
+  overflow: hidden;
+  background: #fff;
+  border-top: 1px solid #f0f0f2;
+}
+.hf-wiki {
+  display: flex;
+  align-items: stretch;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+.hf-wiki__nav {
+  width: 260px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 12px 24px;
+  border-right: 1px solid #eaecec;
+  background: #fcfcfc;
+  overflow: auto;
+}
+.hf-wiki__search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid #e3e3e3;
+  border-radius: 8px;
+  background: #fff;
+}
+.hf-wiki__search .hf-icon {
+  width: 16px;
+  height: 16px;
+  color: #787d7d;
+  flex-shrink: 0;
+}
+.hf-wiki__search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font-family: var(--hf-font);
+  font-size: 13px;
+  color: #141414;
+}
+.hf-wiki__nav-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.hf-wiki__nav-group[hidden] {
+  display: none;
+}
+.hf-wiki__nav-label {
+  margin: 0 0 6px;
+  padding: 0 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #a1a5a5;
+}
+.hf-wiki__nav-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-family: var(--hf-font);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: #282a2a;
+  cursor: pointer;
+}
+.hf-wiki__nav-item:hover {
+  background: #f5f5f5;
+}
+.hf-wiki__nav-item.is-active {
+  background: #ecfbf9;
+  color: var(--primary-default);
+  font-weight: 500;
+}
+.hf-wiki__nav-item[hidden] {
+  display: none;
+}
+.hf-wiki__content {
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+  padding: 28px 40px 48px;
+  background: #fff;
+}
+.hf-wiki__article {
+  max-width: 720px;
+}
+.hf-wiki__article[hidden] {
+  display: none;
+}
+.hf-wiki__eyebrow {
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--primary-default);
+}
+.hf-wiki__article h2 {
+  margin: 0 0 12px;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #141414;
+}
+.hf-wiki__article h3 {
+  margin: 28px 0 10px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #141414;
+}
+.hf-wiki__article > p {
+  margin: 0 0 16px;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: #4a4f4f;
+}
+.hf-wiki__list {
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.hf-wiki__list li {
+  padding: 12px 14px;
+  border: 1px solid #eaecec;
+  border-radius: 8px;
+  background: #fcfcfc;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #282a2a;
+}
+.hf-wiki__list strong {
+  font-weight: 600;
+}
+.hf-wiki__steps {
+  margin: 0 0 20px;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.hf-wiki__step {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.hf-wiki__step-n {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background: #ecfbf9;
+  color: var(--primary-default);
+  font-size: 12px;
+  font-weight: 700;
+}
+.hf-wiki__step strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #141414;
+  margin-bottom: 2px;
+}
+.hf-wiki__step p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #787d7d;
+}
+.hf-wiki__callout {
+  margin: 24px 0 0;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid #d9f5f1;
+  background: #ecfbf9;
+}
+.hf-wiki__callout strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary-default);
+  margin-bottom: 4px;
+}
+.hf-wiki__callout p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #282a2a;
+}
+.hf-wiki__callout a {
+  color: var(--primary-default);
+  font-weight: 500;
+  text-decoration: underline;
+}
+.hf-wiki__cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 8px 0 20px;
+}
+.hf-wiki__card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+  padding: 14px;
+  border: 1px solid #eaecec;
+  border-radius: 10px;
+  background: #fff;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.hf-wiki__card:hover {
+  border-color: #a6e8e0;
+  box-shadow: 0 8px 20px -16px rgba(0, 163, 149, 0.45);
+}
+.hf-wiki__card-tag {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--primary-default);
+}
+.hf-wiki__card strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: #141414;
+}
+.hf-wiki__card span:last-child {
+  font-size: 13px;
+  line-height: 1.45;
+  color: #787d7d;
+}
+.hf-wiki__table-wrap {
+  overflow: auto;
+  border: 1px solid #eaecec;
+  border-radius: 10px;
+  margin: 8px 0 16px;
+}
+.hf-wiki__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.hf-wiki__table th,
+.hf-wiki__table td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid #eaecec;
+  vertical-align: top;
+}
+.hf-wiki__table th {
+  background: #f5f5f5;
+  font-weight: 600;
+  color: #282a2a;
+}
+.hf-wiki__table tr:last-child td {
+  border-bottom: 0;
+}
+.hf-wiki__table td {
+  color: #4a4f4f;
+}
+
+@media (max-width: 900px) {
+  .hf-wiki {
+    flex-direction: column;
+  }
+  .hf-wiki__nav {
+    width: 100%;
+    border-right: 0;
+    border-bottom: 1px solid #eaecec;
+    max-height: 220px;
+  }
+  .hf-wiki__content {
+    padding: 20px 16px 32px;
+  }
+  .hf-wiki__cards {
+    grid-template-columns: 1fr;
+  }
+}

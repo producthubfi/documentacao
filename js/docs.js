@@ -79,6 +79,7 @@
     "operacao-outro-canal": "circle-off",
     "dashboard-operacoes": "layout-dashboard",
     "kanban-operacoes": "kanban",
+    "wiki-sistema": "book-open",
   };
 
   function itemIcon(slug, fallback) {
@@ -135,6 +136,7 @@
     { slug: "operacao-outro-canal", label: "Operação encerrada", icon: "circle-off" },
     { slug: "dashboard-operacoes", label: "Dashboard de operações", icon: "layout-dashboard" },
     { slug: "kanban-operacoes", label: "Kanban de operações", icon: "kanban" },
+    { slug: "wiki-sistema", label: "Central de ajuda", icon: "book-open" },
     { href: "extensao/", label: "Extensão · Itaú", icon: "puzzle" },
     { href: "extensao/spec.html", label: "Spec · 5 bancos", icon: "list-checks" },
     { href: "dashboards/hubfi-painel-empresas.html", label: "Painel empresas", icon: "building-2" },

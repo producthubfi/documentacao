@@ -2358,6 +2358,7 @@
       "detalhes-operacao": '<div class="docs-screen-thumb"><strong>OP-000000</strong><span>Nome cliente</span></div>',
       "dashboard-operacoes": '<div class="docs-screen-thumb"><strong>Dashboard</strong><span>Visão estratégica</span></div>',
       "kanban-operacoes": '<div class="docs-screen-thumb"><strong>Kanban</strong><span>Operações por etapa</span></div>',
+      "wiki-sistema": '<div class="docs-screen-thumb"><strong>Central de ajuda</strong><span>Wiki · novidades</span></div>',
     };
     return map[slug] || "";
   }
