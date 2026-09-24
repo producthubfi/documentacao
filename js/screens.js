@@ -1840,10 +1840,11 @@
           '<span class="hf-wiki-home__line hf-wiki-home__line--accent">Uma plataforma só.</span>' +
           "</h2>" +
           "</section>" +
-          '<section class="hf-wiki-home__mock" aria-hidden="true">' +
-          '<div class="hf-wiki-home__mock-glow"></div>' +
-          '<img class="hf-wiki-home__mock-img" src="assets/wiki/home-mockup.png" width="1140" height="731" alt="">' +
-          "</section>" +
+          '<section class="hf-wiki-home__mock" aria-label="Demonstração animada do backoffice Hubfi">' +
+          '<div class="hf-wiki-home__mock-glow" aria-hidden="true"></div>' +
+          '<div class="hf-wiki-home__mock-frame">' +
+          '<iframe class="hf-wiki-home__mock-iframe" src="assets/wiki/hero-mock/index.html?v=1" title="Mockup animado do backoffice Hubfi" loading="eager" scrolling="no"></iframe>' +
+          "</div></section>" +
           '<div class="hf-wiki-home__divider" aria-hidden="true">' +
           '<span class="hf-wiki-home__divider-line"></span>' +
           '<span class="hf-wiki-home__divider-mark">' +

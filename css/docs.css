@@ -5277,26 +5277,43 @@ textarea {
 }
 .hf-wiki-home__mock {
   position: relative;
-  width: min(914px, 100%);
+  width: min(1020px, 100%);
   margin: 8px auto 0;
 }
 .hf-wiki-home__mock-glow {
   position: absolute;
-  inset: -18px -20px;
-  border-radius: 16px;
-  background: linear-gradient(30deg, rgba(174, 223, 211, 0.4) 0%, rgba(215, 239, 233, 0.3) 50%, transparent 100%);
+  inset: -18px -28px;
+  border-radius: 20px;
+  background: linear-gradient(30deg, rgba(174, 223, 211, 0.45) 0%, rgba(215, 239, 233, 0.32) 50%, transparent 100%);
   filter: blur(48px);
   pointer-events: none;
   z-index: 0;
 }
-.hf-wiki-home__mock-img {
+.hf-wiki-home__mock-frame {
   position: relative;
   z-index: 1;
+  width: 100%;
+  border-radius: 12px;
+  overflow: visible;
+  background: transparent;
+}
+.hf-wiki-home__mock-iframe {
   display: block;
   width: 100%;
-  height: auto;
-  border-radius: 8px;
-  box-shadow: 0 0 0 1px #e5e7eb, 0 24px 48px -20px rgba(15, 18, 25, 0.22);
+  height: 760px;
+  border: 0;
+  background: transparent;
+  pointer-events: none;
+}
+@media (max-width: 900px) {
+  .hf-wiki-home__mock-iframe {
+    height: 680px;
+  }
+}
+@media (max-width: 640px) {
+  .hf-wiki-home__mock-iframe {
+    height: 620px;
+  }
 }
 .hf-wiki-home__divider {
   display: flex;
