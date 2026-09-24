@@ -1186,174 +1186,533 @@
         : '<button class="hf-btn hf-btn--primary hf-btn--sm" type="button" data-tour-close>Fechar</button>') +
       "</div></div></div>";
 
-    function tabKpi(label, value) {
+    function tabLegend(items) {
       return (
-        '<div class="docs-dash-tab-kpi"><span>' +
-        label +
-        "</span><b>" +
-        value +
-        "</b></div>"
+        '<div class="docs-dash-tab-legend">' +
+        items
+          .map(function (it) {
+            return (
+              '<span class="docs-dash-tab-legend__item"><i style="background:' +
+              it.color +
+              '"></i>' +
+              it.text +
+              "</span>"
+            );
+          })
+          .join("") +
+        "</div>"
       );
     }
 
-    function tabRankRow(color, name, ops, conv, vol, barPct) {
+    function tabMetricCard(opts) {
       return (
-        "<tr><td><span class=\"docs-dash-tab-name\"><span class=\"docs-dash-tab-dot\" style=\"background:" +
-        color +
-        '"></span>' +
-        name +
-        '</span><span class="docs-dash-tab-bar"><span style="width:' +
-        barPct +
-        "%;background:" +
-        color +
-        '"></span></span></td>' +
-        '<td class="is-num">' +
-        ops +
-        '</td><td class="is-center">' +
-        badge("success", conv) +
-        '</td><td class="is-right">' +
-        vol +
-        "</td></tr>"
+        '<article class="docs-dash-tab-metric">' +
+        '<div class="docs-dash-tab-metric__head">' +
+        '<span class="docs-dash-kpi__chip' +
+        (opts.chip ? " docs-dash-kpi__chip--" + opts.chip : "") +
+        '">' +
+        ico(opts.icon || "layers", 20) +
+        "</span>" +
+        '<span class="docs-dash-tab-metric__label">' +
+        opts.label +
+        "</span>" +
+        '<span class="docs-dash-kpi__info">' +
+        ico("info", 16) +
+        "</span></div>" +
+        '<p class="docs-dash-tab-metric__value">' +
+        opts.value +
+        "</p>" +
+        (opts.legend || opts.foot
+          ? '<div class="docs-dash-tab-metric__foot">' +
+            (opts.legend || "") +
+            (opts.foot ? '<span class="docs-dash-tab-metric__hint">' + opts.foot + "</span>" : "") +
+            "</div>"
+          : "") +
+        "</article>"
       );
     }
 
-    function tabRankCard(title, hint, rowsHtml) {
+    function tabStackCell(main, sub) {
+      return (
+        '<span class="docs-dash-tab-stack"><b>' +
+        main +
+        "</b><small>" +
+        sub +
+        "</small></span>"
+      );
+    }
+
+    function tabStatus(kind, label) {
+      return '<span class="docs-dash-tab-status docs-dash-tab-status--' + kind + '">' + label + "</span>";
+    }
+
+    function tabConvRing(pct) {
+      var n = parseInt(String(pct).replace(/\D/g, ""), 10) || 0;
+      return (
+        '<span class="docs-dash-tab-ring" style="--p:' +
+        n +
+        '"><span>' +
+        pct +
+        "</span></span>"
+      );
+    }
+
+    function tabToolbar(opts) {
+      opts = opts || {};
+      return (
+        '<div class="docs-dash-tab-toolbar">' +
+        (opts.search
+          ? '<label class="docs-dash-tab-search"><span aria-hidden="true">' +
+            ico("search", 16) +
+            '</span><input type="search" placeholder="' +
+            opts.search +
+            '" aria-label="' +
+            opts.search +
+            '"></label>'
+          : '<span></span>') +
+        '<div class="docs-dash-tab-toolbar__right">' +
+        dashSelect("", opts.sort || "Ordenar por: Empresa", opts.sortOpts || [
+          opts.sort || "Ordenar por: Empresa",
+          "Ordenar por: Operações",
+          "Ordenar por: Conversão",
+        ]) +
+        dashSelect("", opts.order || "Ordem: Decrescente", [
+          "Ordem: Decrescente",
+          "Ordem: Crescente",
+        ]) +
+        "</div></div>"
+      );
+    }
+
+    function tabPager(pageInfo) {
+      return (
+        '<div class="docs-dash-tab-pager">' +
+        '<label class="docs-dash-tab-pager__size">Itens por página ' +
+        dashSelect("", "10", ["10", "25", "50"]) +
+        "</label>" +
+        '<span class="docs-dash-tab-pager__info">' +
+        (pageInfo || "Página 1 de 1") +
+        "</span>" +
+        '<div class="docs-dash-tab-pager__nav">' +
+        '<button type="button" aria-label="Primeira">' +
+        ico("chevrons-left", 16) +
+        "</button>" +
+        '<button type="button" aria-label="Anterior">' +
+        ico("chevron-left", 16) +
+        "</button>" +
+        '<button type="button" aria-label="Próxima">' +
+        ico("chevron-right", 16) +
+        "</button>" +
+        '<button type="button" aria-label="Última">' +
+        ico("chevrons-right", 16) +
+        "</button></div></div>"
+      );
+    }
+
+    function tabDetailCard(title, hint, toolbarHtml, headers, rows, pager) {
       return (
         '<section class="docs-dash-tab-card">' +
         '<div class="docs-dash-tab-card__head"><div><h2 class="docs-dash-tab-card__title">' +
         title +
         '</h2><p class="docs-dash-tab-card__hint">' +
         hint +
-        "</p></div>" +
-        '<span class="docs-dash-kpi__info">' +
-        ico("info", 16) +
-        "</span></div>" +
-        '<table class="docs-dash-tab-table"><thead><tr>' +
-        "<th>Nome</th><th class=\"is-num\">Operações</th><th class=\"is-center\">Conversão</th><th class=\"is-right\">Volume</th>" +
-        "</tr></thead><tbody>" +
-        rowsHtml +
-        "</tbody></table>" +
-        '<div class="docs-dash-card__acts">' +
-        ghostBtn("Ver todos", "", "chevron-right") +
-        "</div></section>"
-      );
-    }
-
-    function tabEntityTable(title, hint, headers, rows) {
-      return (
-        '<section class="docs-dash-tab-card">' +
-        '<div class="docs-dash-tab-card__head"><div><h2 class="docs-dash-tab-card__title">' +
-        title +
-        '</h2><p class="docs-dash-tab-card__hint">' +
-        hint +
-        "</p></div>" +
-        '<span class="docs-dash-kpi__info">' +
-        ico("info", 16) +
-        "</span></div>" +
-        '<table class="docs-dash-tab-table"><thead><tr>' +
+        "</p></div></div>" +
+        (toolbarHtml || "") +
+        '<div class="docs-dash-tab-table-wrap"><table class="docs-dash-tab-table"><thead><tr>' +
         headers +
         "</tr></thead><tbody>" +
         rows +
-        "</tbody></table>" +
-        '<div class="docs-dash-card__acts">' +
-        ghostBtn("Ver todos", "", "chevron-right") +
+        "</tbody></table></div>" +
+        (pager || "") +
+        "</section>"
+      );
+    }
+
+    function safraChart() {
+      return (
+        '<section class="docs-dash-tab-card docs-dash-tab-chart">' +
+        '<div class="docs-dash-tab-card__head"><div><h2 class="docs-dash-tab-card__title">Comparativo de safras</h2>' +
+        '<p class="docs-dash-tab-card__hint">Evolução mês a mês da propriedade selecionada · compare mais de um ano</p></div>' +
+        '<div class="docs-dash-tab-chart__controls">' +
+        dashSelect("", "Volume ganho", ["Volume ganho", "Operações", "Conversão"]) +
+        '<div class="docs-dash-tab-year" role="group" aria-label="Ano">' +
+        '<button type="button">2025</button>' +
+        '<button type="button" class="is-active">2026</button></div>' +
+        "</div></div>" +
+        '<div class="docs-dash-tab-chart__plot" aria-hidden="true">' +
+        '<svg viewBox="0 0 640 180" preserveAspectRatio="none">' +
+        '<polyline fill="none" stroke="#d1d5db" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" points="20,150 80,142 140,130 200,118 260,110 320,102 380,96 440,90 500,86 560,82 620,78"/>' +
+        '<polyline fill="none" stroke="#00a395" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" points="20,120 80,95 140,70 200,48 260,55 320,78 380,110 440,130 500,145 560,152 620,155"/>' +
+        '<circle cx="200" cy="48" r="5" fill="#00a395"/>' +
+        "</svg>" +
+        '<div class="docs-dash-tab-chart__axis"><span>Jan</span><span>Fev</span><span>Mar</span><span>Abr</span><span>Mai</span><span>Jun</span><span>Jul</span><span>Ago</span><span>Set</span><span>Out</span><span>Nov</span><span>Dez</span></div>' +
         "</div></section>"
       );
     }
 
     var panelSafra =
-      '<div class="docs-dash-tab-kpis">' +
-      tabKpi("Volume originado", "R$ 42,8M") +
-      tabKpi("Ticket médio", "R$ 14.800") +
-      tabKpi("Operações", "2.890") +
-      tabKpi("Conversão média", "28%") +
+      filters +
+      '<div class="docs-dash-tab-metrics docs-dash-tab-metrics--3">' +
+      tabMetricCard({
+        icon: "layers",
+        chip: "info",
+        label: "Operações nas safras mapeadas",
+        value: "2.131",
+        legend: tabLegend([
+          { color: "#00a395", text: "900 Ganhas" },
+          { color: "#ef4444", text: "350 perdidas" },
+        ]),
+      }) +
+      tabMetricCard({
+        icon: "banknote-arrow-up",
+        chip: "ok",
+        label: "Volume total originado",
+        value: "R$ 84,8M",
+        legend: tabLegend([
+          { color: "#00a395", text: "R$ 55,1M Ganho" },
+          { color: "#ef4444", text: "R$ 10M perdido" },
+        ]),
+      }) +
+      tabMetricCard({
+        icon: "calendar",
+        chip: "info",
+        label: "Quantidade de safras",
+        value: "18",
+        legend: tabLegend([
+          { color: "#00a395", text: "10 fechadas" },
+          { color: "#3b82f6", text: "1 andamento" },
+        ]),
+      }) +
       "</div>" +
-      tabRankCard(
-        "Ranking por mesa",
-        "Performance da safra agrupada por mesa",
-        tabRankRow("#00a395", "Financiamento", "1.240", "32%", "R$ 18,4M", 100) +
-          tabRankRow("#3b82f6", "Consórcio", "860", "27%", "R$ 12,1M", 69) +
-          tabRankRow("#8b5cf6", "Crédito PJ", "520", "24%", "R$ 7,8M", 42) +
-          tabRankRow("#f59e0b", "Seguros", "270", "19%", "R$ 4,5M", 22)
-      ) +
-      tabRankCard(
-        "Ranking por produto",
-        "Comparativo de produtos na safra selecionada",
-        tabRankRow("#00a395", "Home Equity", "980", "34%", "R$ 15,2M", 100) +
-          tabRankRow("#3b82f6", "Financiamento Imobiliário", "720", "29%", "R$ 11,4M", 73) +
-          tabRankRow("#8b5cf6", "Capital de Giro", "410", "22%", "R$ 6,1M", 42) +
-          tabRankRow("#f59e0b", "CDC", "190", "18%", "R$ 2,9M", 19)
-      ) +
-      tabRankCard(
-        "Ranking por empresa",
-        "Empresas com maior volume na safra",
-        tabRankRow("#00a395", "Hub de Crédito Techfinance", "500", "35%", "R$ 8,4M", 100) +
-          tabRankRow("#3b82f6", "Vitta Empreendimentos", "310", "28%", "R$ 5,1M", 62) +
-          tabRankRow("#8b5cf6", "Personal Finance", "210", "24%", "R$ 3,4M", 42) +
-          tabRankRow("#f59e0b", "Interno Hubfi", "90", "20%", "R$ 1,2M", 18)
+      safraChart() +
+      tabDetailCard(
+        "Detalhamento por safra",
+        "Cada linha é uma coorte de operações abertas no mesmo período",
+        tabToolbar({
+          sort: "Ordenar por: Safra",
+          sortOpts: ["Ordenar por: Safra", "Ordenar por: Originadas", "Ordenar por: Conversão"],
+        }),
+        "<th>Safra</th><th>Originadas</th><th>Ganhas</th><th>Perdidas</th><th>Conversão</th><th>Tempo mínimo</th><th>Tempo médio</th><th>Tempo máximo</th><th>Status</th>",
+        "<tr><td>Junho/2026</td><td>" +
+          tabStackCell("908", "R$ 5,4M") +
+          "</td><td>" +
+          tabStackCell("134", "R$ 900K") +
+          "</td><td>" +
+          tabStackCell("21", "R$ 130K") +
+          "</td><td>—</td><td>—</td><td>—</td><td>—</td><td>" +
+          tabStatus("progress", "Em andamento") +
+          "</td></tr>" +
+          "<tr><td>Maio/2026</td><td>" +
+          tabStackCell("20", "R$ 1,8M") +
+          "</td><td>" +
+          tabStackCell("18", "R$ 1,7M") +
+          "</td><td>" +
+          tabStackCell("2", "R$ 100K") +
+          "</td><td>90%</td><td>22 dias</td><td>71 dias</td><td>200 dias</td><td>" +
+          tabStatus("done", "Fechada") +
+          "</td></tr>" +
+          "<tr><td>Abril/2026</td><td>" +
+          tabStackCell("96", "R$ 6,2M") +
+          "</td><td>" +
+          tabStackCell("71", "R$ 4,8M") +
+          "</td><td>" +
+          tabStackCell("15", "R$ 1,0M") +
+          "</td><td>74%</td><td>28 dias</td><td>92 dias</td><td>310 dias</td><td>" +
+          tabStatus("done", "Fechada") +
+          "</td></tr>" +
+          "<tr><td>Março/2026</td><td>" +
+          tabStackCell("112", "R$ 7,1M") +
+          "</td><td>" +
+          tabStackCell("80", "R$ 5,1M") +
+          "</td><td>" +
+          tabStackCell("24", "R$ 1,2M") +
+          "</td><td>71%</td><td>31 dias</td><td>101 dias</td><td>360 dias</td><td>" +
+          tabStatus("done", "Fechada") +
+          "</td></tr>" +
+          "<tr><td>Fevereiro/2026</td><td>" +
+          tabStackCell("104", "R$ 6,4M") +
+          "</td><td>" +
+          tabStackCell("69", "R$ 4,6M") +
+          "</td><td>" +
+          tabStackCell("29", "R$ 1,5M") +
+          "</td><td>66%</td><td>35 dias</td><td>108 dias</td><td>400 dias</td><td>" +
+          tabStatus("done", "Fechada") +
+          "</td></tr>" +
+          "<tr><td>Janeiro/2026</td><td>" +
+          tabStackCell("100", "R$ 6,0M") +
+          "</td><td>" +
+          tabStackCell("67", "R$ 4,4M") +
+          "</td><td>" +
+          tabStackCell("28", "R$ 1,4M") +
+          "</td><td>67%</td><td>36 dias</td><td>110 dias</td><td>410 dias</td><td>" +
+          tabStatus("done", "Fechada") +
+          "</td></tr>",
+        tabPager("Página 1 de 1")
       );
 
-    var panelEmpresas = tabEntityTable(
-      "Ranking de empresas",
-      "Volume, conversão e SLA por empresa no período",
-      "<th>Empresa</th><th class=\"is-num\">Operações</th><th class=\"is-center\">Conversão</th><th class=\"is-num\">Ativas</th><th class=\"is-right\">Volume</th><th class=\"is-center\">SLA</th>",
-      "<tr><td>Hub de Crédito Techfinance</td><td class=\"is-num\">500</td><td class=\"is-center\">" +
-        badge("success", "35%") +
-        '</td><td class="is-num">112</td><td class="is-right">R$ 12,1M</td><td class="is-center">' +
-        badge("alert", "Atenção") +
-        "</td></tr>" +
-        "<tr><td>Vitta Empreendimentos</td><td class=\"is-num\">210</td><td class=\"is-center\">" +
-        badge("success", "28%") +
-        '</td><td class="is-num">48</td><td class="is-right">R$ 1,51M</td><td class="is-center">' +
-        badge("success", "No prazo") +
-        "</td></tr>" +
-        "<tr><td>Personal Finance</td><td class=\"is-num\">110</td><td class=\"is-center\">" +
-        badge("secondary", "24%") +
-        '</td><td class="is-num">31</td><td class="is-right">R$ 1,1M</td><td class="is-center">' +
-        badge("alert", "Crítica") +
-        "</td></tr>" +
-        "<tr><td>Interno Hubfi</td><td class=\"is-num\">50</td><td class=\"is-center\">" +
-        badge("secondary", "20%") +
-        '</td><td class="is-num">12</td><td class="is-right">R$ 0,9M</td><td class="is-center">' +
-        badge("success", "No prazo") +
-        "</td></tr>"
-    );
+    var panelEmpresas =
+      filters +
+      '<div class="docs-dash-tab-metrics docs-dash-tab-metrics--3">' +
+      tabMetricCard({
+        icon: "building-2",
+        chip: "info",
+        label: "Ativas",
+        value: "25",
+        foot: "total cadastrado",
+      }) +
+      tabMetricCard({
+        icon: "circle-check",
+        chip: "ok",
+        label: "Ativas",
+        value: "18",
+        foot: "com operação no período",
+      }) +
+      tabMetricCard({
+        icon: "circle-x",
+        chip: "err",
+        label: "Inativas",
+        value: "7",
+        foot: "sem operação no período",
+      }) +
+      "</div>" +
+      tabDetailCard(
+        "Detalhamento por safra",
+        "Cada linha é uma coorte de operações abertas no mesmo período",
+        tabToolbar({
+          search: "Procurar por empresas...",
+          sort: "Ordenar por: Empresa",
+          sortOpts: ["Ordenar por: Empresa", "Ordenar por: Operações", "Ordenar por: Conversão"],
+        }),
+        "<th>Empresa</th><th>Operações no período</th><th>Em andamento</th><th>Ganhas</th><th>Perdidas</th><th>Taxa de conversão</th><th>Status</th><th></th>",
+        "<tr><td>Vitta Empreendimentos</td><td>" +
+          tabStackCell("180", "R$ 12,4M") +
+          "</td><td>" +
+          tabStackCell("96", "R$ 6,6M") +
+          "</td><td>" +
+          tabStackCell("61", "R$ 4,2M") +
+          "</td><td>" +
+          tabStackCell("23", "R$ 1,6M") +
+          "</td><td>34%</td><td>" +
+          tabStatus("done", "Ativa") +
+          '</td><td><button class="docs-dash-tab-link" type="button">Ver detalhes</button></td></tr>' +
+          "<tr><td>Personal Finance</td><td>" +
+          tabStackCell("260", "R$ 18,7M") +
+          "</td><td>" +
+          tabStackCell("190", "R$ 13,7M") +
+          "</td><td>" +
+          tabStackCell("31", "R$ 2,2M") +
+          "</td><td>" +
+          tabStackCell("39", "R$ 2,8M") +
+          "</td><td>12%</td><td>" +
+          tabStatus("done", "Ativa") +
+          '</td><td><button class="docs-dash-tab-link" type="button">Ver detalhes</button></td></tr>' +
+          "<tr><td>Hub Nogueira</td><td>" +
+          tabStackCell("90", "R$ 6,1M") +
+          "</td><td>" +
+          tabStackCell("9", "R$ 600k") +
+          "</td><td>" +
+          tabStackCell("10", "R$ 700k") +
+          "</td><td>" +
+          tabStackCell("71", "R$ 4,8M") +
+          "</td><td>11%</td><td>" +
+          tabStatus("idle", "Inativa") +
+          '</td><td><button class="docs-dash-tab-link" type="button">Ver detalhes</button></td></tr>' +
+          "<tr><td>Hub de Crédito Techfinance</td><td>" +
+          tabStackCell("900", "R$ 42,1M") +
+          "</td><td>" +
+          tabStackCell("620", "R$ 29,0M") +
+          "</td><td>" +
+          tabStackCell("190", "R$ 8,9M") +
+          "</td><td>" +
+          tabStackCell("90", "R$ 4,2M") +
+          "</td><td>21%</td><td>" +
+          tabStatus("done", "Ativa") +
+          '</td><td><button class="docs-dash-tab-link" type="button">Ver detalhes</button></td></tr>',
+        tabPager("Página 1 de 1")
+      );
 
-    var panelProdutos = tabEntityTable(
-      "Ranking de produtos",
-      "Conversão e volume por produto no período",
-      "<th>Produto</th><th class=\"is-num\">Operações</th><th class=\"is-center\">Conversão</th><th class=\"is-right\">Volume</th><th class=\"is-center\">Ticket médio</th>",
-      "<tr><td>Home Equity</td><td class=\"is-num\">980</td><td class=\"is-center\">" +
-        badge("success", "34%") +
-        '</td><td class="is-right">R$ 15,2M</td><td class="is-center">R$ 15.500</td></tr>' +
-        "<tr><td>Financiamento Imobiliário</td><td class=\"is-num\">720</td><td class=\"is-center\">" +
-        badge("success", "29%") +
-        '</td><td class="is-right">R$ 11,4M</td><td class="is-center">R$ 15.800</td></tr>' +
-        "<tr><td>Capital de Giro</td><td class=\"is-num\">410</td><td class=\"is-center\">" +
-        badge("secondary", "22%") +
-        '</td><td class="is-right">R$ 6,1M</td><td class="is-center">R$ 14.900</td></tr>' +
-        "<tr><td>CDC</td><td class=\"is-num\">190</td><td class=\"is-center\">" +
-        badge("secondary", "18%") +
-        '</td><td class="is-right">R$ 2,9M</td><td class="is-center">R$ 15.200</td></tr>'
-    );
+    var panelProdutos =
+      filters +
+      '<div class="docs-dash-tab-metrics docs-dash-tab-metrics--3">' +
+      tabMetricCard({
+        icon: "package",
+        chip: "info",
+        label: "Ativas",
+        value: "25",
+        foot: "total cadastrado",
+      }) +
+      tabMetricCard({
+        icon: "circle-check",
+        chip: "ok",
+        label: "Ativas",
+        value: "18",
+        foot: "disponíveis na plataforma",
+      }) +
+      tabMetricCard({
+        icon: "circle-x",
+        chip: "err",
+        label: "Inativas",
+        value: "7",
+        foot: "inativados na plataforma",
+      }) +
+      "</div>" +
+      tabDetailCard(
+        "Produtos",
+        "Comparativo de produção e conversão entre produtos, volume ao lado de cada quantidade",
+        tabToolbar({
+          sort: "Ordenar por: Produto",
+          sortOpts: ["Ordenar por: Produto", "Ordenar por: Operações", "Ordenar por: Conversão"],
+        }),
+        "<th>Produto</th><th>Operações no período</th><th>Em andamento</th><th>Convertidas</th><th>Ticket médio</th><th>Conversão</th><th>Status</th>",
+        "<tr><td>Seguros</td><td>" +
+          tabStackCell("184", "102 originadas no período") +
+          "</td><td>" +
+          tabStackCell("90", "R$ 684k") +
+          "</td><td>" +
+          tabStackCell("58", "R$ 441k") +
+          "</td><td>R$ 8k</td><td>32%</td><td>" +
+          tabStatus("done", "Ativo") +
+          "</td></tr>" +
+          "<tr><td>Financiamento Imobiliário · Aquisição</td><td>" +
+          tabStackCell("1.240", "620 originadas no período") +
+          "</td><td>" +
+          tabStackCell("760", "R$ 11,2M") +
+          "</td><td>" +
+          tabStackCell("372", "R$ 5,5M") +
+          "</td><td>R$ 15k</td><td>30%</td><td>" +
+          tabStatus("done", "Ativo") +
+          "</td></tr>" +
+          "<tr><td>Financiamento · Portabilidade</td><td>" +
+          tabStackCell("0", "—") +
+          "</td><td>" +
+          tabStackCell("0", "—") +
+          "</td><td>" +
+          tabStackCell("0", "—") +
+          "</td><td>—</td><td>—</td><td>" +
+          tabStatus("idle", "Inativo") +
+          "</td></tr>" +
+          "<tr><td>Consórcio · APE</td><td>" +
+          tabStackCell("412", "230 originadas no período") +
+          "</td><td>" +
+          tabStackCell("288", "R$ 3,6M") +
+          "</td><td>" +
+          tabStackCell("96", "R$ 1,2M") +
+          "</td><td>R$ 12k</td><td>23%</td><td>" +
+          tabStatus("done", "Ativo") +
+          "</td></tr>",
+        tabPager("Página 1 de 78")
+      );
 
-    var panelUsuarios = tabEntityTable(
-      "Ranking de usuários",
-      "Originação e pipeline aberto por usuário",
-      "<th>Usuário</th><th>Empresa</th><th class=\"is-num\">Originadas</th><th class=\"is-num\">Ativas</th><th class=\"is-right\">Volume ativo</th><th class=\"is-center\">Conversão</th>",
-      "<tr><td>Ana Souza</td><td>Hub de Crédito Techfinance</td><td class=\"is-num\">84</td><td class=\"is-num\">22</td><td class=\"is-right\">R$ 3,2M</td><td class=\"is-center\">" +
-        badge("success", "36%") +
-        "</td></tr>" +
-        "<tr><td>Bruno Lima</td><td>Vitta Empreendimentos</td><td class=\"is-num\">61</td><td class=\"is-num\">18</td><td class=\"is-right\">R$ 1,8M</td><td class=\"is-center\">" +
-        badge("success", "29%") +
-        "</td></tr>" +
-        "<tr><td>Carla Mendes</td><td>Personal Finance</td><td class=\"is-num\">44</td><td class=\"is-num\">12</td><td class=\"is-right\">R$ 1,1M</td><td class=\"is-center\">" +
-        badge("secondary", "24%") +
-        "</td></tr>" +
-        "<tr><td>Diego Alves</td><td>Interno Hubfi</td><td class=\"is-num\">28</td><td class=\"is-num\">9</td><td class=\"is-right\">R$ 0,7M</td><td class=\"is-center\">" +
-        badge("secondary", "21%") +
-        "</td></tr>"
-    );
+    var panelUsuarios =
+      filters +
+      '<div class="docs-dash-tab-metrics docs-dash-tab-metrics--2">' +
+      tabMetricCard({
+        icon: "users",
+        chip: "info",
+        label: "Usuários da base",
+        value: "400",
+        legend: tabLegend([
+          { color: "#00a395", text: "300 ativos" },
+          { color: "#d1d5db", text: "50 inativos" },
+          { color: "#e7b008", text: "50 bloqueados" },
+        ]),
+      }) +
+      tabMetricCard({
+        icon: "user-check",
+        chip: "ok",
+        label: "Ativos no período selecionado",
+        value: "248",
+        foot: "79% dos 312 usuários da base",
+      }) +
+      "</div>" +
+      tabDetailCard(
+        "Usuários",
+        "Originação, pipeline e conversão por usuário no período",
+        tabToolbar({
+          sort: "Ordenar por: Usuário",
+          sortOpts: ["Ordenar por: Usuário", "Ordenar por: Operações", "Ordenar por: Conversão"],
+        }),
+        "<th>Usuário / Empresa</th><th>Operações no período</th><th>Em andamento</th><th>Ganhas</th><th>Perdidas</th><th>Taxa de conversão</th><th></th>",
+        "<tr><td>" +
+          tabStackCell("Ricardo Almeida", "Hub de Crédito Techfinance") +
+          "</td><td>" +
+          tabStackCell("128", "R$ 12,4M") +
+          "</td><td>" +
+          tabStackCell("4", "R$ 388k") +
+          "</td><td>" +
+          tabStackCell("98", "R$ 9,5M") +
+          "</td><td>" +
+          tabStackCell("26", "R$ 2,5M") +
+          "</td><td>" +
+          tabConvRing("77%") +
+          '</td><td><button class="docs-dash-tab-link" type="button">Ver detalhes</button></td></tr>' +
+          "<tr><td>" +
+          tabStackCell("Marina Souza", "Vitta Empreendimentos") +
+          "</td><td>" +
+          tabStackCell("61", "R$ 4,4M") +
+          "</td><td>" +
+          tabStackCell("3", "R$ 216k") +
+          "</td><td>" +
+          tabStackCell("44", "R$ 3,2M") +
+          "</td><td>" +
+          tabStackCell("14", "R$ 1,0M") +
+          "</td><td>" +
+          tabConvRing("72%") +
+          '</td><td><button class="docs-dash-tab-link" type="button">Ver detalhes</button></td></tr>' +
+          "<tr><td>" +
+          tabStackCell("Marcos Pereira", "Hub de Crédito Techfinance") +
+          "</td><td>" +
+          tabStackCell("88", "R$ 7,2M") +
+          "</td><td>" +
+          tabStackCell("1", "R$ 82k") +
+          "</td><td>" +
+          tabStackCell("67", "R$ 5,5M") +
+          "</td><td>" +
+          tabStackCell("20", "R$ 1,6M") +
+          "</td><td>" +
+          tabConvRing("76%") +
+          '</td><td><button class="docs-dash-tab-link" type="button">Ver detalhes</button></td></tr>' +
+          "<tr><td>" +
+          tabStackCell("Juliana Santos", "Interno Hubfi") +
+          "</td><td>" +
+          tabStackCell("62", "R$ 5,4M") +
+          "</td><td>" +
+          tabStackCell("2", "R$ 174k") +
+          "</td><td>" +
+          tabStackCell("48", "R$ 4,2M") +
+          "</td><td>" +
+          tabStackCell("12", "R$ 1,0M") +
+          "</td><td>" +
+          tabConvRing("77%") +
+          '</td><td><button class="docs-dash-tab-link" type="button">Ver detalhes</button></td></tr>' +
+          "<tr><td>" +
+          tabStackCell("Fernanda Costa", "Hub de Crédito Techfinance") +
+          "</td><td>" +
+          tabStackCell("94", "R$ 8,9M") +
+          "</td><td>" +
+          tabStackCell("2", "R$ 189k") +
+          "</td><td>" +
+          tabStackCell("72", "R$ 6,8M") +
+          "</td><td>" +
+          tabStackCell("20", "R$ 1,9M") +
+          "</td><td>" +
+          tabConvRing("77%") +
+          '</td><td><button class="docs-dash-tab-link" type="button">Ver detalhes</button></td></tr>' +
+          "<tr><td>" +
+          tabStackCell("Bruno Oliveira", "Personal Finance") +
+          "</td><td>" +
+          tabStackCell("76", "R$ 6,8M") +
+          "</td><td>" +
+          tabStackCell("3", "R$ 268k") +
+          "</td><td>" +
+          tabStackCell("54", "R$ 4,8M") +
+          "</td><td>" +
+          tabStackCell("19", "R$ 1,7M") +
+          "</td><td>" +
+          tabConvRing("71%") +
+          '</td><td><button class="docs-dash-tab-link" type="button">Ver detalhes</button></td></tr>',
+        tabPager("Página 1 de 12")
+      );
 
     var bodyTop =
       toolbar +

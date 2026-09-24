@@ -2874,6 +2874,275 @@ textarea {
   line-height: 20px;
   color: #787d7d;
 }
+.docs-dash-tab-metrics {
+  display: grid;
+  gap: 12px;
+}
+.docs-dash-tab-metrics--2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.docs-dash-tab-metrics--3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.docs-dash-tab-metric {
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+  background: #fff;
+  border: 1px solid #eaecec;
+  border-radius: 12px;
+}
+.docs-dash-tab-metric__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.docs-dash-tab-metric__label {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #787d7d;
+}
+.docs-dash-tab-metric__value {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+.docs-dash-tab-metric__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.docs-dash-tab-metric__hint {
+  font-size: 13px;
+  color: #787d7d;
+}
+.docs-dash-tab-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+}
+.docs-dash-tab-legend__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #787d7d;
+}
+.docs-dash-tab-legend__item i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.docs-dash-tab-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.docs-dash-tab-toolbar__right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.docs-dash-tab-search {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 240px;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid #e3e3e3;
+  border-radius: 8px;
+  background: #fff;
+}
+.docs-dash-tab-search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 14px;
+  color: #191a1a;
+}
+.docs-dash-tab-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+.docs-dash-tab-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.docs-dash-tab-table th,
+.docs-dash-tab-table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #f0f0f0;
+  text-align: left;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.docs-dash-tab-table th {
+  font-size: 12px;
+  font-weight: 500;
+  color: #787d7d;
+}
+.docs-dash-tab-table .is-num,
+.docs-dash-tab-table .is-right { text-align: right; }
+.docs-dash-tab-table .is-center { text-align: center; }
+.docs-dash-tab-stack {
+  display: grid;
+  gap: 2px;
+}
+.docs-dash-tab-stack b {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.docs-dash-tab-stack small {
+  font-size: 12px;
+  color: #787d7d;
+}
+.docs-dash-tab-status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 12px;
+  font-weight: 500;
+}
+.docs-dash-tab-status--done {
+  color: #0a7165;
+  border-color: #aedfd3;
+  background: #ebf7f4;
+}
+.docs-dash-tab-status--progress {
+  color: #2563eb;
+  border-color: #bfdbfe;
+  background: #eff6ff;
+}
+.docs-dash-tab-status--idle {
+  color: #787d7d;
+  border-color: #e5e7eb;
+  background: #f5f5f5;
+}
+.docs-dash-tab-link {
+  border: 0;
+  background: transparent;
+  color: var(--primary-default);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+.docs-dash-tab-link:hover {
+  text-decoration: underline;
+}
+.docs-dash-tab-ring {
+  --p: 70;
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background:
+    radial-gradient(#fff 58%, transparent 59%),
+    conic-gradient(#00a395 calc(var(--p) * 1%), #e5e7eb 0);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.docs-dash-tab-pager {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-top: 4px;
+}
+.docs-dash-tab-pager__size {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #787d7d;
+}
+.docs-dash-tab-pager__info {
+  font-size: 13px;
+  color: #787d7d;
+}
+.docs-dash-tab-pager__nav {
+  display: inline-flex;
+  gap: 4px;
+}
+.docs-dash-tab-pager__nav button {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid #eaecec;
+  border-radius: 8px;
+  background: #fff;
+  color: #787d7d;
+  cursor: pointer;
+}
+.docs-dash-tab-chart__controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.docs-dash-tab-year {
+  display: inline-flex;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 8px;
+  background: #f5f5f5;
+}
+.docs-dash-tab-year button {
+  height: 32px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  color: #787d7d;
+  cursor: pointer;
+}
+.docs-dash-tab-year button.is-active {
+  background: #00a395;
+  color: #fff;
+}
+.docs-dash-tab-chart__plot {
+  display: grid;
+  gap: 8px;
+}
+.docs-dash-tab-chart__plot svg {
+  display: block;
+  width: 100%;
+  height: 180px;
+}
+.docs-dash-tab-chart__axis {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  font-size: 12px;
+  color: #9ca3af;
+  text-align: center;
+}
 .docs-dash-tab-kpis {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -2898,26 +3167,6 @@ textarea {
   line-height: 1.3;
   color: var(--text-primary);
 }
-.docs-dash-tab-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-}
-.docs-dash-tab-table th,
-.docs-dash-tab-table td {
-  padding: 10px 8px;
-  border-bottom: 1px solid #f0f0f0;
-  text-align: left;
-  vertical-align: middle;
-}
-.docs-dash-tab-table th {
-  font-size: 12px;
-  font-weight: 500;
-  color: #787d7d;
-}
-.docs-dash-tab-table .is-num,
-.docs-dash-tab-table .is-right { text-align: right; }
-.docs-dash-tab-table .is-center { text-align: center; }
 .docs-dash-tab-name {
   display: inline-flex;
   align-items: center;
@@ -2942,6 +3191,12 @@ textarea {
   display: block;
   height: 100%;
   border-radius: inherit;
+}
+@media (max-width: 1100px) {
+  .docs-dash-tab-metrics--3,
+  .docs-dash-tab-metrics--2 {
+    grid-template-columns: 1fr;
+  }
 }
 @media (max-width: 960px) {
   .docs-dash-tab-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
