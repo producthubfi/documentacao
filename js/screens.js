@@ -9,7 +9,7 @@
   var FIGMA_OPEN_INFO =
     "https://www.figma.com/design/C9RP2qnls5pDBjMSEdhT1n/Untitled?node-id=5-5689";
   var FIGMA_DASH =
-    "https://www.figma.com/design/6GPvl7jqcGdcwaCCx9kyOI/Dashboard-de-opera%C3%A7%C3%B5es?node-id=3109-36103";
+    "https://www.figma.com/design/6GPvl7jqcGdcwaCCx9kyOI/Dashboard-de-opera%C3%A7%C3%B5es?node-id=2211-6474";
   var FIGMA_KANBAN =
     "https://www.figma.com/design/LQfnfvRTFm2AZ9qwTWsQEk/Nova-opera%C3%A7%C3%A3o?node-id=8501-45420";
 
@@ -748,12 +748,12 @@
 
     var toolbar =
       '<div class="docs-dash-toolbar" data-tour="tabs">' +
-      '<div class="hf-tabs" data-tabs>' +
-      '<button class="hf-tab is-active" type="button">Operações</button>' +
-      '<button class="hf-tab" type="button">Safra</button>' +
-      '<button class="hf-tab" type="button">Empresas</button>' +
-      '<button class="hf-tab" type="button">Produtos</button>' +
-      '<button class="hf-tab" type="button">Usuários</button></div>' +
+      '<div class="hf-tabs" data-dash-tabs>' +
+      '<button class="hf-tab is-active" type="button" data-dash-tab="operacoes">Operações</button>' +
+      '<button class="hf-tab" type="button" data-dash-tab="safra">Safra</button>' +
+      '<button class="hf-tab" type="button" data-dash-tab="empresas">Empresas</button>' +
+      '<button class="hf-tab" type="button" data-dash-tab="produtos">Produtos</button>' +
+      '<button class="hf-tab" type="button" data-dash-tab="usuarios">Usuários</button></div>' +
       '<button class="hf-btn hf-btn--lg hf-btn--ghost docs-dash-filter-btn" type="button">' +
       ico("list-filter", 20) +
       "Filtros</button></div>";
@@ -813,7 +813,7 @@
       '<div class="docs-dash-kpis">' +
       kpi({
         icon: "banknote-arrow-up",
-        label: "Pipeline originado",
+        label: "Pipeline originada",
         info: true,
         value: "R$ 1.000,00",
         ticket: "R$ 14.800",
@@ -823,7 +823,7 @@
       kpi({
         icon: "refresh-ccw",
         chip: "info",
-        label: "Pipeline ativo",
+        label: "Pipeline ativa",
         info: true,
         value: "R$ 11,2M",
         ticket: "R$ 14.800",
@@ -836,7 +836,7 @@
       kpi({
         icon: "circle-check",
         chip: "ok",
-        label: "Pipeline ganho",
+        label: "Pipeline ganha",
         value: "R$ 5,4M",
         ticket: "R$ 14.800",
         subs: kpiSub("layers", "317"),
@@ -853,27 +853,95 @@
       }) +
       "</div>";
 
-    function bar(count, height, kind) {
-      var alert = kind === "warn" || kind === "crit";
+    function tipAsset(name, w, h) {
       return (
-        '<div class="docs-dash-bar' +
-        (kind ? " docs-dash-bar--" + kind : "") +
-        '">' +
-        '<span class="docs-dash-bar__n">' +
-        (alert ? ico("triangle-alert", 16) : "") +
-        count +
-        "</span>" +
-        '<span class="docs-dash-bar__fill" style="height:' +
-        height +
-        'px"></span></div>'
+        '<img src="assets/screen/dash/tip/' +
+        name +
+        '.svg" width="' +
+        w +
+        '" height="' +
+        h +
+        '" alt="">'
       );
     }
 
+    function funnelTipStatus(dot, count, label, value) {
+      return (
+        '<div class="docs-dash-ftip__row"><span class="docs-dash-ftip__info">' +
+        tipAsset(dot, 8, 8) +
+        "<span><b>" +
+        count +
+        "</b> <em>" +
+        label +
+        '</em></span></span><span class="docs-dash-ftip__val">' +
+        value +
+        "</span></div>"
+      );
+    }
+
+    var funnelTip =
+      '<aside class="docs-dash-ftip" data-funnel-tip hidden>' +
+      '<div class="docs-dash-ftip__head"><strong data-ftip-title>Documentação das Partes</strong>' +
+      '<span class="docs-dash-ftip__badge" data-ftip-badge>Gargalo</span></div>' +
+      '<div class="docs-dash-ftip__callout">' +
+      tipAsset("info", 16, 16) +
+      '<p data-ftip-note>Entra em gargalo quando 50% das operações nesta fase estão em Atenção ou Crítica.</p></div>' +
+      '<hr class="docs-dash-ftip__div">' +
+      '<div class="docs-dash-ftip__stats"><b data-ftip-ops>32 operações</b><b data-ftip-vol>R$ 10,8M</b></div>' +
+      '<div class="docs-dash-ftip__breakdown" data-ftip-rows>' +
+      funnelTipStatus("dot-ok", "20", "No prazo", "R$ 10,8M") +
+      funnelTipStatus("dot-warn", "10", "Atenção", "R$ 10,8M") +
+      funnelTipStatus("dot-crit", "2", "Crítica", "R$ 10,8M") +
+      "</div>" +
+      '<button class="docs-dash-ftip__btn" type="button">Ver todas' +
+      tipAsset("chevron", 16, 16) +
+      "</button></aside>";
+
+    function bar(optsBar) {
+      var alert = optsBar.kind === "warn" || optsBar.kind === "crit";
+      return (
+        '<button class="docs-dash-bar' +
+        (optsBar.kind ? " docs-dash-bar--" + optsBar.kind : "") +
+        (optsBar.gargalo ? " is-gargalo" : "") +
+        '" type="button" data-funnel-bar' +
+        (optsBar.gargalo ? ' data-tour="funil-gargalo"' : "") +
+        ' data-stage="' +
+        optsBar.label +
+        '" data-ops="' +
+        optsBar.count +
+        '" data-vol="' +
+        (optsBar.vol || "R$ 10,8M") +
+        '"' +
+        (optsBar.gargalo ? ' data-gargalo="1"' : "") +
+        ' aria-label="' +
+        optsBar.label +
+        '">' +
+        '<span class="docs-dash-bar__n">' +
+        (alert ? ico("triangle-alert", 16) : "") +
+        optsBar.count +
+        "</span>" +
+        '<span class="docs-dash-bar__fill" style="height:' +
+        optsBar.height +
+        'px"></span></button>'
+      );
+    }
+
+    var funnelStages = [
+      { label: "Coleta de Dados", count: "19", height: 59, kind: "", vol: "R$ 4,2M" },
+      { label: "Análise de Crédito", count: "30", height: 118, kind: "warn", vol: "R$ 8,1M" },
+      { label: "Doc. das Partes", count: "32", height: 209, kind: "crit", vol: "R$ 10,8M", gargalo: true },
+      { label: "Análise Jurídica", count: "20", height: 76, kind: "warn", vol: "R$ 6,4M" },
+      { label: "Proposta", count: "15", height: 52, kind: "", vol: "R$ 5,1M" },
+      { label: "Formalização", count: "10", height: 32, kind: "pale", vol: "R$ 3,2M" },
+      { label: "Assinatura", count: "7", height: 20, kind: "pale", vol: "R$ 2,1M" },
+      { label: "Finalizado", count: "3", height: 9, kind: "pale", vol: "R$ 0,9M" },
+    ];
+
     var funnel =
-      '<section class="docs-dash-card" data-tour="funil">' +
+      '<section class="docs-dash-card docs-dash-card--funnel" data-tour="funil" data-funnel-root>' +
       '<div class="docs-dash-funnel__head">' +
       '<div class="docs-dash-card__copy"><h2 class="docs-dash-card__title">Funil de etapas</h2>' +
-      '<p class="docs-dash-card__hint">Confira quantas operações estão por etapa.</p></div>' +
+      '<p class="docs-dash-card__hint">Confira quantas operações estão por etapa. Passe o mouse nas barras para ver SLA e gargalo.</p></div>' +
       '<div class="docs-dash-legend">' +
       '<span class="docs-dash-legend__item"><span class="docs-dash-legend__ico docs-dash-legend__ico--crit">' +
       ico("triangle-alert", 14) +
@@ -885,18 +953,23 @@
       ico("check", 14) +
       "</span><b>65</b> Dentro do prazo</span>" +
       "</div></div>" +
+      '<div class="docs-dash-funnel__plot">' +
       '<div class="docs-dash-bars">' +
-      bar("19", 59, "") +
-      bar("30", 118, "warn") +
-      bar("32", 209, "crit") +
-      bar("20", 76, "warn") +
-      bar("15", 52, "") +
-      bar("10", 32, "pale") +
-      bar("7", 20, "pale") +
-      bar("3", 9, "pale") +
+      funnelStages
+        .map(function (s) {
+          return bar(s);
+        })
+        .join("") +
       "</div>" +
-      '<div class="docs-dash-axis"><span>Coleta de Dados</span><span>Análise de Crédito</span><span>Doc. das Partes</span><span>Análise Jurídica</span><span>Coleta de Dados</span><span>Análise de Crédito</span><span>Doc. das Partes</span><span>Análise Jurídica</span></div>' +
-      "</section>";
+      funnelTip +
+      "</div>" +
+      '<div class="docs-dash-axis">' +
+      funnelStages
+        .map(function (s) {
+          return "<span>" + s.label + "</span>";
+        })
+        .join("") +
+      "</div></section>";
 
     function convRow(stage, fill, ops, conv, convType, rel, vol, time, timeMod) {
       return (
@@ -1090,7 +1163,7 @@
         '<div class="hf-tour__mask" data-tour-mask></div>' +
         '<div class="hf-tour__spot" data-tour-spot hidden></div>' +
         '<div class="hf-tour__tip" data-tour-tip hidden>' +
-        '<div class="hf-tour__tip-head"><span class="hf-tour__step" data-tour-step>1 / 8</span>' +
+        '<div class="hf-tour__tip-head"><span class="hf-tour__step" data-tour-step>1 / 9</span>' +
         '<button class="hf-tour__skip" type="button" data-tour-skip>Pular tour</button></div>' +
         '<strong class="hf-tour__title" data-tour-title></strong>' +
         '<p class="hf-tour__body" data-tour-body></p>' +
@@ -1100,19 +1173,202 @@
         "</div></div></div>"
       : "";
 
+    function tabKpi(label, value) {
+      return (
+        '<div class="docs-dash-tab-kpi"><span>' +
+        label +
+        "</span><b>" +
+        value +
+        "</b></div>"
+      );
+    }
+
+    function tabRankRow(color, name, ops, conv, vol, barPct) {
+      return (
+        "<tr><td><span class=\"docs-dash-tab-name\"><span class=\"docs-dash-tab-dot\" style=\"background:" +
+        color +
+        '"></span>' +
+        name +
+        '</span><span class="docs-dash-tab-bar"><span style="width:' +
+        barPct +
+        "%;background:" +
+        color +
+        '"></span></span></td>' +
+        '<td class="is-num">' +
+        ops +
+        '</td><td class="is-center">' +
+        badge("success", conv) +
+        '</td><td class="is-right">' +
+        vol +
+        "</td></tr>"
+      );
+    }
+
+    function tabRankCard(title, hint, rowsHtml) {
+      return (
+        '<section class="docs-dash-tab-card">' +
+        '<div class="docs-dash-tab-card__head"><div><h2 class="docs-dash-tab-card__title">' +
+        title +
+        '</h2><p class="docs-dash-tab-card__hint">' +
+        hint +
+        "</p></div>" +
+        '<span class="docs-dash-kpi__info">' +
+        ico("info", 16) +
+        "</span></div>" +
+        '<table class="docs-dash-tab-table"><thead><tr>' +
+        "<th>Nome</th><th class=\"is-num\">Operações</th><th class=\"is-center\">Conversão</th><th class=\"is-right\">Volume</th>" +
+        "</tr></thead><tbody>" +
+        rowsHtml +
+        "</tbody></table>" +
+        '<div class="docs-dash-card__acts">' +
+        ghostBtn("Ver todos", "", "chevron-right") +
+        "</div></section>"
+      );
+    }
+
+    function tabEntityTable(title, hint, headers, rows) {
+      return (
+        '<section class="docs-dash-tab-card">' +
+        '<div class="docs-dash-tab-card__head"><div><h2 class="docs-dash-tab-card__title">' +
+        title +
+        '</h2><p class="docs-dash-tab-card__hint">' +
+        hint +
+        "</p></div>" +
+        '<span class="docs-dash-kpi__info">' +
+        ico("info", 16) +
+        "</span></div>" +
+        '<table class="docs-dash-tab-table"><thead><tr>' +
+        headers +
+        "</tr></thead><tbody>" +
+        rows +
+        "</tbody></table>" +
+        '<div class="docs-dash-card__acts">' +
+        ghostBtn("Ver todos", "", "chevron-right") +
+        "</div></section>"
+      );
+    }
+
+    var panelSafra =
+      '<div class="docs-dash-tab-kpis">' +
+      tabKpi("Volume originado", "R$ 42,8M") +
+      tabKpi("Ticket médio", "R$ 14.800") +
+      tabKpi("Operações", "2.890") +
+      tabKpi("Conversão média", "28%") +
+      "</div>" +
+      tabRankCard(
+        "Ranking por mesa",
+        "Performance da safra agrupada por mesa",
+        tabRankRow("#00a395", "Financiamento", "1.240", "32%", "R$ 18,4M", 100) +
+          tabRankRow("#3b82f6", "Consórcio", "860", "27%", "R$ 12,1M", 69) +
+          tabRankRow("#8b5cf6", "Crédito PJ", "520", "24%", "R$ 7,8M", 42) +
+          tabRankRow("#f59e0b", "Seguros", "270", "19%", "R$ 4,5M", 22)
+      ) +
+      tabRankCard(
+        "Ranking por produto",
+        "Comparativo de produtos na safra selecionada",
+        tabRankRow("#00a395", "Home Equity", "980", "34%", "R$ 15,2M", 100) +
+          tabRankRow("#3b82f6", "Financiamento Imobiliário", "720", "29%", "R$ 11,4M", 73) +
+          tabRankRow("#8b5cf6", "Capital de Giro", "410", "22%", "R$ 6,1M", 42) +
+          tabRankRow("#f59e0b", "CDC", "190", "18%", "R$ 2,9M", 19)
+      ) +
+      tabRankCard(
+        "Ranking por empresa",
+        "Empresas com maior volume na safra",
+        tabRankRow("#00a395", "Hub de Crédito Techfinance", "500", "35%", "R$ 8,4M", 100) +
+          tabRankRow("#3b82f6", "Vitta Empreendimentos", "310", "28%", "R$ 5,1M", 62) +
+          tabRankRow("#8b5cf6", "Personal Finance", "210", "24%", "R$ 3,4M", 42) +
+          tabRankRow("#f59e0b", "Interno Hubfi", "90", "20%", "R$ 1,2M", 18)
+      );
+
+    var panelEmpresas = tabEntityTable(
+      "Ranking de empresas",
+      "Volume, conversão e SLA por empresa no período",
+      "<th>Empresa</th><th class=\"is-num\">Operações</th><th class=\"is-center\">Conversão</th><th class=\"is-num\">Ativas</th><th class=\"is-right\">Volume</th><th class=\"is-center\">SLA</th>",
+      "<tr><td>Hub de Crédito Techfinance</td><td class=\"is-num\">500</td><td class=\"is-center\">" +
+        badge("success", "35%") +
+        '</td><td class="is-num">112</td><td class="is-right">R$ 12,1M</td><td class="is-center">' +
+        badge("alert", "Atenção") +
+        "</td></tr>" +
+        "<tr><td>Vitta Empreendimentos</td><td class=\"is-num\">210</td><td class=\"is-center\">" +
+        badge("success", "28%") +
+        '</td><td class="is-num">48</td><td class="is-right">R$ 1,51M</td><td class="is-center">' +
+        badge("success", "No prazo") +
+        "</td></tr>" +
+        "<tr><td>Personal Finance</td><td class=\"is-num\">110</td><td class=\"is-center\">" +
+        badge("secondary", "24%") +
+        '</td><td class="is-num">31</td><td class="is-right">R$ 1,1M</td><td class="is-center">' +
+        badge("alert", "Crítica") +
+        "</td></tr>" +
+        "<tr><td>Interno Hubfi</td><td class=\"is-num\">50</td><td class=\"is-center\">" +
+        badge("secondary", "20%") +
+        '</td><td class="is-num">12</td><td class="is-right">R$ 0,9M</td><td class="is-center">' +
+        badge("success", "No prazo") +
+        "</td></tr>"
+    );
+
+    var panelProdutos = tabEntityTable(
+      "Ranking de produtos",
+      "Conversão e volume por produto no período",
+      "<th>Produto</th><th class=\"is-num\">Operações</th><th class=\"is-center\">Conversão</th><th class=\"is-right\">Volume</th><th class=\"is-center\">Ticket médio</th>",
+      "<tr><td>Home Equity</td><td class=\"is-num\">980</td><td class=\"is-center\">" +
+        badge("success", "34%") +
+        '</td><td class="is-right">R$ 15,2M</td><td class="is-center">R$ 15.500</td></tr>' +
+        "<tr><td>Financiamento Imobiliário</td><td class=\"is-num\">720</td><td class=\"is-center\">" +
+        badge("success", "29%") +
+        '</td><td class="is-right">R$ 11,4M</td><td class="is-center">R$ 15.800</td></tr>' +
+        "<tr><td>Capital de Giro</td><td class=\"is-num\">410</td><td class=\"is-center\">" +
+        badge("secondary", "22%") +
+        '</td><td class="is-right">R$ 6,1M</td><td class="is-center">R$ 14.900</td></tr>' +
+        "<tr><td>CDC</td><td class=\"is-num\">190</td><td class=\"is-center\">" +
+        badge("secondary", "18%") +
+        '</td><td class="is-right">R$ 2,9M</td><td class="is-center">R$ 15.200</td></tr>'
+    );
+
+    var panelUsuarios = tabEntityTable(
+      "Ranking de usuários",
+      "Originação e pipeline aberto por usuário",
+      "<th>Usuário</th><th>Empresa</th><th class=\"is-num\">Originadas</th><th class=\"is-num\">Ativas</th><th class=\"is-right\">Volume ativo</th><th class=\"is-center\">Conversão</th>",
+      "<tr><td>Ana Souza</td><td>Hub de Crédito Techfinance</td><td class=\"is-num\">84</td><td class=\"is-num\">22</td><td class=\"is-right\">R$ 3,2M</td><td class=\"is-center\">" +
+        badge("success", "36%") +
+        "</td></tr>" +
+        "<tr><td>Bruno Lima</td><td>Vitta Empreendimentos</td><td class=\"is-num\">61</td><td class=\"is-num\">18</td><td class=\"is-right\">R$ 1,8M</td><td class=\"is-center\">" +
+        badge("success", "29%") +
+        "</td></tr>" +
+        "<tr><td>Carla Mendes</td><td>Personal Finance</td><td class=\"is-num\">44</td><td class=\"is-num\">12</td><td class=\"is-right\">R$ 1,1M</td><td class=\"is-center\">" +
+        badge("secondary", "24%") +
+        "</td></tr>" +
+        "<tr><td>Diego Alves</td><td>Interno Hubfi</td><td class=\"is-num\">28</td><td class=\"is-num\">9</td><td class=\"is-right\">R$ 0,7M</td><td class=\"is-center\">" +
+        badge("secondary", "21%") +
+        "</td></tr>"
+    );
+
     var bodyTop =
       toolbar +
+      '<div class="docs-dash-panels">' +
+      '<div class="docs-dash-panel is-active" data-dash-panel="operacoes">' +
       filters +
       kpis +
       funnel +
       '<div class="docs-dash-split">' +
       conversion +
       resolucao +
-      "</div>";
+      "</div></div>" +
+      '<div class="docs-dash-panel" data-dash-panel="safra">' +
+      panelSafra +
+      "</div>" +
+      '<div class="docs-dash-panel" data-dash-panel="empresas">' +
+      panelEmpresas +
+      "</div>" +
+      '<div class="docs-dash-panel" data-dash-panel="produtos">' +
+      panelProdutos +
+      "</div>" +
+      '<div class="docs-dash-panel" data-dash-panel="usuarios">' +
+      panelUsuarios +
+      "</div></div>";
 
     if (tour) {
       return (
-        '<div class="docs-screen docs-screen--dash docs-screen--tour" data-dash-tour>' +
+        '<div class="docs-screen docs-screen--dash docs-screen--tour" data-dash-tour data-dash-root>' +
         sidebar +
         '<div class="docs-screen__main">' +
         '<div class="docs-screen__top">' +
@@ -1286,7 +1542,7 @@
       "</tbody></table></section>";
 
     return (
-      '<div class="docs-screen docs-screen--dash">' +
+      '<div class="docs-screen docs-screen--dash" data-dash-root>' +
       sidebar +
       '<div class="docs-screen__main">' +
       '<div class="docs-screen__top">' +
@@ -1295,6 +1551,8 @@
       "</div>" +
       '<div class="docs-screen__body">' +
       toolbar +
+      '<div class="docs-dash-panels">' +
+      '<div class="docs-dash-panel is-active" data-dash-panel="operacoes">' +
       filters +
       kpis +
       funnel +
@@ -1312,7 +1570,19 @@
       "</div>" +
       '<div class="docs-dash-split docs-dash-split--eq">' +
       formFunnel +
-      "</div></div></div></div>"
+      "</div></div>" +
+      '<div class="docs-dash-panel" data-dash-panel="safra">' +
+      panelSafra +
+      "</div>" +
+      '<div class="docs-dash-panel" data-dash-panel="empresas">' +
+      panelEmpresas +
+      "</div>" +
+      '<div class="docs-dash-panel" data-dash-panel="produtos">' +
+      panelProdutos +
+      "</div>" +
+      '<div class="docs-dash-panel" data-dash-panel="usuarios">' +
+      panelUsuarios +
+      "</div></div></div></div></div>"
     );
   }
 
@@ -1472,7 +1742,7 @@
         "<h2>Como ler os indicadores</h2>" +
           "<p>Cada card do dashboard responde a uma pergunta. Use esta referência em vez de slides soltos.</p>" +
           '<div class="hf-wiki__table-wrap"><table class="hf-wiki__table"><thead><tr><th>Indicador</th><th>Significa</th><th>Ação típica</th></tr></thead><tbody>' +
-          "<tr><td>Pipeline originado</td><td>Volume que entrou no período</td><td>Comparar com meta de captação</td></tr>" +
+          "<tr><td>Pipeline originada</td><td>Volume que entrou no período</td><td>Comparar com meta de captação</td></tr>" +
           "<tr><td>Pipeline ativo</td><td>Operações ainda em andamento</td><td>Priorizar o que está parado</td></tr>" +
           "<tr><td>Pipeline ganho</td><td>Fechamentos confirmados</td><td>Validar ticket e produto</td></tr>" +
           "<tr><td>Pipeline perdido</td><td>Volume que saiu sem fechamento</td><td>Ver motivos de perda</td></tr>" +
@@ -3450,6 +3720,111 @@
     showTopic(topicQ ? decodeURIComponent(topicQ[1]) : "inicio");
   }
 
+  function bindDashTabs(root) {
+    var shell = root.querySelector("[data-dash-root]");
+    if (!shell) return;
+    var tabs = shell.querySelectorAll("[data-dash-tab]");
+    var panels = shell.querySelectorAll("[data-dash-panel]");
+    if (!tabs.length || !panels.length) return;
+
+    tabs.forEach(function (tab) {
+      tab.addEventListener("click", function () {
+        var id = tab.getAttribute("data-dash-tab");
+        tabs.forEach(function (btn) {
+          btn.classList.toggle("is-active", btn === tab);
+        });
+        panels.forEach(function (panel) {
+          panel.classList.toggle(
+            "is-active",
+            panel.getAttribute("data-dash-panel") === id
+          );
+        });
+      });
+    });
+  }
+
+  function bindFunnelTip(root) {
+    var funnelRoot = root.querySelector("[data-funnel-root]");
+    if (!funnelRoot) return;
+    var tip = funnelRoot.querySelector("[data-funnel-tip]");
+    var bars = funnelRoot.querySelectorAll("[data-funnel-bar]");
+    if (!tip || !bars.length) return;
+
+    var titleEl = tip.querySelector("[data-ftip-title]");
+    var badgeEl = tip.querySelector("[data-ftip-badge]");
+    var calloutEl = tip.querySelector(".docs-dash-ftip__callout");
+    var opsEl = tip.querySelector("[data-ftip-ops]");
+    var volEl = tip.querySelector("[data-ftip-vol]");
+    var hideTimer = null;
+
+    function stageFullName(label) {
+      if (label === "Doc. das Partes") return "Documentação das Partes";
+      return label;
+    }
+
+    function placeTip(bar) {
+      var plot = funnelRoot.querySelector(".docs-dash-funnel__plot") || funnelRoot;
+      var plotRect = plot.getBoundingClientRect();
+      var barRect = bar.getBoundingClientRect();
+      var tipW = tip.offsetWidth || 296;
+      var left = barRect.left - plotRect.left + barRect.width / 2 - tipW / 2;
+      left = Math.max(8, Math.min(left, plotRect.width - tipW - 8));
+      tip.style.left = left + "px";
+      tip.style.top = Math.max(8, barRect.top - plotRect.top - 8) + "px";
+    }
+
+    function showTip(bar) {
+      if (hideTimer) {
+        clearTimeout(hideTimer);
+        hideTimer = null;
+      }
+      var stage = bar.getAttribute("data-stage") || "";
+      var ops = bar.getAttribute("data-ops") || "0";
+      var vol = bar.getAttribute("data-vol") || "R$ 0";
+      var gargalo = bar.getAttribute("data-gargalo") === "1";
+
+      if (titleEl) titleEl.textContent = stageFullName(stage);
+      if (opsEl) opsEl.textContent = ops + " operações";
+      if (volEl) volEl.textContent = vol;
+      if (badgeEl) badgeEl.hidden = !gargalo;
+      if (calloutEl) calloutEl.hidden = !gargalo;
+
+      bars.forEach(function (b) {
+        b.classList.toggle("is-tip-open", b === bar);
+      });
+      tip.hidden = false;
+      placeTip(bar);
+    }
+
+    function scheduleHide() {
+      hideTimer = setTimeout(function () {
+        tip.hidden = true;
+        bars.forEach(function (b) {
+          b.classList.remove("is-tip-open");
+        });
+      }, 120);
+    }
+
+    bars.forEach(function (bar) {
+      bar.addEventListener("mouseenter", function () {
+        showTip(bar);
+      });
+      bar.addEventListener("focus", function () {
+        showTip(bar);
+      });
+      bar.addEventListener("mouseleave", scheduleHide);
+      bar.addEventListener("blur", scheduleHide);
+    });
+
+    tip.addEventListener("mouseenter", function () {
+      if (hideTimer) {
+        clearTimeout(hideTimer);
+        hideTimer = null;
+      }
+    });
+    tip.addEventListener("mouseleave", scheduleHide);
+  }
+
   function bindDashTour(root) {
     var shell = root.querySelector("[data-dash-tour]");
     if (!shell) return;
@@ -3458,7 +3833,7 @@
       {
         id: "tabs",
         title: "Abas da visão",
-        body: "Troque entre Operações, Safra, Empresas, Produtos e Usuários. O restante da tela responde à aba ativa. Use Filtros para refinar o recorte.",
+        body: "Troque entre Operações, Safra, Empresas, Produtos e Usuários. Cada aba troca o conteúdo abaixo — rankings e recortes específicos.",
       },
       {
         id: "filters",
@@ -3467,17 +3842,17 @@
       },
       {
         id: "kpi-originado",
-        title: "Pipeline originado",
+        title: "Pipeline originada",
         body: "Volume que entrou no período e quantidade de operações. Compare com a meta de captação e olhe o ticket médio no rodapé do card.",
       },
       {
         id: "kpi-ativo",
-        title: "Pipeline ativo",
+        title: "Pipeline ativa",
         body: "O que ainda está em jogo. Os ícones mostram operações ativas, movimentações e o quanto está pausado — priorize o que está parado.",
       },
       {
         id: "kpi-ganho",
-        title: "Pipeline ganho",
+        title: "Pipeline ganha",
         body: "Fechamentos confirmados no período. Use para validar resultado e ticket médio dos negócios ganhos.",
       },
       {
@@ -3488,7 +3863,12 @@
       {
         id: "funil",
         title: "Funil de etapas",
-        body: "Barras por etapa com alerta de prazo (crítica, atenção, no prazo). A barra mais alta e vermelha indica onde o volume está travado.",
+        body: "Barras por etapa com alerta de prazo. Passe o mouse para ver volume e SLA; a barra vermelha marca o gargalo.",
+      },
+      {
+        id: "funil-gargalo",
+        title: "Tooltip de gargalo",
+        body: "Etapa entra em gargalo quando 50% das operações estão em Atenção ou Crítica. Use Ver todas para abrir a lista filtrada.",
       },
       {
         id: "conversao",
@@ -3512,6 +3892,8 @@
     var nextBtn = shell.querySelector("[data-tour-next]");
     var skipBtn = shell.querySelector("[data-tour-skip]");
     var bodyScroll = shell.querySelector(".docs-screen__body");
+    var funnelTip = shell.querySelector("[data-funnel-tip]");
+    var gargaloBar = shell.querySelector('[data-tour="funil-gargalo"]');
 
     function place() {
       var step = steps[idx];
@@ -3522,6 +3904,16 @@
       shell.querySelectorAll("[data-tour]").forEach(function (el) {
         el.classList.toggle("is-tour-focus", el === target);
       });
+
+      if (funnelTip) {
+        if (step.id === "funil-gargalo" && gargaloBar) {
+          funnelTip.hidden = false;
+          gargaloBar.classList.add("is-tip-open");
+        } else {
+          funnelTip.hidden = true;
+          if (gargaloBar) gargaloBar.classList.remove("is-tip-open");
+        }
+      }
 
       target.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
 
@@ -3565,9 +3957,11 @@
       shell.classList.add("is-tour-done");
       if (spot) spot.hidden = true;
       if (tip) tip.hidden = true;
+      if (funnelTip) funnelTip.hidden = true;
       shell.querySelectorAll("[data-tour]").forEach(function (el) {
         el.classList.remove("is-tour-focus");
       });
+      if (gargaloBar) gargaloBar.classList.remove("is-tip-open");
     }
 
     if (prevBtn) {
@@ -3595,6 +3989,8 @@
       bindOpDetail(root);
       bindKanban(root);
       bindWiki(root);
+      bindDashTabs(root);
+      bindFunnelTip(root);
       bindDashTour(root);
       if (window.HF_IDENTITY && typeof window.HF_IDENTITY.bind === "function") {
         window.HF_IDENTITY.bind(root);
