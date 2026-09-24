@@ -1831,12 +1831,12 @@
           "<h2>Operar crédito com clareza.<br><span>Sem slides. Sem adivinhação.</span></h2>" +
           "<p>Documentação completa das funcionalidades da Hubfi: do dashboard ao kanban, cadastros e operações. Feita para imobiliárias, assessorias e quem fecha negócio.</p>" +
           '<div class="hf-wiki-home__cta">' +
-          '<a class="hf-wiki-home__btn hf-wiki-home__btn--primary" href="ds.html#/tour-dashboard">' +
+          '<button class="hf-wiki-home__btn hf-wiki-home__btn--primary" type="button" data-wiki-href="ds.html#/tour-dashboard">' +
           ico("map", 16) +
-          "<span>Tour do dashboard</span></a>" +
-          '<a class="hf-wiki-home__btn hf-wiki-home__btn--ghost" href="?topic=dashboard" data-wiki-jump="dashboard">' +
+          "<span>Tour do dashboard</span></button>" +
+          '<button class="hf-wiki-home__btn hf-wiki-home__btn--ghost" type="button" data-wiki-jump="dashboard">' +
           ico("book-open", 16) +
-          "<span>Guia do painel</span></a>" +
+          "<span>Guia do painel</span></button>" +
           "</div></div></section>" +
           '<section class="hf-wiki-home__features">' +
           '<article class="hf-wiki-home__feat">' +
@@ -1845,37 +1845,34 @@
           '<span class="hf-wiki-home__feat-tag">Novo</span></div>' +
           "<strong>Dashboard de operações</strong>" +
           "<span>Funil, SLA, gargalo e abas por Safra, Empresas e Produtos. Clique em qualquer card para entender o indicador.</span>" +
-          '<a class="hf-wiki-home__feat-link" href="ds.html#/tour-dashboard">' +
-          "<span>Abrir tour</span>" +
-          ico("arrow-right", 14) +
-          "</a></article>" +
+          '<button class="hf-wiki-home__btn hf-wiki-home__btn--ghost" type="button" data-wiki-href="ds.html#/tour-dashboard">' +
+          ico("map", 16) +
+          "<span>Abrir tour</span></button></article>" +
           '<article class="hf-wiki-home__feat">' +
           '<div class="hf-wiki-home__feat-top">' +
           wikiFrameIcon("kanban") +
           '<span class="hf-wiki-home__feat-tag">Novo</span></div>' +
           "<strong>Kanban de operações</strong>" +
           "<span>Board por etapa com filtros Todas, Pausadas e Rascunhos. Foque no que move o pipeline.</span>" +
-          '<a class="hf-wiki-home__feat-link" href="?topic=kanban" data-wiki-jump="kanban">' +
-          "<span>Ler guia</span>" +
-          ico("arrow-right", 14) +
-          "</a></article>" +
+          '<button class="hf-wiki-home__btn hf-wiki-home__btn--ghost" type="button" data-wiki-jump="kanban">' +
+          ico("book-open", 16) +
+          "<span>Ler guia</span></button></article>" +
           '<article class="hf-wiki-home__feat">' +
           '<div class="hf-wiki-home__feat-top">' +
           wikiFrameIcon("pause") +
           '<span class="hf-wiki-home__feat-tag">Atualizado</span></div>' +
           "<strong>Status Pausado</strong>" +
           "<span>Pendência temporária fora do SLA, com data de retorno e cadência de lembretes.</span>" +
-          '<a class="hf-wiki-home__feat-link" href="?topic=pausado" data-wiki-jump="pausado">' +
-          "<span>Como usar</span>" +
-          ico("arrow-right", 14) +
-          "</a></article>" +
+          '<button class="hf-wiki-home__btn hf-wiki-home__btn--ghost" type="button" data-wiki-jump="pausado">' +
+          ico("info", 16) +
+          "<span>Como usar</span></button></article>" +
           "</section>" +
           '<section class="hf-wiki-home__band">' +
           "<div><h3>Feito para quem opera, não só para quem treina</h3>" +
           "<p>Cada artigo fica aqui de forma permanente: buscável, atualizável e sem depender do modal de novidades.</p></div>" +
-          '<a class="hf-wiki-home__btn hf-wiki-home__btn--ghost" href="?topic=como-usar" data-wiki-jump="como-usar">' +
+          '<button class="hf-wiki-home__btn hf-wiki-home__btn--ghost" type="button" data-wiki-jump="como-usar">' +
           ico("book-open", 16) +
-          "<span>Como usar esta central</span></a>" +
+          "<span>Como usar esta central</span></button>" +
           "</section></div>"
       ) +
       wikiArticle(
@@ -3902,13 +3899,19 @@
       });
     });
 
-    shell.querySelectorAll("[data-wiki-jump]").forEach(function (link) {
-      link.addEventListener("click", function (event) {
-        var jump = link.getAttribute("data-wiki-jump");
-        var href = link.getAttribute("href") || "";
-        if (href.indexOf("ds.html") === 0 || href.indexOf("#/tour-dashboard") === 0) return;
+    shell.querySelectorAll("[data-wiki-jump]").forEach(function (el) {
+      el.addEventListener("click", function (event) {
+        var jump = el.getAttribute("data-wiki-jump");
+        if (!jump) return;
         event.preventDefault();
         showTopic(jump);
+      });
+    });
+
+    shell.querySelectorAll("[data-wiki-href]").forEach(function (el) {
+      el.addEventListener("click", function () {
+        var href = el.getAttribute("data-wiki-href");
+        if (href) location.href = href;
       });
     });
 
