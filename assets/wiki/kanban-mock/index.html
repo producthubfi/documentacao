@@ -80,12 +80,52 @@
     min-height: 640px;
     height: 640px;
     padding: 8px;
+    overflow: hidden;
+  }
+  .k-mock__stage .hf-app-nav,
+  .k-mock__stage .hf-app-nav__panel {
+    display: none !important;
   }
   .k-mock__stage .hf-kboard {
     height: 100%;
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .k-mock__stage .hf-kboard__toolbar {
+    flex-wrap: nowrap;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .k-mock__stage .hf-kboard__search {
+    width: min(220px, 22vw);
+    flex-shrink: 1;
+    min-width: 140px;
+  }
+  .k-mock__stage .hf-kboard__quicks {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .k-mock__stage .hf-kboard__filters,
+  .k-mock__stage .hf-kboard__export {
+    display: none;
   }
   .k-mock__stage .hf-kboard__cols {
-    justify-content: flex-start;
+    overflow: hidden !important;
+    justify-content: stretch;
+    gap: 8px;
+    width: 100%;
+    min-width: 0;
+  }
+  .k-mock__stage .hf-kcol {
+    width: auto;
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: none;
+  }
+  .k-mock__stage .hf-kcol__sum {
+    display: none;
   }
   .k-mock__stage .hf-kcard {
     opacity: 0;

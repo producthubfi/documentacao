@@ -5329,9 +5329,11 @@ textarea {
 .hf-wiki-kanban-mock {
   width: min(1100px, 100%);
   margin: 8px auto 0;
+  overflow: hidden;
 }
 .hf-wiki-kanban-mock__iframe {
   height: 740px;
+  max-width: 100%;
 }
 @media (max-width: 900px) {
   .hf-wiki-kanban-mock__iframe {
