@@ -78,6 +78,7 @@
     "detalhes-operacao": "file-search",
     "operacao-outro-canal": "circle-off",
     "dashboard-operacoes": "layout-dashboard",
+    "tour-dashboard": "map",
     "kanban-operacoes": "kanban",
     "wiki-sistema": "book-open",
   };
@@ -135,6 +136,7 @@
     { slug: "detalhes-operacao", label: "Detalhes da operação", icon: "file-search" },
     { slug: "operacao-outro-canal", label: "Operação encerrada", icon: "circle-off" },
     { slug: "dashboard-operacoes", label: "Dashboard de operações", icon: "layout-dashboard" },
+    { slug: "tour-dashboard", label: "Tour do Dashboard", icon: "map" },
     { slug: "kanban-operacoes", label: "Kanban de operações", icon: "kanban" },
     { slug: "wiki-sistema", label: "Central de ajuda", icon: "book-open" },
     { href: "extensao/", label: "Extensão · Itaú", icon: "puzzle" },
