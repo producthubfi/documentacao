@@ -5290,10 +5290,10 @@ textarea {
 }
 .hf-wiki-home__mock-glow {
   position: absolute;
-  inset: -18px -28px;
+  inset: -12px -16px;
   border-radius: 20px;
-  background: linear-gradient(30deg, rgba(174, 223, 211, 0.45) 0%, rgba(215, 239, 233, 0.32) 50%, transparent 100%);
-  filter: blur(48px);
+  background: linear-gradient(30deg, rgba(0, 0, 0, 0.03) 0%, rgba(0, 0, 0, 0.015) 50%, transparent 100%);
+  filter: blur(32px);
   pointer-events: none;
   z-index: 0;
 }
@@ -5323,44 +5323,100 @@ textarea {
     height: 620px;
   }
 }
-.hf-wiki-home__divider {
+.hf-wiki-home__divider.bridge {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 18px;
   width: min(1024px, 100%);
-  margin: 8px auto 0;
+  margin: 28px auto 8px;
+  padding: 8px 0;
 }
-.hf-wiki-home__divider-line {
+.hf-wiki-home__divider .bridge-mark-rule {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+  max-width: 1024px;
+}
+.hf-wiki-home__divider .bridge-mark-line {
   flex: 1;
   height: 1px;
+  transform: scaleX(1);
   background: linear-gradient(
-    90deg,
-    rgba(15, 18, 25, 0) 0%,
+    to right,
+    transparent 0%,
     rgba(15, 18, 25, 0.16) 30%,
     rgba(15, 18, 25, 0.16) 70%,
-    rgba(15, 18, 25, 0) 100%
+    transparent 100%
   );
 }
-.hf-wiki-home__divider-mark {
-  display: grid;
-  place-items: center;
+.hf-wiki-home__divider .bridge-mark-badge {
   width: 44px;
   height: 44px;
-  flex-shrink: 0;
   border-radius: 10px;
   background: #fff;
   box-shadow:
-    0 8px 20px -6px rgba(15, 23, 42, 0.18),
-    0 2px 6px -2px rgba(15, 23, 42, 0.08),
-    0 0 0 1px rgba(15, 23, 42, 0.06);
-  overflow: hidden;
+    0 4px 12px -4px rgba(15, 23, 42, 0.1),
+    0 1px 3px -1px rgba(15, 23, 42, 0.05),
+    0 0 0 1px rgba(15, 23, 42, 0.05);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  opacity: 1;
+  transform: scale(1);
 }
-.hf-wiki-home__divider-mark img {
+.hf-wiki-home__divider .bridge-mark-badge img {
   display: block;
   width: 26px;
   height: 26px;
   object-fit: contain;
+}
+.hf-wiki-home__divider .bridge-mark-badge::before,
+.hf-wiki-home__divider .bridge-mark-badge::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1.5px solid rgba(14, 139, 122, 0.7);
+  opacity: 0;
+  pointer-events: none;
+}
+.hf-wiki-home__divider.in .bridge-mark-badge::before {
+  animation: wikiBridgeRipple 2.6s ease-out 0.4s infinite;
+}
+.hf-wiki-home__divider.in .bridge-mark-badge::after {
+  animation: wikiBridgeRipple 2.6s ease-out 1.7s infinite;
+}
+@keyframes wikiBridgeRipple {
+  0% {
+    transform: scale(1);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(1.85);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hf-wiki-home__divider .bridge-mark-badge::before,
+  .hf-wiki-home__divider .bridge-mark-badge::after {
+    display: none;
+  }
+}
+@media (max-width: 640px) {
+  .hf-wiki-home__divider .bridge-mark-rule {
+    gap: 12px;
+  }
+  .hf-wiki-home__divider .bridge-mark-badge {
+    width: 40px;
+    height: 40px;
+  }
 }
 .hf-wiki-home__btn {
   display: inline-flex;

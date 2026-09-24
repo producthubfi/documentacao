@@ -1843,15 +1843,14 @@
           '<section class="hf-wiki-home__mock" aria-label="Demonstração animada do backoffice Hubfi">' +
           '<div class="hf-wiki-home__mock-glow" aria-hidden="true"></div>' +
           '<div class="hf-wiki-home__mock-frame">' +
-          '<iframe class="hf-wiki-home__mock-iframe" src="assets/wiki/hero-mock/index.html?v=1" title="Mockup animado do backoffice Hubfi" loading="eager" scrolling="no"></iframe>' +
+          '<iframe class="hf-wiki-home__mock-iframe" src="assets/wiki/hero-mock/index.html?v=2" title="Mockup animado do backoffice Hubfi" loading="eager" scrolling="no"></iframe>' +
           "</div></section>" +
-          '<div class="hf-wiki-home__divider" aria-hidden="true">' +
-          '<span class="hf-wiki-home__divider-line"></span>' +
-          '<span class="hf-wiki-home__divider-mark">' +
-          '<img src="assets/wiki/home-mark.png" width="44" height="44" alt="">' +
-          "</span>" +
-          '<span class="hf-wiki-home__divider-line"></span>' +
-          "</div>" +
+          '<div class="hf-wiki-home__divider bridge bridge--mark bridge--white-to-paper in" aria-hidden="true">' +
+          '<div class="bridge-mark-rule">' +
+          '<span class="bridge-mark-line"></span>' +
+          '<span class="bridge-mark-badge"><img src="assets/wiki/bridge-icon.png" width="26" height="26" alt=""></span>' +
+          '<span class="bridge-mark-line"></span>' +
+          "</div></div>" +
           '<section class="hf-wiki-home__features">' +
           '<article class="hf-wiki-home__feat">' +
           '<div class="hf-wiki-home__feat-top">' +
