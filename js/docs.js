@@ -346,11 +346,21 @@
     var isFoundation = !!(catalog.foundations || []).some(function (item) {
       return item[0] === current;
     });
+    var fromWiki = false;
+    try {
+      fromWiki = new URLSearchParams(location.search).get("from") === "wiki";
+    } catch (err) {}
     var app = document.querySelector(".docs-app");
     if (app) app.classList.toggle("docs-app--screen", !!(isScreen && !isHome));
     var back = document.getElementById("docs-back");
     if (back) {
-      back.setAttribute("href", isScreen && !isHome ? "#/prototipos" : "#/");
+      if (isScreen && !isHome && fromWiki) {
+        back.setAttribute("href", "wiki.html");
+      } else if (isScreen && !isHome) {
+        back.setAttribute("href", "#/prototipos");
+      } else {
+        back.setAttribute("href", "#/");
+      }
       back.innerHTML =
         (window.hfIcon ? window.hfIcon("arrow-left", 16) : "") + "Voltar";
     }
@@ -360,6 +370,11 @@
     } else if (isProtoHub) {
       crumb =
         '<nav class="docs-crumb"><a href="#/">Documentação</a><span aria-hidden="true">/</span><span>PROTÓTIPOS</span></nav>';
+    } else if (isScreen && fromWiki) {
+      crumb =
+        '<nav class="docs-crumb"><a href="wiki.html">Central de ajuda</a><span aria-hidden="true">/</span><span>' +
+        page.title +
+        "</span></nav>";
     } else if (isScreen) {
       crumb =
         '<nav class="docs-crumb"><a href="#/">Documentação</a><span aria-hidden="true">/</span><a href="#/prototipos">PROTÓTIPOS</a><span aria-hidden="true">/</span><span>' +

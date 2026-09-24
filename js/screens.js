@@ -1601,6 +1601,10 @@
     );
   }
 
+  function wikiProto(path) {
+    return "ds.html?from=wiki#/" + String(path || "").replace(/^\//, "");
+  }
+
   function wikiNavItem(id, label, icon, active) {
     return (
       '<button class="hf-wiki__nav-item' +
@@ -1811,7 +1815,9 @@
       ]) +
       "</nav>" +
       '<div class="hf-wiki__nav-foot">' +
-      '<a class="hf-wiki__nav-foot-link" href="ds.html#/tour-dashboard">' +
+      '<a class="hf-wiki__nav-foot-link" href="' +
+      wikiProto("tour-dashboard") +
+      '">' +
       ico("map", 14) +
       "<span>Tour do dashboard</span></a>" +
       '<p class="hf-wiki__nav-foot-note">Hubfi · set/2026</p>' +
@@ -1831,7 +1837,9 @@
           "<h2>Operar crédito com clareza.<br><span>Sem slides. Sem adivinhação.</span></h2>" +
           "<p>Documentação completa das funcionalidades da Hubfi: do dashboard ao kanban, cadastros e operações. Feita para imobiliárias, assessorias e quem fecha negócio.</p>" +
           '<div class="hf-wiki-home__cta">' +
-          '<button class="hf-wiki-home__btn hf-wiki-home__btn--primary" type="button" data-wiki-href="ds.html#/tour-dashboard">' +
+          '<button class="hf-wiki-home__btn hf-wiki-home__btn--primary" type="button" data-wiki-href="' +
+          wikiProto("tour-dashboard") +
+          '">' +
           ico("map", 16) +
           "<span>Tour do dashboard</span></button>" +
           '<button class="hf-wiki-home__btn hf-wiki-home__btn--ghost" type="button" data-wiki-jump="dashboard">' +
@@ -1845,7 +1853,9 @@
           '<span class="hf-wiki-home__feat-tag">Novo</span></div>' +
           "<strong>Dashboard de operações</strong>" +
           "<span>Funil, SLA, gargalo e abas por Safra, Empresas e Produtos. Clique em qualquer card para entender o indicador.</span>" +
-          '<button class="hf-wiki-home__btn hf-wiki-home__btn--ghost" type="button" data-wiki-href="ds.html#/tour-dashboard">' +
+          '<button class="hf-wiki-home__btn hf-wiki-home__btn--ghost" type="button" data-wiki-href="' +
+          wikiProto("tour-dashboard") +
+          '">' +
           ico("map", 16) +
           "<span>Abrir tour</span></button></article>" +
           '<article class="hf-wiki-home__feat">' +
@@ -1916,7 +1926,9 @@
           "</ul>" +
           wikiCallout(
             "Tour visual",
-            'Prefira o <a href="ds.html#/tour-dashboard">Tour do Dashboard</a>: percorre cada card e gráfico da primeira tela com spotlight. Use <strong>Fechar tour</strong> a qualquer momento para navegar livremente.'
+            'Prefira o <a href="' +
+              wikiProto("tour-dashboard") +
+              '">Tour do Dashboard</a>: percorre cada card e gráfico da primeira tela com spotlight. Use <strong>Fechar tour</strong> a qualquer momento para navegar livremente.'
           ) +
           "</div>"
       ) +
@@ -1961,7 +1973,9 @@
           "</ul>" +
           wikiCallout(
             "Protótipo",
-            'Veja o board em <a href="ds.html#/kanban-operacoes">Kanban de operações</a>.'
+            'Veja o board em <a href="' +
+              wikiProto("kanban-operacoes") +
+              '">Kanban de operações</a>.'
           ) +
           "</div>"
       ) +
@@ -1983,7 +1997,9 @@
           "</ul>" +
           wikiCallout(
             "Protótipo",
-            'Simule em <a href="ds.html#/detalhes-operacao?demo=paused">Detalhes da operação · Pausado</a>.'
+            'Simule em <a href="' +
+              wikiProto("detalhes-operacao?demo=paused") +
+              '">Detalhes da operação · Pausado</a>.'
           ) +
           "</div>"
       ) +
@@ -2005,7 +2021,9 @@
           "</ul>" +
           wikiCallout(
             "Protótipo",
-            'Fluxo em <a href="ds.html#/abertura-operacao">Abertura de operação</a>.'
+            'Fluxo em <a href="' +
+              wikiProto("abertura-operacao") +
+              '">Abertura de operação</a>.'
           ) +
           "</div>"
       ) +
@@ -2026,7 +2044,11 @@
           "</ul>" +
           wikiCallout(
             "Protótipo",
-            'Cenários em <a href="ds.html#/cadastro-cliente?demo=empresa">Cadastro de cliente</a> e <a href="ds.html#/edicao-cliente?demo=colisao">Edição de cliente</a>.'
+            'Cenários em <a href="' +
+              wikiProto("cadastro-cliente?demo=empresa") +
+              '">Cadastro de cliente</a> e <a href="' +
+              wikiProto("edicao-cliente?demo=colisao") +
+              '">Edição de cliente</a>.'
           ) +
           "</div>"
       );
