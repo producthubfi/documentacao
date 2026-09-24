@@ -5326,6 +5326,23 @@ textarea {
     height: 620px;
   }
 }
+.hf-wiki-kanban-mock {
+  width: min(1100px, 100%);
+  margin: 8px 0 28px;
+}
+.hf-wiki-kanban-mock__iframe {
+  height: 740px;
+}
+@media (max-width: 900px) {
+  .hf-wiki-kanban-mock__iframe {
+    height: 680px;
+  }
+}
+@media (max-width: 640px) {
+  .hf-wiki-kanban-mock__iframe {
+    height: 600px;
+  }
+}
 /* ===== Bridge mark — 100% igual ao site Hubfi ===== */
 .hf-wiki-home__divider.bridge {
   position: relative;

@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Hubfi · mockup Kanban</title>
+<base href="../../../"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/tokens.css?v=83"/>
+<link rel="stylesheet" href="css/hf.css?v=97"/>
+<link rel="stylesheet" href="css/docs.css?v=132"/>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    overflow: hidden;
+    font-family: Outfit, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .k-mock {
+    position: relative;
+    padding: 24px 28px 28px;
+    box-sizing: border-box;
+  }
+  .k-mock__window {
+    position: relative;
+    border-radius: 10px;
+    background: #fff;
+    border: 1px solid #fff;
+    box-shadow:
+      0 1px 2px rgba(15, 18, 25, 0.03),
+      0 8px 24px -12px rgba(15, 18, 25, 0.08);
+    overflow: hidden;
+  }
+  .k-mock__chrome {
+    height: 40px;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid #e5e7eb;
+    background: #fafbfb;
+  }
+  .k-mock__dots { display: flex; gap: 6px; }
+  .k-mock__dots span {
+    width: 12px; height: 12px; border-radius: 50%;
+  }
+  .k-mock__dots span:nth-child(1) { background: #ff5f57; }
+  .k-mock__dots span:nth-child(2) { background: #febc2e; }
+  .k-mock__dots span:nth-child(3) { background: #28c840; }
+  .k-mock__url {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+  .k-mock__url-pill {
+    height: 24px;
+    padding: 0 12px;
+    border-radius: 6px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11.5px;
+    font-weight: 500;
+    color: #6b7280;
+  }
+  .k-mock__url-pill svg { flex-shrink: 0; }
+  .k-mock__stage {
+    height: 640px;
+    overflow: hidden;
+    background: #fcfcfc;
+  }
+  .k-mock__stage .docs-screen--kanban {
+    max-height: 640px;
+    min-height: 640px;
+    height: 640px;
+    padding: 8px;
+  }
+  .k-mock__stage .hf-kboard {
+    height: 100%;
+  }
+  .k-mock__stage .hf-kboard__cols {
+    justify-content: flex-start;
+  }
+  .k-mock__stage .hf-kcard {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity .45s cubic-bezier(.22,1,.36,1), transform .45s cubic-bezier(.22,1,.36,1);
+  }
+  .k-mock__stage.is-ready .hf-kcard {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .k-mock__stage.is-ready .hf-kcol:nth-child(1) .hf-kcard:nth-child(1) { transition-delay: .05s; }
+  .k-mock__stage.is-ready .hf-kcol:nth-child(1) .hf-kcard:nth-child(2) { transition-delay: .1s; }
+  .k-mock__stage.is-ready .hf-kcol:nth-child(1) .hf-kcard:nth-child(3) { transition-delay: .15s; }
+  .k-mock__stage.is-ready .hf-kcol:nth-child(1) .hf-kcard:nth-child(4) { transition-delay: .2s; }
+  .k-mock__stage.is-ready .hf-kcol:nth-child(2) .hf-kcard:nth-child(1) { transition-delay: .12s; }
+  .k-mock__stage.is-ready .hf-kcol:nth-child(2) .hf-kcard:nth-child(2) { transition-delay: .17s; }
+  .k-mock__stage.is-ready .hf-kcol:nth-child(2) .hf-kcard:nth-child(3) { transition-delay: .22s; }
+  .k-mock__stage.is-ready .hf-kcol:nth-child(2) .hf-kcard:nth-child(4) { transition-delay: .27s; }
+  .k-mock__stage.is-ready .hf-kcol:nth-child(3) .hf-kcard:nth-child(1) { transition-delay: .18s; }
+  .k-mock__stage.is-ready .hf-kcol:nth-child(3) .hf-kcard:nth-child(2) { transition-delay: .23s; }
+  .k-mock__stage.is-ready .hf-kcol:nth-child(3) .hf-kcard:nth-child(3) { transition-delay: .28s; }
+  .k-mock__stage.is-ready .hf-kcol:nth-child(3) .hf-kcard:nth-child(4) { transition-delay: .33s; }
+  .k-mock__stage.is-ready .hf-kcol:nth-child(4) .hf-kcard:nth-child(1) { transition-delay: .24s; }
+  .k-mock__stage.is-ready .hf-kcol:nth-child(4) .hf-kcard:nth-child(2) { transition-delay: .29s; }
+  .k-mock__stage.is-ready .hf-kcol:nth-child(5) .hf-kcard:nth-child(1) { transition-delay: .3s; }
+  .k-mock__stage.is-ready .hf-kcol:nth-child(5) .hf-kcard:nth-child(2) { transition-delay: .35s; }
+
+  .k-mock-cursor {
+    position: absolute;
+    top: 0; left: 0;
+    width: 20px; height: 20px;
+    z-index: 50;
+    opacity: 0;
+    pointer-events: none;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,.22));
+    transition: transform .82s cubic-bezier(.45,0,.15,1), opacity .25s ease;
+    will-change: transform;
+  }
+  .k-mock-cursor.is-visible { opacity: 1; }
+  .k-mock-cursor svg { display: block; }
+  .k-mock-cursor-ripple {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(0, 163, 149, .45);
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .k-mock-cursor.is-clicking .k-mock-cursor-ripple {
+    animation: kCursorClick .42s ease-out forwards;
+  }
+  .k-mock-cursor.is-clicking svg { animation: kCursorPress .28s ease-out; }
+  @keyframes kCursorClick {
+    0%   { transform: translate(-50%, -50%) scale(0); opacity: .7; }
+    60%  { transform: translate(-50%, -50%) scale(2.6); opacity: .25; }
+    100% { transform: translate(-50%, -50%) scale(3.4); opacity: 0; }
+  }
+  @keyframes kCursorPress {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(.82); }
+  }
+
+  .k-mock-float {
+    position: absolute;
+    left: 36px;
+    top: 120px;
+    z-index: 20;
+    width: 210px;
+    padding: 12px;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(15,18,25,.05), 0 14px 40px rgba(15,18,25,.08);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity .4s ease, transform .5s cubic-bezier(.34,1.3,.64,1);
+    pointer-events: none;
+  }
+  .k-mock-float.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    animation: kFloaty 6s ease-in-out infinite;
+  }
+  @keyframes kFloaty {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  .k-mock-float__row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .k-mock-float__ico {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: #00a395;
+    color: #fff;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+  }
+  .k-mock-float__title {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #0b0e14;
+  }
+  .k-mock-float__sub {
+    font-size: 10px;
+    color: #6b7280;
+    margin-top: 2px;
+  }
+
+  .k-mock-toast {
+    position: absolute;
+    inset: 40px 0 0;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .35s ease, background .35s ease;
+  }
+  .k-mock-toast.is-visible {
+    opacity: 1;
+    background: rgba(255,255,255,.5);
+    backdrop-filter: blur(2px);
+  }
+  .k-mock-toast__card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px 14px 16px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow:
+      0 28px 56px -14px rgba(15,23,42,.36),
+      0 10px 20px -6px rgba(15,23,42,.18);
+    max-width: 320px;
+    transform: scale(.9) translateY(8px);
+    transition: transform .42s cubic-bezier(.34,1.3,.64,1);
+  }
+  .k-mock-toast.is-visible .k-mock-toast__card {
+    transform: scale(1) translateY(0);
+  }
+  .k-mock-toast__ico {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #14b8a6, #00a395);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+  }
+  .k-mock-toast__title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1f2e;
+  }
+  .k-mock-toast__desc {
+    font-size: 11px;
+    color: #6b7280;
+    margin-top: 3px;
+  }
+
+  .hf-kquick.is-pressed {
+    transform: scale(.97);
+    filter: brightness(.97);
+  }
+  .hf-kcard.is-hover {
+    border-color: rgba(0, 163, 149, .35);
+    box-shadow: 0 0 0 3px rgba(0, 163, 149, .1);
+  }
+
+  @media (max-width: 720px) {
+    .k-mock { padding: 12px 10px 16px; }
+    .k-mock-float { display: none; }
+    .k-mock-cursor { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .k-mock-cursor, .k-mock-float, .k-mock-toast, .k-mock-toast__card,
+    .k-mock__stage .hf-kcard {
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="k-mock" id="kanbanMock">
+  <div class="k-mock__window">
+    <div class="k-mock__chrome">
+      <div class="k-mock__dots" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div class="k-mock__url">
+        <div class="k-mock__url-pill">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          app.hubfi.com.br/operacoes
+        </div>
+      </div>
+      <div style="width:48px"></div>
+    </div>
+    <div class="k-mock__stage" id="kStage"></div>
+  </div>
+
+  <aside class="k-mock-float" data-k-float aria-hidden="true">
+    <div class="k-mock-float__row">
+      <div class="k-mock-float__ico">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="10"/><path d="M10 15l-3-3 1.4-1.4L10 12.2l5.6-5.6L17 8.2z"/></svg>
+      </div>
+      <div>
+        <div class="k-mock-float__title">Filtro Pausadas</div>
+        <div class="k-mock-float__sub">12 operações · fora do SLA</div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="k-mock-cursor" data-k-cursor aria-hidden="true">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="#1A1F2E" stroke="white" stroke-width="1.4" stroke-linejoin="round">
+      <path d="M5 3l6 16 2.5-6.5L20 10z"/>
+    </svg>
+    <span class="k-mock-cursor-ripple"></span>
+  </div>
+
+  <div class="k-mock-toast" data-k-toast role="status" aria-hidden="true">
+    <div class="k-mock-toast__card">
+      <div class="k-mock-toast__ico">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>
+      </div>
+      <div>
+        <div class="k-mock-toast__title">Filtro aplicado</div>
+        <div class="k-mock-toast__desc">Mostrando só operações pausadas no board</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/icon-data.js?v=82"></script>
+<script src="js/catalog.js?v=98"></script>
+<script src="js/ds-icons.js?v=82"></script>
+<script src="js/screens.js?v=137"></script>
+<script>
+(function () {
+  var stage = document.getElementById("kStage");
+  var mock = document.getElementById("kanbanMock");
+  if (!stage || !mock) return;
+
+  var page = window.HF_CATALOG && window.HF_CATALOG.pages && window.HF_CATALOG.pages["kanban-operacoes"];
+  if (!page || typeof page.html !== "function") {
+    stage.innerHTML = '<div style="padding:48px;font-family:Outfit,sans-serif">Não foi possível carregar o Kanban.</div>';
+    return;
+  }
+
+  stage.innerHTML = page.html();
+  if (window.HF_SCREENS && typeof window.HF_SCREENS.bind === "function") {
+    window.HF_SCREENS.bind(stage);
+  }
+
+  var root = stage.querySelector("[data-k-root]");
+  var cursor = mock.querySelector("[data-k-cursor]");
+  var toast = mock.querySelector("[data-k-toast]");
+  var floatEl = mock.querySelector("[data-k-float]");
+  var pausadasBtn = stage.querySelector('[data-k-quick="pausadas"]');
+  var todasBtn = stage.querySelector('[data-k-quick="todas"]');
+  var pausedCard = stage.querySelector('.hf-kcard[data-k-flags*="paused"]');
+
+  var wait = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
+  var cancel = false;
+  var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var running = false;
+
+  function applyFilter(key) {
+    if (!root) return;
+    root.querySelectorAll("[data-k-quick]").forEach(function (btn) {
+      btn.classList.toggle("is-selected", btn.getAttribute("data-k-quick") === key);
+    });
+    root.querySelectorAll(".hf-kcard").forEach(function (card) {
+      var flags = " " + (card.getAttribute("data-k-flags") || "") + " ";
+      var show =
+        key === "todas" ||
+        (key === "pausadas" && flags.indexOf(" paused ") !== -1) ||
+        (key === "rascunhos" && flags.indexOf(" draft ") !== -1);
+      card.hidden = !show;
+    });
+  }
+
+  function resetVisual() {
+    applyFilter("todas");
+    [cursor, toast, floatEl].forEach(function (el) {
+      if (el) el.classList.remove("is-visible");
+    });
+    if (cursor) cursor.classList.remove("is-clicking");
+    if (pausadasBtn) pausadasBtn.classList.remove("is-pressed");
+    if (pausedCard) pausedCard.classList.remove("is-hover");
+    stage.classList.remove("is-ready");
+  }
+
+  function moveCursorTo(el, fallbackX, fallbackY) {
+    if (!cursor || !el) return { x: fallbackX, y: fallbackY };
+    var mockRect = mock.getBoundingClientRect();
+    var r = el.getBoundingClientRect();
+    return {
+      x: r.left - mockRect.left + r.width * 0.55,
+      y: r.top - mockRect.top + r.height * 0.55
+    };
+  }
+
+  async function play() {
+    cancel = false;
+    resetVisual();
+
+    if (reduce) {
+      stage.classList.add("is-ready");
+      applyFilter("pausadas");
+      await wait(5000);
+      return;
+    }
+
+    await wait(200);
+    if (cancel) return;
+    stage.classList.add("is-ready");
+    await wait(900);
+    if (cancel) return;
+
+    if (floatEl) floatEl.classList.add("is-visible");
+    await wait(700);
+    if (cancel) return;
+
+    if (cursor && pausadasBtn) {
+      var start = { x: 80, y: mock.getBoundingClientRect().height - 80 };
+      cursor.style.transition = "none";
+      cursor.style.transform = "translate(" + start.x + "px, " + start.y + "px)";
+      void cursor.offsetWidth;
+      cursor.style.transition = "";
+      cursor.classList.add("is-visible");
+      await wait(80);
+      if (cancel) return;
+
+      var target = moveCursorTo(pausadasBtn, 320, 180);
+      cursor.style.transform = "translate(" + target.x + "px, " + target.y + "px)";
+      await wait(820);
+      if (cancel) return;
+
+      cursor.classList.add("is-clicking");
+      pausadasBtn.classList.add("is-pressed");
+      applyFilter("pausadas");
+      await wait(280);
+      if (cancel) return;
+      cursor.classList.remove("is-clicking");
+      pausadasBtn.classList.remove("is-pressed");
+      await wait(400);
+      if (cancel) return;
+
+      if (toast) toast.classList.add("is-visible");
+      await wait(1800);
+      if (cancel) return;
+      toast.classList.remove("is-visible");
+      await wait(300);
+      if (cancel) return;
+
+      if (pausedCard) {
+        var cardTarget = moveCursorTo(pausedCard, target.x, target.y + 120);
+        cursor.style.transform = "translate(" + cardTarget.x + "px, " + cardTarget.y + "px)";
+        await wait(700);
+        if (cancel) return;
+        pausedCard.classList.add("is-hover");
+        await wait(1200);
+        if (cancel) return;
+        pausedCard.classList.remove("is-hover");
+      }
+
+      cursor.classList.remove("is-visible");
+      await wait(400);
+      if (cancel) return;
+    }
+
+    applyFilter("todas");
+    if (floatEl) floatEl.classList.remove("is-visible");
+    await wait(1400);
+  }
+
+  async function loop() {
+    if (running) return;
+    running = true;
+    while (!cancel) {
+      await play();
+      if (cancel) break;
+    }
+    running = false;
+  }
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        cancel = false;
+        loop();
+      } else {
+        cancel = true;
+      }
+    });
+  }, { threshold: 0.15 });
+  io.observe(mock);
+
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) cancel = true;
+    else if (!running) {
+      cancel = false;
+      loop();
+    }
+  });
+
+  cancel = false;
+  loop();
+})();
+</script>
+</body>
+</html>
