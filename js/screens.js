@@ -1724,7 +1724,7 @@
           "<strong>Status Pausado</strong>" +
           "<span>Pendência temporária fora do SLA, com data de retorno e cadência de lembretes.</span>" +
           '<a class="hf-wiki-home__linkbtn" href="?topic=pausado" data-wiki-jump="pausado">' +
-          ico("circle-help", 16) +
+          ico("info", 16) +
           "<span>Como usar</span></a></article>" +
           "</section>" +
           '<section class="hf-wiki-home__band">' +
