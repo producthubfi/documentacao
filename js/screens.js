@@ -1840,10 +1840,10 @@
           '<span class="hf-wiki-home__line hf-wiki-home__line--accent">Opere com mais confiança.</span>' +
           "</h2>" +
           "</section>" +
-          '<section class="hf-wiki-home__mock" aria-label="Demonstração animada do backoffice Hubfi">' +
+          '<section class="hf-wiki-home__mock hf-wiki-kanban-mock" aria-label="Demonstração animada do Kanban de operações">' +
           '<div class="hf-wiki-home__mock-glow" aria-hidden="true"></div>' +
           '<div class="hf-wiki-home__mock-frame">' +
-          '<iframe class="hf-wiki-home__mock-iframe" src="assets/wiki/hero-mock/index.html?v=2" title="Mockup animado do backoffice Hubfi" loading="eager" scrolling="no"></iframe>' +
+          '<iframe class="hf-wiki-home__mock-iframe hf-wiki-kanban-mock__iframe" src="assets/wiki/kanban-mock/index.html?v=2" title="Mockup animado do Kanban Hubfi" loading="eager" scrolling="no"></iframe>' +
           "</div></section>" +
           '<div class="hf-wiki-home__divider bridge bridge--mark bridge--white-to-paper" aria-hidden="true">' +
           '<div class="bridge-mark-rule">' +
@@ -1962,11 +1962,6 @@
           "Board por etapa: Pré-cadastro, Em análise, Proposta, Formalização e Finalizado. Cada card mostra código, cliente, produto, valor, tempo e responsável.",
           "kanban"
         ) +
-          '<section class="hf-wiki-home__mock hf-wiki-kanban-mock" aria-label="Demonstração animada do Kanban de operações">' +
-          '<div class="hf-wiki-home__mock-glow" aria-hidden="true"></div>' +
-          '<div class="hf-wiki-home__mock-frame">' +
-          '<iframe class="hf-wiki-home__mock-iframe hf-wiki-kanban-mock__iframe" src="assets/wiki/kanban-mock/index.html?v=1" title="Mockup animado do Kanban Hubfi" loading="eager" scrolling="no"></iframe>' +
-          "</div></section>" +
           '<div class="hf-wiki__panel">' +
           "<h3>Filtros rápidos</h3>" +
           "<ul class=\"hf-wiki__list\">" +

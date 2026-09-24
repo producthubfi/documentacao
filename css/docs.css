@@ -5328,7 +5328,7 @@ textarea {
 }
 .hf-wiki-kanban-mock {
   width: min(1100px, 100%);
-  margin: 8px 0 28px;
+  margin: 8px auto 0;
 }
 .hf-wiki-kanban-mock__iframe {
   height: 740px;
