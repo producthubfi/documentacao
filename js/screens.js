@@ -1127,7 +1127,7 @@
     }
 
     var perda =
-      '<section class="docs-dash-card docs-dash-card--chart">' +
+      '<section class="docs-dash-card docs-dash-card--chart" data-tour="perda">' +
       '<div class="docs-dash-card__head">' +
       '<div class="docs-dash-card__copy"><h2 class="docs-dash-card__title">Motivos de perda</h2>' +
       '<p class="docs-dash-card__hint">Top 5 sobre o total de perdidas no período</p></div>' +
@@ -1158,21 +1158,28 @@
       ghostBtn("Ver todos", "", "chevron-right") +
       "</div></section>";
 
-    var tourChrome = tour
-      ? '<div class="hf-tour" data-tour-root aria-live="polite">' +
-        '<div class="hf-tour__mask" data-tour-mask></div>' +
-        '<div class="hf-tour__spot" data-tour-spot hidden></div>' +
-        '<div class="hf-tour__tip" data-tour-tip hidden>' +
-        '<div class="hf-tour__tip-head"><span class="hf-tour__step" data-tour-step>1 / 9</span>' +
-        '<button class="hf-tour__skip" type="button" data-tour-skip>Fechar tour</button></div>' +
-        '<strong class="hf-tour__title" data-tour-title></strong>' +
-        '<p class="hf-tour__body" data-tour-body></p>' +
-        '<div class="hf-tour__actions">' +
-        '<button class="hf-btn hf-btn--ghost hf-btn--sm" type="button" data-tour-prev>Voltar</button>' +
-        '<button class="hf-btn hf-btn--ghost hf-btn--sm" type="button" data-tour-close>Fechar tour</button>' +
-        '<button class="hf-btn hf-btn--primary hf-btn--sm" type="button" data-tour-next>Próximo</button>' +
-        "</div></div></div>"
-      : "";
+    var helpChrome =
+      '<div class="hf-tour' +
+      (tour ? "" : " is-explain") +
+      '" data-tour-root' +
+      (tour ? "" : " hidden") +
+      ' aria-live="polite">' +
+      '<div class="hf-tour__mask" data-tour-mask></div>' +
+      '<div class="hf-tour__spot" data-tour-spot hidden></div>' +
+      '<div class="hf-tour__tip" data-tour-tip hidden>' +
+      '<div class="hf-tour__tip-head"><span class="hf-tour__step" data-tour-step>' +
+      (tour ? "1 / 10" : "Ajuda") +
+      '</span>' +
+      '<button class="hf-tour__skip" type="button" data-tour-skip>Fechar</button></div>' +
+      '<strong class="hf-tour__title" data-tour-title></strong>' +
+      '<p class="hf-tour__body" data-tour-body></p>' +
+      '<div class="hf-tour__actions">' +
+      (tour
+        ? '<button class="hf-btn hf-btn--ghost hf-btn--sm" type="button" data-tour-prev>Voltar</button>' +
+          '<button class="hf-btn hf-btn--ghost hf-btn--sm" type="button" data-tour-close>Fechar tour</button>' +
+          '<button class="hf-btn hf-btn--primary hf-btn--sm" type="button" data-tour-next>Próximo</button>'
+        : '<button class="hf-btn hf-btn--primary hf-btn--sm" type="button" data-tour-close>Fechar</button>') +
+      "</div></div></div>";
 
     function tabKpi(label, value) {
       return (
@@ -1369,7 +1376,7 @@
 
     if (tour) {
       return (
-        '<div class="docs-screen docs-screen--dash docs-screen--tour" data-dash-tour data-dash-root>' +
+        '<div class="docs-screen docs-screen--dash docs-screen--tour" data-dash-tour data-dash-root data-dash-help="tour">' +
         sidebar +
         '<div class="docs-screen__main">' +
         '<div class="docs-screen__top">' +
@@ -1379,7 +1386,7 @@
         '<div class="docs-screen__body">' +
         bodyTop +
         "</div></div>" +
-        tourChrome +
+        helpChrome +
         "</div>"
       );
     }
@@ -1396,7 +1403,7 @@
     }
 
     var probabilidade =
-      '<section class="docs-dash-card docs-dash-card--chart">' +
+      '<section class="docs-dash-card docs-dash-card--chart" data-tour="probabilidade">' +
       '<div class="docs-dash-card__head">' +
       '<div class="docs-dash-card__copy"><h2 class="docs-dash-card__title">Probabilidade de fechamento</h2>' +
       '<p class="docs-dash-card__hint">Clique numa faixa para ver as operações · distribuição sem ponderação</p></div>' +
@@ -1461,7 +1468,7 @@
     }
 
     var usuarios =
-      '<section class="docs-dash-card">' +
+      '<section class="docs-dash-card" data-tour="usuarios-origem">' +
       '<div class="docs-dash-card__head">' +
       '<div class="docs-dash-card__copy"><h2 class="docs-dash-card__title">Usuários que originaram operações</h2>' +
       '<p class="docs-dash-card__hint">No período selecionado, com detalhamento por empresa</p></div>' +
@@ -1484,7 +1491,7 @@
       "</div></section>";
 
     var pipelineUsers =
-      '<section class="docs-dash-card">' +
+      '<section class="docs-dash-card" data-tour="usuarios-pipeline">' +
       '<div class="docs-dash-card__head">' +
       '<div class="docs-dash-card__copy"><h2 class="docs-dash-card__title">Usuários com pipeline em aberto</h2>' +
       '<p class="docs-dash-card__hint">Têm ao menos uma operação ativa no período, por empresa</p></div>' +
@@ -1524,7 +1531,7 @@
     }
 
     var formFunnel =
-      '<section class="docs-dash-card docs-dash-card--table docs-dash-formfunnel">' +
+      '<section class="docs-dash-card docs-dash-card--table docs-dash-formfunnel" data-tour="form-funnel">' +
       '<div class="docs-dash-card__head">' +
       '<div class="docs-dash-card__copy"><h2 class="docs-dash-card__title docs-dash-card__title--lg">Funil de formulário</h2>' +
       '<p class="docs-dash-card__hint docs-dash-card__hint--sm">Texto de apoio</p></div>' +
@@ -1543,7 +1550,7 @@
       "</tbody></table></section>";
 
     return (
-      '<div class="docs-screen docs-screen--dash" data-dash-root>' +
+      '<div class="docs-screen docs-screen--dash docs-screen--tour" data-dash-root data-dash-help="click">' +
       sidebar +
       '<div class="docs-screen__main">' +
       '<div class="docs-screen__top">' +
@@ -1583,7 +1590,9 @@
       "</div>" +
       '<div class="docs-dash-panel" data-dash-panel="usuarios">' +
       panelUsuarios +
-      "</div></div></div></div></div>"
+      "</div></div></div></div>" +
+      helpChrome +
+      "</div>"
     );
   }
 
@@ -1676,18 +1685,37 @@
       wikiArticle(
         "inicio",
         true,
-        '<p class="hf-wiki__eyebrow">Setembro 2026</p>' +
-          "<h2>O que há de novo</h2>" +
-          "<p>Em vez do modal com slides, esta central concentra o que mudou na plataforma. Cada tópico explica a tela, o porquê e o que fazer no dia a dia.</p>" +
-          '<div class="hf-wiki__cards">' +
-          '<a class="hf-wiki__card" href="ds.html#/tour-dashboard"><span class="hf-wiki__card-tag">Novo</span><strong>Dashboard de operações</strong><span>Funil, conversão e indicadores — com tour visual card a card.</span></a>' +
-          '<a class="hf-wiki__card" href="?topic=kanban" data-wiki-jump="kanban"><span class="hf-wiki__card-tag">Novo</span><strong>Kanban de operações</strong><span>Board por etapa com filtros Todas, Pausadas e Rascunhos.</span></a>' +
-          '<a class="hf-wiki__card" href="?topic=pausado" data-wiki-jump="pausado"><span class="hf-wiki__card-tag">Atualizado</span><strong>Status Pausado</strong><span>Pendência temporária fora do SLA, com data de retorno.</span></a>' +
-          "</div>" +
-          wikiCallout(
-            "Por que mudamos",
-            "O modal de novidades acumulava slides e ficava difícil de consultar depois. Aqui cada funcionalidade tem um artigo permanente, buscável e atualizável."
-          )
+        '<div class="hf-wiki-home">' +
+          '<section class="hf-wiki-home__hero">' +
+          '<p class="hf-wiki-home__kicker">Central de ajuda · Hubfi</p>' +
+          "<h2>Operar crédito com clareza.<br>Sem slides. Sem adivinhação.</h2>" +
+          "<p>Guias rápidos das telas que seu time usa todo dia — dashboard, kanban e status — pensados para imobiliárias, assessorias e quem fecha negócio.</p>" +
+          '<div class="hf-wiki-home__cta">' +
+          '<a class="hf-wiki-home__btn hf-wiki-home__btn--primary" href="ds.html#/tour-dashboard">Tour do dashboard</a>' +
+          '<a class="hf-wiki-home__btn" href="?topic=dashboard" data-wiki-jump="dashboard">Guia do painel</a>' +
+          "</div></section>" +
+          '<section class="hf-wiki-home__features">' +
+          '<a class="hf-wiki-home__feat" href="ds.html#/tour-dashboard">' +
+          '<span class="hf-wiki-home__feat-tag">Novo</span>' +
+          "<strong>Dashboard de operações</strong>" +
+          "<span>Funil, SLA, gargalo e abas por Safra, Empresas e Produtos. Clique em qualquer card para entender o indicador.</span>" +
+          '<em>Abrir tour →</em></a>' +
+          '<a class="hf-wiki-home__feat" href="?topic=kanban" data-wiki-jump="kanban">' +
+          '<span class="hf-wiki-home__feat-tag">Novo</span>' +
+          "<strong>Kanban de operações</strong>" +
+          "<span>Board por etapa com filtros Todas, Pausadas e Rascunhos — foque no que move o pipeline.</span>" +
+          '<em>Ler guia →</em></a>' +
+          '<a class="hf-wiki-home__feat" href="?topic=pausado" data-wiki-jump="pausado">' +
+          '<span class="hf-wiki-home__feat-tag">Atualizado</span>' +
+          "<strong>Status Pausado</strong>" +
+          "<span>Pendência temporária fora do SLA, com data de retorno e cadência de lembretes.</span>" +
+          '<em>Como usar →</em></a>' +
+          "</section>" +
+          '<section class="hf-wiki-home__band">' +
+          "<div><h3>Feito para quem opera, não só para quem treina</h3>" +
+          "<p>Cada artigo fica aqui de forma permanente — buscável, atualizável e sem depender do modal de novidades.</p></div>" +
+          '<a class="hf-wiki-home__btn hf-wiki-home__btn--light" href="?topic=como-usar" data-wiki-jump="como-usar">Como usar esta central</a>' +
+          "</section></div>"
       ) +
       wikiArticle(
         "como-usar",
@@ -3807,64 +3835,95 @@
     tip.addEventListener("mouseleave", scheduleHide);
   }
 
-  function bindDashTour(root) {
-    var shell = root.querySelector("[data-dash-tour]");
+  var DASH_HELP = {
+    tabs: {
+      title: "Abas da visão",
+      body: "Troque entre Operações, Safra, Empresas, Produtos e Usuários. Cada aba troca o conteúdo abaixo — rankings e recortes específicos.",
+    },
+    filters: {
+      title: "Filtros aplicados",
+      body: "Os chips mostram o recorte atual (mesa, produto, empresa, período…). Remova um chip para ampliar a visão antes de interpretar os números.",
+    },
+    "kpi-originado": {
+      title: "Pipeline originada",
+      body: "Volume que entrou no período e quantidade de operações. Compare com a meta de captação e olhe o ticket médio no rodapé do card.",
+    },
+    "kpi-ativo": {
+      title: "Pipeline ativa",
+      body: "O que ainda está em jogo. Os ícones mostram operações ativas, movimentações e o quanto está pausado — priorize o que está parado.",
+    },
+    "kpi-ganho": {
+      title: "Pipeline ganha",
+      body: "Fechamentos confirmados no período. Use para validar resultado e ticket médio dos negócios ganhos.",
+    },
+    "kpi-perdido": {
+      title: "Pipeline perdido",
+      body: "Volume que saiu sem fechamento. Cruze depois com Motivos de perda para atacar causas.",
+    },
+    funil: {
+      title: "Funil de etapas",
+      body: "Barras por etapa com alerta de prazo. Passe o mouse para ver volume e SLA; a barra vermelha marca o gargalo.",
+    },
+    "funil-gargalo": {
+      title: "Tooltip de gargalo",
+      body: "Etapa entra em gargalo quando 50% das operações estão em Atenção ou Crítica. Use Ver todas para abrir a lista filtrada.",
+    },
+    conversao: {
+      title: "Conversão entre etapas",
+      body: "Tabela de passagem: quantas operações avançam, % relativa e tempo médio. Comece pela etapa com pior conversão ou maior tempo.",
+    },
+    resolucao: {
+      title: "Conversão e resolução",
+      body: "Anéis resumem o período: conversão (ganhas ÷ ativas) e resolução (ganhas + perdidas ÷ ativas). Leitura rápida do desfecho do funil.",
+    },
+    perda: {
+      title: "Motivos de perda",
+      body: "Top motivos sobre o total de perdidas no período. Use para priorizar ações comerciais e de produto.",
+    },
+    probabilidade: {
+      title: "Probabilidade de fechamento",
+      body: "Distribuição das operações por chance de fechar. Clique numa faixa para focar nas que precisam de atenção.",
+    },
+    "usuarios-origem": {
+      title: "Usuários que originaram",
+      body: "Quem gerou operações no período, com detalhe por empresa. Bom para ver concentração de origem.",
+    },
+    "usuarios-pipeline": {
+      title: "Usuários com pipeline aberto",
+      body: "Quem ainda tem operação ativa. Compare com a origem para ver quem mantém o funil em movimento.",
+    },
+    "form-funnel": {
+      title: "Funil de formulário",
+      body: "Acompanha envio, resposta parcial e conclusão dos formulários ligados às operações.",
+    },
+  };
+
+  var DASH_TOUR_ORDER = [
+    "tabs",
+    "filters",
+    "kpi-originado",
+    "kpi-ativo",
+    "kpi-ganho",
+    "kpi-perdido",
+    "funil",
+    "funil-gargalo",
+    "conversao",
+    "resolucao",
+  ];
+
+  function bindDashHelp(root) {
+    var shell = root.querySelector("[data-dash-help]");
     if (!shell) return;
 
-    var steps = [
-      {
-        id: "tabs",
-        title: "Abas da visão",
-        body: "Troque entre Operações, Safra, Empresas, Produtos e Usuários. Cada aba troca o conteúdo abaixo — rankings e recortes específicos.",
-      },
-      {
-        id: "filters",
-        title: "Filtros aplicados",
-        body: "Os chips mostram o recorte atual (mesa, produto, empresa, período…). Remova um chip para ampliar a visão antes de interpretar os números.",
-      },
-      {
-        id: "kpi-originado",
-        title: "Pipeline originada",
-        body: "Volume que entrou no período e quantidade de operações. Compare com a meta de captação e olhe o ticket médio no rodapé do card.",
-      },
-      {
-        id: "kpi-ativo",
-        title: "Pipeline ativa",
-        body: "O que ainda está em jogo. Os ícones mostram operações ativas, movimentações e o quanto está pausado — priorize o que está parado.",
-      },
-      {
-        id: "kpi-ganho",
-        title: "Pipeline ganha",
-        body: "Fechamentos confirmados no período. Use para validar resultado e ticket médio dos negócios ganhos.",
-      },
-      {
-        id: "kpi-perdido",
-        title: "Pipeline perdido",
-        body: "Volume que saiu sem fechamento. Cruze depois com Motivos de perda (mais abaixo no dashboard completo) para atacar causas.",
-      },
-      {
-        id: "funil",
-        title: "Funil de etapas",
-        body: "Barras por etapa com alerta de prazo. Passe o mouse para ver volume e SLA; a barra vermelha marca o gargalo.",
-      },
-      {
-        id: "funil-gargalo",
-        title: "Tooltip de gargalo",
-        body: "Etapa entra em gargalo quando 50% das operações estão em Atenção ou Crítica. Use Ver todas para abrir a lista filtrada.",
-      },
-      {
-        id: "conversao",
-        title: "Conversão entre etapas",
-        body: "Tabela de passagem: quantas operações avançam, % relativa e tempo médio. Comece pela etapa com pior conversão ou maior tempo.",
-      },
-      {
-        id: "resolucao",
-        title: "Conversão e resolução",
-        body: "Anéis resumem o período: conversão (ganhas ÷ ativas) e resolução (ganhas + perdidas ÷ ativas). Leitura rápida do desfecho do funil.",
-      },
-    ];
+    var mode = shell.getAttribute("data-dash-help") || "click";
+    var tourMode = mode === "tour";
+    var steps = DASH_TOUR_ORDER.map(function (id) {
+      var meta = DASH_HELP[id] || { title: id, body: "" };
+      return { id: id, title: meta.title, body: meta.body };
+    });
 
     var idx = 0;
+    var open = false;
     var spot = shell.querySelector("[data-tour-spot]");
     var tip = shell.querySelector("[data-tour-tip]");
     var titleEl = shell.querySelector("[data-tour-title]");
@@ -3878,27 +3937,39 @@
     var bodyScroll = shell.querySelector(".docs-screen__body");
     var funnelTip = shell.querySelector("[data-funnel-tip]");
     var gargaloBar = shell.querySelector('[data-tour="funil-gargalo"]');
-    var done = false;
+    var actions = tip ? tip.querySelector(".hf-tour__actions") : null;
 
-    function place() {
-      if (done) return;
-      var step = steps[idx];
-      if (!step) return;
-      var target = shell.querySelector('[data-tour="' + step.id + '"]');
+    function setTourChrome(on) {
+      shell.classList.toggle("docs-screen--tour", true);
+      shell.classList.toggle("is-tour-done", !on);
+      if (tourRoot) {
+        tourRoot.hidden = !on;
+        tourRoot.classList.toggle("is-explain", !tourMode || !on);
+      }
+      if (actions) {
+        var seq = tourMode && on && shell.getAttribute("data-help-seq") === "1";
+        actions.querySelectorAll("[data-tour-prev], [data-tour-next]").forEach(function (btn) {
+          btn.hidden = !seq;
+        });
+        if (closeBtn) closeBtn.textContent = seq ? "Fechar tour" : "Fechar";
+      }
+      if (stepEl && !(tourMode && shell.getAttribute("data-help-seq") === "1")) {
+        stepEl.textContent = "Ajuda";
+      }
+    }
+
+    function placeTarget(target, meta) {
       if (!target || !spot || !tip) return;
-
+      open = true;
+      setTourChrome(true);
       shell.querySelectorAll("[data-tour]").forEach(function (el) {
         el.classList.toggle("is-tour-focus", el === target);
       });
 
       if (funnelTip) {
-        if (step.id === "funil-gargalo" && gargaloBar) {
-          funnelTip.hidden = false;
-          gargaloBar.classList.add("is-tip-open");
-        } else {
-          funnelTip.hidden = true;
-          if (gargaloBar) gargaloBar.classList.remove("is-tip-open");
-        }
+        var isGargalo = target.getAttribute("data-tour") === "funil-gargalo";
+        funnelTip.hidden = !isGargalo;
+        if (gargaloBar) gargaloBar.classList.toggle("is-tip-open", isGargalo);
       }
 
       target.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
@@ -3913,11 +3984,8 @@
         spot.style.width = rect.width + pad * 2 + "px";
         spot.style.height = rect.height + pad * 2 + "px";
 
-        if (titleEl) titleEl.textContent = step.title;
-        if (bodyEl) bodyEl.textContent = step.body;
-        if (stepEl) stepEl.textContent = idx + 1 + " / " + steps.length;
-        if (prevBtn) prevBtn.disabled = idx === 0;
-        if (nextBtn) nextBtn.textContent = idx === steps.length - 1 ? "Concluir" : "Próximo";
+        if (titleEl) titleEl.textContent = meta.title || "";
+        if (bodyEl) bodyEl.textContent = meta.body || "";
 
         var tipW = tip.offsetWidth || 320;
         var tipH = tip.offsetHeight || 160;
@@ -3934,13 +4002,26 @@
       });
     }
 
-    function go(n) {
-      idx = Math.max(0, Math.min(steps.length - 1, n));
-      place();
+    function showId(id) {
+      var meta = DASH_HELP[id];
+      var target = shell.querySelector('[data-tour="' + id + '"]');
+      if (!meta || !target) return;
+      placeTarget(target, meta);
     }
 
-    function endTour() {
-      done = true;
+    function placeTour() {
+      if (!open && !tourMode) return;
+      var step = steps[idx];
+      if (!step) return;
+      if (stepEl) stepEl.textContent = idx + 1 + " / " + steps.length;
+      if (prevBtn) prevBtn.disabled = idx === 0;
+      if (nextBtn) nextBtn.textContent = idx === steps.length - 1 ? "Concluir" : "Próximo";
+      showId(step.id);
+    }
+
+    function closeHelp() {
+      open = false;
+      shell.setAttribute("data-help-seq", "0");
       shell.classList.add("is-tour-done");
       if (tourRoot) tourRoot.hidden = true;
       if (spot) spot.hidden = true;
@@ -3952,6 +4033,32 @@
       if (gargaloBar) gargaloBar.classList.remove("is-tip-open");
     }
 
+    function go(n) {
+      idx = Math.max(0, Math.min(steps.length - 1, n));
+      placeTour();
+    }
+
+    shell.querySelectorAll("[data-tour]").forEach(function (el) {
+      el.classList.add("is-help-target");
+      el.addEventListener("click", function (event) {
+        var nested = event.target.closest("[data-tour]");
+        if (nested && nested !== el) return;
+        if (event.target.closest("[data-tour-root], [data-funnel-tip]")) return;
+        var id = el.getAttribute("data-tour");
+        if (!id || !DASH_HELP[id]) return;
+        event.stopPropagation();
+        shell.setAttribute("data-help-seq", "0");
+        if (stepEl) stepEl.textContent = "Ajuda";
+        if (actions) {
+          actions.querySelectorAll("[data-tour-prev], [data-tour-next]").forEach(function (btn) {
+            btn.hidden = true;
+          });
+          if (closeBtn) closeBtn.textContent = "Fechar";
+        }
+        showId(id);
+      });
+    });
+
     if (prevBtn) {
       prevBtn.addEventListener("click", function () {
         go(idx - 1);
@@ -3959,16 +4066,48 @@
     }
     if (nextBtn) {
       nextBtn.addEventListener("click", function () {
-        if (idx >= steps.length - 1) endTour();
+        if (idx >= steps.length - 1) closeHelp();
         else go(idx + 1);
       });
     }
-    if (skipBtn) skipBtn.addEventListener("click", endTour);
-    if (closeBtn) closeBtn.addEventListener("click", endTour);
-    window.addEventListener("resize", place);
-    if (bodyScroll) bodyScroll.addEventListener("scroll", place, { passive: true });
+    if (skipBtn) skipBtn.addEventListener("click", closeHelp);
+    if (closeBtn) closeBtn.addEventListener("click", closeHelp);
 
-    go(0);
+    window.addEventListener("resize", function () {
+      if (!open) return;
+      if (shell.getAttribute("data-help-seq") === "1") placeTour();
+      else {
+        var focus = shell.querySelector("[data-tour].is-tour-focus");
+        if (focus) showId(focus.getAttribute("data-tour"));
+      }
+    });
+    if (bodyScroll) {
+      bodyScroll.addEventListener(
+        "scroll",
+        function () {
+          if (!open) return;
+          if (shell.getAttribute("data-help-seq") === "1") placeTour();
+          else {
+            var focus = shell.querySelector("[data-tour].is-tour-focus");
+            if (focus) showId(focus.getAttribute("data-tour"));
+          }
+        },
+        { passive: true }
+      );
+    }
+
+    if (tourMode) {
+      shell.setAttribute("data-help-seq", "1");
+      open = true;
+      if (actions) {
+        actions.querySelectorAll("[data-tour-prev], [data-tour-next]").forEach(function (btn) {
+          btn.hidden = false;
+        });
+      }
+      go(0);
+    } else {
+      closeHelp();
+    }
   }
 
   window.HF_SCREENS = {
@@ -3981,7 +4120,7 @@
       bindWiki(root);
       bindDashTabs(root);
       bindFunnelTip(root);
-      bindDashTour(root);
+      bindDashHelp(root);
       if (window.HF_IDENTITY && typeof window.HF_IDENTITY.bind === "function") {
         window.HF_IDENTITY.bind(root);
       }
