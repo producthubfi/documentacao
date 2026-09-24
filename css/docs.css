@@ -4624,13 +4624,32 @@ textarea {
   }
 }
 
-/* Central de ajuda / wiki do sistema */
-.docs-screen--wiki .docs-screen__body--wiki {
-  padding: 0;
-  gap: 0;
-  overflow: hidden;
+/* Central de ajuda / wiki do sistema (página própria) */
+.wiki-page {
+  min-height: 100vh;
   background: #fff;
-  border-top: 1px solid #f0f0f2;
+  color: var(--text-primary, #141414);
+  font-family: var(--hf-font, "Outfit", sans-serif);
+}
+.wiki-page .hf-wiki {
+  display: flex;
+  align-items: stretch;
+  min-height: 100vh;
+  height: 100vh;
+}
+.hf-wiki__brand {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 4px 4px 8px;
+}
+.hf-wiki__brand img {
+  display: block;
+}
+.hf-wiki__brand span {
+  font-size: 13px;
+  font-weight: 600;
+  color: #787d7d;
 }
 .hf-wiki {
   display: flex;
@@ -4640,12 +4659,12 @@ textarea {
   height: 100%;
 }
 .hf-wiki__nav {
-  width: 260px;
+  width: 280px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 16px 12px 24px;
+  padding: 20px 14px 28px;
   border-right: 1px solid #eaecec;
   background: #fcfcfc;
   overflow: auto;
@@ -4672,49 +4691,48 @@ textarea {
   border: 0;
   outline: 0;
   background: transparent;
-  font-family: var(--hf-font);
-  font-size: 13px;
+  font: inherit;
+  font-size: 14px;
   color: #141414;
 }
 .hf-wiki__nav-group {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+  display: grid;
+  gap: 4px;
 }
 .hf-wiki__nav-group[hidden] {
   display: none;
 }
 .hf-wiki__nav-label {
-  margin: 0 0 6px;
-  padding: 0 10px;
+  margin: 0 0 4px;
+  padding: 0 8px;
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: #a1a5a5;
+  color: #a8a8a8;
 }
 .hf-wiki__nav-item {
   display: block;
   width: 100%;
-  text-align: left;
-  border: 0;
-  background: transparent;
-  border-radius: 8px;
+  margin: 0;
   padding: 8px 10px;
-  font-family: var(--hf-font);
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  text-align: left;
+  font: inherit;
   font-size: 14px;
-  font-weight: 400;
-  line-height: 1.4;
+  font-weight: 500;
+  line-height: 1.35;
   color: #282a2a;
   cursor: pointer;
 }
 .hf-wiki__nav-item:hover {
-  background: #f5f5f5;
+  background: #f0f0f2;
 }
 .hf-wiki__nav-item.is-active {
-  background: #ecfbf9;
-  color: var(--primary-default);
-  font-weight: 500;
+  background: #e8f8f6;
+  color: #007a70;
 }
 .hf-wiki__nav-item[hidden] {
   display: none;
@@ -4723,7 +4741,7 @@ textarea {
   flex: 1;
   min-width: 0;
   overflow: auto;
-  padding: 28px 40px 48px;
+  padding: 32px 40px 64px;
   background: #fff;
 }
 .hf-wiki__article {
@@ -4731,6 +4749,40 @@ textarea {
 }
 .hf-wiki__article[hidden] {
   display: none;
+}
+.docs-screen--tour.is-tour-done .hf-tour,
+.docs-screen--tour.is-tour-done .hf-tour__mask,
+.docs-screen--tour.is-tour-done .hf-tour__spot,
+.docs-screen--tour.is-tour-done .hf-tour__tip {
+  display: none !important;
+}
+.hf-tour__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+.hf-tour__actions .hf-btn {
+  flex: 0 0 auto;
+}
+.hf-tour__actions [data-tour-next] {
+  margin-left: auto;
+}
+@media (max-width: 800px) {
+  .wiki-page .hf-wiki {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+  }
+  .hf-wiki__nav {
+    width: 100%;
+    border-right: 0;
+    border-bottom: 1px solid #eaecec;
+    max-height: 40vh;
+  }
+  .hf-wiki__content {
+    padding: 24px 20px 48px;
+  }
 }
 .hf-wiki__eyebrow {
   margin: 0 0 8px;
@@ -4957,9 +5009,7 @@ textarea {
   pointer-events: none;
   border-radius: inherit;
 }
-.docs-screen--tour.is-tour-done .hf-tour__mask {
-  display: none;
-}
+
 .hf-tour__spot {
   position: fixed;
   z-index: 40;

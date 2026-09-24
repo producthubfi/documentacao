@@ -138,7 +138,7 @@
     { slug: "dashboard-operacoes", label: "Dashboard de operações", icon: "layout-dashboard" },
     { slug: "tour-dashboard", label: "Tour do Dashboard", icon: "map" },
     { slug: "kanban-operacoes", label: "Kanban de operações", icon: "kanban" },
-    { slug: "wiki-sistema", label: "Central de ajuda", icon: "book-open" },
+    { href: "wiki.html", label: "Central de ajuda", icon: "book-open" },
     { href: "extensao/", label: "Extensão · Itaú", icon: "puzzle" },
     { href: "extensao/spec.html", label: "Spec · 5 bancos", icon: "list-checks" },
     { href: "dashboards/hubfi-painel-empresas.html", label: "Painel empresas", icon: "building-2" },

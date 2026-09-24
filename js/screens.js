@@ -1164,11 +1164,12 @@
         '<div class="hf-tour__spot" data-tour-spot hidden></div>' +
         '<div class="hf-tour__tip" data-tour-tip hidden>' +
         '<div class="hf-tour__tip-head"><span class="hf-tour__step" data-tour-step>1 / 9</span>' +
-        '<button class="hf-tour__skip" type="button" data-tour-skip>Pular tour</button></div>' +
+        '<button class="hf-tour__skip" type="button" data-tour-skip>Fechar tour</button></div>' +
         '<strong class="hf-tour__title" data-tour-title></strong>' +
         '<p class="hf-tour__body" data-tour-body></p>' +
         '<div class="hf-tour__actions">' +
         '<button class="hf-btn hf-btn--ghost hf-btn--sm" type="button" data-tour-prev>Voltar</button>' +
+        '<button class="hf-btn hf-btn--ghost hf-btn--sm" type="button" data-tour-close>Fechar tour</button>' +
         '<button class="hf-btn hf-btn--primary hf-btn--sm" type="button" data-tour-next>Próximo</button>' +
         "</div></div></div>"
       : "";
@@ -1645,24 +1646,11 @@
   }
 
   function wikiScreen() {
-    var sidebar =
-      typeof ui.appSidebar === "function" ? ui.appSidebar("operacoes", "fit collapsed") : "";
-
-    var crumb =
-      '<nav class="hf-crumb">' +
-      '<button class="hf-crumb__home" type="button" data-nav-toggle aria-expanded="false" aria-label="Expandir menu">' +
-      ico("panel-left", 20) +
-      "</button>" +
-      '<span class="hf-crumb__div"></span>' +
-      "<span>Central de ajuda</span></nav>";
-
-    var header =
-      "<header>" +
-      '<h1 class="docs-dash-title">Central de ajuda</h1>' +
-      '<p class="docs-dash-sub">Documentação das telas e novidades da plataforma — no lugar do modal de slides</p></header>';
-
     var wikiNav =
       '<aside class="hf-wiki__nav" aria-label="Tópicos">' +
+      '<div class="hf-wiki__brand">' +
+      '<img src="assets/logos/h-color-light.svg" width="96" height="24" alt="hubfi">' +
+      "<span>Central de ajuda</span></div>" +
       '<label class="hf-wiki__search">' +
       ico("search", 16) +
       '<input type="search" placeholder="Buscar tópico" aria-label="Buscar tópico" data-wiki-search></label>' +
@@ -1692,9 +1680,9 @@
           "<h2>O que há de novo</h2>" +
           "<p>Em vez do modal com slides, esta central concentra o que mudou na plataforma. Cada tópico explica a tela, o porquê e o que fazer no dia a dia.</p>" +
           '<div class="hf-wiki__cards">' +
-          '<a class="hf-wiki__card" href="#/tour-dashboard"><span class="hf-wiki__card-tag">Novo</span><strong>Dashboard de operações</strong><span>Funil, conversão e indicadores — com tour visual card a card.</span></a>' +
-          '<a class="hf-wiki__card" href="#/wiki-sistema?topic=kanban" data-wiki-jump="kanban"><span class="hf-wiki__card-tag">Novo</span><strong>Kanban de operações</strong><span>Board por etapa com filtros Todas, Pausadas e Rascunhos.</span></a>' +
-          '<a class="hf-wiki__card" href="#/wiki-sistema?topic=pausado" data-wiki-jump="pausado"><span class="hf-wiki__card-tag">Atualizado</span><strong>Status Pausado</strong><span>Pendência temporária fora do SLA, com data de retorno.</span></a>' +
+          '<a class="hf-wiki__card" href="ds.html#/tour-dashboard"><span class="hf-wiki__card-tag">Novo</span><strong>Dashboard de operações</strong><span>Funil, conversão e indicadores — com tour visual card a card.</span></a>' +
+          '<a class="hf-wiki__card" href="?topic=kanban" data-wiki-jump="kanban"><span class="hf-wiki__card-tag">Novo</span><strong>Kanban de operações</strong><span>Board por etapa com filtros Todas, Pausadas e Rascunhos.</span></a>' +
+          '<a class="hf-wiki__card" href="?topic=pausado" data-wiki-jump="pausado"><span class="hf-wiki__card-tag">Atualizado</span><strong>Status Pausado</strong><span>Pendência temporária fora do SLA, com data de retorno.</span></a>' +
           "</div>" +
           wikiCallout(
             "Por que mudamos",
@@ -1720,20 +1708,20 @@
           "<p>Visão estratégica da plataforma: pipeline, funil, conversão, perdas e desempenho por usuário. Substitui a necessidade de “explicar o painel” em slides.</p>" +
           "<h3>O que você encontra</h3>" +
           "<ul class=\"hf-wiki__list\">" +
-          "<li><strong>KPIs de pipeline</strong> — originado, ativo, ganho e perdido, com ticket médio.</li>" +
-          "<li><strong>Funil</strong> — distribuição por etapa e conversão entre etapas.</li>" +
+          "<li><strong>KPIs de pipeline</strong> — originada, ativa, ganha e perdido, com ticket médio.</li>" +
+          "<li><strong>Funil</strong> — distribuição por etapa, SLA e tooltip de gargalo.</li>" +
           "<li><strong>Abas</strong> — Operações, Safra, Empresas, Produtos e Usuários.</li>" +
           "<li><strong>Filtros</strong> — mesa, produto, empresa, período, operador e usuário.</li>" +
           "</ul>" +
           "<h3>Como ler rápido</h3>" +
           "<ul class=\"hf-wiki__steps\">" +
-          wikiStep("1", "Comece pelos KPIs", "Veja volume e ticket. Pipeline ativo mostra o que ainda está em jogo.") +
+          wikiStep("1", "Comece pelos KPIs", "Veja volume e ticket. Pipeline ativa mostra o que ainda está em jogo.") +
           wikiStep("2", "Olhe o funil", "Identifique onde o volume trava — análise, proposta ou formalização.") +
           wikiStep("3", "Ajuste os filtros", "Restrinja por mesa ou período antes de concluir.") +
           "</ul>" +
           wikiCallout(
             "Tour visual",
-            'Prefira o <a href="#/tour-dashboard">Tour do Dashboard</a> — percorre cada card e gráfico da primeira tela com spotlight.'
+            'Prefira o <a href="ds.html#/tour-dashboard">Tour do Dashboard</a> — percorre cada card e gráfico da primeira tela com spotlight. Use <strong>Fechar tour</strong> a qualquer momento para navegar livremente.'
           )
       ) +
       wikiArticle(
@@ -1743,8 +1731,8 @@
           "<p>Cada card do dashboard responde a uma pergunta. Use esta referência em vez de slides soltos.</p>" +
           '<div class="hf-wiki__table-wrap"><table class="hf-wiki__table"><thead><tr><th>Indicador</th><th>Significa</th><th>Ação típica</th></tr></thead><tbody>' +
           "<tr><td>Pipeline originada</td><td>Volume que entrou no período</td><td>Comparar com meta de captação</td></tr>" +
-          "<tr><td>Pipeline ativo</td><td>Operações ainda em andamento</td><td>Priorizar o que está parado</td></tr>" +
-          "<tr><td>Pipeline ganho</td><td>Fechamentos confirmados</td><td>Validar ticket e produto</td></tr>" +
+          "<tr><td>Pipeline ativa</td><td>Operações ainda em andamento</td><td>Priorizar o que está parado</td></tr>" +
+          "<tr><td>Pipeline ganha</td><td>Fechamentos confirmados</td><td>Validar ticket e produto</td></tr>" +
           "<tr><td>Pipeline perdido</td><td>Volume que saiu sem fechamento</td><td>Ver motivos de perda</td></tr>" +
           "<tr><td>Conversão</td><td>% que avança entre etapas</td><td>Atacar o gargalo do funil</td></tr>" +
           "</tbody></table></div>" +
@@ -1767,7 +1755,7 @@
           "</ul>" +
           wikiCallout(
             "Protótipo",
-            'Veja o board em <a href="#/kanban-operacoes">Kanban de operações</a>.'
+            'Veja o board em <a href="ds.html#/kanban-operacoes">Kanban de operações</a>.'
           )
       ) +
       wikiArticle(
@@ -1783,7 +1771,7 @@
           "</ul>" +
           wikiCallout(
             "Protótipo",
-            'Simule em <a href="#/detalhes-operacao?demo=paused">Detalhes da operação · Pausado</a>.'
+            'Simule em <a href="ds.html#/detalhes-operacao?demo=paused">Detalhes da operação · Pausado</a>.'
           )
       ) +
       wikiArticle(
@@ -1799,7 +1787,7 @@
           "</ul>" +
           wikiCallout(
             "Protótipo",
-            'Fluxo em <a href="#/abertura-operacao">Abertura de operação</a>.'
+            'Fluxo em <a href="ds.html#/abertura-operacao">Abertura de operação</a>.'
           )
       ) +
       wikiArticle(
@@ -1814,24 +1802,17 @@
           "</ul>" +
           wikiCallout(
             "Protótipo",
-            'Cenários em <a href="#/cadastro-cliente?demo=empresa">Cadastro de cliente</a> e <a href="#/edicao-cliente?demo=colisao">Edição de cliente</a>.'
+            'Cenários em <a href="ds.html#/cadastro-cliente?demo=empresa">Cadastro de cliente</a> e <a href="ds.html#/edicao-cliente?demo=colisao">Edição de cliente</a>.'
           )
       );
 
     return (
-      '<div class="docs-screen docs-screen--wiki docs-screen--dash" data-wiki-root>' +
-      sidebar +
-      '<div class="docs-screen__main">' +
-      '<div class="docs-screen__top">' +
-      crumb +
-      header +
-      "</div>" +
-      '<div class="docs-screen__body docs-screen__body--wiki">' +
+      '<div class="wiki-page" data-wiki-root>' +
       '<div class="hf-wiki">' +
       wikiNav +
       '<div class="hf-wiki__content" data-wiki-content>' +
       articles +
-      "</div></div></div></div></div>"
+      "</div></div></div>"
     );
   }
 
@@ -3245,9 +3226,10 @@
     figmaFile: FIGMA_DASH,
     wide: true,
     section: "Telas",
-    scenarios: [
+      scenarios: [
       { label: "Visão estratégica", note: "Funil, conversão e indicadores.", href: "#/dashboard-operacoes" },
       { label: "Tour guiado", note: "Product tour card a card na primeira tela.", href: "#/tour-dashboard" },
+      { label: "Central de ajuda", note: "Wiki em página própria.", href: "wiki.html" },
     ],
     html: function () {
       return dashScreen();
@@ -3281,22 +3263,6 @@
     ],
     html: function () {
       return kanbanScreen();
-    },
-  };
-
-  catalog.pages["wiki-sistema"] = {
-    title: "Central de ajuda",
-    lead: "Wiki das telas e novidades — substitui o modal de slides.",
-    wide: true,
-    section: "Telas",
-    scenarios: [
-      { label: "O que há de novo", note: "Resumo das funcionalidades recentes.", href: "#/wiki-sistema" },
-      { label: "Tour do Dashboard", note: "Spotlight visual card a card.", href: "#/tour-dashboard" },
-      { label: "Kanban", note: "Board, filtros e pausadas.", href: "#/wiki-sistema?topic=kanban" },
-      { label: "Pausado", note: "Pendência temporária fora do SLA.", href: "#/wiki-sistema?topic=pausado" },
-    ],
-    html: function () {
-      return wikiScreen();
     },
   };
 
@@ -3664,7 +3630,24 @@
     var shell = root.querySelector("[data-wiki-root]");
     if (!shell) return;
 
-    function showTopic(id) {
+    function topicFromUrl() {
+      var search = location.search.replace(/^\?/, "");
+      var hashQ = (location.hash.split("?")[1] || "");
+      var qs = search || hashQ;
+      var match = qs.match(/(?:^|&)topic=([^&]+)/);
+      return match ? decodeURIComponent(match[1]) : "inicio";
+    }
+
+    function setTopicUrl(id) {
+      try {
+        var url = new URL(location.href);
+        if (id && id !== "inicio") url.searchParams.set("topic", id);
+        else url.searchParams.delete("topic");
+        history.replaceState(null, "", url.pathname + url.search + url.hash);
+      } catch (err) {}
+    }
+
+    function showTopic(id, syncUrl) {
       var key = String(id || "inicio");
       var found = false;
       shell.querySelectorAll("[data-wiki-article]").forEach(function (article) {
@@ -3674,7 +3657,7 @@
         article.hidden = !on;
       });
       if (!found) {
-        showTopic("inicio");
+        showTopic("inicio", syncUrl);
         return;
       }
       shell.querySelectorAll("[data-wiki-nav]").forEach(function (btn) {
@@ -3682,6 +3665,7 @@
       });
       var content = shell.querySelector("[data-wiki-content]");
       if (content) content.scrollTop = 0;
+      if (syncUrl !== false) setTopicUrl(key);
     }
 
     shell.querySelectorAll("[data-wiki-nav]").forEach(function (btn) {
@@ -3694,7 +3678,7 @@
       link.addEventListener("click", function (event) {
         var jump = link.getAttribute("data-wiki-jump");
         var href = link.getAttribute("href") || "";
-        if (href.indexOf("#/tour-dashboard") === 0) return;
+        if (href.indexOf("ds.html") === 0 || href.indexOf("#/tour-dashboard") === 0) return;
         event.preventDefault();
         showTopic(jump);
       });
@@ -3715,9 +3699,7 @@
       });
     }
 
-    var qs = location.hash.split("?")[1] || "";
-    var topicQ = qs.match(/(?:^|&)topic=([^&]+)/);
-    showTopic(topicQ ? decodeURIComponent(topicQ[1]) : "inicio");
+    showTopic(topicFromUrl(), false);
   }
 
   function bindDashTabs(root) {
@@ -3891,11 +3873,15 @@
     var prevBtn = shell.querySelector("[data-tour-prev]");
     var nextBtn = shell.querySelector("[data-tour-next]");
     var skipBtn = shell.querySelector("[data-tour-skip]");
+    var closeBtn = shell.querySelector("[data-tour-close]");
+    var tourRoot = shell.querySelector("[data-tour-root]");
     var bodyScroll = shell.querySelector(".docs-screen__body");
     var funnelTip = shell.querySelector("[data-funnel-tip]");
     var gargaloBar = shell.querySelector('[data-tour="funil-gargalo"]');
+    var done = false;
 
     function place() {
+      if (done) return;
       var step = steps[idx];
       if (!step) return;
       var target = shell.querySelector('[data-tour="' + step.id + '"]');
@@ -3954,7 +3940,9 @@
     }
 
     function endTour() {
+      done = true;
       shell.classList.add("is-tour-done");
+      if (tourRoot) tourRoot.hidden = true;
       if (spot) spot.hidden = true;
       if (tip) tip.hidden = true;
       if (funnelTip) funnelTip.hidden = true;
@@ -3976,6 +3964,7 @@
       });
     }
     if (skipBtn) skipBtn.addEventListener("click", endTour);
+    if (closeBtn) closeBtn.addEventListener("click", endTour);
     window.addEventListener("resize", place);
     if (bodyScroll) bodyScroll.addEventListener("scroll", place, { passive: true });
 
@@ -3983,6 +3972,7 @@
   }
 
   window.HF_SCREENS = {
+    wiki: wikiScreen,
     bind: function (root) {
       bindOcr(root);
       bindOpen(root);
