@@ -4912,7 +4912,8 @@ textarea {
 .hf-wiki__content {
   margin-left: 292px;
   width: calc(100% - 292px);
-  min-width: 1440px;
+  max-width: 1920px;
+  min-width: 0;
   min-height: 100vh;
   padding: 40px 56px 80px;
   background:
