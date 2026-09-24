@@ -1828,28 +1828,29 @@
         "inicio",
         true,
         '<div class="hf-wiki-home">' +
-          '<section class="hf-wiki-home__hero">' +
-          '<div class="hf-wiki-home__hero-inner">' +
-          '<div class="hf-wiki__chip hf-wiki__chip--hero">' +
-          wikiFrameIcon("spark") +
-          '<span class="hf-wiki__chip-label">Central de ajuda</span>' +
-          '<span class="hf-wiki__chip-meta">Hubfi · set/2026</span></div>' +
+          '<section class="hf-wiki-home__intro">' +
+          '<div class="hf-wiki__chip hf-wiki__chip--center">' +
+          '<span class="hf-wiki-frame hf-wiki-frame--xs" aria-hidden="true"><span class="hf-wiki-frame__inner">' +
+          wikiDuoSvg("spark") +
+          "</span></span>" +
+          '<span class="hf-wiki__chip-label">Produtos</span>' +
+          '<span class="hf-wiki__chip-meta">3 motores</span></div>' +
           "<h2>" +
-          '<span class="hf-wiki-home__line">Ajuda para usar a Hubfi no dia a dia.</span>' +
-          '<span class="hf-wiki-home__line hf-wiki-home__line--accent">Respostas claras.</span>' +
-          '<span class="hf-wiki-home__line hf-wiki-home__line--accent">Sem depender de treinamento.</span>' +
+          '<span class="hf-wiki-home__line">Três motores de crédito.</span>' +
+          '<span class="hf-wiki-home__line hf-wiki-home__line--accent">Uma plataforma só.</span>' +
           "</h2>" +
-          "<p>Guias práticos das funcionalidades: dashboard, kanban, cadastros e operações. Feito para imobiliárias, assessorias e quem precisa resolver na hora.</p>" +
-          '<div class="hf-wiki-home__cta">' +
-          '<button class="hf-wiki-home__btn hf-wiki-home__btn--primary" type="button" data-wiki-href="' +
-          wikiProto("tour-dashboard") +
-          '">' +
-          ico("map", 16) +
-          "<span>Tour do dashboard</span></button>" +
-          '<button class="hf-wiki-home__btn hf-wiki-home__btn--ghost" type="button" data-wiki-jump="dashboard">' +
-          ico("book-open", 16) +
-          "<span>Guia do painel</span></button>" +
-          "</div></div></section>" +
+          "</section>" +
+          '<section class="hf-wiki-home__mock" aria-hidden="true">' +
+          '<div class="hf-wiki-home__mock-glow"></div>' +
+          '<img class="hf-wiki-home__mock-img" src="assets/wiki/home-mockup.png" width="1140" height="731" alt="">' +
+          "</section>" +
+          '<div class="hf-wiki-home__divider" aria-hidden="true">' +
+          '<span class="hf-wiki-home__divider-line"></span>' +
+          '<span class="hf-wiki-home__divider-mark">' +
+          '<img src="assets/wiki/home-mark.png" width="44" height="44" alt="">' +
+          "</span>" +
+          '<span class="hf-wiki-home__divider-line"></span>' +
+          "</div>" +
           '<section class="hf-wiki-home__features">' +
           '<article class="hf-wiki-home__feat">' +
           '<div class="hf-wiki-home__feat-top">' +
@@ -1880,13 +1881,6 @@
           '<button class="hf-wiki-home__btn hf-wiki-home__btn--ghost" type="button" data-wiki-jump="pausado">' +
           ico("info", 16) +
           "<span>Como usar</span></button></article>" +
-          "</section>" +
-          '<section class="hf-wiki-home__band">' +
-          "<div><h3>Feito para quem opera, não só para quem treina</h3>" +
-          "<p>Cada artigo fica aqui de forma permanente: buscável, atualizável e sem depender do modal de novidades.</p></div>" +
-          '<button class="hf-wiki-home__btn hf-wiki-home__btn--ghost" type="button" data-wiki-jump="como-usar">' +
-          ico("book-open", 16) +
-          "<span>Como usar esta central</span></button>" +
           "</section></div>"
       ) +
       wikiArticle(
