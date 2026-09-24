@@ -4912,7 +4912,6 @@ textarea {
 .hf-wiki__content {
   margin-left: 292px;
   width: calc(100% - 292px);
-  max-width: 1920px;
   min-width: 0;
   min-height: 100vh;
   padding: 40px 56px 80px;
@@ -4924,7 +4923,7 @@ textarea {
 }
 .hf-wiki__article {
   width: 100%;
-  max-width: none;
+  max-width: 1920px;
 }
 .hf-wiki__article[hidden] {
   display: none;
@@ -5259,7 +5258,7 @@ textarea {
 .hf-wiki-home__hero-inner {
   position: relative;
   z-index: 1;
-  max-width: 720px;
+  max-width: none;
 }
 .hf-wiki-home__hero .hf-wiki__chip {
   background: rgba(255, 255, 255, 0.12);
@@ -5278,11 +5277,14 @@ textarea {
   margin: 22px 0 16px;
   font-size: clamp(32px, 4vw, 48px);
   font-weight: 700;
-  line-height: 1.08;
+  line-height: 1.12;
   letter-spacing: -0.03em;
   color: #fff;
 }
-.hf-wiki-home__hero h2 span {
+.hf-wiki-home__line {
+  display: block;
+}
+.hf-wiki-home__line--accent {
   color: #a6e8e0;
 }
 .hf-wiki-home__hero > .hf-wiki-home__hero-inner > p {
