@@ -5170,18 +5170,32 @@ textarea {
 
 .docs-screen--dash [data-tour].is-help-target {
   cursor: pointer;
+  transition: box-shadow 0.15s ease, outline-color 0.15s ease, background-color 0.15s ease, transform 0.15s ease;
 }
 .docs-screen--dash [data-tour].is-help-target:hover {
-  box-shadow: 0 0 0 1px #a6e8e0;
+  outline: 2px solid #00a395;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(0, 163, 149, 0.18), 0 10px 28px -14px rgba(0, 163, 149, 0.55);
+  background-color: rgba(0, 163, 149, 0.05);
+  border-radius: 10px;
+  z-index: 2;
 }
 .docs-screen--dash .docs-dash-kpi.is-help-target:hover,
-.docs-screen--dash .docs-dash-card.is-help-target:hover {
-  outline: 1px solid #a6e8e0;
-  outline-offset: 0;
+.docs-screen--dash .docs-dash-card.is-help-target:hover,
+.docs-screen--dash .docs-dash-funnel.is-help-target:hover {
+  outline: 2px solid #00a395;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px rgba(0, 163, 149, 0.16), 0 12px 32px -12px rgba(0, 163, 149, 0.5);
 }
+.hf-tour.is-explain .hf-tour__skip,
 .hf-tour.is-explain .hf-tour__actions [data-tour-prev],
-.hf-tour.is-explain .hf-tour__actions [data-tour-next] {
-  display: none;
+.hf-tour.is-explain .hf-tour__actions [data-tour-next],
+.hf-tour__tip.is-explain .hf-tour__skip {
+  display: none !important;
+}
+.hf-tour.is-explain .hf-tour__actions [data-tour-close],
+.hf-tour__tip.is-explain .hf-tour__actions [data-tour-close] {
+  display: inline-flex;
 }
 .hf-wiki__card {
   display: flex;

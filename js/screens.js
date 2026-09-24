@@ -1166,11 +1166,16 @@
       ' aria-live="polite">' +
       '<div class="hf-tour__mask" data-tour-mask></div>' +
       '<div class="hf-tour__spot" data-tour-spot hidden></div>' +
-      '<div class="hf-tour__tip" data-tour-tip hidden>' +
+      '<div class="hf-tour__tip' +
+      (tour ? "" : " is-explain") +
+      '" data-tour-tip hidden>' +
       '<div class="hf-tour__tip-head"><span class="hf-tour__step" data-tour-step>' +
       (tour ? "1 / 10" : "Ajuda") +
-      '</span>' +
-      '<button class="hf-tour__skip" type="button" data-tour-skip>Fechar</button></div>' +
+      "</span>" +
+      (tour
+        ? '<button class="hf-tour__skip" type="button" data-tour-skip>Fechar</button>'
+        : "") +
+      "</div>" +
       '<strong class="hf-tour__title" data-tour-title></strong>' +
       '<p class="hf-tour__body" data-tour-body></p>' +
       '<div class="hf-tour__actions">' +
@@ -3962,29 +3967,40 @@
     var gargaloBar = shell.querySelector('[data-tour="funil-gargalo"]');
     var actions = tip ? tip.querySelector(".hf-tour__actions") : null;
 
+    function setHelpMode(seq) {
+      var isSeq = !!seq;
+      shell.setAttribute("data-help-seq", isSeq ? "1" : "0");
+      if (tourRoot) {
+        tourRoot.classList.toggle("is-explain", !isSeq);
+        tourRoot.classList.toggle("is-tour-seq", isSeq);
+      }
+      if (tip) tip.classList.toggle("is-explain", !isSeq);
+      if (stepEl) stepEl.textContent = isSeq ? idx + 1 + " / " + steps.length : "Ajuda";
+      if (skipBtn) skipBtn.hidden = !isSeq;
+      if (actions) {
+        actions.querySelectorAll("[data-tour-prev], [data-tour-next]").forEach(function (btn) {
+          btn.hidden = !isSeq;
+        });
+        if (closeBtn) {
+          closeBtn.hidden = false;
+          closeBtn.textContent = isSeq ? "Fechar tour" : "Fechar";
+          closeBtn.classList.toggle("hf-btn--ghost", isSeq);
+          closeBtn.classList.toggle("hf-btn--primary", !isSeq);
+        }
+      }
+    }
+
     function setTourChrome(on) {
       shell.classList.toggle("docs-screen--tour", true);
       shell.classList.toggle("is-tour-done", !on);
-      if (tourRoot) {
-        tourRoot.hidden = !on;
-        tourRoot.classList.toggle("is-explain", !tourMode || !on);
-      }
-      if (actions) {
-        var seq = tourMode && on && shell.getAttribute("data-help-seq") === "1";
-        actions.querySelectorAll("[data-tour-prev], [data-tour-next]").forEach(function (btn) {
-          btn.hidden = !seq;
-        });
-        if (closeBtn) closeBtn.textContent = seq ? "Fechar tour" : "Fechar";
-      }
-      if (stepEl && !(tourMode && shell.getAttribute("data-help-seq") === "1")) {
-        stepEl.textContent = "Ajuda";
-      }
+      if (tourRoot) tourRoot.hidden = !on;
     }
 
     function placeTarget(target, meta) {
       if (!target || !spot || !tip) return;
       open = true;
       setTourChrome(true);
+      setHelpMode(shell.getAttribute("data-help-seq") === "1");
       shell.querySelectorAll("[data-tour]").forEach(function (el) {
         el.classList.toggle("is-tour-focus", el === target);
       });
@@ -4009,6 +4025,11 @@
 
         if (titleEl) titleEl.textContent = meta.title || "";
         if (bodyEl) bodyEl.textContent = meta.body || "";
+        if (shell.getAttribute("data-help-seq") === "1") {
+          if (stepEl) stepEl.textContent = idx + 1 + " / " + steps.length;
+          if (prevBtn) prevBtn.disabled = idx === 0;
+          if (nextBtn) nextBtn.textContent = idx === steps.length - 1 ? "Concluir" : "Próximo";
+        }
 
         var tipW = tip.offsetWidth || 320;
         var tipH = tip.offsetHeight || 160;
@@ -4070,14 +4091,7 @@
         var id = el.getAttribute("data-tour");
         if (!id || !DASH_HELP[id]) return;
         event.stopPropagation();
-        shell.setAttribute("data-help-seq", "0");
-        if (stepEl) stepEl.textContent = "Ajuda";
-        if (actions) {
-          actions.querySelectorAll("[data-tour-prev], [data-tour-next]").forEach(function (btn) {
-            btn.hidden = true;
-          });
-          if (closeBtn) closeBtn.textContent = "Fechar";
-        }
+        setHelpMode(false);
         showId(id);
       });
     });
@@ -4120,13 +4134,8 @@
     }
 
     if (tourMode) {
-      shell.setAttribute("data-help-seq", "1");
       open = true;
-      if (actions) {
-        actions.querySelectorAll("[data-tour-prev], [data-tour-next]").forEach(function (btn) {
-          btn.hidden = false;
-        });
-      }
+      setHelpMode(true);
       go(0);
     } else {
       closeHelp();
