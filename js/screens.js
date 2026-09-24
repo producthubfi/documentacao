@@ -1781,11 +1781,17 @@
     var wikiNav =
       '<aside class="hf-wiki__nav" aria-label="Tópicos">' +
       '<div class="hf-wiki__brand">' +
-      '<img src="assets/logos/h-color-light.svg" width="96" height="24" alt="hubfi">' +
-      "<span>Central de ajuda</span></div>" +
+      '<a class="hf-wiki__brand-logo" href="wiki.html" aria-label="Hubfi Central de ajuda">' +
+      '<span class="hf-wiki__brand-mark" aria-hidden="true">h<span>.</span></span>' +
+      '<img src="assets/logos/h-color-light.svg" width="88" height="22" alt="hubfi">' +
+      "</a>" +
+      '<div class="hf-wiki__brand-meta">' +
+      "<strong>Central de ajuda</strong>" +
+      "<span>Guias e novidades do produto</span>" +
+      "</div></div>" +
       '<label class="hf-wiki__search">' +
       ico("search", 16) +
-      '<input type="search" placeholder="Buscar tópico" aria-label="Buscar tópico" data-wiki-search></label>' +
+      '<input type="search" placeholder="Buscar tópico…" aria-label="Buscar tópico" data-wiki-search></label>' +
       '<nav class="hf-wiki__nav-scroll">' +
       wikiNavGroup("Começar", [
         wikiNavItem("inicio", "O que há de novo", "sparkles", true),
@@ -1803,7 +1809,13 @@
       wikiNavGroup("Cadastros", [
         wikiNavItem("unicidade", "Unicidade de cliente", "user-plus"),
       ]) +
-      "</nav></aside>";
+      "</nav>" +
+      '<div class="hf-wiki__nav-foot">' +
+      '<a class="hf-wiki__nav-foot-link" href="ds.html#/tour-dashboard">' +
+      ico("map", 14) +
+      "<span>Tour do dashboard</span></a>" +
+      '<p class="hf-wiki__nav-foot-note">Hubfi · set/2026</p>' +
+      "</div></aside>";
 
     var articles =
       wikiArticle(
