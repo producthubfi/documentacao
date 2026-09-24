@@ -1867,6 +1867,15 @@ textarea {
   max-height: calc(100vh - 140px);
 }
 
+.docs-screen--dash .docs-screen__top,
+.docs-screen--dash .docs-screen__body {
+  width: 100%;
+  max-width: 1920px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
 .docs-screen--dash .docs-screen__body {
   padding: 16px 24px 24px;
   gap: 16px;
