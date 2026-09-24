@@ -4627,7 +4627,10 @@ textarea {
 /* Central de ajuda / wiki do sistema (página própria) */
 .wiki-page {
   min-height: 100vh;
-  background: #f7f8f8;
+  background:
+    radial-gradient(50% 40% at 100% 0%, rgba(14, 139, 122, 0.1), transparent 60%),
+    radial-gradient(40% 35% at 0% 20%, rgba(14, 139, 122, 0.06), transparent 55%),
+    linear-gradient(180deg, #f2f9f7 0%, #fff 48%);
   color: var(--text-primary, #141414);
   font-family: var(--hf-font, "Outfit", sans-serif);
 }
@@ -4915,11 +4918,11 @@ textarea {
   color: #9ca3af;
 }
 .hf-wiki__content {
-  margin-left: 308px;
-  width: calc(100% - 308px);
+  margin-left: 0;
+  width: 100%;
   min-width: 0;
   min-height: 100vh;
-  padding: 40px 56px 80px;
+  padding: 40px 56px 80px 308px;
   background:
     radial-gradient(50% 40% at 100% 0%, rgba(14, 139, 122, 0.1), transparent 60%),
     radial-gradient(40% 35% at 0% 20%, rgba(14, 139, 122, 0.06), transparent 55%),
