@@ -1691,30 +1691,48 @@
           "<h2>Operar crédito com clareza.<br>Sem slides. Sem adivinhação.</h2>" +
           "<p>Documentação completa das funcionalidades da Hubfi: do dashboard ao kanban, cadastros e operações. Feita para imobiliárias, assessorias e quem fecha negócio.</p>" +
           '<div class="hf-wiki-home__cta">' +
-          '<a class="hf-wiki-home__btn hf-wiki-home__btn--primary" href="ds.html#/tour-dashboard">Tour do dashboard</a>' +
-          '<a class="hf-wiki-home__btn" href="?topic=dashboard" data-wiki-jump="dashboard">Guia do painel</a>' +
+          '<a class="hf-wiki-home__linkbtn hf-wiki-home__linkbtn--on-dark" href="ds.html#/tour-dashboard">' +
+          ico("map", 16) +
+          "<span>Tour do dashboard</span></a>" +
+          '<a class="hf-wiki-home__linkbtn hf-wiki-home__linkbtn--on-dark" href="?topic=dashboard" data-wiki-jump="dashboard">' +
+          ico("book-open", 16) +
+          "<span>Guia do painel</span></a>" +
           "</div></section>" +
           '<section class="hf-wiki-home__features">' +
-          '<a class="hf-wiki-home__feat" href="ds.html#/tour-dashboard">' +
-          '<span class="hf-wiki-home__feat-tag">Novo</span>' +
+          '<article class="hf-wiki-home__feat">' +
+          '<div class="hf-wiki-home__feat-top">' +
+          ibox("layout-dashboard") +
+          '<span class="hf-wiki-home__feat-tag">Novo</span></div>' +
           "<strong>Dashboard de operações</strong>" +
           "<span>Funil, SLA, gargalo e abas por Safra, Empresas e Produtos. Clique em qualquer card para entender o indicador.</span>" +
-          '<em>Abrir tour →</em></a>' +
-          '<a class="hf-wiki-home__feat" href="?topic=kanban" data-wiki-jump="kanban">' +
-          '<span class="hf-wiki-home__feat-tag">Novo</span>' +
+          '<a class="hf-wiki-home__linkbtn" href="ds.html#/tour-dashboard">' +
+          ico("map", 16) +
+          "<span>Abrir tour</span></a></article>" +
+          '<article class="hf-wiki-home__feat">' +
+          '<div class="hf-wiki-home__feat-top">' +
+          ibox("kanban") +
+          '<span class="hf-wiki-home__feat-tag">Novo</span></div>' +
           "<strong>Kanban de operações</strong>" +
           "<span>Board por etapa com filtros Todas, Pausadas e Rascunhos. Foque no que move o pipeline.</span>" +
-          '<em>Ler guia →</em></a>' +
-          '<a class="hf-wiki-home__feat" href="?topic=pausado" data-wiki-jump="pausado">' +
-          '<span class="hf-wiki-home__feat-tag">Atualizado</span>' +
+          '<a class="hf-wiki-home__linkbtn" href="?topic=kanban" data-wiki-jump="kanban">' +
+          ico("book-open", 16) +
+          "<span>Ler guia</span></a></article>" +
+          '<article class="hf-wiki-home__feat">' +
+          '<div class="hf-wiki-home__feat-top">' +
+          ibox("circle-pause") +
+          '<span class="hf-wiki-home__feat-tag">Atualizado</span></div>' +
           "<strong>Status Pausado</strong>" +
           "<span>Pendência temporária fora do SLA, com data de retorno e cadência de lembretes.</span>" +
-          '<em>Como usar →</em></a>' +
+          '<a class="hf-wiki-home__linkbtn" href="?topic=pausado" data-wiki-jump="pausado">' +
+          ico("circle-help", 16) +
+          "<span>Como usar</span></a></article>" +
           "</section>" +
           '<section class="hf-wiki-home__band">' +
           "<div><h3>Feito para quem opera, não só para quem treina</h3>" +
           "<p>Cada artigo fica aqui de forma permanente: buscável, atualizável e sem depender do modal de novidades.</p></div>" +
-          '<a class="hf-wiki-home__btn hf-wiki-home__btn--light" href="?topic=como-usar" data-wiki-jump="como-usar">Como usar esta central</a>' +
+          '<a class="hf-wiki-home__linkbtn" href="?topic=como-usar" data-wiki-jump="como-usar">' +
+          ico("book-open", 16) +
+          "<span>Como usar esta central</span></a>" +
           "</section></div>"
       ) +
       wikiArticle(
