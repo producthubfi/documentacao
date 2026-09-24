@@ -4853,22 +4853,6 @@ textarea {
 .hf-tour__actions [data-tour-next] {
   margin-left: auto;
 }
-@media (max-width: 800px) {
-  .wiki-page .hf-wiki {
-    flex-direction: column;
-    height: auto;
-    min-height: 100vh;
-  }
-  .hf-wiki__nav {
-    width: 100%;
-    border-right: 0;
-    border-bottom: 1px solid #eaecec;
-    max-height: 40vh;
-  }
-  .hf-wiki__content {
-    padding: 24px 20px 48px;
-  }
-}
 .hf-wiki__eyebrow {
   margin: 0 0 8px;
   font-size: 12px;
