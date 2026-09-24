@@ -1627,6 +1627,100 @@
     );
   }
 
+  function wikiDuoSvg(kind) {
+    var dark = "#0A7165";
+    var light = "#3DB29C";
+    var paths = {
+      dashboard:
+        '<rect x="3" y="3" width="8" height="8" rx="1.5" stroke="' +
+        dark +
+        '" stroke-width="1.7"></rect>' +
+        '<rect x="13" y="3" width="8" height="5" rx="1.5" stroke="' +
+        dark +
+        '" stroke-width="1.7"></rect>' +
+        '<rect x="13" y="10" width="8" height="11" rx="1.5" stroke="' +
+        dark +
+        '" stroke-width="1.7"></rect>' +
+        '<rect x="3" y="13" width="8" height="8" rx="1.5" stroke="' +
+        light +
+        '" stroke-width="1.7"></rect>' +
+        '<circle cx="17" cy="5.5" fill="' +
+        light +
+        '" r="1.4"></circle>',
+      kanban:
+        '<rect x="3" y="4" width="5" height="16" rx="1.5" stroke="' +
+        dark +
+        '" stroke-width="1.7"></rect>' +
+        '<rect x="9.5" y="4" width="5" height="11" rx="1.5" stroke="' +
+        dark +
+        '" stroke-width="1.7"></rect>' +
+        '<rect x="16" y="4" width="5" height="14" rx="1.5" stroke="' +
+        light +
+        '" stroke-width="1.7"></rect>' +
+        '<circle cx="18.5" cy="8" fill="' +
+        light +
+        '" r="1.3"></circle>',
+      pause:
+        '<circle cx="12" cy="12" r="9" stroke="' +
+        dark +
+        '" stroke-width="1.7"></circle>' +
+        '<path d="M10 8.5v7M14 8.5v7" stroke="' +
+        light +
+        '" stroke-width="1.9" stroke-linecap="round"></path>',
+      compass:
+        '<circle cx="12" cy="12" r="9" stroke="' +
+        dark +
+        '" stroke-width="1.7"></circle>' +
+        '<path d="M14.5 9.5 10 14l4.5-1.2L16 9.5z" stroke="' +
+        light +
+        '" stroke-width="1.6" stroke-linejoin="round"></path>',
+      chart:
+        '<path d="M4 19V5M4 19h16" stroke="' +
+        dark +
+        '" stroke-width="1.7" stroke-linecap="round"></path>' +
+        '<path d="M8 15l3.5-4 3 2.5L18 8" stroke="' +
+        light +
+        '" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>' +
+        '<circle cx="18" cy="8" fill="' +
+        light +
+        '" r="1.5"></circle>',
+      plus:
+        '<circle cx="12" cy="12" r="9" stroke="' +
+        dark +
+        '" stroke-width="1.7"></circle>' +
+        '<path d="M12 8v8M8 12h8" stroke="' +
+        light +
+        '" stroke-width="1.8" stroke-linecap="round"></path>',
+      user:
+        '<circle cx="12" cy="8" r="3.2" stroke="' +
+        dark +
+        '" stroke-width="1.7"></circle>' +
+        '<path d="M5.5 19c1.2-3.2 3.4-4.8 6.5-4.8s5.3 1.6 6.5 4.8" stroke="' +
+        light +
+        '" stroke-width="1.7" stroke-linecap="round"></path>',
+      spark:
+        '<path d="M12 3l1.6 5.2a2 2 0 0 0 1.2 1.2L20 11l-5.2 1.6a2 2 0 0 0-1.2 1.2L12 19l-1.6-5.2a2 2 0 0 0-1.2-1.2L4 11l5.2-1.6a2 2 0 0 0 1.2-1.2z" stroke="' +
+        dark +
+        '" stroke-width="1.6" stroke-linejoin="round"></path>' +
+        '<circle cx="12" cy="11" fill="' +
+        light +
+        '" r="1.5"></circle>',
+    };
+    return (
+      '<svg class="hf-wiki-duo" fill="none" height="22" viewBox="0 0 24 24" width="22" aria-hidden="true">' +
+      (paths[kind] || paths.spark) +
+      "</svg>"
+    );
+  }
+
+  function wikiFrameIcon(kind) {
+    return (
+      '<span class="hf-wiki-frame" aria-hidden="true"><span class="hf-wiki-frame__inner">' +
+      wikiDuoSvg(kind) +
+      "</span></span>"
+    );
+  }
+
   function wikiStep(n, title, text) {
     return (
       '<li class="hf-wiki__step"><span class="hf-wiki__step-n">' +
@@ -1641,11 +1735,31 @@
 
   function wikiCallout(title, text) {
     return (
-      '<aside class="hf-wiki__callout"><strong>' +
+      '<aside class="hf-wiki__callout">' +
+      wikiFrameIcon("spark") +
+      '<div><strong>' +
       title +
       "</strong><p>" +
       text +
-      "</p></aside>"
+      "</p></div></aside>"
+    );
+  }
+
+  function wikiHead(eyebrow, title, lead, iconKind) {
+    return (
+      '<header class="hf-wiki__head">' +
+      (eyebrow
+        ? '<div class="hf-wiki__chip">' +
+          (iconKind ? wikiFrameIcon(iconKind) : "") +
+          '<span class="hf-wiki__chip-label">' +
+          eyebrow +
+          "</span></div>"
+        : "") +
+      "<h2>" +
+      title +
+      "</h2>" +
+      (lead ? '<p class="hf-wiki__lead">' + lead + "</p>" : "") +
+      "</header>"
     );
   }
 
@@ -1697,50 +1811,57 @@
         true,
         '<div class="hf-wiki-home">' +
           '<section class="hf-wiki-home__hero">' +
-          '<p class="hf-wiki-home__kicker">Central de ajuda · Hubfi · set/2026</p>' +
-          "<h2>Operar crédito com clareza.<br>Sem slides. Sem adivinhação.</h2>" +
+          '<div class="hf-wiki-home__hero-inner">' +
+          '<div class="hf-wiki__chip hf-wiki__chip--hero">' +
+          wikiFrameIcon("spark") +
+          '<span class="hf-wiki__chip-label">Central de ajuda</span>' +
+          '<span class="hf-wiki__chip-meta">Hubfi · set/2026</span></div>' +
+          "<h2>Operar crédito com clareza.<br><span>Sem slides. Sem adivinhação.</span></h2>" +
           "<p>Documentação completa das funcionalidades da Hubfi: do dashboard ao kanban, cadastros e operações. Feita para imobiliárias, assessorias e quem fecha negócio.</p>" +
           '<div class="hf-wiki-home__cta">' +
-          '<a class="hf-wiki-home__linkbtn hf-wiki-home__linkbtn--on-dark" href="ds.html#/tour-dashboard">' +
+          '<a class="hf-wiki-home__btn hf-wiki-home__btn--primary" href="ds.html#/tour-dashboard">' +
           ico("map", 16) +
           "<span>Tour do dashboard</span></a>" +
-          '<a class="hf-wiki-home__linkbtn hf-wiki-home__linkbtn--on-dark" href="?topic=dashboard" data-wiki-jump="dashboard">' +
+          '<a class="hf-wiki-home__btn hf-wiki-home__btn--ghost" href="?topic=dashboard" data-wiki-jump="dashboard">' +
           ico("book-open", 16) +
           "<span>Guia do painel</span></a>" +
-          "</div></section>" +
+          "</div></div></section>" +
           '<section class="hf-wiki-home__features">' +
           '<article class="hf-wiki-home__feat">' +
           '<div class="hf-wiki-home__feat-top">' +
-          ibox("layout-dashboard") +
+          wikiFrameIcon("dashboard") +
           '<span class="hf-wiki-home__feat-tag">Novo</span></div>' +
           "<strong>Dashboard de operações</strong>" +
           "<span>Funil, SLA, gargalo e abas por Safra, Empresas e Produtos. Clique em qualquer card para entender o indicador.</span>" +
-          '<a class="hf-wiki-home__linkbtn" href="ds.html#/tour-dashboard">' +
-          ico("map", 16) +
-          "<span>Abrir tour</span></a></article>" +
+          '<a class="hf-wiki-home__feat-link" href="ds.html#/tour-dashboard">' +
+          "<span>Abrir tour</span>" +
+          ico("arrow-right", 14) +
+          "</a></article>" +
           '<article class="hf-wiki-home__feat">' +
           '<div class="hf-wiki-home__feat-top">' +
-          ibox("kanban") +
+          wikiFrameIcon("kanban") +
           '<span class="hf-wiki-home__feat-tag">Novo</span></div>' +
           "<strong>Kanban de operações</strong>" +
           "<span>Board por etapa com filtros Todas, Pausadas e Rascunhos. Foque no que move o pipeline.</span>" +
-          '<a class="hf-wiki-home__linkbtn" href="?topic=kanban" data-wiki-jump="kanban">' +
-          ico("book-open", 16) +
-          "<span>Ler guia</span></a></article>" +
+          '<a class="hf-wiki-home__feat-link" href="?topic=kanban" data-wiki-jump="kanban">' +
+          "<span>Ler guia</span>" +
+          ico("arrow-right", 14) +
+          "</a></article>" +
           '<article class="hf-wiki-home__feat">' +
           '<div class="hf-wiki-home__feat-top">' +
-          ibox("circle-pause") +
+          wikiFrameIcon("pause") +
           '<span class="hf-wiki-home__feat-tag">Atualizado</span></div>' +
           "<strong>Status Pausado</strong>" +
           "<span>Pendência temporária fora do SLA, com data de retorno e cadência de lembretes.</span>" +
-          '<a class="hf-wiki-home__linkbtn" href="?topic=pausado" data-wiki-jump="pausado">' +
-          ico("info", 16) +
-          "<span>Como usar</span></a></article>" +
+          '<a class="hf-wiki-home__feat-link" href="?topic=pausado" data-wiki-jump="pausado">' +
+          "<span>Como usar</span>" +
+          ico("arrow-right", 14) +
+          "</a></article>" +
           "</section>" +
           '<section class="hf-wiki-home__band">' +
           "<div><h3>Feito para quem opera, não só para quem treina</h3>" +
           "<p>Cada artigo fica aqui de forma permanente: buscável, atualizável e sem depender do modal de novidades.</p></div>" +
-          '<a class="hf-wiki-home__linkbtn" href="?topic=como-usar" data-wiki-jump="como-usar">' +
+          '<a class="hf-wiki-home__btn hf-wiki-home__btn--ghost" href="?topic=como-usar" data-wiki-jump="como-usar">' +
           ico("book-open", 16) +
           "<span>Como usar esta central</span></a>" +
           "</section></div>"
@@ -1748,20 +1869,29 @@
       wikiArticle(
         "como-usar",
         false,
-        "<h2>Como usar esta central</h2>" +
-          "<p>Use a barra lateral para navegar entre tópicos. A busca filtra os itens do menu. Os artigos ficam nesta área, sem popup.</p>" +
+        wikiHead(
+          "Começar",
+          "Como usar esta central",
+          "Use a barra lateral para navegar entre tópicos. A busca filtra os itens do menu. Os artigos ficam nesta área, sem popup.",
+          "compass"
+        ) +
+          '<div class="hf-wiki__panel">' +
           "<ul class=\"hf-wiki__steps\">" +
           wikiStep("1", "Escolha o tópico", "No menu à esquerda, abra o grupo e clique no artigo.") +
           wikiStep("2", "Leia no ritmo", "Cada página tem contexto, passos e o que evitar.") +
           wikiStep("3", "Volte quando precisar", "A central fica no produto, e não some como o modal antigo.") +
-          "</ul>"
+          "</ul></div>"
       ) +
       wikiArticle(
         "dashboard",
         false,
-        '<p class="hf-wiki__eyebrow">Dashboards</p>' +
-          "<h2>Dashboard de operações</h2>" +
-          "<p>Visão estratégica da plataforma: pipeline, funil, conversão, perdas e desempenho por usuário. Substitui a necessidade de “explicar o painel” em slides.</p>" +
+        wikiHead(
+          "Dashboards",
+          "Dashboard de operações",
+          "Visão estratégica da plataforma: pipeline, funil, conversão, perdas e desempenho por usuário. Substitui a necessidade de explicar o painel em slides.",
+          "dashboard"
+        ) +
+          '<div class="hf-wiki__panel">' +
           "<h3>O que você encontra</h3>" +
           "<ul class=\"hf-wiki__list\">" +
           "<li><strong>KPIs de pipeline:</strong> originada, ativa, ganha e perdido, com ticket médio.</li>" +
@@ -1778,13 +1908,19 @@
           wikiCallout(
             "Tour visual",
             'Prefira o <a href="ds.html#/tour-dashboard">Tour do Dashboard</a>: percorre cada card e gráfico da primeira tela com spotlight. Use <strong>Fechar tour</strong> a qualquer momento para navegar livremente.'
-          )
+          ) +
+          "</div>"
       ) +
       wikiArticle(
         "como-ler",
         false,
-        "<h2>Como ler os indicadores</h2>" +
-          "<p>Cada card do dashboard responde a uma pergunta. Use esta referência em vez de slides soltos.</p>" +
+        wikiHead(
+          "Dashboards",
+          "Como ler os indicadores",
+          "Cada card do dashboard responde a uma pergunta. Use esta referência em vez de slides soltos.",
+          "chart"
+        ) +
+          '<div class="hf-wiki__panel">' +
           '<div class="hf-wiki__table-wrap"><table class="hf-wiki__table"><thead><tr><th>Indicador</th><th>Significa</th><th>Ação típica</th></tr></thead><tbody>' +
           "<tr><td>Pipeline originada</td><td>Volume que entrou no período</td><td>Comparar com meta de captação</td></tr>" +
           "<tr><td>Pipeline ativa</td><td>Operações ainda em andamento</td><td>Priorizar o que está parado</td></tr>" +
@@ -1795,14 +1931,19 @@
           wikiCallout(
             "Guia estendido",
             'Há também o material externo <a href="dashboards/como-ler.html" target="_blank" rel="noreferrer">Como ler os dados</a> para Admin e Gestor da empresa.'
-          )
+          ) +
+          "</div>"
       ) +
       wikiArticle(
         "kanban",
         false,
-        '<p class="hf-wiki__eyebrow">Operações</p>' +
-          "<h2>Kanban de operações</h2>" +
-          "<p>Board por etapa: Pré-cadastro, Em análise, Proposta, Formalização e Finalizado. Cada card mostra código, cliente, produto, valor, tempo e responsável.</p>" +
+        wikiHead(
+          "Operações",
+          "Kanban de operações",
+          "Board por etapa: Pré-cadastro, Em análise, Proposta, Formalização e Finalizado. Cada card mostra código, cliente, produto, valor, tempo e responsável.",
+          "kanban"
+        ) +
+          '<div class="hf-wiki__panel">' +
           "<h3>Filtros rápidos</h3>" +
           "<ul class=\"hf-wiki__list\">" +
           "<li><strong>Todas:</strong> visão completa do funil.</li>" +
@@ -1812,13 +1953,19 @@
           wikiCallout(
             "Protótipo",
             'Veja o board em <a href="ds.html#/kanban-operacoes">Kanban de operações</a>.'
-          )
+          ) +
+          "</div>"
       ) +
       wikiArticle(
         "pausado",
         false,
-        "<h2>Status Pausado</h2>" +
-          "<p>Use quando a operação tem pendência temporária. A operação sai das filas ativas, o tempo pausado não conta no SLA e a cadência de lembretes começa a partir da data de retorno.</p>" +
+        wikiHead(
+          "Operações",
+          "Status Pausado",
+          "Use quando a operação tem pendência temporária. A operação sai das filas ativas, o tempo pausado não conta no SLA e a cadência de lembretes começa a partir da data de retorno.",
+          "pause"
+        ) +
+          '<div class="hf-wiki__panel">' +
           "<ul class=\"hf-wiki__steps\">" +
           wikiStep("1", "Pausar", "Informe motivo e data de retorno.") +
           wikiStep("2", "Acompanhar", "Busque com o filtro Pausadas no Kanban.") +
@@ -1828,13 +1975,19 @@
           wikiCallout(
             "Protótipo",
             'Simule em <a href="ds.html#/detalhes-operacao?demo=paused">Detalhes da operação · Pausado</a>.'
-          )
+          ) +
+          "</div>"
       ) +
       wikiArticle(
         "abertura",
         false,
-        "<h2>Abertura de operação</h2>" +
-          "<p>Documento é a identidade. A ficha é única na empresa e reaproveitada entre colegas. Outra empresa cadastra o mesmo CPF em silêncio.</p>" +
+        wikiHead(
+          "Operações",
+          "Abertura de operação",
+          "Documento é a identidade. A ficha é única na empresa e reaproveitada entre colegas. Outra empresa cadastra o mesmo CPF em silêncio.",
+          "plus"
+        ) +
+          '<div class="hf-wiki__panel">' +
           "<ul class=\"hf-wiki__list\">" +
           "<li>PF pede CPF; PJ pede CNPJ.</li>" +
           "<li>Sem documento válido, não avança.</li>" +
@@ -1844,13 +1997,19 @@
           wikiCallout(
             "Protótipo",
             'Fluxo em <a href="ds.html#/abertura-operacao">Abertura de operação</a>.'
-          )
+          ) +
+          "</div>"
       ) +
       wikiArticle(
         "unicidade",
         false,
-        "<h2>Unicidade de cliente por empresa</h2>" +
-          "<p>O mesmo documento não cria fichas duplicadas dentro da empresa. Entre empresas, cada uma cadastra de forma independente, sem mencionar a outra.</p>" +
+        wikiHead(
+          "Cadastros",
+          "Unicidade de cliente por empresa",
+          "O mesmo documento não cria fichas duplicadas dentro da empresa. Entre empresas, cada uma cadastra de forma independente, sem mencionar a outra.",
+          "user"
+        ) +
+          '<div class="hf-wiki__panel">' +
           "<ul class=\"hf-wiki__list\">" +
           "<li>Cadastro bloqueia se o documento já existe na empresa.</li>" +
           "<li>Edição com colisão de documento é barrada.</li>" +
@@ -1859,7 +2018,8 @@
           wikiCallout(
             "Protótipo",
             'Cenários em <a href="ds.html#/cadastro-cliente?demo=empresa">Cadastro de cliente</a> e <a href="ds.html#/edicao-cliente?demo=colisao">Edição de cliente</a>.'
-          )
+          ) +
+          "</div>"
       );
 
     return (
