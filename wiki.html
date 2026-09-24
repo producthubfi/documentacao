@@ -9,7 +9,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/tokens.css?v=83">
   <link rel="stylesheet" href="css/hf.css?v=97">
-  <link rel="stylesheet" href="css/docs.css?v=110">
+  <link rel="stylesheet" href="css/docs.css?v=111">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
   <style>
     html, body { height: 100%; margin: 0; }
     body { background: #fff; }
@@ -20,11 +22,17 @@
   <script src="js/icon-data.js?v=82"></script>
   <script src="js/catalog.js?v=98"></script>
   <script src="js/ds-icons.js?v=82"></script>
-  <script src="js/screens.js?v=119"></script>
+  <script src="js/screens.js?v=120"></script>
   <script>
     (function () {
       var root = document.getElementById("wiki-root");
-      if (!root || !window.HF_SCREENS || typeof window.HF_SCREENS.wiki !== "function") return;
+      if (!root) return;
+      if (!window.HF_SCREENS || typeof window.HF_SCREENS.wiki !== "function") {
+        root.innerHTML =
+          '<div style="padding:48px;font-family:Outfit,sans-serif;max-width:560px">' +
+          "<h1>Central de ajuda</h1><p>Não foi possível carregar o conteúdo. Atualize a página (Cmd/Ctrl + Shift + R).</p></div>";
+        return;
+      }
       root.innerHTML = window.HF_SCREENS.wiki();
       window.HF_SCREENS.bind(root);
     })();

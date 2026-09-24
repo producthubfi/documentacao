@@ -1687,7 +1687,7 @@
         true,
         '<div class="hf-wiki-home">' +
           '<section class="hf-wiki-home__hero">' +
-          '<p class="hf-wiki-home__kicker">Central de ajuda · Hubfi</p>' +
+          '<p class="hf-wiki-home__kicker">Central de ajuda · Hubfi · set/2026</p>' +
           "<h2>Operar crédito com clareza.<br>Sem slides. Sem adivinhação.</h2>" +
           "<p>Guias rápidos das telas que seu time usa todo dia — dashboard, kanban e status — pensados para imobiliárias, assessorias e quem fecha negócio.</p>" +
           '<div class="hf-wiki-home__cta">' +
