@@ -5292,13 +5292,7 @@ textarea {
   margin: 8px auto 0;
 }
 .hf-wiki-home__mock-glow {
-  position: absolute;
-  inset: -12px -16px;
-  border-radius: 20px;
-  background: linear-gradient(30deg, rgba(0, 0, 0, 0.03) 0%, rgba(0, 0, 0, 0.015) 50%, transparent 100%);
-  filter: blur(32px);
-  pointer-events: none;
-  z-index: 0;
+  display: none;
 }
 .hf-wiki-home__mock-frame {
   position: relative;
