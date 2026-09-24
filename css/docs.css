@@ -3925,7 +3925,7 @@ textarea {
 /* Kanban de operações — Figma 8501:45420 */
 .docs-screen--kanban {
   gap: 0;
-  padding: 8px 8px 8px 0;
+  padding: 8px;
   background: #fcfcfc;
   border: 0;
   max-height: calc(100vh - 88px);
@@ -3942,20 +3942,16 @@ textarea {
   min-width: 0;
   min-height: 0;
   gap: 24px;
-  padding: 16px 0 16px 16px;
+  padding: 16px;
   background: #fff;
   border: 1px solid #eaecec;
   border-radius: 16px;
   overflow: hidden;
 }
-.hf-kboard .hf-crumb {
-  padding-right: 32px;
-}
 .hf-kboard__pagehead {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding-right: 32px;
 }
 .hf-kboard__titles {
   display: flex;
@@ -3998,7 +3994,6 @@ textarea {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding-right: 32px;
   flex-shrink: 0;
 }
 .hf-kboard__search {
@@ -4149,6 +4144,7 @@ textarea {
   overflow-x: auto;
   overflow-y: hidden;
   align-items: stretch;
+  justify-content: safe center;
 }
 .hf-kcol {
   display: flex;
