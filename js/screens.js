@@ -1689,7 +1689,7 @@
           '<section class="hf-wiki-home__hero">' +
           '<p class="hf-wiki-home__kicker">Central de ajuda · Hubfi · set/2026</p>' +
           "<h2>Operar crédito com clareza.<br>Sem slides. Sem adivinhação.</h2>" +
-          "<p>Guias rápidos das telas que seu time usa todo dia — dashboard, kanban e status — pensados para imobiliárias, assessorias e quem fecha negócio.</p>" +
+          "<p>Documentação completa das funcionalidades da Hubfi: do dashboard ao kanban, cadastros e operações. Feita para imobiliárias, assessorias e quem fecha negócio.</p>" +
           '<div class="hf-wiki-home__cta">' +
           '<a class="hf-wiki-home__btn hf-wiki-home__btn--primary" href="ds.html#/tour-dashboard">Tour do dashboard</a>' +
           '<a class="hf-wiki-home__btn" href="?topic=dashboard" data-wiki-jump="dashboard">Guia do painel</a>' +
@@ -1703,7 +1703,7 @@
           '<a class="hf-wiki-home__feat" href="?topic=kanban" data-wiki-jump="kanban">' +
           '<span class="hf-wiki-home__feat-tag">Novo</span>' +
           "<strong>Kanban de operações</strong>" +
-          "<span>Board por etapa com filtros Todas, Pausadas e Rascunhos — foque no que move o pipeline.</span>" +
+          "<span>Board por etapa com filtros Todas, Pausadas e Rascunhos. Foque no que move o pipeline.</span>" +
           '<em>Ler guia →</em></a>' +
           '<a class="hf-wiki-home__feat" href="?topic=pausado" data-wiki-jump="pausado">' +
           '<span class="hf-wiki-home__feat-tag">Atualizado</span>' +
@@ -1713,7 +1713,7 @@
           "</section>" +
           '<section class="hf-wiki-home__band">' +
           "<div><h3>Feito para quem opera, não só para quem treina</h3>" +
-          "<p>Cada artigo fica aqui de forma permanente — buscável, atualizável e sem depender do modal de novidades.</p></div>" +
+          "<p>Cada artigo fica aqui de forma permanente: buscável, atualizável e sem depender do modal de novidades.</p></div>" +
           '<a class="hf-wiki-home__btn hf-wiki-home__btn--light" href="?topic=como-usar" data-wiki-jump="como-usar">Como usar esta central</a>' +
           "</section></div>"
       ) +
@@ -1725,7 +1725,7 @@
           "<ul class=\"hf-wiki__steps\">" +
           wikiStep("1", "Escolha o tópico", "No menu à esquerda, abra o grupo e clique no artigo.") +
           wikiStep("2", "Leia no ritmo", "Cada página tem contexto, passos e o que evitar.") +
-          wikiStep("3", "Volte quando precisar", "A central fica no produto — não some como o modal antigo.") +
+          wikiStep("3", "Volte quando precisar", "A central fica no produto, e não some como o modal antigo.") +
           "</ul>"
       ) +
       wikiArticle(
@@ -1736,20 +1736,20 @@
           "<p>Visão estratégica da plataforma: pipeline, funil, conversão, perdas e desempenho por usuário. Substitui a necessidade de “explicar o painel” em slides.</p>" +
           "<h3>O que você encontra</h3>" +
           "<ul class=\"hf-wiki__list\">" +
-          "<li><strong>KPIs de pipeline</strong> — originada, ativa, ganha e perdido, com ticket médio.</li>" +
-          "<li><strong>Funil</strong> — distribuição por etapa, SLA e tooltip de gargalo.</li>" +
-          "<li><strong>Abas</strong> — Operações, Safra, Empresas, Produtos e Usuários.</li>" +
-          "<li><strong>Filtros</strong> — mesa, produto, empresa, período, operador e usuário.</li>" +
+          "<li><strong>KPIs de pipeline:</strong> originada, ativa, ganha e perdido, com ticket médio.</li>" +
+          "<li><strong>Funil:</strong> distribuição por etapa, SLA e tooltip de gargalo.</li>" +
+          "<li><strong>Abas:</strong> Operações, Safra, Empresas, Produtos e Usuários.</li>" +
+          "<li><strong>Filtros:</strong> mesa, produto, empresa, período, operador e usuário.</li>" +
           "</ul>" +
           "<h3>Como ler rápido</h3>" +
           "<ul class=\"hf-wiki__steps\">" +
           wikiStep("1", "Comece pelos KPIs", "Veja volume e ticket. Pipeline ativa mostra o que ainda está em jogo.") +
-          wikiStep("2", "Olhe o funil", "Identifique onde o volume trava — análise, proposta ou formalização.") +
+          wikiStep("2", "Olhe o funil", "Identifique onde o volume trava: análise, proposta ou formalização.") +
           wikiStep("3", "Ajuste os filtros", "Restrinja por mesa ou período antes de concluir.") +
           "</ul>" +
           wikiCallout(
             "Tour visual",
-            'Prefira o <a href="ds.html#/tour-dashboard">Tour do Dashboard</a> — percorre cada card e gráfico da primeira tela com spotlight. Use <strong>Fechar tour</strong> a qualquer momento para navegar livremente.'
+            'Prefira o <a href="ds.html#/tour-dashboard">Tour do Dashboard</a>: percorre cada card e gráfico da primeira tela com spotlight. Use <strong>Fechar tour</strong> a qualquer momento para navegar livremente.'
           )
       ) +
       wikiArticle(
@@ -1777,9 +1777,9 @@
           "<p>Board por etapa: Pré-cadastro, Em análise, Proposta, Formalização e Finalizado. Cada card mostra código, cliente, produto, valor, tempo e responsável.</p>" +
           "<h3>Filtros rápidos</h3>" +
           "<ul class=\"hf-wiki__list\">" +
-          "<li><strong>Todas</strong> — visão completa do funil.</li>" +
-          "<li><strong>Pausadas</strong> — só operações com pausa (fora do SLA).</li>" +
-          "<li><strong>Rascunhos</strong> — operações ainda não enviadas.</li>" +
+          "<li><strong>Todas:</strong> visão completa do funil.</li>" +
+          "<li><strong>Pausadas:</strong> só operações com pausa (fora do SLA).</li>" +
+          "<li><strong>Rascunhos:</strong> operações ainda não enviadas.</li>" +
           "</ul>" +
           wikiCallout(
             "Protótipo",
