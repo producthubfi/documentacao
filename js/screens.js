@@ -1845,10 +1845,10 @@
           '<div class="hf-wiki-home__mock-frame">' +
           '<iframe class="hf-wiki-home__mock-iframe" src="assets/wiki/hero-mock/index.html?v=2" title="Mockup animado do backoffice Hubfi" loading="eager" scrolling="no"></iframe>' +
           "</div></section>" +
-          '<div class="hf-wiki-home__divider bridge bridge--mark bridge--white-to-paper in" aria-hidden="true">' +
+          '<div class="hf-wiki-home__divider bridge bridge--mark bridge--white-to-paper" aria-hidden="true">' +
           '<div class="bridge-mark-rule">' +
           '<span class="bridge-mark-line"></span>' +
-          '<span class="bridge-mark-badge"><img src="assets/wiki/bridge-icon.png" width="26" height="26" alt=""></span>' +
+          '<span class="bridge-mark-badge"><img src="assets/wiki/bridge-icon.png" id="icon-logo" alt=""></span>' +
           '<span class="bridge-mark-line"></span>' +
           "</div></div>" +
           '<section class="hf-wiki-home__features">' +
@@ -3951,6 +3951,24 @@
     }
 
     showTopic(topicFromUrl(), false);
+
+    // Bridge mark — mesmo IntersectionObserver do site Hubfi
+    var bridges = shell.querySelectorAll(".bridge");
+    if (bridges.length) {
+      var bridgeIO = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add("in");
+            bridgeIO.unobserve(entry.target);
+          });
+        },
+        { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+      );
+      bridges.forEach(function (el) {
+        bridgeIO.observe(el);
+      });
+    }
   }
 
   function bindDashTabs(root) {
