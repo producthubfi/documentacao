@@ -5261,7 +5261,7 @@ textarea {
 }
 .hf-wiki-home__intro h2 {
   margin: 0;
-  max-width: 18ch;
+  max-width: 22ch;
   font-size: clamp(36px, 4.2vw, 52px);
   font-weight: 700;
   line-height: 1.08;

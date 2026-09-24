@@ -1833,11 +1833,11 @@
           '<span class="hf-wiki-frame hf-wiki-frame--xs" aria-hidden="true"><span class="hf-wiki-frame__inner">' +
           wikiDuoSvg("spark") +
           "</span></span>" +
-          '<span class="hf-wiki__chip-label">Produtos</span>' +
-          '<span class="hf-wiki__chip-meta">3 motores</span></div>' +
+          '<span class="hf-wiki__chip-label">Central de ajuda</span>' +
+          '<span class="hf-wiki__chip-meta">Guias e novidades</span></div>' +
           "<h2>" +
-          '<span class="hf-wiki-home__line">Três motores de crédito.</span>' +
-          '<span class="hf-wiki-home__line hf-wiki-home__line--accent">Uma plataforma só.</span>' +
+          '<span class="hf-wiki-home__line">Tire suas dúvidas em minutos.</span>' +
+          '<span class="hf-wiki-home__line hf-wiki-home__line--accent">Opere com mais confiança.</span>' +
           "</h2>" +
           "</section>" +
           '<section class="hf-wiki-home__mock" aria-label="Demonstração animada do backoffice Hubfi">' +
