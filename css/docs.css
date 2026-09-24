@@ -4634,8 +4634,12 @@ textarea {
 .wiki-page .hf-wiki {
   display: flex;
   align-items: stretch;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
   min-height: 100vh;
   height: 100vh;
+  box-sizing: border-box;
 }
 .hf-wiki__brand {
   display: flex;
