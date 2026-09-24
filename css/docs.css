@@ -4932,6 +4932,9 @@ textarea {
 .hf-wiki__article {
   width: 100%;
   max-width: 1920px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
 }
 .hf-wiki__article[hidden] {
   display: none;
@@ -5259,6 +5262,11 @@ textarea {
   display: grid;
   gap: 36px;
   padding-top: 8px;
+  width: 100%;
+  max-width: 1920px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
 }
 .hf-wiki-home__intro {
   display: flex;
@@ -5550,12 +5558,18 @@ textarea {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
+  width: min(1024px, 100%);
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
 }
 .hf-wiki-home__feat {
   display: flex;
   flex-direction: column;
   gap: 14px;
   align-items: flex-start;
+  width: 100%;
+  max-width: 100%;
   min-height: 100%;
   padding: 24px;
   border-radius: 16px;
@@ -5563,6 +5577,7 @@ textarea {
   border: 1px solid #e5e7eb;
   box-shadow: 0 1px 2px rgba(15, 18, 25, 0.03);
   transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease, border-color 0.2s ease;
+  box-sizing: border-box;
 }
 .hf-wiki-home__feat:hover {
   transform: translateY(-3px);
