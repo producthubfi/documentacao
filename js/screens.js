@@ -1596,15 +1596,19 @@
     );
   }
 
-  function wikiNavItem(id, label, active) {
+  function wikiNavItem(id, label, icon, active) {
     return (
       '<button class="hf-wiki__nav-item' +
       (active ? " is-active" : "") +
       '" type="button" data-wiki-nav="' +
       id +
       '">' +
+      '<span class="hf-wiki__nav-ico" aria-hidden="true">' +
+      ico(icon || "book-open", 18) +
+      "</span>" +
+      '<span class="hf-wiki__nav-text">' +
       label +
-      "</button>"
+      "</span></button>"
     );
   }
 
@@ -1663,23 +1667,24 @@
       '<label class="hf-wiki__search">' +
       ico("search", 16) +
       '<input type="search" placeholder="Buscar tópico" aria-label="Buscar tópico" data-wiki-search></label>' +
+      '<nav class="hf-wiki__nav-scroll">' +
       wikiNavGroup("Começar", [
-        wikiNavItem("inicio", "O que há de novo", true),
-        wikiNavItem("como-usar", "Como usar esta central"),
+        wikiNavItem("inicio", "O que há de novo", "sparkles", true),
+        wikiNavItem("como-usar", "Como usar esta central", "compass"),
       ]) +
       wikiNavGroup("Dashboards", [
-        wikiNavItem("dashboard", "Dashboard de operações"),
-        wikiNavItem("como-ler", "Como ler os indicadores"),
+        wikiNavItem("dashboard", "Dashboard de operações", "layout-dashboard"),
+        wikiNavItem("como-ler", "Como ler os indicadores", "chart-line"),
       ]) +
       wikiNavGroup("Operações", [
-        wikiNavItem("kanban", "Kanban de operações"),
-        wikiNavItem("pausado", "Status Pausado"),
-        wikiNavItem("abertura", "Abertura de operação"),
+        wikiNavItem("kanban", "Kanban de operações", "kanban"),
+        wikiNavItem("pausado", "Status Pausado", "circle-pause"),
+        wikiNavItem("abertura", "Abertura de operação", "plus"),
       ]) +
       wikiNavGroup("Cadastros", [
-        wikiNavItem("unicidade", "Unicidade de cliente"),
+        wikiNavItem("unicidade", "Unicidade de cliente", "user-plus"),
       ]) +
-      "</aside>";
+      "</nav></aside>";
 
     var articles =
       wikiArticle(
