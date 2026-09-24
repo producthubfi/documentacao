@@ -5398,32 +5398,41 @@ textarea {
 }
 .hf-wiki__table-wrap {
   overflow: auto;
-  border: 1px solid #eaecec;
-  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
   margin: 8px 0 16px;
+  background: #fff;
 }
 .hf-wiki__table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 13px;
+  font-size: 14px;
 }
 .hf-wiki__table th,
 .hf-wiki__table td {
-  padding: 10px 12px;
+  padding: 12px 16px;
   text-align: left;
-  border-bottom: 1px solid #eaecec;
+  border-bottom: 1px solid #eef0f2;
   vertical-align: top;
 }
 .hf-wiki__table th {
-  background: #f5f5f5;
-  font-weight: 600;
-  color: #282a2a;
+  background: #f7faf9;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #6b7280;
 }
 .hf-wiki__table tr:last-child td {
   border-bottom: 0;
 }
 .hf-wiki__table td {
-  color: #4a4f4f;
+  color: #282a2a;
+  line-height: 1.5;
+}
+.hf-wiki__table td:first-child {
+  font-weight: 600;
+  color: #0f1219;
 }
 
 @media (max-width: 900px) {
