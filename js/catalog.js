@@ -2361,7 +2361,7 @@
       "kanban-operacoes": '<div class="docs-screen-thumb"><strong>Kanban</strong><span>Operações por etapa</span></div>',
       "wiki-sistema": '<div class="docs-screen-thumb"><strong>Central de ajuda</strong><span>Wiki · novidades</span></div>',
     };
-    return map[slug] || "";
+    return map[slug] || (window.HF_THUMBS && window.HF_THUMBS[slug]) || "";
   }
 
   function protoCard(slug, title) {

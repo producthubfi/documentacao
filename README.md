@@ -26,7 +26,7 @@ Landing do painel para empresas e guia de leitura:
 
 Todos os componentes do arquivo Figma, com variantes:
 
-Search, Input, Textarea, Select, Checkbox, Radio, Switch, Label, Upload, Button, Chip, Select Button, Alert, Badge, Toast, Tooltip, Progress, Skeleton, Accordion, Breadcrumb, Tabs, Pagination, Header, Sidebar, Stepper, Dropdown Menu, Modal, Dialog, Popover, Sheet, Avatar, Card, Card Select, Card File, Table, List Item, Separator, Slider, Operations, Section, Rich Text Editor.
+Search, Input, Textarea, Select, Checkbox, Radio, Switch, Label, Upload, Multiselect, Form Row, Button, Chip, Select Button, Filter Chip, Card Radio, Alert, Badge, Toast, Tooltip, Progress, Skeleton, Spinner, Accordion, Breadcrumb, Tabs, Pagination, Header, Sidebar, Stepper, Dropdown Menu, Modal, Dialog, Popover, Sheet, Modal Stepper, Avatar, Card, Card Select, Card File, Table, List Item, Separator, Slider, Operations, Section, Rich Text Editor, Bancos, Card Proposta, Stage Card, Log, KPI Consórcio, Bulk Bar, Lance Card, Impact Summary.
 
 Tokens em `css/tokens.css`. Componentes em `css/hf.css`. Docs em `css/docs.css` + `js/catalog.js`.
 
