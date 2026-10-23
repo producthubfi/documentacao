@@ -914,6 +914,7 @@
       '<div class="hf-app-nav__scroll">' +
       navGroup("Rotina", [
         navItem("nav-plus", "Nova Operação", { active: nova }),
+        navItem("nav-dashboard", "Dashboard"),
         navItem("nav-ops", "Operações", { active: !backoffice && !nova && !clientes }),
         navItem("nav-panel", "Painel de Produtos")
       ]) +

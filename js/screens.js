@@ -11,7 +11,7 @@
   var FIGMA_DASH =
     "https://www.figma.com/design/6GPvl7jqcGdcwaCCx9kyOI/Dashboard-de-opera%C3%A7%C3%B5es?node-id=2211-6474";
   var FIGMA_KANBAN =
-    "https://www.figma.com/design/LQfnfvRTFm2AZ9qwTWsQEk/Nova-opera%C3%A7%C3%A3o?node-id=8501-45420";
+    "https://www.figma.com/design/6cUI4dosCuSuXXgZRwBRUj/Kanban-opera%C3%A7%C3%B5es?node-id=12007-14798";
 
   function ico(name, size) {
     return window.hfIcon ? window.hfIcon(name, size || 20) : "";
@@ -2463,35 +2463,132 @@
     return "";
   }
 
+  function kanbanStatus(kind) {
+    if (!kind) return "";
+    var label = kind === "pendente" ? "Pendente" : kind === "perdida" ? "Perdida" : "Ganha";
+    return (
+      '<span class="hf-kstatus hf-kstatus--' +
+      kind +
+      '">' +
+      kAsset("status-" + kind, 12, 12) +
+      "<span>" +
+      label +
+      "</span></span>"
+    );
+  }
+
+  function kanbanAvatars(list) {
+    return (
+      '<span class="hf-kcard__avatars">' +
+      (list || [])
+        .map(function (initials) {
+          return '<span class="hf-kcard__avatar">' + initials + "</span>";
+        })
+        .join("") +
+      "</span>"
+    );
+  }
+
+  function kanbanName(value) {
+    return String(value || "").replace(/\S+/g, function (word) {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    });
+  }
+
+  function kanbanHover() {
+    function row(icon, label, value) {
+      return (
+        '<div class="hf-khover__row">' +
+        kAsset(icon, 16, 16) +
+        "<span>" +
+        label +
+        "</span><b>" +
+        value +
+        "</b></div>"
+      );
+    }
+    function bank(file, name, meta, tag, tone) {
+      return (
+        '<div class="hf-kbank"><img src="assets/screen/kanban/' +
+        file +
+        '" width="20" height="20" alt=""><strong>' +
+        name +
+        "</strong><span>" +
+        meta +
+        '</span><em class="hf-kbank__tag hf-kbank__tag--' +
+        tone +
+        '">' +
+        tag +
+        "</em></div>"
+      );
+    }
+    return (
+      '<div class="hf-khover" role="dialog" aria-label="OP-002983" hidden>' +
+      '<div class="hf-khover__head"><div class="hf-khover__top"><span class="hf-khover__id">OP-002983</span>' +
+      '<span class="hf-khover__temp">Temperatura média</span></div>' +
+      '<p class="hf-khover__name">Pedro Henrique De Melo Muniz Raposo</p>' +
+      '<p class="hf-khover__product">Financiamento Imobiliário - Aquisição</p></div>' +
+      '<div class="hf-khover__alert">' +
+      '<img src="assets/screen/kanban/hover-info.svg" width="20" height="20" alt="">' +
+      '<div><p class="hf-khover__alert-title">Resultado pendente · Itaú</p>' +
+      '<p class="hf-khover__alert-desc">Sem resposta da API há 12 min. Reenvie ou registre o resultado manualmente.</p></div></div>' +
+      '<div class="hf-khover__rows">' +
+      row("hover-finance", "Financiamento", "R$ 350.000") +
+      row("hover-house", "Valor do imóvel", "R$ 490.000") +
+      row("hover-layers", "Etapa atual", "Análise de crédito · 21h 54m") +
+      "</div>" +
+      '<hr class="hf-khover__sep">' +
+      '<div class="hf-khover__banks"><p class="hf-khover__kicker">Bancos</p>' +
+      bank("bank-caixa.png", "Caixa", "11,29% a.a. · 360 meses", "Aprovada", "ok") +
+      bank("bank-itau.png", "Itaú", "Enviada às 14:52", "Sem resposta", "wait") +
+      bank("bank-bradesco.png", "Bradesco", "Aguardando retorno", "Em análise", "neutral") +
+      "</div>" +
+      '<hr class="hf-khover__sep">' +
+      '<div class="hf-khover__context"><div class="hf-khover__person"><span class="hf-kcard__avatar">VT</span><div><strong>Victor Tavares</strong><span>Imobiliária Aurora</span></div></div>' +
+      '<div><p class="hf-khover__kicker">Última atividade</p>' +
+      '<p class="hf-khover__activity">Operador cadastrou proposta · Itaú · 14/04/2026 14:20</p></div></div>' +
+      '<div class="hf-khover__actions"><button class="hf-btn hf-btn--primary" type="button">Abrir operação</button>' +
+      '<button class="hf-btn hf-btn--ghost" type="button">Registrar resultado</button></div></div>'
+    );
+  }
+
   function kanbanCard(opts) {
     var flags = [];
     if (opts.paused) flags.push("paused");
     if (opts.draft) flags.push("draft");
-    var tag = "";
-    if (opts.paused) tag = kanbanTag("paused", opts.paused);
-    else if (opts.draft) tag = kanbanTag("draft", "Rascunho");
     return (
-      '<article class="hf-kcard" data-k-flags="' +
+      '<article class="hf-kcard"' +
+      (opts.hover ? ' data-k-hover="aquisicao"' : "") +
+      ' data-k-flags="' +
       flags.join(" ") +
       '">' +
       '<div class="hf-kcard__head"><span class="hf-kcard__id">' +
       opts.id +
       "</span>" +
-      tag +
-      kanbanTemp(opts.temp || "alta") +
+      kanbanStatus(opts.status) +
+      (opts.trend
+        ? '<span class="hf-kcard__trend">' + kAsset("trend-down", 16, 16) + "</span>"
+        : "") +
       "</div>" +
       '<div class="hf-kcard__body"><p class="hf-kcard__name">' +
-      opts.name +
+      kanbanName(opts.name) +
       '</p><p class="hf-kcard__product">' +
       opts.product +
       "</p></div>" +
       '<div class="hf-kcard__foot"><p class="hf-kcard__value">' +
       opts.value +
-      '</p><div class="hf-kcard__meta"><span class="hf-kcard__days">' +
-      opts.days +
-      '</span><span class="hf-kcard__avatar">' +
-      opts.avatar +
-      "</span></div></div></article>"
+      '</p><div class="hf-kcard__meta">' +
+      (opts.days
+        ? '<span class="hf-kcard__days' +
+          (opts.late ? " hf-kcard__days--late" : "") +
+          '">' +
+          opts.days +
+          "</span>"
+        : "") +
+      kanbanAvatars(opts.avatars) +
+      "</div></div>" +
+      (opts.hover ? kanbanHover() : "") +
+      "</article>"
     );
   }
 
@@ -2506,9 +2603,6 @@
       (opts.tom || "neutro") +
       '">' +
       '<header class="hf-kcol__head">' +
-      '<span class="hf-kcol__dot" aria-hidden="true">' +
-      kAsset("dot-" + (opts.tom || "neutro"), 8, 8) +
-      "</span>" +
       '<span class="hf-kcol__name">' +
       opts.name +
       '</span><span class="hf-kcol__count">' +
@@ -2539,12 +2633,12 @@
 
   function kanbanScreen() {
     var sidebar =
-      typeof ui.appSidebar === "function" ? ui.appSidebar("operacoes", "fit collapsed") : "";
+      typeof ui.appSidebar === "function" ? ui.appSidebar("operacoes", "fit") : "";
 
     var crumb =
       '<nav class="hf-crumb">' +
-      '<button class="hf-crumb__home" type="button" data-nav-toggle aria-expanded="false" aria-label="Expandir menu">' +
-      kAsset("panel-left", 20, 20) +
+      '<button class="hf-crumb__home" type="button" data-nav-toggle aria-expanded="true" aria-label="Recolher menu">' +
+      kAsset("crumb-home", 20, 20) +
       "</button>" +
       '<span class="hf-crumb__div"></span>' +
       "<span>Operações</span></nav>";
@@ -2552,7 +2646,7 @@
     var header =
       '<header class="hf-kboard__pagehead">' +
       '<div class="hf-kboard__titles"><h1 class="hf-kboard__title">Operações</h1>' +
-      '<p class="hf-kboard__sub">Acompanhe cada operação da entrada à finalização</p></div>' +
+      '<p class="hf-kboard__sub">Gerencie e acompanhe as operações solicitadas</p></div>' +
       '<button class="hf-btn hf-btn--primary hf-kboard__cta" type="button">' +
       kAsset("plus", 20, 20) +
       "Nova Operação</button></header>";
@@ -2561,71 +2655,70 @@
       '<div class="hf-kboard__toolbar">' +
       '<label class="hf-kboard__search"><span class="hf-kboard__search-ico" aria-hidden="true">' +
       kAsset("search", 16, 16) +
-      '</span><input type="search" placeholder="Buscar por código, cliente ou responsável" aria-label="Buscar operações"></label>' +
-      '<div class="hf-kboard__quicks" data-k-quicks>' +
-      kanbanQuick("Todas", "2.790", true) +
-      kanbanQuick("Pausadas", "12", false) +
-      kanbanQuick("Rascunhos", "8", false) +
-      "</div>" +
-      '<div class="hf-kboard__view" role="group" aria-label="Visão">' +
-      '<button class="hf-kboard__view-btn is-active" type="button" aria-label="Kanban" aria-pressed="true">' +
-      kAsset("view-kanban", 16, 16) +
-      '</button><button class="hf-kboard__view-btn" type="button" aria-label="Lista" aria-pressed="false">' +
-      kAsset("view-lista", 16, 16) +
-      "</button></div>" +
-      '<button class="hf-btn hf-btn--ghost hf-kboard__filters" type="button">Filtros</button>' +
-      '<button class="hf-btn hf-btn--ghost hf-btn--icon hf-kboard__export" type="button" aria-label="Exportar">' +
-      kAsset("download", 20, 20) +
-      "</button></div>";
+      '</span><input type="search" placeholder="código, cliente ou personal..." aria-label="Buscar operações"></label>' +
+      '<div class="hf-kboard__tools">' +
+      '<button class="hf-kboard__filters" type="button">' +
+      kAsset("funnel", 20, 20) +
+      "Filtros</button>" +
+      '<div class="hf-kboard__icons">' +
+      '<button class="hf-kboard__iconbtn" type="button" aria-label="Lista">' +
+      kAsset("icon-lista", 16, 16) +
+      '</button><button class="hf-kboard__iconbtn" type="button" aria-label="Exportar">' +
+      kAsset("icon-download", 16, 16) +
+      "</button></div></div></div>";
 
     var board =
       '<div class="hf-kboard__cols" data-k-board>' +
       kanbanCol({
-        name: "Pré-cadastro",
-        count: "1.126",
-        sum: "R$ 793,8 mi",
+        name: "Pré-Cadastro",
+        count: "1.257",
+        sum: "R$ 853,1 mi",
         tom: "neutro",
         cards: [
-          { id: "OP-002897", name: "Rafael Cavalcanti Teixeira Gomes", product: "Home Equity", value: "R$ 100.000,00", days: "2d", avatar: "RC", temp: "alta" },
-          { id: "OP-002969", name: "Lucas Augusto Costa Godoi", product: "Financiamento Imobiliário", value: "R$ 450.000,00", days: "37d", avatar: "LA", temp: "media", paused: "Pausada até 11/10" },
-          { id: "OP-002968", name: "Mauricio Lima", product: "Financiamento Imobiliário", value: "R$ 878.100,00", days: "1d", avatar: "ML", temp: "media", draft: true },
-          { id: "OP-002967", name: "Aila Maria de Alencar Barreto", product: "Financiamento de Veículos", value: "R$ 39.000,00", days: "5d", avatar: "AM", temp: "baixa" },
+          { id: "OP-002983", status: "pendente", trend: true, hover: true, late: true, name: "pedro henrique de melo muniz raposo", product: "Financiamento Imobiliário - Aquisição", value: "R$ 0,00", days: "8d", avatars: ["?", "FS"] },
+          { id: "OP-002982", status: "pendente", trend: true, late: true, name: "pedro henrique de melo muniz raposo", product: "Financiamento Imobiliário - Aquisição", value: "R$ 0,00", days: "8d", avatars: ["?", "FS"] },
+          { id: "OP-002979", status: "pendente", trend: true, name: "mauricio lima cpf", product: "Financiamento Imobiliário - Construção", value: "R$ 790.000,00", days: "16d", avatars: ["?", "MP"] },
+          { id: "OP-002977", status: "pendente", trend: true, late: true, name: "teste guilherme lopes barbosa", product: "APE - Alavancagem Patrimonial Estratégica", value: "R$ 1.000.000,00", days: "16d", avatars: ["?", "EM"] },
+          { id: "OP-002897", status: "perdida", name: "rafael cavalcanti teixeira gomes", product: "Home Equity - Crédito com Garantia de Imóvel", value: "R$ 100.000,00", avatars: ["?", "RC"] },
         ],
       }) +
       kanbanCol({
-        name: "Em análise",
-        count: "560",
-        sum: "R$ 554,5 mi",
+        name: "Em Análise",
+        count: "575",
+        sum: "R$ 576,6 mi",
         tom: "atencao",
         cards: [
-          { id: "OP-002890", name: "Mauricio Lima Teste", product: "Financiamento Imobiliário", value: "R$ 500.000,00", days: "1d", avatar: "ML", temp: "alta" },
-          { id: "OP-002954", name: "Ricardo Paz dos Santos Filho", product: "Home Equity", value: "R$ 670.000,00", days: "3d", avatar: "RP", temp: "alta" },
-          { id: "OP-002778", name: "Geiza Ribeiro da Silva Sousa", product: "Financiamento Imobiliário", value: "R$ 15.000,00", days: "12d", avatar: "GR", temp: "baixa", paused: "Pausada até 04/10" },
-          { id: "OP-002959", name: "Victor Tavares de Souza Lopes", product: "Consórcio", value: "R$ 400.000,00", days: "7d", avatar: "VT", temp: "media" },
+          { id: "OP-002978", status: "perdida", name: "mauricio lima cpf", product: "Financiamento Imobiliário - Construção", value: "R$ 790.000,00", avatars: ["?", "ML"] },
+          { id: "OP-002405", status: "ganha", name: "cap protensão e construções ltda", product: "Adiantamento de Recebíveis", value: "R$ 1.000.000,00", avatars: ["RC", "JN"] },
+          { id: "OP-002959", status: "perdida", name: "ricardo paz dos santos filho", product: "Financiamento Imobiliário - Aquisição", value: "R$ 400.000,00", avatars: ["?", "RP"] },
+          { id: "OP-002778", status: "pendente", trend: true, late: true, name: "mauricio", product: "Financiamento Imobiliário - Aquisição", value: "R$ 15.000,00", days: "23d", avatars: ["RP", "RP"] },
+          { id: "OP-002955", status: "pendente", trend: true, late: true, name: "victor tavares de souza lopes", product: "Financiamento Imobiliário - Aquisição", value: "R$ 0,00", days: "34d", avatars: ["?", "VT"] },
         ],
       }) +
       kanbanCol({
         name: "Proposta",
-        count: "584",
-        sum: "R$ 57,9 mi",
+        count: "594",
+        sum: "R$ 60,7 mi",
         tom: "progresso",
         cards: [
-          { id: "OP-001477", name: "Aila Maria de Alencar Barreto", product: "Plano de Saúde", value: "R$ 4.000,00", days: "2d", avatar: "AM", temp: "media" },
-          { id: "OP-000588", name: "Wellington Andrade", product: "Financiamento de Veículos", value: "R$ 40.908,00", days: "9d", avatar: "WA", temp: "alta" },
-          { id: "OP-002496", name: "Thiago Rebouças Correia", product: "Seguro de Vida", value: "R$ 654,24", days: "4d", avatar: "TR", temp: "baixa" },
-          { id: "OP-001003", name: "Alberto Cassiano Barbosa", product: "Seguro Auto", value: "R$ 4.445,07", days: "21d", avatar: "AC", temp: "media", paused: "Pausada até 18/10" },
+          { id: "OP-002954", status: "ganha", name: "mauricio lima teste", product: "Financiamento Imobiliário - Construção", value: "R$ 670.000,00", avatars: ["?", "MP"] },
+          { id: "OP-001477", status: "perdida", name: "aila maria de alencar barreto", product: "Plano de Saúde", value: "R$ 4.000,00", avatars: ["AM", "CI"] },
+          { id: "OP-000588", status: "perdida", name: "aila maria de alencar barreto", product: "Financiamento de Veículos", value: "R$ 40.908,00", avatars: ["RC", "CI"] },
+          { id: "OP-002496", trend: true, name: "thiago rebouças correira de sousa", product: "Plano de Saúde", value: "R$ 654,24", days: "679d", avatars: ["BR", "BR"] },
+          { id: "OP-001003", status: "perdida", name: "aila maria de alencar barreto", product: "Seguro Auto", value: "R$ 4.445,07", avatars: ["AM", "CI"] },
         ],
       }) +
       kanbanCol({
         name: "Formalização",
-        count: "36",
+        count: "42",
         sum: "R$ 2,4 mi",
         tom: "progresso",
         cards: [
-          { id: "OP-002766", name: "Raposo Teste", product: "Financiamento Imobiliário", value: "R$ 8.000,34", days: "6d", avatar: "RT", temp: "alta" },
-          { id: "OP-000661", name: "Luiz Felipe Rocha Bezerra", product: "Financiamento de Veículos", value: "R$ 89.999,73", days: "15d", avatar: "LF", temp: "media" },
-          { id: "OP-002542", name: "João Leal", product: "Financiamento Imobiliário", value: "R$ 213.610,53", days: "28d", avatar: "JL", temp: "baixa", paused: "Pausada até 30/09" },
-          { id: "OP-002453", name: "Patricia Andrade de Sales", product: "Consórcio", value: "R$ 293.832,00", days: "3d", avatar: "PA", temp: "alta" },
+          { id: "OP-002766", trend: true, late: true, name: "raposo teste", product: "Financiamento Imobiliário - Aquisição", value: "R$ 8.000,34", days: "219d", avatars: ["RP", "R"] },
+          { id: "OP-000661", status: "perdida", name: "alberto cassiano barbosa", product: "Financiamento de Veículos", value: "R$ 89.999,73", avatars: ["RC", "VS"] },
+          { id: "OP-002542", status: "ganha", name: "geiza ribeiro da silva sousa", product: "Seguro de Vida Individual", value: "R$ 2.028,54", avatars: ["AM", "EJ"] },
+          { id: "OP-002849", trend: true, name: "ricaro paz", product: "Consórcio Imóbiliário", value: "R$ 0,00", days: "234d", avatars: ["?", "RK"] },
+          { id: "OP-001146", status: "perdida", name: "dejanira augustinho dos santos macedo", product: "Home Equity - Crédito com Garantia de Imóvel", value: "R$ 390.000,00", avatars: ["BR", "MR"] },
         ],
       }) +
       kanbanCol({
@@ -2634,10 +2727,11 @@
         sum: "R$ 22,5 mi",
         tom: "concluido",
         cards: [
-          { id: "OP-000371", name: "Nanci Eckermann", product: "Home Equity", value: "R$ 50.000,00", days: "2d", avatar: "NE", temp: "alta" },
-          { id: "OP-001441", name: "Clean Terceirização", product: "Seguro Garantia", value: "R$ 798,31", days: "1d", avatar: "CT", temp: "media" },
-          { id: "OP-002016", name: "Cynthia Freire Cottard", product: "Remessa Cambial", value: "R$ 120.000,00", days: "4d", avatar: "CF", temp: "media" },
-          { id: "OP-002725", name: "Ricardo Paz dos Santos Filho", product: "Consórcio", value: "R$ 25.000.000,00", days: "9d", avatar: "RP", temp: "alta" },
+          { id: "OP-000371", status: "ganha", name: "nanci eckermann", product: "Home Equity - Crédito com Garantia de Imóvel", value: "R$ 50.000,00", avatars: ["BR", "FG"] },
+          { id: "OP-001441", status: "ganha", name: "clean terceirização", product: "Seguro Garantia", value: "R$ 798,31", avatars: ["AM", "WA"] },
+          { id: "OP-001600", status: "ganha", name: "wellington andrade", product: "Seguro Residencial", value: "R$ 141,57", avatars: ["AM", "WA"] },
+          { id: "OP-001598", status: "ganha", name: "wellington andrade", product: "Seguro Residencial", value: "R$ 71,22", avatars: ["AM", "WA"] },
+          { id: "OP-002360", status: "ganha", name: "edf aliança colonial", product: "Seguro de Condomínio", value: "R$ 3.674,20", avatars: ["AM", "WA"] },
         ],
       }) +
       "</div>";
@@ -3855,15 +3949,14 @@
 
   catalog.pages["kanban-operacoes"] = {
     title: "Kanban de operações",
-    lead: "Board por etapa — busca, filtros rápidos, pausadas e rascunhos.",
-    node: "8501-45420",
+    lead: "Board por etapa. Passe o mouse no primeiro card de Financiamento Imobiliário - Aquisição para abrir o detalhe.",
+    node: "12007-14798",
     figmaFile: FIGMA_KANBAN,
     wide: true,
     section: "Telas",
     scenarios: [
-      { label: "Todas", note: "Visão completa do funil.", href: "#/kanban-operacoes" },
-      { label: "Pausadas", note: "Só operações com pausa.", href: "#/kanban-operacoes?view=pausadas" },
-      { label: "Rascunhos", note: "Só rascunhos.", href: "#/kanban-operacoes?view=rascunhos" },
+      { label: "Board", note: "Kanban padrão, da entrada à finalização.", href: "#/kanban-operacoes" },
+      { label: "Card hover", note: "Detalhe de Financiamento Imobiliário - Aquisição no primeiro card.", href: "#/kanban-operacoes" },
     ],
     html: function () {
       return kanbanScreen();
@@ -4228,6 +4321,35 @@
     var qs = location.hash.split("?")[1] || "";
     var viewQ = qs.match(/(?:^|&)view=([^&]+)/);
     applyFilter(viewQ ? decodeURIComponent(viewQ[1]) : "todas");
+
+    shell.querySelectorAll("[data-k-hover]").forEach(function (card) {
+      var pop = card.querySelector(".hf-khover");
+      if (!pop) return;
+
+      function place() {
+        pop.hidden = false;
+        var rect = card.getBoundingClientRect();
+        var width = pop.offsetWidth || 360;
+        var gap = 8;
+        var left = rect.right - gap;
+        if (left + width > window.innerWidth - 12) left = Math.max(12, rect.left - width + gap);
+        var top = rect.top;
+        pop.style.left = left + "px";
+        pop.style.top = top + "px";
+        var height = pop.offsetHeight;
+        if (top + height > window.innerHeight - 12) {
+          pop.style.top = Math.max(12, window.innerHeight - height - 12) + "px";
+        }
+      }
+
+      card.addEventListener("mouseenter", place);
+      card.addEventListener("mouseleave", function () {
+        pop.hidden = true;
+      });
+      window.addEventListener("scroll", function () {
+        if (!pop.hidden) place();
+      }, true);
+    });
   }
 
   function bindWiki(root) {
