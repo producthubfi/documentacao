@@ -171,6 +171,7 @@
     };
     sub.textContent = map[screen];
     results.classList.toggle("is-done", screen === "a5");
+    results.classList.toggle("is-loading", screen === "a4");
     title.textContent = "Potencial de compra por banco";
     document.getElementById("clienteModeTitle").textContent =
       screen === "a3" || screen === "a4" || screen === "a5"
