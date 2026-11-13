@@ -111,9 +111,9 @@
       '</div>';
   }
 
-  function metric(k, v, cls, icon) {
+  function metric(k, v, cls, icon, plain) {
     var ico = icon
-      ? '<span class="m-ico"><img src="assets/' + icon + '.svg" alt=""></span>'
+      ? '<span class="m-ico' + (plain ? " is-plain" : "") + '"><img src="assets/' + icon + '.svg" alt=""></span>'
       : "";
     return '<div class="metric ' + (cls || "") + (icon ? " has-ico" : "") + '">' + ico +
       '<div><p class="k">' + k + '</p><p class="v">' + v + '</p></div></div>';
@@ -124,12 +124,12 @@
       ? '<span class="tag ' + b.tag + '">' + b.tagText + '</span>'
       : "";
     var action = b.action === "ajustar"
-      ? '<button class="btn ghost sm" type="button" data-adjust="' + b.id + '">Ajustar entrada <img src="assets/a3423.svg" alt=""></button>'
+      ? '<button class="btn ghost sm adjust-btn" type="button" data-adjust="' + b.id + '">Ajustar entrada <img src="assets/a3423.svg" alt=""></button>'
       : '<button class="btn primary sm" type="button" data-use="' + b.id + '" style="width:136px">Usar este valor <img src="assets/b8177.svg" alt=""></button>';
     var adjust = b.action === "ajustar"
       ? '<div class="adjust">' +
-          metric("Entrada informada", "R$ 120.000") +
-          metric("Diferença necessária para esta condição", '<span class="hot">' + b.gap + '</span>') +
+          metric("Entrada informada", "R$ 120.000", "", "wallet-plain", true) +
+          metric("Diferença necessária para esta condição", '<span class="hot">' + b.gap + '</span>', "", "coins", true) +
         '</div>'
       : "";
     return '<article class="card" data-bank="' + b.id + '">' +
@@ -172,6 +172,10 @@
     sub.textContent = map[screen];
     results.classList.toggle("is-done", screen === "a5");
     title.textContent = "Potencial de compra por banco";
+    document.getElementById("clienteModeTitle").textContent =
+      screen === "a3" || screen === "a4" || screen === "a5"
+        ? "Pelo Potencial de compra pelo cliente"
+        : "Potencial de compra pelo cliente";
     if (screen === "a5") {
       body.innerHTML = resultsHtml();
     } else if (screen === "a4") {
