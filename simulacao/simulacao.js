@@ -79,9 +79,6 @@
       el.hidden = el.getAttribute("data-only") !== m;
     });
     document.getElementById("fastBox").hidden = m !== "imovel";
-    document.getElementById("ask").textContent = m === "imovel"
-      ? "O que você quer simular:"
-      : "O que você quer descobrir?";
   }
 
   function syncButton() {
@@ -111,16 +108,15 @@
           '<img src="assets/107d4.png" alt="">' +
         '</div>' +
         '<p>Calculando o maior imóvel em cada banco</p>' +
-      '</div>' +
-      '<div class="skel-list">' +
-        ["Caixa", "Santander", "Bradesco", "Itaú", "Inter"].map(function (name) {
-          return '<article class="skel"><strong>' + name + '</strong><div class="bars"><i></i><i></i><i></i></div></article>';
-        }).join("") +
       '</div>';
   }
 
-  function metric(k, v, cls) {
-    return '<div class="metric ' + (cls || "") + '"><p class="k">' + k + '</p><p class="v">' + v + '</p></div>';
+  function metric(k, v, cls, icon) {
+    var ico = icon
+      ? '<span class="m-ico"><img src="assets/' + icon + '.svg" alt=""></span>'
+      : "";
+    return '<div class="metric ' + (cls || "") + (icon ? " has-ico" : "") + '">' + ico +
+      '<div><p class="k">' + k + '</p><p class="v">' + v + '</p></div></div>';
   }
 
   function cardHtml(b) {
@@ -140,8 +136,8 @@
       '<div class="card-top"><div class="who"><img class="logo" src="' + b.logo + '" alt=""><span class="name">' + b.name + '</span>' + tag + '</div>' + action + '</div>' +
       '<div class="metrics">' +
         metric("Valor máximo do imóvel", b.imóvel, "lg") +
-        metric(b.entradaLabel, b.entrada, "md") +
-        metric("Valor financiado", b.financiado, "md") +
+        metric(b.entradaLabel, b.entrada, "md", "wallet") +
+        metric("Valor financiado", b.financiado, "md", "landmark") +
       '</div>' +
       adjust +
       '<div class="conds">' +
@@ -224,7 +220,7 @@
     if (next === "a3" || next === "a4" || next === "a5") fillExample();
     paint();
     if (next === "a4") {
-      loadTimer = setTimeout(function () { go("a5"); }, 2200);
+      loadTimer = setTimeout(function () { go("a5"); }, 4200);
     }
   }
 
