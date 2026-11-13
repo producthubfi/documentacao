@@ -6,7 +6,7 @@
 <title>Simulação · Hubfi</title>
 <link rel="icon" href="../dashboards/images/icon.png">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="simulacao.css?v=4">
+<link rel="stylesheet" href="simulacao.css?v=8">
 </head>
 <body>
 <header class="proto">
@@ -125,11 +125,11 @@
 
     <div class="stepper" aria-label="Etapas da operação">
       <div class="stepper-row">
-        <div class="step"><img src="assets/04ab0.svg" alt=""><span>Perfil<br>do cliente</span></div>
-        <div class="step"><img src="assets/79a7d.svg" alt=""><span>Seleção<br>de Produto</span></div>
-        <div class="step"><img src="assets/12b6e.svg" alt=""><span>Simulação</span></div>
-        <div class="step is-wait"><img src="assets/d2f80.svg" alt=""><span>Informações<br>do cliente</span></div>
-        <div class="step is-wait"><img src="assets/60a16.svg" alt=""><span>Comunicação</span></div>
+        <div class="step"><span class="time"></span><img src="assets/04ab0.svg" alt=""><span>Perfil<br>do cliente</span></div>
+        <div class="step"><span class="time"></span><img src="assets/79a7d.svg" alt=""><span>Seleção<br>de Produto</span></div>
+        <div class="step"><span class="time"></span><img src="assets/12b6e.svg" alt=""><span>Simulação</span></div>
+        <div class="step is-wait"><span class="time"></span><img src="assets/d2f80.svg" alt=""><span>Informações<br>do cliente</span></div>
+        <div class="step is-wait"><span class="time"></span><img src="assets/60a16.svg" alt=""><span>Comunicação</span></div>
       </div>
     </div>
 
@@ -220,6 +220,10 @@
         <div class="fgts">
           <span class="lbl" style="margin:0">Vai utilizar FGTS?</span>
           <button class="switch" type="button" id="fgts" aria-pressed="false" aria-label="Utilizar FGTS"><i></i></button>
+          <div class="field fgts-valor" id="fgtsValorField" hidden>
+            <label class="lbl" for="fgtsValor">Valor do FGTS</label>
+            <input class="control" id="fgtsValor" inputmode="numeric" placeholder="R$" data-money>
+          </div>
         </div>
 
         <div class="actions">
@@ -230,7 +234,6 @@
 
       <section class="results" id="results">
         <h2 id="resTitle">Potencial de compra por banco</h2>
-        <p class="lead" id="resLead" hidden></p>
         <div id="resBody"></div>
       </section>
     </div>
@@ -238,6 +241,6 @@
 </div>
 
 <div class="toast" id="toast" role="status"></div>
-<script src="simulacao.js?v=4"></script>
+<script src="simulacao.js?v=6"></script>
 </body>
 </html>

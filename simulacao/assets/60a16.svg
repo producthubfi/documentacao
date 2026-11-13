@@ -4,8 +4,8 @@
 <rect width="55" height="2" transform="translate(0 7)" fill="#EAECEC"/>
 </g>
 <circle id="Step Dot" cx="60" cy="8" r="5" fill="#EAECEC"/>
-<g id="Line Right">
-<rect width="55" height="2" transform="translate(65 7)" fill="#F8F9F9"/>
+<g id="Line Right" opacity="0">
+<rect width="55" height="2" transform="translate(65 7)" fill="#EAECEC"/>
 </g>
 </g>
 </svg>

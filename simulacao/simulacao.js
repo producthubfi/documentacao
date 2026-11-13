@@ -160,7 +160,6 @@
   function paint() {
     var sub = document.getElementById("subtitle");
     var title = document.getElementById("resTitle");
-    var lead = document.getElementById("resLead");
     var body = document.getElementById("resBody");
     var results = document.getElementById("results");
     var map = {
@@ -174,14 +173,10 @@
     results.classList.toggle("is-done", screen === "a5");
     title.textContent = "Potencial de compra por banco";
     if (screen === "a5") {
-      lead.hidden = false;
-      lead.textContent = "Exemplo ilustrativo: renda de R$ 20.000/mês e entrada disponível de R$ 120.000.";
       body.innerHTML = resultsHtml();
     } else if (screen === "a4") {
-      lead.hidden = true;
       body.innerHTML = loadingHtml();
     } else {
-      lead.hidden = true;
       body.innerHTML = emptyHtml();
     }
     document.querySelectorAll(".proto button").forEach(function (b) {
@@ -204,11 +199,17 @@
   function clearForm() {
     tipo = "";
     document.getElementById("tipoLabel").textContent = "Selecione...";
-    ["renda", "recursos", "nasc", "prazo", "valor", "entrada"].forEach(function (id) {
+    ["renda", "recursos", "nasc", "prazo", "valor", "entrada", "fgtsValor"].forEach(function (id) {
       document.getElementById(id).value = "";
     });
-    document.getElementById("fgts").classList.remove("is-on");
-    document.getElementById("fgts").setAttribute("aria-pressed", "false");
+    setFgts(false);
+  }
+
+  function setFgts(on) {
+    var btn = document.getElementById("fgts");
+    btn.classList.toggle("is-on", on);
+    btn.setAttribute("aria-pressed", on ? "true" : "false");
+    document.getElementById("fgtsValorField").hidden = !on;
   }
 
   function go(next) {
@@ -298,8 +299,9 @@
     toast(on ? "Fast Itaú ligado. O retorno passa a vir direto do banco." : "Fast Itaú desligado.");
   });
   document.getElementById("fgts").addEventListener("click", function () {
-    var on = this.classList.toggle("is-on");
-    this.setAttribute("aria-pressed", on ? "true" : "false");
+    var on = this.getAttribute("aria-pressed") !== "true";
+    setFgts(on);
+    if (on) document.getElementById("fgtsValor").focus();
   });
 
   document.querySelectorAll("[data-money]").forEach(function (input) {

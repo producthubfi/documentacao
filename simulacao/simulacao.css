@@ -307,17 +307,18 @@ img { display: block; max-width: none; }
   margin: 20px 0 24px;
   overflow: hidden;
 }
-.stepper-row { display: flex; width: 600px; }
-.step { width: 120px; text-align: center; }
+.stepper-row { display: flex; width: 600px; align-items: flex-start; }
+.step { width: 120px; display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
+.step .time { height: 18px; font-size: 12px; font-weight: 600; line-height: 1.5; color: var(--brand); }
 .step img { width: 120px; height: 16px; }
 .step span {
   display: block;
-  margin-top: 6px;
   font-size: 12px;
   font-weight: 500;
-  line-height: 1.35;
+  line-height: 1.5;
+  color: var(--ink);
 }
-.step.is-wait span { color: var(--faint); font-weight: 400; }
+.step.is-wait span { color: #ccc; font-weight: 500; }
 
 .ask {
   margin: 0 0 8px;
@@ -498,6 +499,9 @@ label.lbl {
   font-weight: 500;
   line-height: 20px;
 }
+.fgts-valor { width: 100%; }
+.fgts-valor[hidden] { display: none; }
+.fgts-valor .lbl { display: block; margin-bottom: 8px; }
 .actions { display: flex; align-items: center; justify-content: space-between; }
 .btn {
   display: inline-flex;
@@ -538,11 +542,6 @@ label.lbl {
   line-height: 1.5;
 }
 .results.is-done h2 { font-size: 18px; line-height: 1.32; }
-.lead {
-  margin: 4px 0 0;
-  font-size: 14px;
-  line-height: 1.45;
-}
 .empty {
   display: flex;
   align-items: center;
@@ -625,10 +624,15 @@ label.lbl {
 }
 .tag.ok { border: 1px solid var(--brand-400); background: var(--brand-50); color: var(--brand); }
 .tag.warn { border: 1px solid var(--warn-line); background: var(--warn-bg); color: var(--warn); }
-.metrics { display: flex; gap: 16px; }
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: 24px;
+  align-items: center;
+}
 .metric { min-width: 0; }
-.metric.lg { width: 240px; flex: 0 0 240px; }
-.metric.md { flex: 1; }
+.metric.lg,
+.metric.md { width: auto; }
 .metric.has-ico { display: flex; align-items: center; gap: 8px; }
 .m-ico {
   display: grid;
@@ -705,6 +709,6 @@ label.lbl {
 @media (max-width: 1180px) {
   .work { flex-direction: column; }
   .form { width: 100%; flex-basis: auto; }
-  .metrics, .conds, .adjust { flex-wrap: wrap; }
-  .metric.lg, .conds .col.sac { width: auto; flex-basis: auto; }
+  .conds, .adjust { flex-wrap: wrap; }
+  .conds .col.sac { width: auto; flex-basis: auto; }
 }
