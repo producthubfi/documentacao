@@ -860,7 +860,7 @@
 
   function navItem(icon, label, opts) {
     opts = opts || {};
-    return (
+    var link =
       '<a class="hf-app-nav__item' +
       (opts.active ? " is-active" : "") +
       '" href="#" title="' +
@@ -873,9 +873,28 @@
       label +
       "</span>" +
       (opts.more
-        ? '<span class="hf-app-nav__more"><img src="assets/icons/nav-chevron.svg" width="18" height="18" alt=""></span>'
+        ? '<span class="hf-app-nav__more' +
+          (opts.open ? " is-open" : "") +
+          '"><img src="assets/icons/nav-chevron.svg" width="18" height="18" alt=""></span>'
         : "") +
-      "</a>"
+      "</a>";
+    if (!opts.sub || !opts.sub.length) return link;
+    return (
+      '<div class="hf-app-nav__branch">' +
+      link +
+      '<div class="hf-app-nav__sublist">' +
+      opts.sub
+        .map(function (item) {
+          return (
+            '<a class="hf-app-nav__sub' +
+            (item.active ? " is-active" : "") +
+            '" href="#">' +
+            item.label +
+            "</a>"
+          );
+        })
+        .join("") +
+      "</div></div>"
     );
   }
 
@@ -890,9 +909,16 @@
   }
 
   function appSidebar(variant, mod) {
-    var backoffice = variant === "backoffice";
     var nova = variant === "nova";
+    var dashboard = variant === "dashboard";
+    var painel = variant === "painel" || variant === "painel-de-produtos";
     var clientes = variant === "clientes";
+    var empresas = variant === "empresas";
+    var usuariosOpen = variant === "usuarios" || variant === "perfis";
+    var backofficeOpen =
+      variant === "backoffice" || variant === "backoffice-area" || variant === "consorcio";
+    var produtosOpen =
+      variant === "produtos" || variant === "gestao-de-produtos" || variant === "motivos";
     var extra = String(mod || "")
       .split(/\s+/)
       .filter(Boolean)
@@ -914,18 +940,50 @@
       '<div class="hf-app-nav__scroll">' +
       navGroup("Rotina", [
         navItem("nav-plus", "Nova Operação", { active: nova }),
-        navItem("nav-dashboard", "Dashboard"),
-        navItem("nav-ops", "Operações", { active: !backoffice && !nova && !clientes }),
-        navItem("nav-panel", "Painel de Produtos")
+        navItem("nav-dashboard", "Dashboard", { active: dashboard }),
+        navItem("nav-ops", "Operações", {
+          active: !nova && !dashboard && !painel && !clientes && !empresas && !usuariosOpen && !backofficeOpen && !produtosOpen,
+        }),
+        navItem("nav-panel", "Painel de Produtos", { active: painel }),
       ]) +
       navGroup("Gestão", [
         navItem("nav-clients", "Clientes", { active: clientes }),
-        navItem("nav-users", "Usuários", { more: true })
+        navItem("nav-users", "Usuários", {
+          active: usuariosOpen,
+          more: true,
+          open: usuariosOpen,
+          sub: usuariosOpen
+            ? [
+                { label: "Usuários", active: variant === "usuarios" },
+                { label: "Perfis e Permissões", active: variant === "perfis" },
+              ]
+            : null,
+        }),
       ]) +
       navGroup("Administração Interna", [
-        navItem("nav-grid", "Backoffice", { active: backoffice }),
-        navItem("nav-products", "Gestão de Produtos", { more: true }),
-        navItem("nav-building", "Empresas")
+        navItem("nav-grid", "Backoffice", {
+          active: backofficeOpen,
+          more: true,
+          open: backofficeOpen,
+          sub: backofficeOpen
+            ? [
+                { label: "Área de trabalho", active: variant !== "consorcio" },
+                { label: "Gestão de Consórcio", active: variant === "consorcio" },
+              ]
+            : null,
+        }),
+        navItem("nav-products", "Gestão de Produtos", {
+          active: produtosOpen,
+          more: true,
+          open: produtosOpen,
+          sub: produtosOpen
+            ? [
+                { label: "Gestão de Produtos", active: variant !== "motivos" },
+                { label: "Motivos de Perda", active: variant === "motivos" },
+              ]
+            : null,
+        }),
+        navItem("nav-building", "Empresas", { active: empresas }),
       ]) +
       '<div class="hf-app-nav__promo-wrap"><div class="hf-app-nav__promo">' +
       "<p>Portal do<br>Personal Finance</p>" +
@@ -935,6 +993,22 @@
       '<span class="hf-app-nav__who"><strong>Lucas Augusto</strong><span>lucasaugusto@hubfi.com.br</span></span>' +
       '<img src="assets/icons/nav-user-swap.svg" width="16" height="16" alt="">' +
       "</div></div></nav></div>"
+    );
+  }
+
+  function pageTemplate(opts) {
+    opts = opts || {};
+    var slot = opts.slot != null ? opts.slot : "";
+    var head = opts.header || headerDefault();
+    return (
+      '<div class="hf-template">' +
+      appSidebar(opts.nav || "operacoes", "fit") +
+      '<div class="hf-template__main">' +
+      (opts.crumb == null ? crumb() : opts.crumb) +
+      head +
+      '<div class="hf-template__slot">' +
+      slot +
+      "</div></div></div>"
     );
   }
 
@@ -980,19 +1054,46 @@
   }
 
   function miniBtn(icon, label, extra) {
+    var glyph =
+      icon.indexOf("hd-") === 0
+        ? '<img src="assets/icons/' + icon + '.svg?v=89" width="16" height="16" alt="">'
+        : ico(icon, 16);
     return (
       '<button class="hf-btn hf-header__act' +
       (extra ? " " + extra : "") +
       '" type="button">' +
-      '<span class="hf-btn__glyph"><img src="assets/icons/' +
-      icon +
-      '.svg?v=89" width="16" height="16" alt=""></span>' +
+      '<span class="hf-btn__glyph">' +
+      glyph +
+      "</span>" +
       label +
       "</button>"
     );
   }
 
-  function headerInterna() {
+  function headerInterna(state) {
+    var more = miniBtn("hd-info", "Mais informações", "hf-header__act--more");
+    var rule = '<i class="hf-header__rule" style="height:20px"></i>';
+    var actions;
+    if (state === "pausada") {
+      actions =
+        miniBtn("play", "Retomar", "hf-btn--primary") +
+        miniBtn("clock-plus", "Estender pausa") +
+        rule +
+        more;
+    } else if (state === "perdida") {
+      actions = miniBtn("hd-x", "Perdido", "hf-header__act--bad") + rule + more;
+    } else if (state === "ganha") {
+      actions = miniBtn("hd-check", "Ganho", "hf-header__act--ok") + rule + more;
+    } else {
+      actions =
+        '<div class="hf-header__group">' +
+        miniBtn("hd-check", "Ganho") +
+        miniBtn("hd-x", "Perdido") +
+        "</div>" +
+        miniBtn("pause", "Pausar operação") +
+        rule +
+        more;
+    }
     return (
       '<header class="hf-header hf-header--tall">' +
       '<div class="hf-header__line"><div class="hf-header__op">' +
@@ -1002,14 +1103,9 @@
       '<img src="assets/icons/hd-copy.svg" alt="Copiar código">' +
       "</div>" +
       '<div class="hf-header__actions">' +
-      '<div class="hf-header__group">' +
-      miniBtn("hd-check", "Ganho") +
-      miniBtn("hd-x", "Perdido") +
-      "</div>" +
-      '<i class="hf-header__rule" style="height:20px"></i>' +
-      miniBtn("hd-info", "Mais informações", "hf-header__act--more") +
+      actions +
       "</div></div>" +
-      '<h1 class="hf-header__title">Teste Daily</h1>' +
+      '<h1 class="hf-header__title">Nome do cliente</h1>' +
       '<div class="hf-header__chips">' +
       metaBlock("hd-money", "R$ 0,00") +
       '<i class="hf-header__rule" style="height:24px"></i>' +
@@ -1137,6 +1233,62 @@
       '<div class="hf-dropdown"><button type="button">Editar</button><button type="button">Duplicar</button>' +
       '<button type="button">Favoritar</button><hr class="hf-dropdown__sep">' +
       '<button class="hf-dropdown__danger" type="button">Excluir</button></div>'
+    );
+  }
+
+  function dropdownUser() {
+    return (
+      '<div class="hf-dropdown hf-dropdown--user">' +
+      '<div class="hf-dropdown__who"><strong>Lucas Augusto</strong><span>Administrador</span></div>' +
+      '<hr class="hf-dropdown__sep">' +
+      '<button type="button">' + ico("user", 16) + "Minha Conta</button>" +
+      '<button type="button">' + ico("log-out", 16) + "Log out</button>" +
+      "</div>"
+    );
+  }
+
+  function dropdownCompany() {
+    var names = [
+      "Todas as empresas",
+      "Interno - HubFi",
+      "Personal Finance - HubFi",
+      "A Percinio Construções Ltda",
+      "Aceleraí",
+      "Advisory 360",
+    ];
+    return (
+      '<div class="hf-dropdown hf-dropdown--company">' +
+      '<label class="hf-dropdown__search">' +
+      ico("search", 16) +
+      '<input type="text" placeholder="Procurar empresa..." aria-label="Procurar empresa">' +
+      "</label>" +
+      names
+        .map(function (name, i) {
+          return (
+            '<button type="button"' +
+            (i === 0 ? ' class="is-on"' : "") +
+            ">" +
+            (i === 0 ? ico("check", 16) : '<span class="hf-dropdown__check"></span>') +
+            name +
+            "</button>"
+          );
+        })
+        .join("") +
+      "</div>"
+    );
+  }
+
+  function dropdownColumns() {
+    var names = ["Nome", "Personal finance", "Email", "Telefone", "Data de criação"];
+    return (
+      '<div class="hf-dropdown hf-dropdown--columns">' +
+      '<p class="hf-dropdown__title">Colunas</p>' +
+      names
+        .map(function (name) {
+          return '<button type="button" class="is-on">' + ico("check", 16) + name + "</button>";
+        })
+        .join("") +
+      "</div>"
     );
   }
 
@@ -1282,6 +1434,7 @@
         ["pagination", "Pagination"],
         ["header", "Header"],
         ["sidebar", "Sidebar"],
+        ["template", "Template"],
         ["stepper", "Stepper"],
         ["dropdown-menu", "Dropdown Menu"],
       ],
@@ -1816,7 +1969,10 @@
           "Importar Usuários</button></div></header>";
         return (
           card("Default", "", preview(simple, "docs-preview--wide")) +
-          card("Interna", "", preview(tall, "docs-preview--wide")) +
+          card("Detalhes da operação", "Ganho, Perdido, Pausar operação e Mais informações.", preview(tall, "docs-preview--wide")) +
+          card("Pausada", "Retomar e Estender pausa.", preview(headerInterna("pausada"), "docs-preview--wide")) +
+          card("Perdida", "Ação Perdido em vermelho.", preview(headerInterna("perdida"), "docs-preview--wide")) +
+          card("Ganha", "Ação Ganho em verde.", preview(headerInterna("ganha"), "docs-preview--wide")) +
           card("Sem primary", "", preview(noPrimary, "docs-preview--wide")) +
           card("Exemplo de uso", "Topo da tela de clientes na plataforma.", preview(simple, "docs-preview--wide"))
         );
@@ -1829,7 +1985,9 @@
       html: function () {
         return (
           card("Operações", "Item ativo em Rotina › Operações.", preview(appSidebar("operacoes"))) +
-          card("Backoffice", "Item ativo em Administração Interna › Backoffice.", preview(appSidebar("backoffice"))) +
+          card("Usuários", "Submenu aberto: Usuários e Perfis e Permissões.", preview(appSidebar("usuarios"))) +
+          card("Backoffice", "Submenu aberto: Área de trabalho e Gestão de Consórcio.", preview(appSidebar("backoffice"))) +
+          card("Gestão de Produtos", "Submenu aberto: Gestão de Produtos e Motivos de Perda.", preview(appSidebar("produtos"))) +
           card("Fechada", "Trilho com ícones. O rótulo aparece no title de cada item.", preview(appSidebar("operacoes", "fit collapsed"))) +
           card(
             "Exemplo de uso",
@@ -1843,6 +2001,38 @@
                 opCard("analise") +
                 opCard("proposta") +
                 "</div></div></div>",
+              "docs-preview--wide"
+            )
+          )
+        );
+      },
+    },
+    template: {
+      title: "Template",
+      lead: "Layout de 1440px: sidebar de 256, breadcrumb, header e o slot do conteúdo.",
+      node: "6-2441",
+      html: function () {
+        return (
+          card(
+            "Padrão",
+            "Sidebar, breadcrumb, header de listagem e a área do conteúdo.",
+            preview(pageTemplate({ slot: usersTable() }), "docs-preview--wide")
+          ) +
+          card(
+            "Com modal",
+            "O mesmo shell, com o diálogo de confirmação sobre o conteúdo.",
+            preview(
+              '<div class="hf-template-stage">' +
+                pageTemplate({ slot: usersTable() }) +
+                '<div class="hf-template__overlay">' +
+                modalBox({
+                  confirm: true,
+                  title: "Excluir usuário?",
+                  desc: "Essa ação não pode ser desfeita.",
+                  cancel: "Cancelar",
+                  ok: "Excluir",
+                }) +
+                "</div></div>",
               "docs-preview--wide"
             )
           )
@@ -1877,11 +2067,14 @@
     },
     "dropdown-menu": {
       title: "Dropdown Menu",
-      lead: "Menu de ações. 200×209. Excluir em vermelho.",
+      lead: "Menu de ações, menu do usuário, colunas da tabela e troca de empresa.",
       node: "294-2434",
       html: function () {
         return (
-          card("Componente", "", preview(dropdownMenu())) +
+          card("Ações", "Editar, Duplicar, Favoritar e Excluir.", preview(dropdownMenu())) +
+          card("Usuário", "Conta e saída, no rodapé da sidebar.", preview(dropdownUser())) +
+          card("Colunas", "Visibilidade das colunas da tabela.", preview(dropdownColumns())) +
+          card("Empresa", "Troca o contexto da empresa no topo da sidebar.", preview(dropdownCompany())) +
           card("Exemplo de uso", "Menu de ações na linha da tabela de clientes.", preview(
             '<div class="docs-scene docs-scene--row"><span>Caloi Bike Store</span>' +
             dropdownMenu() +
@@ -2520,6 +2713,13 @@
     figmaBase: FIGMA,
     ui: {
       appSidebar: appSidebar,
+      headerDefault: headerDefault,
+      headerInterna: headerInterna,
+      pageTemplate: pageTemplate,
+      dropdownMenu: dropdownMenu,
+      dropdownUser: dropdownUser,
+      dropdownColumns: dropdownColumns,
+      dropdownCompany: dropdownCompany,
       cardFile: cardFile,
       cardComments: cardComments,
       badge: badge,

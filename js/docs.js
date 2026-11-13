@@ -51,6 +51,7 @@
     pagination: "chevrons-left-right",
     header: "panel-top",
     sidebar: "panel-left",
+    template: "layout-template",
     stepper: "list-ordered",
     "dropdown-menu": "menu",
     modal: "app-window",
