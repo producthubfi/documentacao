@@ -138,6 +138,13 @@
     { slug: "dashboard-operacoes", label: "Dashboard de operações", icon: "layout-dashboard" },
     { slug: "tour-dashboard", label: "Tour do Dashboard", icon: "map" },
     { slug: "kanban-operacoes", label: "Kanban de operações", icon: "kanban" },
+    {
+      href: "simulacao/",
+      slug: "simulacao",
+      label: "Simulação",
+      icon: "calculator",
+      keys: "simulacao simulação financiamento fgts potencial cliente imóvel imovel bancos",
+    },
     { href: "wiki.html", label: "Central de ajuda", icon: "book-open" },
     { href: "extensao/", label: "Extensão · Itaú", icon: "puzzle" },
     { href: "extensao/spec.html", label: "Spec · 5 bancos", icon: "list-checks" },
@@ -170,7 +177,7 @@
 
   function protoItemMatch(item, q) {
     if (!q) return true;
-    var hay = (item.label + " " + (item.slug || "") + " " + (item.href || "")).toLowerCase();
+    var hay = (item.label + " " + (item.slug || "") + " " + (item.href || "") + " " + (item.keys || "")).toLowerCase();
     return hay.indexOf(q) !== -1 || protoMatch(q);
   }
 
