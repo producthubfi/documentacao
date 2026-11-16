@@ -771,7 +771,16 @@
           '<div class="section-head"><h3>Lances desta assembleia</h3>' +
           badge("atualizados") +
           "</div>" +
-          lancesTable("done")
+          lancesTable("done") +
+          '<div class="next-step">' +
+          "<p>Confira a cota contemplada na ficha do cliente Mauricio Lima.</p>" +
+          btn("Abrir ficha do cliente", {
+            variant: "hf-btn--primary",
+            foot: true,
+            icon: "icon-arrow-right.svg",
+            go: "a7",
+          }) +
+          "</div>"
       ) +
       '<div class="asm-toast" id="pub-toast" role="status">' +
       '<img src="' +
@@ -816,25 +825,27 @@
             : "") +
           "</div>";
         return (
-          '<div class="asm-list__row">' +
-          '<div class="asm-col-cota"><strong>' +
+          '<div class="asm-list__row' +
+          (r.sim ? " is-highlight" : "") +
+          '">' +
+          '<div class="asm-col-ficha-cota"><strong>' +
           r.cota +
           "</strong></div>" +
-          '<div class="asm-col-data">' +
+          '<div class="asm-col-ficha-grupo">' +
           r.grupo +
           "</div>" +
-          '<div class="asm-col-admin">' +
+          '<div class="asm-col-ficha-admin">' +
           r.admin +
           "</div>" +
-          '<div class="asm-col-comp">' +
+          '<div class="asm-col-ficha-cont">' +
           contemplada +
           "</div>" +
-          '<div class="asm-col-credito">' +
+          '<div class="asm-col-ficha-credito">' +
           r.credito +
           "</div>" +
-          '<div class="asm-col-status">' +
+          '<div class="asm-col-ficha-status">' +
           '<span class="hf-badge asm-badge hf-badge--published">Ativa</span></div>' +
-          '<div class="asm-col-menu">' +
+          '<div class="asm-col-ficha-menu">' +
           actions +
           "</div></div>"
         );
@@ -842,13 +853,13 @@
       .join("");
 
     var head =
-      '<span class="asm-col-cota">Cota</span>' +
-      '<span class="asm-col-data">Grupo</span>' +
-      '<span class="asm-col-admin">Administradora</span>' +
-      '<span class="asm-col-comp">Contemplada</span>' +
-      '<span class="asm-col-credito">Crédito</span>' +
-      '<span class="asm-col-status">Status</span>' +
-      '<span class="asm-col-menu">Ações</span>';
+      '<span class="asm-col-ficha-cota">Cota</span>' +
+      '<span class="asm-col-ficha-grupo">Grupo</span>' +
+      '<span class="asm-col-ficha-admin">Administradora</span>' +
+      '<span class="asm-col-ficha-cont">Contemplada</span>' +
+      '<span class="asm-col-ficha-credito">Crédito</span>' +
+      '<span class="asm-col-ficha-status">Status</span>' +
+      '<span class="asm-col-ficha-menu">Ações</span>';
 
     return shell(
       '<div class="crumb">Gestão de Consórcio</div>' +
@@ -874,9 +885,9 @@
         '<img src="' +
         ASM +
         'icon-trophy.svg" alt="" width="20" height="20">' +
-        '<div><strong>Cota 2211 contemplada na assembleia de 25/10/2026</strong>' +
+        '<div class="alert-info__text"><strong>Cota 2211 contemplada na assembleia de 25/10/2026</strong>' +
         "<span>Os lances vinculados foram atualizados automaticamente pelo resultado publicado.</span></div></div>" +
-        '<div class="filters">' +
+        '<div class="filters filters--ficha">' +
         searchField("Buscar por cota ou grupo") +
         selectField("grupo", "Grupo", "Todos", ["Todos", "1054", "1021"]) +
         selectField("contemplada", "Contemplada", "Todas", ["Todas", "Sim", "Não"]) +
@@ -919,7 +930,7 @@
         '<img src="' +
         ASM +
         'icon-trophy.svg" alt="" width="20" height="20">' +
-        '<div><strong>Histórico de lances · Cota 2211</strong>' +
+        '<div class="alert-info__text"><strong>Histórico de lances · Cota 2211</strong>' +
         "<span>Grupo 1054 · Turn2C · Contemplada na assembleia de 25/10/2026</span></div></div>" +
         listTable(head, rows) +
         '<div class="next-step">' +
