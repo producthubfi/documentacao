@@ -632,17 +632,17 @@
       msWide +
       (sheetOpen ? " is-open" : "") +
       '" data-ms>' +
-      '<p class="ms-label">Cotas contempladas</p>' +
-      '<button class="ms-box" type="button" data-ms-toggle aria-expanded="' +
+      '<p class="ms-label" id="ms-cotas-label">Cotas contempladas</p>' +
+      '<div class="ms-box" role="combobox" tabindex="0" data-ms-toggle aria-labelledby="ms-cotas-label" aria-expanded="' +
       (sheetOpen ? "true" : "false") +
-      '">' +
+      '" aria-haspopup="listbox">' +
       (selected.length
         ? '<span class="chips">' + chips + "</span>"
         : '<span class="placeholder">Selecione as cotas contempladas</span>') +
       '<img class="ms-chevron" src="' +
       ICO +
       'select-chevron.svg" alt="" width="16" height="16">' +
-      "</button>" +
+      "</div>" +
       (sheetOpen ? multiselectDropdown() : "") +
       '<p class="ms-help">Apenas cotas cadastradas no grupo 1054</p>' +
       "</div>" +
@@ -1125,6 +1125,14 @@
     if (event.key === "Escape") {
       closeSelects(null);
       closeMsDropdown();
+      return;
+    }
+    if (
+      event.target.matches("[data-ms-toggle]") &&
+      (event.key === "Enter" || event.key === " ")
+    ) {
+      event.preventDefault();
+      event.target.click();
     }
   });
 
