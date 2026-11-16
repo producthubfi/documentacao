@@ -184,12 +184,31 @@
     });
   }
 
-  function impactSummary(opts) {
-    opts = opts || {};
+  function impactStats() {
     var contemplados = LANCES.filter(function (l) {
       return selected.indexOf(l.cota) >= 0;
     }).length;
     var nao = LANCES.length - contemplados;
+    return (
+      '<div class="impact-summary__stats">' +
+      '<div class="impact-stat impact-stat--ok"><p class="impact-stat__n">' +
+      selected.length +
+      '</p><p class="impact-stat__l">Cotas contempladas</p></div>' +
+      '<div class="impact-stat impact-stat--ok"><p class="impact-stat__n">' +
+      contemplados +
+      '</p><p class="impact-stat__l">Lances contemplados</p></div>' +
+      '<div class="impact-stat impact-stat--info"><p class="impact-stat__n">' +
+      nao +
+      '</p><p class="impact-stat__l">Lances não contemplados</p></div>' +
+      "</div>"
+    );
+  }
+
+  function impactSummary(opts) {
+    opts = opts || {};
+    if (opts.metricsOnly) {
+      return '<div class="impact-summary impact-summary--embed">' + impactStats() + "</div>";
+    }
     var title = opts.published ? "Resultado publicado" : "O que acontece ao publicar";
     var note = opts.published
       ? '<div class="impact-summary__note"><img src="' +
@@ -205,17 +224,7 @@
       '<p class="impact-summary__title">' +
       title +
       "</p>" +
-      '<div class="impact-summary__stats">' +
-      '<div class="impact-stat impact-stat--ok"><p class="impact-stat__n">' +
-      selected.length +
-      '</p><p class="impact-stat__l">Cotas contempladas</p></div>' +
-      '<div class="impact-stat impact-stat--ok"><p class="impact-stat__n">' +
-      contemplados +
-      '</p><p class="impact-stat__l">Lances contemplados</p></div>' +
-      '<div class="impact-stat impact-stat--info"><p class="impact-stat__n">' +
-      nao +
-      '</p><p class="impact-stat__l">Lances não contemplados</p></div>' +
-      "</div>" +
+      impactStats() +
       note +
       "</div>"
     );
@@ -256,26 +265,32 @@
         });
     return (
       '<div class="card card--published">' +
-      '<div class="card-header"><h2>Resultado publicado</h2>' +
-      '<p class="lead">Publicado por Lucas Augusto em 25/10/2026 às 16:42. O resultado não pode ser republicado por cima.</p></div>' +
-      '<div class="published-row">' +
-      '<div class="published-left">' +
-      '<p class="published-kicker">Cotas contempladas</p>' +
-      '<div class="published-tags">' +
-      tags +
-      "</div>" +
+      '<div class="published-top">' +
+      '<div class="published-top__copy">' +
+      '<div class="published-title-row">' +
+      "<h2>Resultado publicado</h2>" +
+      '<span class="hf-badge asm-badge hf-badge--published">Publicada</span></div>' +
+      '<p class="lead">Por Lucas Augusto · 25/10/2026 às 16:42</p></div>' +
       '<div class="published-actions">' +
+      histBtn +
       btn("Ajustar resultado", {
-        variant: "hf-btn--ghost",
+        variant: "hf-btn--primary",
         foot: true,
         icon: "icon-pencil.svg",
         extra: "data-open-adjust",
       }) +
-      histBtn +
       "</div></div>" +
-      '<div class="published-aside">' +
-      impactSummary({ published: true, boxed: true }) +
-      "</div></div></div>"
+      '<div class="published-body">' +
+      '<div class="published-cotas">' +
+      '<p class="published-kicker">Cotas contempladas</p>' +
+      '<div class="published-tags">' +
+      (tags || '<span class="published-empty">Nenhuma cota contemplada</span>') +
+      "</div></div>" +
+      impactSummary({ metricsOnly: true }) +
+      "</div>" +
+      '<p class="published-foot"><img src="' +
+      ASM +
+      'icon-circle-check.svg" alt="" width="14" height="14"><span>O resultado não pode ser republicado por cima. Correções entram por ajuste, com registro de quem alterou.</span></p></div>'
     );
   }
 
