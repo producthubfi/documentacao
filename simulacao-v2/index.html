@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simulação V2 · Hubfi</title>
+<link rel="icon" href="../dashboards/images/icon.png">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="simulacao.css?v=13">
+</head>
+<body>
+<header class="proto">
+  <strong>Protótipo</strong>
+  <span>Simulação V2, detalhes no modal</span>
+  <nav>
+    <button type="button" data-jump="a1">A1 Imóvel</button>
+    <button type="button" data-jump="a2">A2 Vazio</button>
+    <button type="button" data-jump="a3">A3 Preenchido</button>
+    <button type="button" data-jump="a4">A4 Carregando</button>
+    <button type="button" data-jump="a5">A5 Resultado</button>
+    <button type="button" data-jump="a6">A6 Detalhes</button>
+  </nav>
+</header>
+
+<div class="shell" id="app" data-mode="imovel" data-screen="a1">
+  <aside class="sidebar">
+    <div class="side-pad">
+      <div class="logo"><img src="assets/04b4c.svg" alt="hubfi" width="109" height="27"></div>
+      <div class="ctx-wrap">
+        <button class="ctx" type="button" id="ctxBtn" aria-expanded="false">
+          <span class="ctx-ico"><img src="assets/ebb2f.svg" alt=""></span>
+          <span class="ctx-copy">
+            <span class="ctx-k">Contexto da Empresa</span>
+            <span class="ctx-v" id="ctxLabel">Todas as empresas</span>
+          </span>
+          <img src="assets/517ff.svg" alt="">
+        </button>
+        <div class="menu" id="ctxMenu" hidden>
+          <button type="button" class="is-on" data-company="Todas as empresas">Todas as empresas</button>
+          <button type="button" data-company="Hubfi Demonstração">Hubfi Demonstração</button>
+          <button type="button" data-company="Imobiliária Aurora">Imobiliária Aurora</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-pad">
+      <div class="group-label">Rotina</div>
+      <div class="nav-list">
+        <div class="nav-item"><button class="nav-btn" type="button"><img src="assets/67044.svg" alt="">Nova Operação</button></div>
+        <div class="nav-item"><button class="nav-btn" type="button"><img src="assets/a7eeb.svg" alt="">Dashboard</button></div>
+        <div class="nav-item"><button class="nav-btn is-on" type="button"><img src="assets/b6ca6.svg" alt="">Operações</button></div>
+        <div class="nav-item"><button class="nav-btn" type="button"><img src="assets/d0972.svg" alt="">Painel de Produtos</button></div>
+      </div>
+    </div>
+
+    <div class="side-pad">
+      <div class="group-label">Gestão</div>
+      <div class="nav-list">
+        <div class="nav-item"><button class="nav-btn" type="button"><img src="assets/8222b.svg" alt="">Clientes</button></div>
+        <div class="nav-item" data-acc>
+          <button class="nav-btn" type="button"><img src="assets/dc4e5.svg" alt="">Usuários</button>
+          <button class="nav-chev" type="button" aria-label="Abrir Usuários"><img src="assets/6dc84.svg" alt=""></button>
+          <div class="sub">
+            <a href="#usuarios">Lista de usuários</a>
+            <a href="#permissoes">Permissões</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-pad">
+      <div class="group-label">Administração Interna</div>
+      <div class="nav-list">
+        <div class="nav-item"><button class="nav-btn" type="button"><img src="assets/c01d7.svg" alt="">Backoffice</button></div>
+        <div class="nav-item" data-acc>
+          <button class="nav-btn" type="button"><img src="assets/8ff0a.svg" alt="">Gestão de Produtos</button>
+          <button class="nav-chev" type="button" aria-label="Abrir Gestão de Produtos"><img src="assets/6dc84.svg" alt=""></button>
+          <div class="sub">
+            <a href="#financiamento">Financiamento</a>
+            <a href="#consorcio">Consórcio</a>
+          </div>
+        </div>
+        <div class="nav-item"><button class="nav-btn" type="button"><img src="assets/ba1a0.svg" alt="">Empresas</button></div>
+      </div>
+    </div>
+
+    <div class="side-grow">
+      <div class="side-pad">
+        <a class="portal" href="#portal">
+          <img src="assets/bfc44.png" alt="">
+          <p>Portal do<br>Personal Finance</p>
+        </a>
+      </div>
+    </div>
+
+    <div class="side-pad">
+      <div class="user-wrap">
+        <button class="user" type="button" id="userBtn" aria-expanded="false">
+          <span class="avatar">LA</span>
+          <span class="user-copy">
+            <strong>Lucas Augusto</strong>
+            <small>lucasaugusto@hubfi.com.…</small>
+          </span>
+          <img src="assets/2233e.svg" alt="">
+        </button>
+        <div class="menu" id="userMenu" hidden>
+          <button type="button" data-toast="Perfil ilustrativo neste protótipo.">Meu perfil</button>
+          <button type="button" data-toast="Saída ilustrativa. Nada foi encerrado.">Sair</button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="page">
+    <div class="crumb">
+      <img src="assets/996b0.svg" alt="">
+      <span>Nova operação</span>
+      <img class="sep" src="assets/f29f6.svg" alt="">
+      <b>Simulação</b>
+    </div>
+
+    <header class="page-head">
+      <h1>Simulação de Financiamento Imobiliário - Aquisição</h1>
+      <p id="subtitle">Informe os dados para a simulação.</p>
+    </header>
+
+    <div class="stepper" aria-label="Etapas da operação">
+      <div class="stepper-row">
+        <div class="step"><span class="time"></span><img src="assets/04ab0.svg" alt=""><span>Perfil<br>do cliente</span></div>
+        <div class="step"><span class="time"></span><img src="assets/79a7d.svg" alt=""><span>Seleção<br>de Produto</span></div>
+        <div class="step"><span class="time"></span><img src="assets/12b6e.svg" alt=""><span>Simulação</span></div>
+        <div class="step is-wait"><span class="time"></span><img src="assets/d2f80.svg" alt=""><span>Informações<br>do cliente</span></div>
+        <div class="step is-wait"><span class="time"></span><img src="assets/60a16.svg" alt=""><span>Comunicação</span></div>
+      </div>
+    </div>
+
+    <p class="ask" id="ask">O que você quer simular:</p>
+    <div class="modes">
+      <button class="mode is-on" type="button" data-mode="imovel">
+        <img src="assets/0f65c.svg" alt="" data-radio>
+        <span>
+          <strong>Pelo imóvel</strong>
+          <small>Informe o valor do imóvel e a entrada para ver em quais bancos o cliente é aprovado.</small>
+        </span>
+      </button>
+      <button class="mode" type="button" data-mode="cliente">
+        <img src="assets/7582e.svg" alt="" data-radio>
+        <span>
+          <strong id="clienteModeTitle">Potencial de compra pelo cliente</strong>
+          <small>Informe a renda e os recursos para ver o teto de compra do cliente.</small>
+        </span>
+      </button>
+    </div>
+
+    <section class="banks">
+      <div>
+        <div class="bank-title">
+          <span class="bank-logos">
+            <img src="assets/eec12.png" alt="">
+            <img src="assets/4ef0d.png" alt="">
+            <img src="assets/429dd.png" alt="">
+            <img src="assets/301d3.png" alt="">
+            <img src="assets/ae7eb.png" alt="">
+          </span>
+          Simulação para 5 bancos
+        </div>
+        <p class="subline">Itaú · Bradesco · Caixa · Inter · Santander</p>
+      </div>
+      <div class="fast" id="fastBox">
+        <div class="fast-row">
+          <span class="badge-fast"><img src="assets/c83b4.svg" alt="">Fast Itaú</span>
+          <button class="switch fast-sw" type="button" id="fastSwitch" aria-pressed="false" aria-label="Fast Itaú"><i></i></button>
+        </div>
+        <small>Retorno personalizado direto do banco</small>
+      </div>
+    </section>
+
+    <div class="work">
+      <form class="form" id="form" autocomplete="off">
+        <div class="fields">
+          <div class="field">
+            <label class="lbl" for="tipoBtn">Tipo do imóvel</label>
+            <button class="select-btn" type="button" id="tipoBtn" aria-expanded="false">
+              <span id="tipoLabel">Selecione...</span>
+              <img src="assets/3af0b.svg" alt="">
+            </button>
+            <div class="menu select-menu" id="tipoMenu" hidden>
+              <button type="button" data-tipo="Residencial">Residencial</button>
+              <button type="button" data-tipo="Comercial">Comercial</button>
+              <button type="button" data-tipo="Terreno">Terreno</button>
+              <button type="button" data-tipo="Rural">Rural</button>
+            </div>
+          </div>
+
+          <div class="field" data-only="imovel">
+            <label class="lbl" for="valor">Valor do imóvel</label>
+            <input class="control" id="valor" inputmode="numeric" placeholder="R$" data-money>
+          </div>
+          <div class="field" data-only="imovel">
+            <label class="lbl" for="entrada">Valor da entrada</label>
+            <input class="control" id="entrada" inputmode="numeric" placeholder="R$" data-money>
+          </div>
+          <div class="field" data-only="cliente">
+            <label class="lbl" for="renda">Renda mensal</label>
+            <input class="control" id="renda" inputmode="numeric" placeholder="R$" data-money>
+          </div>
+          <div class="field" data-only="cliente">
+            <label class="lbl" for="recursos">Recursos para entrada</label>
+            <input class="control" id="recursos" inputmode="numeric" placeholder="R$" data-money>
+          </div>
+          <div class="field">
+            <label class="lbl" for="nasc">Data de nascimento</label>
+            <input class="control" id="nasc" inputmode="numeric" placeholder="dd/mm/aaaa" maxlength="10">
+          </div>
+          <div class="field">
+            <label class="lbl" for="prazo">Prazo (em meses)</label>
+            <input class="control" id="prazo" inputmode="numeric" placeholder="Informe o prazo">
+          </div>
+        </div>
+
+        <div class="fgts">
+          <span class="lbl" style="margin:0">Vai utilizar FGTS?</span>
+          <button class="switch" type="button" id="fgts" aria-pressed="false" aria-label="Utilizar FGTS"><i></i></button>
+          <div class="field fgts-valor" id="fgtsValorField" hidden>
+            <label class="lbl" for="fgtsValor">Valor do FGTS</label>
+            <input class="control" id="fgtsValor" inputmode="numeric" placeholder="R$" data-money>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn ghost" type="button" id="backBtn">Voltar</button>
+          <button class="btn primary go" type="submit" id="simBtn">Simular <img src="assets/ea7e2.svg" alt=""></button>
+        </div>
+      </form>
+
+      <section class="results" id="results">
+        <h2 id="resTitle">Potencial de compra por banco</h2>
+        <div id="resBody"></div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+<div class="modal" id="modal" hidden></div>
+<script src="simulacao.js?v=10"></script>
+</body>
+</html>

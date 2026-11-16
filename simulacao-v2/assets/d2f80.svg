@@ -1,0 +1,11 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="120" height="16" viewBox="0 0 120 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Indicator">
+<g id="Line Left">
+<rect width="55" height="2" transform="translate(0 7)" fill="#EAECEC"/>
+</g>
+<circle id="Step Dot" cx="60" cy="8" r="5" fill="#EAECEC"/>
+<g id="Line Right">
+<rect width="55" height="2" transform="translate(65 7)" fill="#EAECEC"/>
+</g>
+</g>
+</svg>
