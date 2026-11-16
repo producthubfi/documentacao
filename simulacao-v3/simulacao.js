@@ -139,21 +139,40 @@
       '</div></div>';
   }
 
+  function detailsLabel(open) {
+    return (open ? "Recolher" : "Mais detalhes") +
+      '<img class="details-caret" src="assets/lucide-chevron-down.svg" width="16" height="16" alt="">';
+  }
+
   function rowHtml(b) {
     var warn = b.tag === "warn";
     var open = openId === b.id;
     return '<article class="row' + (open ? " is-open" : "") + '" data-bank="' + b.id + '">' +
       '<div class="row-top"><div class="who"><span class="bank-logo"><img src="' + b.logo + '" alt=""></span><span class="name">' + b.name + '</span>' +
       '<span class="tag ' + b.tag + '">' + b.tagText + '</span></div>' +
-      '<button class="btn ghost sm details" type="button" data-toggle="' + b.id + '" aria-expanded="' + (open ? "true" : "false") + '">' + (open ? "Recolher" : "Mais detalhes") + '<img class="details-caret" src="assets/lucide-chevron-down.svg" width="16" height="16" alt=""></button></div>' +
+      '<button class="btn ghost sm details" type="button" data-toggle="' + b.id + '" aria-expanded="' + (open ? "true" : "false") + '">' + detailsLabel(open) + '</button></div>' +
       '<div class="row-metrics">' +
         '<div><p class="k">Valor máximo do imóvel</p><p class="v lg">' + b.imóvel + '</p></div>' +
         '<div><p class="k">' + b.entradaLabel + '</p><p class="v' + (warn ? " hot" : "") + '">' + b.entrada + '</p></div>' +
         '<div><p class="k">Valor financiado</p><p class="v">' + b.financiado + '</p></div>' +
         '<div><p class="k">Primeira parcela</p><p class="v">' + b.p1 + '</p></div>' +
       '</div>' +
-      (open ? detailBlock(b) : "") +
+      '<div class="row-panel" aria-hidden="' + (open ? "false" : "true") + '"><div class="row-panel-inner">' + detailBlock(b) + '</div></div>' +
       '</article>';
+  }
+
+  function syncAccordion() {
+    document.querySelectorAll(".row[data-bank]").forEach(function (row) {
+      var isOpen = row.getAttribute("data-bank") === openId;
+      row.classList.toggle("is-open", isOpen);
+      var btn = row.querySelector("[data-toggle]");
+      if (btn) {
+        btn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        btn.innerHTML = detailsLabel(isOpen);
+      }
+      var panel = row.querySelector(".row-panel");
+      if (panel) panel.setAttribute("aria-hidden", isOpen ? "false" : "true");
+    });
   }
 
   function resultsHtml() {
@@ -381,7 +400,7 @@
       var id = toggle.getAttribute("data-toggle");
       openId = openId === id ? "" : id;
       screen = openId ? "a6" : "a5";
-      document.getElementById("resBody").innerHTML = resultsHtml();
+      syncAccordion();
       document.querySelectorAll(".proto button").forEach(function (b) {
         b.classList.toggle("is-on", b.getAttribute("data-jump") === screen);
       });
