@@ -1053,6 +1053,145 @@ html, body {
   margin: 0;
 }
 
+.overlay--hist {
+  align-items: flex-start;
+  padding-top: 48px;
+  overflow: auto;
+}
+.dialog--hist {
+  width: 512px;
+  max-width: min(512px, calc(100vw - 48px));
+  max-height: calc(100vh - 80px);
+  gap: 16px;
+}
+.hist-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  overflow: auto;
+  min-height: 0;
+}
+.hist-card {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  width: 100%;
+  padding: 16px;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+}
+.hist-card__meta {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: rgba(25, 26, 26, 0.7);
+}
+.hist-card__valor {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 4px;
+}
+.hist-card__valor strong {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 21px;
+  color: #191a1a;
+}
+.hist-card__valor span {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgba(25, 26, 26, 0.7);
+}
+.hist-card__file {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+.hist-card__file > span {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+  line-height: 16px;
+  color: rgba(25, 26, 26, 0.7);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.hist-card__comp.hf-btn {
+  width: 132px;
+  height: 32px;
+  padding: 0 8px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  border-radius: 8px;
+  gap: 8px;
+  flex: none;
+}
+.hist-card__comp img {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+.hist-card__status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  height: 36px;
+  width: 100%;
+}
+.hist-card__select {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 200px;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid #e3e3e3;
+  border-radius: 8px;
+  background: #fff;
+  box-sizing: border-box;
+  flex: none;
+}
+.hist-card__select span {
+  font-size: 12px;
+  line-height: 16px;
+  color: #191a1a;
+}
+.hist-card__select img {
+  width: 12px;
+  height: 7px;
+  display: block;
+  flex: none;
+}
+.hist-lock {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.hist-lock img { flex: none; }
+.hist-lock span {
+  font-size: 12px;
+  line-height: 16px;
+  color: rgba(25, 26, 26, 0.7);
+}
+.hist-lock .linkish {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+}
+
 .alert-info {
   display: flex;
   align-items: center;

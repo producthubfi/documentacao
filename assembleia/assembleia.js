@@ -5,6 +5,7 @@
   var selected = ["2211", "3307"];
   var sheetOpen = false;
   var confirmOpen = false;
+  var histOpen = false;
   var filters = {
     grupo: "Todos",
     admin: "Todas",
@@ -36,9 +37,30 @@
   ];
 
   var HIST = [
-    { data: "27/09/2026", tipo: "Lance fixo", valor: "R$ 60.000,00", status: "Contemplado", assembleia: "25/10/2026" },
-    { data: "24/09/2026", tipo: "Lance fixo", valor: "R$ 60.000,00", status: "Substituído", assembleia: "25/10/2026" },
-    { data: "12/08/2026", tipo: "Lance livre", valor: "R$ 40.000,00", status: "Não contemplado", assembleia: "20/08/2026" },
+    {
+      assembleia: "25/10/2026",
+      valor: "R$ 60.000,00",
+      detalhe: "(30,00%) Lance fixo - Crédito",
+      registrado: "24/09/2026",
+      status: "cont",
+      arquivo: "Mauricio de Lima Couotinho Junior - 1054 - 2211.pdf",
+    },
+    {
+      assembleia: "25/10/2026",
+      valor: "R$ 60.000,00",
+      detalhe: "(30,00%) Lance fixo - Crédito",
+      registrado: "27/09/2026",
+      status: "cont",
+      arquivo: "Mauricio de Lima Couotinho Junior - 1054 - 2211.pdf",
+    },
+    {
+      assembleia: "01/10/2026",
+      valor: "R$ 60.000,00",
+      detalhe: "(30,00%) Lance fixo - Crédito",
+      registrado: "27/09/2026",
+      status: "nao-blue",
+      arquivo: "Mauricio de Lima Couotinho Junior - 1054 - 2211.pdf",
+    },
   ];
 
   var SELECTS = {
@@ -525,7 +547,10 @@
         var name = r.go
           ? '<button class="linkish cell-name" type="button" data-go="' + r.go + '">' + r.cliente + "</button>"
           : "<strong>" + r.cliente + "</strong>";
-        var histGo = r.st === "contcota" ? ' data-go="a8"' : ' data-toast="Histórico ilustrativo neste protótipo."';
+        var histAttr =
+          r.st === "contcota"
+            ? " data-open-hist"
+            : ' data-toast="Histórico ilustrativo neste protótipo."';
         return (
           '<div class="asm-list__row' +
           (r.st === "contcota" ? " is-highlight" : "") +
@@ -546,7 +571,7 @@
           "</div>" +
           '<div class="asm-col-reg">25/10/2026</div>' +
           '<div class="asm-col-comp"><button class="linkish" type="button"' +
-          histGo +
+          histAttr +
           '>Histórico de lances <img src="' +
           ASM +
           'icon-eye.svg" alt="" width="14" height="14"></button></div>' +
@@ -815,7 +840,7 @@
               '<button type="button" role="menuitem" data-toast="Cota ilustrativa neste protótipo."><img src="' +
               ASM +
               'icon-eye.svg" alt="" width="14" height="14">Ver cota</button>' +
-              '<button type="button" role="menuitem" class="is-on" data-go="a8"><img src="' +
+              '<button type="button" role="menuitem" class="is-on" data-open-hist><img src="' +
               ASM +
               'icon-history.svg" alt="" width="14" height="14">Histórico de lances</button>' +
               '<button type="button" role="menuitem" data-toast="Edição ilustrativa neste protótipo."><img src="' +
@@ -895,48 +920,67 @@
     );
   }
 
-  function a8() {
-    var head =
-      '<span class="asm-col-data">Registrado em</span>' +
-      '<span class="asm-col-tipo">Tipo</span>' +
-      '<span class="asm-col-vlance">Valor</span>' +
-      '<span class="asm-col-reg">Assembleia</span>' +
-      '<span class="asm-col-status-lg">Status</span>';
-    var rows = HIST.map(function (h) {
-      var st = h.status === "Contemplado" ? "cont" : h.status === "Substituído" ? "sub" : "nao";
+  function historicoModalHtml() {
+    var cards = HIST.map(function (h) {
+      var statusLabel = h.status === "cont" ? "Contemplado" : "Não contemplado";
+      var badgeHtml =
+        h.status === "cont"
+          ? '<span class="hf-badge asm-badge hf-badge--published">' + statusLabel + "</span>"
+          : '<span class="hf-badge asm-badge hf-badge--info">' + statusLabel + "</span>";
       return (
-        '<div class="asm-list__row">' +
-        '<div class="asm-col-data">' +
-        h.data +
-        '</div><div class="asm-col-tipo">' +
-        h.tipo +
-        '</div><div class="asm-col-vlance">' +
-        h.valor +
-        '</div><div class="asm-col-reg">' +
+        '<article class="hist-card">' +
+        '<p class="hist-card__meta">Assembleia: ' +
         h.assembleia +
-        '</div><div class="asm-col-status-lg">' +
-        badge(st) +
-        "</div></div>"
+        "</p>" +
+        '<div class="hist-card__valor"><strong>' +
+        h.valor +
+        "</strong><span>" +
+        h.detalhe +
+        "</span></div>" +
+        '<p class="hist-card__meta">Registrado em ' +
+        h.registrado +
+        " por Mauricio Lima</p>" +
+        '<div class="hist-card__file"><span>' +
+        h.arquivo +
+        '</span><button class="hf-btn hf-btn--ghost hist-card__comp" type="button" data-toast="Comprovante ilustrativo."><img src="' +
+        ASM +
+        'icon-eye.svg" alt="" width="16" height="16">Ver comprovante</button></div>' +
+        '<div class="hist-card__status">' +
+        badgeHtml +
+        '<div class="hist-card__select" aria-hidden="true"><span>' +
+        statusLabel +
+        '</span><img src="' +
+        ICO +
+        'select-chevron.svg" alt=""></div></div></article>'
       );
     }).join("");
-    return shell(
-      '<div class="crumb">Gestão de Consórcio</div>' +
-        '<div class="page-head"><h1>Mauricio Lima CPF</h1><p>Ficha do cliente · 11354444410</p></div>' +
-        '<button class="back" type="button" data-go="a7">' +
-        ico("left") +
-        "Voltar para Clientes</button>" +
-        '<div class="alert-info">' +
-        '<img src="' +
-        ASM +
-        'icon-trophy.svg" alt="" width="20" height="20">' +
-        '<div class="alert-info__text"><strong>Histórico de lances · Cota 2211</strong>' +
-        "<span>Grupo 1054 · Turn2C · Contemplada na assembleia de 25/10/2026</span></div></div>" +
-        listTable(head, rows) +
-        '<div class="next-step">' +
-        '<p>Fluxo feliz concluído: da lista até o histórico da cota contemplada.</p>' +
-        btn("Voltar ao início", { variant: "hf-btn--primary", foot: true, go: "a1" }) +
-        "</div>"
+
+    return (
+      '<div class="overlay overlay--hist" id="hist-modal">' +
+      '<div class="dialog dialog--hist" role="dialog" aria-modal="true" aria-labelledby="hist-title">' +
+      '<div class="dialog-top">' +
+      '<div class="dialog-titles"><h2 id="hist-title">Histórico de lances da cota 2211</h2>' +
+      "<p>Grupo 1054 · Mauricio Lima CPF</p></div>" +
+      '<button class="x" type="button" data-close-hist aria-label="Fechar"><img src="' +
+      ASM +
+      'icon-x-gray.svg" alt="" width="16" height="16"></button></div>' +
+      '<div class="hist-list">' +
+      cards +
+      "</div>" +
+      '<div class="hist-lock"><img src="' +
+      ASM +
+      'icon-lock.svg" alt="" width="14" height="14">' +
+      "<span>Status definido pela assembleia de 25/10/2026 · </span>" +
+      '<button class="linkish" type="button" data-go="a6">Ver assembleia</button></div>' +
+      '<div class="dialog-actions">' +
+      btn("Fechar", { variant: "hf-btn--ghost", foot: true, extra: "data-close-hist" }) +
+      "</div></div></div>"
     );
+  }
+
+  function a8() {
+    histOpen = true;
+    return a7() + historicoModalHtml();
   }
 
   function confirmHtml() {
@@ -1086,10 +1130,12 @@
   function paint() {
     sheetOpen = screen === "a3";
     confirmOpen = screen === "a5";
+    histOpen = screen === "a8";
     var map = { a1: a1, a2: a2, a3: a3, a4: a4, a5: a5, a6: a6, a7: a7, a8: a8 };
     document.getElementById("app").innerHTML = (map[screen] || a1)();
     document.querySelectorAll(".proto button").forEach(function (b) {
-      b.classList.toggle("is-on", b.getAttribute("data-jump") === screen);
+      var jump = b.getAttribute("data-jump");
+      b.classList.toggle("is-on", jump === screen || (jump === "a7" && screen === "a8"));
     });
     if (location.hash !== "#" + screen) history.replaceState(null, "", "#" + screen);
     wireAll();
@@ -1124,6 +1170,10 @@
     if (event.key === "Escape") {
       closeSelects(null);
       closeMsDropdown();
+      if (screen === "a8" || histOpen) {
+        go("a7");
+        return;
+      }
       return;
     }
     if (
@@ -1143,6 +1193,8 @@
     var toggle = e.target.closest("[data-toggle-cota]");
     var conf = e.target.closest("[data-confirm]");
     var closeConf = e.target.closest("[data-close-confirm]");
+    var openHist = e.target.closest("[data-open-hist]");
+    var closeHist = e.target.closest("[data-close-hist]");
     var closeToast = e.target.closest("[data-close-toast]");
     var tip = e.target.closest("[data-toast]");
 
@@ -1151,6 +1203,15 @@
     if (closeToast) {
       var toastEl = document.getElementById("pub-toast");
       if (toastEl) toastEl.remove();
+      return;
+    }
+
+    if (e.target.id === "hist-modal" || closeHist) {
+      go("a7");
+      return;
+    }
+    if (openHist) {
+      go("a8");
       return;
     }
 
