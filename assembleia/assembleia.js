@@ -141,14 +141,27 @@
     });
   }
 
-  function impactSummary() {
+  function impactSummary(opts) {
+    opts = opts || {};
     var contemplados = LANCES.filter(function (l) {
       return selected.indexOf(l.cota) >= 0;
     }).length;
     var nao = LANCES.length - contemplados;
+    var title = opts.published ? "Resultado publicado" : "O que acontece ao publicar";
+    var note = opts.published
+      ? '<div class="impact-summary__note"><img src="' +
+        ASM +
+        'icon-circle-check.svg" alt="" width="14" height="14"><span>Publicado por Lucas Augusto em 25/10/2026 às 16:42</span></div>'
+      : '<div class="impact-summary__note"><img src="' +
+        ASM +
+        'icon-clock.svg" alt="" width="14" height="14"><span>Os lances aguardando esta assembleia serão atualizados juntos</span></div>';
     return (
-      '<div class="impact-summary">' +
-      "<p class=\"impact-summary__title\">O que acontece ao publicar</p>" +
+      '<div class="impact-summary' +
+      (opts.boxed ? " impact-summary--boxed" : "") +
+      '">' +
+      '<p class="impact-summary__title">' +
+      title +
+      "</p>" +
       '<div class="impact-summary__stats">' +
       '<div class="impact-stat impact-stat--ok"><p class="impact-stat__n">' +
       selected.length +
@@ -160,10 +173,56 @@
       nao +
       '</p><p class="impact-stat__l">Lances não contemplados</p></div>' +
       "</div>" +
-      '<div class="impact-summary__note"><img src="' +
-      ASM +
-      'icon-clock.svg" alt="" width="14" height="14"><span>Os lances aguardando esta assembleia serão atualizados juntos</span></div>' +
+      note +
       "</div>"
+    );
+  }
+
+  function detailHead() {
+    return (
+      '<div class="crumb">Gestão de Consórcio</div>' +
+      '<div class="page-head"><h1>Grupo 1054</h1><p>Resultado oficial da assembleia de 25/10/2026</p></div>'
+    );
+  }
+
+  function publishedCard() {
+    var tags = selected
+      .map(function (id) {
+        return (
+          '<span class="hf-badge asm-badge hf-badge--published"><span class="hf-badge__ico"><img src="' +
+          ASM +
+          'icon-trophy.svg" alt=""></span>Cota ' +
+          id +
+          "</span>"
+        );
+      })
+      .join("");
+    return (
+      '<div class="card card--published">' +
+      '<div class="card-header"><h2>Resultado publicado</h2>' +
+      '<p class="lead">Publicado por Lucas Augusto em 25/10/2026 às 16:42. O resultado não pode ser republicado por cima.</p></div>' +
+      '<div class="published-row">' +
+      '<div class="published-left">' +
+      '<p class="ms-label">Cotas contempladas</p>' +
+      '<div class="published-tags">' +
+      tags +
+      "</div>" +
+      '<div class="published-actions">' +
+      btn("Ajustar resultado", {
+        variant: "hf-btn--ghost",
+        foot: true,
+        icon: "icon-pencil.svg",
+        toast: "Ajuste ilustrativo neste protótipo.",
+      }) +
+      btn("Ver histórico de alterações", {
+        variant: "hf-btn--ghost",
+        foot: true,
+        icon: "icon-history.svg",
+        toast: "Histórico ilustrativo neste protótipo.",
+      }) +
+      "</div></div>" +
+      impactSummary({ published: true, boxed: true }) +
+      "</div></div>"
     );
   }
 
@@ -433,23 +492,7 @@
     );
   }
 
-  function detailChrome(extraCard, lancesStatusMode) {
-    var chips = selected
-      .map(function (id) {
-        return (
-          '<span class="chip">Cota ' +
-          id +
-          '<button type="button" class="chip__x" data-remove-cota="' +
-          id +
-          '" aria-label="Remover cota ' +
-          id +
-          '"><img src="' +
-          ASM +
-          'icon-x.svg" alt="" width="12" height="12"></button></span>'
-        );
-      })
-      .join("");
-
+  function lancesTable(lancesStatusMode) {
     var head =
       '<span class="asm-col-grupo">Cliente</span>' +
       '<span class="asm-col-cota">Cota</span>' +
@@ -492,27 +535,28 @@
         "</div></div>"
       );
     }).join("");
+    return listTable(head, rows);
+  }
+
+  function detailChrome(extraCard, lancesStatusMode) {
+    var chips = selected
+      .map(function (id) {
+        return (
+          '<span class="chip">Cota ' +
+          id +
+          '<button type="button" class="chip__x" data-remove-cota="' +
+          id +
+          '" aria-label="Remover cota ' +
+          id +
+          '"><img src="' +
+          ASM +
+          'icon-x.svg" alt="" width="12" height="12"></button></span>'
+        );
+      })
+      .join("");
 
     var msWide = extraCard ? " ms--wide" : "";
-    return (
-      '<button class="back" type="button" data-go="a1">' +
-      ico("left") +
-      "Voltar para Assembleias</button>" +
-      '<div class="meta">' +
-      badge(screen === "a6" ? "publicada" : "pendente") +
-      '<span class="meta-item">' +
-      ico("calendar") +
-      "Assembleia em 25/10/2026</span>" +
-      '<span class="meta-item">' +
-      ico("layers") +
-      "Turn2C · CNP Consórcio</span>" +
-      '<span class="meta-item">' +
-      ico("users") +
-      "3 cotas com lance</span>" +
-      '<span class="meta-item">' +
-      ico("wallet") +
-      "4 lances · R$ 240.000,00</span>" +
-      "</div>" +
+    var cardBlock =
       '<div class="card">' +
       "<h2>Resultado oficial</h2>" +
       '<p class="lead">Informe as cotas do grupo contempladas nesta assembleia. Os lances dessas cotas serão marcados como contemplados.</p>' +
@@ -535,11 +579,37 @@
       '<p class="ms-help">Apenas cotas cadastradas no grupo 1054</p>' +
       "</div>" +
       (extraCard || "") +
+      "</div>";
+
+    var sectionTitle =
+      lancesStatusMode === "done" ? "Lances desta assembleia" : "Lances aguardando esta assembleia";
+
+    return (
+      '<button class="back" type="button" data-go="a1">' +
+      ico("left") +
+      "Voltar para Assembleias</button>" +
+      '<div class="meta">' +
+      badge(lancesStatusMode === "done" ? "publicada" : "pendente") +
+      '<span class="meta-item">' +
+      ico("calendar") +
+      "Assembleia em 25/10/2026</span>" +
+      '<span class="meta-item">' +
+      ico("layers") +
+      "Turn2C · CNP Consórcio</span>" +
+      '<span class="meta-item">' +
+      ico("users") +
+      "3 cotas com lance</span>" +
+      '<span class="meta-item">' +
+      ico("wallet") +
+      "4 lances · R$ 240.000,00</span>" +
       "</div>" +
-      '<div class="section-head"><h3>Lances aguardando esta assembleia</h3>' +
-      badge(screen === "a6" ? "atualizados" : "lances") +
+      cardBlock +
+      '<div class="section-head"><h3>' +
+      sectionTitle +
+      "</h3>" +
+      badge(lancesStatusMode === "done" ? "atualizados" : "lances") +
       "</div>" +
-      listTable(head, rows)
+      lancesTable(lancesStatusMode)
     );
   }
 
@@ -555,8 +625,7 @@
 
   function a2() {
     return shell(
-      '<div class="crumb">Gestão de Consórcio <span>/</span> Assembleias <span>/</span> <b>Grupo 1054</b></div>' +
-        '<div class="page-head"><h1>Grupo 1054</h1><p>Resultado oficial da assembleia de 25/10/2026</p></div>' +
+      detailHead() +
         detailChrome("", "wait") +
         footBar(
           "Selecione as cotas contempladas para liberar a publicação do resultado.",
@@ -569,8 +638,7 @@
   function a3() {
     sheetOpen = true;
     return shell(
-      '<div class="crumb">Gestão de Consórcio <span>/</span> Assembleias <span>/</span> <b>Grupo 1054</b></div>' +
-        '<div class="page-head"><h1>Grupo 1054</h1><p>Resultado oficial da assembleia de 25/10/2026</p></div>' +
+      detailHead() +
         detailChrome("", "wait") +
         footBar(
           "Selecione as cotas contempladas para liberar a publicação do resultado.",
@@ -586,8 +654,7 @@
   function a4() {
     sheetOpen = false;
     return shell(
-      '<div class="crumb">Gestão de Consórcio <span>/</span> Assembleias <span>/</span> <b>Grupo 1054</b></div>' +
-        '<div class="page-head"><h1>Grupo 1054</h1><p>Resultado oficial da assembleia de 25/10/2026</p></div>' +
+      detailHead() +
         detailChrome(impactSummary(), "preview") +
         footBar(
           "Revise o resumo antes de publicar. O resultado não é republicado por cima.",
@@ -606,53 +673,151 @@
   function a6() {
     confirmOpen = false;
     sheetOpen = false;
-    return shell(
-      '<div class="crumb">Gestão de Consórcio <span>/</span> Assembleias <span>/</span> <b>Grupo 1054</b></div>' +
-        '<div class="alert">' +
-        ico("check") +
-        "<span>Resultado publicado em 16/11/2026 às 10:12. Cotas e lances foram atualizados.</span></div>" +
-        '<div class="page-head"><h1>Grupo 1054</h1><p>Resultado oficial da assembleia de 25/10/2026</p></div>' +
-        detailChrome(impactSummary(), "done") +
-        footBar(
-          "Abra a ficha do cliente contemplado para ver a cota atualizada.",
-          btn("Voltar para lista", { variant: "hf-btn--ghost", foot: true, go: "a1" }) +
-            btn("Abrir ficha do cliente", { variant: "hf-btn--primary", foot: true, go: "a7" })
-        )
+    return (
+      shell(
+        detailHead() +
+          '<button class="back" type="button" data-go="a1">' +
+          ico("left") +
+          "Voltar para Assembleias</button>" +
+          '<div class="meta">' +
+          badge("publicada") +
+          '<span class="meta-item">' +
+          ico("calendar") +
+          "Assembleia em 25/10/2026</span>" +
+          '<span class="meta-item">' +
+          ico("layers") +
+          "Turn2C · CNP Consórcio</span>" +
+          '<span class="meta-item">' +
+          ico("users") +
+          "3 cotas com lance</span>" +
+          '<span class="meta-item">' +
+          ico("wallet") +
+          "4 lances · R$ 240.000,00</span>" +
+          "</div>" +
+          publishedCard() +
+          '<div class="section-head"><h3>Lances desta assembleia</h3>' +
+          badge("atualizados") +
+          "</div>" +
+          lancesTable("done") +
+          '<div class="next-step">' +
+          '<p>Próximo passo no fluxo feliz: abrir a ficha do cliente contemplado.</p>' +
+          btn("Abrir ficha do cliente", {
+            variant: "hf-btn--primary",
+            foot: true,
+            icon: "icon-arrow-right.svg",
+            go: "a7",
+          }) +
+          "</div>"
+      ) +
+      '<div class="asm-toast" id="pub-toast" role="status">' +
+      '<img src="' +
+      ASM +
+      'icon-circle-check.svg" alt="" width="20" height="20">' +
+      '<div class="asm-toast__text"><strong>Resultado publicado</strong><span>2 cotas contempladas e 4 lances atualizados.</span></div>' +
+      '<button type="button" class="asm-toast__x" data-close-toast aria-label="Fechar"><img src="' +
+      ASM +
+      'icon-x-gray.svg" alt="" width="14" height="14"></button></div>'
     );
   }
 
   function a7() {
+    var cotasRows = [
+      { cota: "2211", grupo: "1054", admin: "Turn2C", sim: true, credito: "R$ 120.000,00", menu: true },
+      { cota: "4954", grupo: "1054", admin: "Turn2C", sim: false, credito: "R$ 60.000,00", menu: false },
+      { cota: "3307", grupo: "1021", admin: "Turn2C", sim: false, credito: "R$ 90.000,00", menu: false },
+    ]
+      .map(function (r) {
+        var contemplada = r.sim
+          ? '<span class="hf-badge asm-badge hf-badge--published"><span class="hf-badge__ico"><img src="' +
+            ASM +
+            'icon-trophy.svg" alt=""></span>Sim</span>'
+          : '<span class="hf-badge asm-badge hf-badge--secondary">Não</span>';
+        var actions =
+          '<div class="row-menu' +
+          (r.menu ? " is-open" : "") +
+          '">' +
+          '<button class="row-menu__btn" type="button" data-toggle-menu aria-label="Ações">' +
+          '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button>' +
+          (r.menu
+            ? '<div class="row-menu__dd" role="menu">' +
+              '<button type="button" role="menuitem" data-toast="Cota ilustrativa neste protótipo."><img src="' +
+              ASM +
+              'icon-eye.svg" alt="" width="14" height="14">Ver cota</button>' +
+              '<button type="button" role="menuitem" class="is-on" data-go="a8"><img src="' +
+              ASM +
+              'icon-history.svg" alt="" width="14" height="14">Histórico de lances</button>' +
+              '<button type="button" role="menuitem" data-toast="Edição ilustrativa neste protótipo."><img src="' +
+              ASM +
+              'icon-pencil.svg" alt="" width="14" height="14">Editar cota</button></div>'
+            : "") +
+          "</div>";
+        return (
+          '<div class="asm-list__row">' +
+          '<div class="asm-col-cota"><strong>' +
+          r.cota +
+          "</strong></div>" +
+          '<div class="asm-col-data">' +
+          r.grupo +
+          "</div>" +
+          '<div class="asm-col-admin">' +
+          r.admin +
+          "</div>" +
+          '<div class="asm-col-comp">' +
+          contemplada +
+          "</div>" +
+          '<div class="asm-col-credito">' +
+          r.credito +
+          "</div>" +
+          '<div class="asm-col-status">' +
+          '<span class="hf-badge asm-badge hf-badge--published">Ativa</span></div>' +
+          '<div class="asm-col-menu">' +
+          actions +
+          "</div></div>"
+        );
+      })
+      .join("");
+
+    var head =
+      '<span class="asm-col-cota">Cota</span>' +
+      '<span class="asm-col-data">Grupo</span>' +
+      '<span class="asm-col-admin">Administradora</span>' +
+      '<span class="asm-col-comp">Contemplada</span>' +
+      '<span class="asm-col-credito">Crédito</span>' +
+      '<span class="asm-col-status">Status</span>' +
+      '<span class="asm-col-menu">Ações</span>';
+
     return shell(
-      '<div class="crumb">Gestão de Consórcio <span>/</span> Clientes <span>/</span> <b>Mauricio Lima</b></div>' +
+      '<div class="crumb">Gestão de Consórcio</div>' +
+        '<div class="page-head"><h1>Mauricio Lima CPF</h1><p>Ficha do cliente · 11354444410</p></div>' +
         '<button class="back" type="button" data-go="a6">' +
         ico("left") +
-        "Voltar para resultado</button>" +
-        '<div class="page-head"><h1>Mauricio Lima</h1><p>Ficha do cliente com a cota contemplada nesta assembleia</p></div>' +
-        '<div class="profile">' +
-        '<div class="profile-card">' +
-        '<p class="name">Mauricio Lima</p><p class="sub">CPF 113.544.464-10</p>' +
-        '<div class="kv">' +
-        '<div class="kv-row"><span>Telefone</span><b>(11) 98888-2211</b></div>' +
-        '<div class="kv-row"><span>E-mail</span><b>mauricio@email.com</b></div>' +
-        '<div class="kv-row"><span>Grupo</span><b>1054</b></div>' +
-        '<div class="kv-row"><span>Cota</span><b>2211</b></div>' +
-        '<div class="kv-row"><span>Status da cota</span><b>Contemplada</b></div>' +
-        "</div></div>" +
-        "<div>" +
-        '<div class="alert">' +
-        ico("check") +
-        "<span>Cota 2211 contemplada na assembleia de 25/10/2026 por lance fixo de R$ 60.000,00.</span></div>" +
-        '<div class="card">' +
-        "<h2>Cota 2211</h2>" +
-        '<p class="lead">Crédito de R$ 180.000,00 · Turn2C · CNP Consórcio</p>' +
-        '<div class="impact" style="margin-top:16px">' +
-        '<div class="impact-item"><p class="k">Forma de contemplação</p><p class="v" style="font-size:15px">Lance fixo</p></div>' +
-        '<div class="impact-item"><p class="k">Valor do lance</p><p class="v" style="font-size:15px">R$ 60.000,00</p></div>' +
-        '<div class="impact-item"><p class="k">Assembleia</p><p class="v" style="font-size:15px">25/10/2026</p></div>' +
+        "Voltar para Clientes</button>" +
+        '<div class="kpis">' +
+        '<div class="kpi"><div class="kpi-top"><p class="label">Cotas ativas</p><span class="kpi-ico">' +
+        ico("hash") +
+        '</span></div><p class="value">3</p></div>' +
+        '<div class="kpi"><div class="kpi-top"><p class="label">Cotas contempladas</p><span class="kpi-ico ok">' +
+        ico("wallet") +
+        '</span></div><p class="value">1</p></div>' +
+        '<div class="kpi"><div class="kpi-top"><p class="label">Lances aguardando</p><span class="kpi-ico warn">' +
+        ico("calendar") +
+        '</span></div><p class="value">1</p></div>' +
+        '<div class="kpi"><div class="kpi-top"><p class="label">Total em lances</p><span class="kpi-ico hot">' +
+        ico("clock") +
+        '</span></div><p class="value" style="font-size:22px">R$ 180.000,00</p></div>' +
         "</div>" +
-        '<div style="margin-top:16px">' +
-        btn("Ver histórico de lances", { variant: "hf-btn--ghost", go: "a8" }) +
-        "</div></div></div></div>"
+        '<div class="alert-info">' +
+        '<img src="' +
+        ASM +
+        'icon-trophy.svg" alt="" width="20" height="20">' +
+        '<div><strong>Cota 2211 contemplada na assembleia de 25/10/2026</strong>' +
+        "<span>Os lances vinculados foram atualizados automaticamente pelo resultado publicado.</span></div></div>" +
+        '<div class="filters">' +
+        searchField("Buscar por cota ou grupo") +
+        selectField("grupo", "Grupo", "Todos", ["Todos", "1054", "1021"]) +
+        selectField("contemplada", "Contemplada", "Todas", ["Todas", "Sim", "Não"]) +
+        "</div>" +
+        listTable(head, cotasRows)
     );
   }
 
@@ -681,39 +846,62 @@
       );
     }).join("");
     return shell(
-      '<div class="crumb">Gestão de Consórcio <span>/</span> Clientes <span>/</span> Mauricio Lima <span>/</span> <b>Histórico de lances</b></div>' +
+      '<div class="crumb">Gestão de Consórcio</div>' +
+        '<div class="page-head"><h1>Mauricio Lima CPF</h1><p>Ficha do cliente · 11354444410</p></div>' +
         '<button class="back" type="button" data-go="a7">' +
         ico("left") +
-        "Voltar para ficha</button>" +
-        '<div class="page-head"><h1>Histórico de lances</h1><p>Cota 2211 · Grupo 1054 · Mauricio Lima</p></div>' +
+        "Voltar para Clientes</button>" +
+        '<div class="alert-info">' +
+        '<img src="' +
+        ASM +
+        'icon-trophy.svg" alt="" width="20" height="20">' +
+        '<div><strong>Histórico de lances · Cota 2211</strong>' +
+        "<span>Grupo 1054 · Turn2C · Contemplada na assembleia de 25/10/2026</span></div></div>" +
         listTable(head, rows) +
-        '<div class="foot"><p class="foot-copy">Fluxo feliz concluído: da lista até o histórico da cota contemplada.</p>' +
-        '<div class="foot-actions">' +
-        btn("Voltar ao início", { variant: "hf-btn--primary", go: "a1" }) +
-        "</div></div>"
+        '<div class="next-step">' +
+        '<p>Fluxo feliz concluído: da lista até o histórico da cota contemplada.</p>' +
+        btn("Voltar ao início", { variant: "hf-btn--primary", foot: true, go: "a1" }) +
+        "</div>"
     );
   }
 
   function confirmHtml() {
+    var cotasLabel = selected.join(" e ");
+    var contemplados = LANCES.filter(function (l) {
+      return selected.indexOf(l.cota) >= 0;
+    }).length;
+    var nao = LANCES.length - contemplados;
     return (
       '<div class="overlay" id="confirm">' +
-      '<div class="dialog" role="dialog" aria-modal="true" aria-label="Confirmar publicação">' +
-      '<div class="dialog-top"><div><h2>Confirmar publicação do resultado</h2><p>Essa ação atualiza cotas e lances ao mesmo tempo.</p></div>' +
-      '<button class="x" type="button" data-close-confirm aria-label="Fechar">✕</button></div>' +
+      '<div class="dialog" role="dialog" aria-modal="true" aria-labelledby="confirm-title">' +
+      '<div class="dialog-top">' +
+      '<div class="dialog-titles"><h2 id="confirm-title">Publicar resultado da assembleia?</h2>' +
+      "<p>Grupo 1054 · Assembleia de 25/10/2026</p></div>" +
+      '<button class="x" type="button" data-close-confirm aria-label="Fechar"><img src="' +
+      ASM +
+      'icon-x-gray.svg" alt="" width="16" height="16"></button></div>' +
       '<div class="dialog-body">' +
-      "<p>Você está publicando o resultado oficial da assembleia do <b>Grupo 1054</b> em <b>25/10/2026</b>.</p>" +
-      '<ul class="dialog-list">' +
-      "<li>" +
+      '<div class="dialog-item"><img src="' +
+      ASM +
+      'icon-circle-check.svg" alt="" width="18" height="18"><p>' +
       selected.length +
-      " cotas serão marcadas como contempladas</li>" +
-      "<li>3 lances serão marcados como contemplados</li>" +
-      "<li>1 lance permanecerá como não contemplado nesta assembleia</li>" +
-      "</ul>" +
-      "<p>Depois de publicar, o status da assembleia muda para Publicada.</p>" +
+      " cotas passam para Contemplada: " +
+      cotasLabel +
+      ".</p></div>" +
+      '<div class="dialog-item"><img src="' +
+      ASM +
+      'icon-circle-check.svg" alt="" width="18" height="18"><p>' +
+      contemplados +
+      " lances passam para Contemplado e " +
+      nao +
+      " lance passa para Não contemplado.</p></div>" +
+      '<div class="dialog-item"><img src="' +
+      ASM +
+      'icon-alert.svg" alt="" width="18" height="18"><p>Depois de publicado, o resultado não é republicado por cima. Correções entram por Ajustar resultado, com registro de quem alterou.</p></div>' +
       "</div>" +
       '<div class="dialog-actions">' +
-      btn("Cancelar", { variant: "hf-btn--ghost", extra: "data-close-confirm" }) +
-      btn("Confirmar publicação", { variant: "hf-btn--primary", go: "a6" }) +
+      btn("Cancelar", { variant: "hf-btn--ghost", foot: true, extra: "data-close-confirm" }) +
+      publishBtn({ go: "a6" }) +
       "</div></div></div>"
     );
   }
@@ -873,9 +1061,16 @@
     var toggle = e.target.closest("[data-toggle-cota]");
     var conf = e.target.closest("[data-confirm]");
     var closeConf = e.target.closest("[data-close-confirm]");
+    var closeToast = e.target.closest("[data-close-toast]");
     var tip = e.target.closest("[data-toast]");
 
     if (e.target.closest("[data-ms]")) e.stopPropagation();
+
+    if (closeToast) {
+      var toastEl = document.getElementById("pub-toast");
+      if (toastEl) toastEl.remove();
+      return;
+    }
 
     if (e.target.id === "confirm" || closeConf) {
       go("a4");
@@ -933,6 +1128,14 @@
       if (b.getAttribute("data-jump") === "a2") selected = [];
       go(b.getAttribute("data-jump"));
     });
+  });
+
+  window.addEventListener("hashchange", function () {
+    var next = (location.hash || "#a1").slice(1);
+    if (["a1", "a2", "a3", "a4", "a5", "a6", "a7", "a8"].indexOf(next) === -1) return;
+    if (next === "a3" || next === "a4" || next === "a5" || next === "a6") selected = ["2211", "3307"];
+    if (next === "a2") selected = [];
+    go(next);
   });
 
   var start = (location.hash || "#a1").slice(1);
