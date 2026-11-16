@@ -721,7 +721,7 @@
   function actionBtn(g) {
     if (g.action === "publish") {
       return btn("Publicar resultado", {
-        variant: "hf-btn--dark",
+        variant: "hf-btn--ghost",
         action: true,
         go: "a2",
         extra: 'data-group="' + g.id + '"',
