@@ -2,7 +2,7 @@
   var ICO = "../assets/icons/";
   var ASM = "assets/";
   var screen = "a1";
-  var selected = ["2211", "0884"];
+  var selected = ["2211", "3307"];
   var sheetOpen = false;
   var confirmOpen = false;
   var filters = {
@@ -24,15 +24,15 @@
   var LANCES = [
     { cliente: "Mauricio Lima CPF", doc: "11354446410", cota: "2211", tipo: "Lance fixo", valor: "R$ 60.000,00", data: "27/09/2026" },
     { cliente: "Mauricio Lima CPF", doc: "11354446410", cota: "2211", tipo: "Lance fixo", valor: "R$ 60.000,00", data: "24/09/2026" },
-    { cliente: "Ana Paula Souza CPF", doc: "29811200355", cota: "0884", tipo: "Lance fixo", valor: "R$ 55.000,00", data: "22/09/2026" },
-    { cliente: "Carlos Mendes CPF", doc: "04188722019", cota: "3102", tipo: "Lance livre", valor: "R$ 65.000,00", data: "20/09/2026" },
+    { cliente: "Mauricio Lima CPF", doc: "11354446410", cota: "4954", tipo: "Lance fixo", valor: "R$ 60.000,00", data: "23/09/2026" },
+    { cliente: "Raniele Karolina", doc: "13062079470", cota: "3307", tipo: "Lance livre", valor: "R$ 60.000,00", data: "22/09/2026" },
   ];
 
   var COTAS = [
-    { id: "2211", cliente: "Mauricio Lima", credito: "R$ 180.000,00", lances: "2 lances" },
-    { id: "0884", cliente: "Ana Paula Souza", credito: "R$ 150.000,00", lances: "1 lance" },
-    { id: "3102", cliente: "Carlos Mendes", credito: "R$ 200.000,00", lances: "1 lance" },
-    { id: "4410", cliente: "Fernanda Dias", credito: "R$ 120.000,00", lances: "0 lance" },
+    { id: "2211", cliente: "Mauricio Lima CPF", credito: "R$ 120.000,00", lances: "2 lances" },
+    { id: "4954", cliente: "Mauricio Lima CPF", credito: "R$ 60.000,00", lances: "1 lance" },
+    { id: "3307", cliente: "Raniele Karolina", credito: "R$ 60.000,00", lances: "Lance livre" },
+    { id: "4001", cliente: "Sem lance nesta assembleia", credito: "—", lances: "" },
   ];
 
   var HIST = [
@@ -117,12 +117,95 @@
     var cls = "hf-btn " + (opts.variant || "hf-btn--primary");
     if (opts.size) cls += " " + opts.size;
     if (opts.action) cls += " asm-btn-action";
+    if (opts.foot) cls += " asm-btn-foot";
     var attrs = ' class="' + cls + '" type="button"';
     if (opts.go) attrs += ' data-go="' + opts.go + '"';
     if (opts.toast) attrs += ' data-toast="' + opts.toast + '"';
     if (opts.extra) attrs += " " + opts.extra;
     if (opts.disabled) attrs += " disabled";
-    return "<button" + attrs + ">" + label + "</button>";
+    var icon = opts.icon
+      ? '<img class="asm-btn-ico" src="' + ASM + opts.icon + '" alt="" width="16" height="16">'
+      : "";
+    return "<button" + attrs + ">" + icon + label + "</button>";
+  }
+
+  function publishBtn(opts) {
+    opts = opts || {};
+    return btn("Publicar resultado", {
+      variant: "hf-btn--primary",
+      foot: true,
+      icon: "icon-send.svg",
+      go: opts.go,
+      extra: opts.extra,
+      disabled: opts.disabled,
+    });
+  }
+
+  function impactSummary() {
+    var contemplados = LANCES.filter(function (l) {
+      return selected.indexOf(l.cota) >= 0;
+    }).length;
+    var nao = LANCES.length - contemplados;
+    return (
+      '<div class="impact-summary">' +
+      "<p class=\"impact-summary__title\">O que acontece ao publicar</p>" +
+      '<div class="impact-summary__stats">' +
+      '<div class="impact-stat impact-stat--ok"><p class="impact-stat__n">' +
+      selected.length +
+      '</p><p class="impact-stat__l">Cotas contempladas</p></div>' +
+      '<div class="impact-stat impact-stat--ok"><p class="impact-stat__n">' +
+      contemplados +
+      '</p><p class="impact-stat__l">Lances contemplados</p></div>' +
+      '<div class="impact-stat impact-stat--info"><p class="impact-stat__n">' +
+      nao +
+      '</p><p class="impact-stat__l">Lances não contemplados</p></div>' +
+      "</div>" +
+      '<div class="impact-summary__note"><img src="' +
+      ASM +
+      'icon-clock.svg" alt="" width="14" height="14"><span>Os lances aguardando esta assembleia serão atualizados juntos</span></div>' +
+      "</div>"
+    );
+  }
+
+  function multiselectDropdown() {
+    return (
+      '<div class="ms-dd" role="listbox" aria-label="Cotas do grupo">' +
+      '<div class="ms-dd__search"><img src="' +
+      ICO +
+      'search.svg" alt="" width="16" height="16"><input type="search" placeholder="Buscar cota ou cliente..." data-ms-search aria-label="Buscar cota ou cliente"></div>' +
+      COTAS.map(function (c) {
+        var on = selected.indexOf(c.id) >= 0;
+        return (
+          '<button class="ms-opt' +
+          (on ? " is-on" : "") +
+          '" type="button" role="option" aria-selected="' +
+          (on ? "true" : "false") +
+          '" data-toggle-cota="' +
+          c.id +
+          '" data-ms-label="Cota ' +
+          c.id +
+          " " +
+          c.cliente +
+          '">' +
+          '<span class="ms-check" aria-hidden="true">' +
+          (on ? '<img src="' + ICO + 'select-check.svg" alt="" width="10" height="8">' : "") +
+          "</span>" +
+          '<span class="ms-opt__main"><strong>Cota ' +
+          c.id +
+          "</strong><span>" +
+          c.cliente +
+          " · Grupo 1054</span></span>" +
+          '<span class="ms-opt__side"><strong>' +
+          c.credito +
+          "</strong><span>" +
+          (c.lances || "") +
+          "</span></span></button>"
+        );
+      }).join("") +
+      '<div class="ms-dd__foot"><span>' +
+      selected.length +
+      ' cotas selecionadas</span><button type="button" class="ms-dd__clear" data-clear-cotas>Limpar seleção</button></div></div>'
+    );
   }
 
   function actionBtn(g) {
@@ -353,10 +436,17 @@
   function detailChrome(extraCard, lancesStatusMode) {
     var chips = selected
       .map(function (id) {
-        var c = COTAS.filter(function (x) {
-          return x.id === id;
-        })[0];
-        return '<span class="chip">Cota ' + id + (c ? " · " + c.cliente.split(" ")[0] : "") + "</span>";
+        return (
+          '<span class="chip">Cota ' +
+          id +
+          '<button type="button" class="chip__x" data-remove-cota="' +
+          id +
+          '" aria-label="Remover cota ' +
+          id +
+          '"><img src="' +
+          ASM +
+          'icon-x.svg" alt="" width="12" height="12"></button></span>'
+        );
       })
       .join("");
 
@@ -403,6 +493,7 @@
       );
     }).join("");
 
+    var msWide = extraCard ? " ms--wide" : "";
     return (
       '<button class="back" type="button" data-go="a1">' +
       ico("left") +
@@ -425,13 +516,24 @@
       '<div class="card">' +
       "<h2>Resultado oficial</h2>" +
       '<p class="lead">Informe as cotas do grupo contempladas nesta assembleia. Os lances dessas cotas serão marcados como contemplados.</p>' +
-      '<div class="ms"><p class="ms-label">Cotas contempladas</p>' +
-      '<button class="ms-box' +
+      '<div class="ms' +
+      msWide +
       (sheetOpen ? " is-open" : "") +
-      '" type="button" data-sheet="1">' +
-      (selected.length ? '<span class="chips">' + chips + "</span>" : '<span class="placeholder">Selecione as cotas contempladas</span>') +
-      ico("chevron") +
-      "</button></div>" +
+      '" data-ms>' +
+      '<p class="ms-label">Cotas contempladas</p>' +
+      '<button class="ms-box" type="button" data-ms-toggle aria-expanded="' +
+      (sheetOpen ? "true" : "false") +
+      '">' +
+      (selected.length
+        ? '<span class="chips">' + chips + "</span>"
+        : '<span class="placeholder">Selecione as cotas contempladas</span>') +
+      '<img class="ms-chevron" src="' +
+      ICO +
+      'select-chevron.svg" alt="" width="16" height="16">' +
+      "</button>" +
+      (sheetOpen ? multiselectDropdown() : "") +
+      '<p class="ms-help">Apenas cotas cadastradas no grupo 1054</p>' +
+      "</div>" +
       (extraCard || "") +
       "</div>" +
       '<div class="section-head"><h3>Lances aguardando esta assembleia</h3>' +
@@ -441,54 +543,57 @@
     );
   }
 
+  function footBar(copy, actions) {
+    return (
+      '<div class="foot"><p class="foot-copy">' +
+      copy +
+      '</p><div class="foot-actions">' +
+      actions +
+      "</div></div>"
+    );
+  }
+
   function a2() {
     return shell(
       '<div class="crumb">Gestão de Consórcio <span>/</span> Assembleias <span>/</span> <b>Grupo 1054</b></div>' +
         '<div class="page-head"><h1>Grupo 1054</h1><p>Resultado oficial da assembleia de 25/10/2026</p></div>' +
         detailChrome("", "wait") +
-        '<div class="foot"><p class="foot-copy">Selecione as cotas contempladas para liberar a publicação do resultado.</p>' +
-        '<div class="foot-actions">' +
-        btn("Cancelar", { variant: "hf-btn--ghost", go: "a1" }) +
-        btn("Publicar resultado", { variant: "hf-btn--primary", disabled: true }) +
-        "</div></div>"
+        footBar(
+          "Selecione as cotas contempladas para liberar a publicação do resultado.",
+          btn("Cancelar", { variant: "hf-btn--ghost", foot: true, go: "a1" }) +
+            publishBtn({ disabled: true })
+        )
     );
   }
 
   function a3() {
     sheetOpen = true;
-    return (
-      shell(
-        '<div class="crumb">Gestão de Consórcio <span>/</span> Assembleias <span>/</span> <b>Grupo 1054</b></div>' +
-          '<div class="page-head"><h1>Grupo 1054</h1><p>Resultado oficial da assembleia de 25/10/2026</p></div>' +
-          detailChrome("", "wait") +
-          '<div class="foot"><p class="foot-copy">Selecione as cotas contempladas para liberar a publicação do resultado.</p>' +
-          '<div class="foot-actions">' +
-          btn("Cancelar", { variant: "hf-btn--ghost", go: "a1" }) +
-          btn("Publicar resultado", { variant: "hf-btn--primary", extra: "data-apply-sheet" }) +
-          "</div></div>"
-      ) + sheetHtml()
+    return shell(
+      '<div class="crumb">Gestão de Consórcio <span>/</span> Assembleias <span>/</span> <b>Grupo 1054</b></div>' +
+        '<div class="page-head"><h1>Grupo 1054</h1><p>Resultado oficial da assembleia de 25/10/2026</p></div>' +
+        detailChrome("", "wait") +
+        footBar(
+          "Selecione as cotas contempladas para liberar a publicação do resultado.",
+          btn("Cancelar", { variant: "hf-btn--ghost", foot: true, go: "a1" }) +
+            publishBtn({
+              disabled: !selected.length,
+              go: selected.length ? "a4" : undefined,
+            })
+        )
     );
   }
 
   function a4() {
     sheetOpen = false;
-    var impact =
-      '<div class="impact">' +
-      '<div class="impact-item"><p class="k">Cotas contempladas</p><p class="v">' +
-      selected.length +
-      "</p></div>" +
-      '<div class="impact-item"><p class="k">Lances contemplados</p><p class="v">3</p></div>' +
-      '<div class="impact-item"><p class="k">Lances não contemplados</p><p class="v">1</p></div>' +
-      "</div>";
     return shell(
       '<div class="crumb">Gestão de Consórcio <span>/</span> Assembleias <span>/</span> <b>Grupo 1054</b></div>' +
         '<div class="page-head"><h1>Grupo 1054</h1><p>Resultado oficial da assembleia de 25/10/2026</p></div>' +
-        detailChrome(impact, "preview") +
-        '<div class="foot"><p class="foot-copy">Ao publicar, as cotas selecionadas e os lances vinculados mudam de status juntos.</p>' +
-        '<div class="foot-actions">' +
-        btn("Cancelar", { variant: "hf-btn--ghost", go: "a1" }) +
-        btn("Publicar resultado", { variant: "hf-btn--primary", extra: 'data-confirm="1"' }) +
-        "</div></div>"
+        detailChrome(impactSummary(), "preview") +
+        footBar(
+          "Revise o resumo antes de publicar. O resultado não é republicado por cima.",
+          btn("Cancelar", { variant: "hf-btn--ghost", foot: true, go: "a1" }) +
+            publishBtn({ extra: 'data-confirm="1"' })
+        )
     );
   }
 
@@ -501,26 +606,18 @@
   function a6() {
     confirmOpen = false;
     sheetOpen = false;
-    var impact =
-      '<div class="impact">' +
-      '<div class="impact-item"><p class="k">Cotas contempladas</p><p class="v">' +
-      selected.length +
-      "</p></div>" +
-      '<div class="impact-item"><p class="k">Lances contemplados</p><p class="v">3</p></div>' +
-      '<div class="impact-item"><p class="k">Lances não contemplados</p><p class="v">1</p></div>' +
-      "</div>";
     return shell(
       '<div class="crumb">Gestão de Consórcio <span>/</span> Assembleias <span>/</span> <b>Grupo 1054</b></div>' +
         '<div class="alert">' +
         ico("check") +
         "<span>Resultado publicado em 16/11/2026 às 10:12. Cotas e lances foram atualizados.</span></div>" +
         '<div class="page-head"><h1>Grupo 1054</h1><p>Resultado oficial da assembleia de 25/10/2026</p></div>' +
-        detailChrome(impact, "done") +
-        '<div class="foot"><p class="foot-copy">Abra a ficha do cliente contemplado para ver a cota atualizada.</p>' +
-        '<div class="foot-actions">' +
-        btn("Voltar para lista", { variant: "hf-btn--ghost", go: "a1" }) +
-        btn("Abrir ficha do cliente", { variant: "hf-btn--primary", go: "a7" }) +
-        "</div></div>"
+        detailChrome(impactSummary(), "done") +
+        footBar(
+          "Abra a ficha do cliente contemplado para ver a cota atualizada.",
+          btn("Voltar para lista", { variant: "hf-btn--ghost", foot: true, go: "a1" }) +
+            btn("Abrir ficha do cliente", { variant: "hf-btn--primary", foot: true, go: "a7" })
+        )
     );
   }
 
@@ -594,43 +691,6 @@
         '<div class="foot-actions">' +
         btn("Voltar ao início", { variant: "hf-btn--primary", go: "a1" }) +
         "</div></div>"
-    );
-  }
-
-  function sheetHtml() {
-    return (
-      '<div class="overlay" id="sheet">' +
-      '<div class="sheet" role="dialog" aria-modal="true" aria-label="Selecionar cotas">' +
-      '<div class="sheet-top"><div><h2>Selecionar cotas contempladas</h2><p>Marque as cotas do Grupo 1054 contempladas nesta assembleia.</p></div>' +
-      '<button class="x" type="button" data-close-sheet aria-label="Fechar">✕</button></div>' +
-      searchField("Buscar cota ou cliente...") +
-      COTAS.map(function (c) {
-        var on = selected.indexOf(c.id) >= 0;
-        return (
-          '<button class="opt' +
-          (on ? " is-on" : "") +
-          '" type="button" data-toggle-cota="' +
-          c.id +
-          '">' +
-          '<span class="check">' +
-          (on ? "✓" : "") +
-          "</span>" +
-          '<span class="opt-copy"><strong>Cota ' +
-          c.id +
-          " · " +
-          c.cliente +
-          "</strong><span>" +
-          c.credito +
-          " · " +
-          c.lances +
-          "</span></span></button>"
-        );
-      }).join("") +
-      '<div class="sheet-foot"><span style="color:var(--text-tertiary);font-size:13px">' +
-      selected.length +
-      " cotas selecionadas</span>" +
-      btn("Aplicar seleção", { variant: "hf-btn--primary", extra: "data-apply-sheet" }) +
-      "</div></div></div>"
     );
   }
 
@@ -746,6 +806,19 @@
 
   function wireAll() {
     document.querySelectorAll("[data-select]").forEach(wireSelect);
+    var msSearch = document.querySelector("[data-ms-search]");
+    if (msSearch) {
+      msSearch.addEventListener("input", function () {
+        var q = msSearch.value.toLowerCase();
+        document.querySelectorAll(".ms-opt").forEach(function (opt) {
+          var text = (opt.getAttribute("data-ms-label") || "").toLowerCase();
+          opt.hidden = !!(q && text.indexOf(q) === -1);
+        });
+      });
+      msSearch.addEventListener("click", function (event) {
+        event.stopPropagation();
+      });
+    }
   }
 
   function paint() {
@@ -776,51 +849,69 @@
     }, 2600);
   }
 
-  document.addEventListener("click", function () {
+  function closeMsDropdown() {
+    if (screen === "a3") go(selected.length ? "a4" : "a2");
+  }
+
+  document.addEventListener("click", function (e) {
     closeSelects(null);
+    if (screen === "a3" && !e.target.closest("[data-ms]")) closeMsDropdown();
   });
 
   document.addEventListener("keydown", function (event) {
-    if (event.key === "Escape") closeSelects(null);
+    if (event.key === "Escape") {
+      closeSelects(null);
+      closeMsDropdown();
+    }
   });
 
   document.getElementById("app").addEventListener("click", function (e) {
     var jump = e.target.closest("[data-go]");
-    var openSheet = e.target.closest("[data-sheet]");
-    var closeSheet = e.target.closest("[data-close-sheet]");
-    var applySheet = e.target.closest("[data-apply-sheet]");
+    var msToggle = e.target.closest("[data-ms-toggle]");
+    var removeCota = e.target.closest("[data-remove-cota]");
+    var clearCotas = e.target.closest("[data-clear-cotas]");
     var toggle = e.target.closest("[data-toggle-cota]");
     var conf = e.target.closest("[data-confirm]");
     var closeConf = e.target.closest("[data-close-confirm]");
     var tip = e.target.closest("[data-toast]");
 
-    if (e.target.id === "sheet" || closeSheet) {
-      go(selected.length ? "a4" : "a2");
-      return;
-    }
+    if (e.target.closest("[data-ms]")) e.stopPropagation();
+
     if (e.target.id === "confirm" || closeConf) {
       go("a4");
       return;
     }
+    if (removeCota) {
+      e.stopPropagation();
+      var rid = removeCota.getAttribute("data-remove-cota");
+      selected = selected.filter(function (x) {
+        return x !== rid;
+      });
+      paint();
+      return;
+    }
+    if (clearCotas) {
+      e.stopPropagation();
+      selected = [];
+      paint();
+      return;
+    }
     if (toggle) {
+      e.stopPropagation();
       var id = toggle.getAttribute("data-toggle-cota");
       if (selected.indexOf(id) >= 0) selected = selected.filter(function (x) {
         return x !== id;
       });
       else selected = selected.concat([id]);
+      if (screen !== "a3") screen = "a3";
       paint();
       return;
     }
-    if (applySheet) {
-      if (!selected.length) {
-        toast("Selecione ao menos uma cota contemplada.");
-        return;
-      }
-      go("a4");
-      return;
-    }
-    if (openSheet) {
-      go("a3");
+    if (msToggle) {
+      e.stopPropagation();
+      if (e.target.closest("[data-remove-cota]")) return;
+      if (screen === "a3") go(selected.length ? "a4" : "a2");
+      else go("a3");
       return;
     }
     if (conf) {
@@ -836,7 +927,9 @@
 
   document.querySelectorAll(".proto button").forEach(function (b) {
     b.addEventListener("click", function () {
-      if (b.getAttribute("data-jump") === "a3") selected = ["2211", "0884"];
+      if (b.getAttribute("data-jump") === "a3" || b.getAttribute("data-jump") === "a4" || b.getAttribute("data-jump") === "a5" || b.getAttribute("data-jump") === "a6") {
+        selected = ["2211", "3307"];
+      }
       if (b.getAttribute("data-jump") === "a2") selected = [];
       go(b.getAttribute("data-jump"));
     });
@@ -844,7 +937,7 @@
 
   var start = (location.hash || "#a1").slice(1);
   if (["a1", "a2", "a3", "a4", "a5", "a6", "a7", "a8"].indexOf(start) === -1) start = "a1";
-  if (start === "a3" || start === "a4" || start === "a5" || start === "a6") selected = ["2211", "0884"];
+  if (start === "a3" || start === "a4" || start === "a5" || start === "a6") selected = ["2211", "3307"];
   if (start === "a2") selected = [];
   go(start);
 })();
