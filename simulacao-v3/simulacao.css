@@ -669,6 +669,15 @@ label.lbl {
   font-weight: 600;
   color: #282a2a;
 }
+.row .details-caret {
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #6b6f6f;
+}
+.row .details-caret::before { content: "\25BC"; }
+.row.is-open .details-caret::before { content: "\25B2"; }
 .row-metrics {
   display: flex;
   align-items: flex-start;
