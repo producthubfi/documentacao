@@ -139,25 +139,32 @@
 
   function modalHtml(b) {
     return '<div class="sheet" role="dialog" aria-modal="true" aria-label="Detalhes de ' + b.name + '">' +
-      '<div class="sheet-top"><div class="who"><span class="bank-logo"><img src="' + b.logo + '" alt=""></span><span class="name">' + b.name + '</span>' +
-      '<span class="tag ' + b.tag + '">' + b.tagText + '</span></div>' +
-      '<button class="sheet-x" type="button" data-close aria-label="Fechar">×</button></div>' +
+      '<div class="sheet-top">' +
+        '<span class="bank-logo"><img src="' + b.logo + '" alt=""></span>' +
+        '<span class="name">' + b.name + '</span>' +
+        '<span class="tag ' + b.tag + '">' + b.tagText + '</span>' +
+        '<span class="sheet-spacer" aria-hidden="true"></span>' +
+        '<button class="sheet-x" type="button" data-close aria-label="Fechar">✕</button>' +
+      '</div>' +
       '<div class="sheet-main">' +
         '<div><p class="k">Valor máximo do imóvel</p><p class="v lg">' + b.imóvel + '</p></div>' +
         '<div><p class="k">' + b.entradaLabel + '</p><p class="v' + (b.tag === "warn" ? " hot" : "") + '">' + b.entrada + '</p></div>' +
         '<div><p class="k">Valor financiado</p><p class="v">' + b.financiado + '</p></div>' +
       '</div>' +
-      '<h3>Parcelas · SAC</h3><div class="sheet-grid">' +
+      '<div class="sheet-line" aria-hidden="true"></div>' +
+      '<h3>Parcelas · SAC</h3>' +
+      '<div class="sheet-grid">' +
         '<div><p class="k">Primeira parcela</p><p class="v">' + b.p1 + '</p></div>' +
         '<div><p class="k">Última parcela</p><p class="v">' + b.p2 + '</p></div>' +
         '<div><p class="k">Modelo de amortização</p><p class="v">SAC</p></div>' +
       '</div>' +
-      '<h3>Taxas e prazo</h3><div class="sheet-grid">' +
+      '<div class="sheet-line" aria-hidden="true"></div>' +
+      '<h3>Taxas e prazo</h3>' +
+      '<div class="sheet-grid">' +
         '<div><p class="k">Taxa (a.a.)</p><p class="v">' + b.taxa + '</p></div>' +
         '<div><p class="k">CET (a.a.)</p><p class="v">' + b.cet + '</p></div>' +
         '<div><p class="k">Prazo</p><p class="v">' + b.prazo + '</p></div>' +
       '</div>' +
-      '<div class="sheet-foot"><button class="btn ghost sm" type="button" data-use="' + b.id + '">Usar este valor</button></div>' +
       '</div>';
   }
 
@@ -415,11 +422,6 @@
       });
       history.replaceState(null, "", "#a5");
     }
-    var use = e.target.closest("[data-use]");
-    if (!use) return;
-    var bank = bankBy(use.getAttribute("data-use"));
-    closeModal();
-    toast(bank.name + " selecionado. Teto de " + bank.imóvel + " segue para a próxima etapa.");
   });
 
   document.querySelectorAll("[data-acc]").forEach(function (item) {
