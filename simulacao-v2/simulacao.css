@@ -702,18 +702,21 @@ label.lbl {
   display: grid;
   place-items: center;
   padding: 24px;
+  overflow: auto;
   background: rgba(20, 20, 20, 0.45);
 }
 .sheet {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  width: 560px;
-  max-width: 100%;
+  box-sizing: border-box;
+  width: 600px;
+  max-width: min(600px, calc(100vw - 48px));
   padding: 24px;
   border-radius: 16px;
   background: #fff;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
 }
 .sheet-top {
   display: flex;
@@ -746,14 +749,24 @@ label.lbl {
   align-items: flex-start;
   gap: 16px;
   width: 100%;
+  min-width: 0;
 }
 .sheet-main > div,
 .sheet-grid > div {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  flex: none;
   min-width: 0;
+}
+.sheet-main > div:first-child {
+  flex: 1.35 1 0;
+  width: auto;
+}
+.sheet-main > div:nth-child(2),
+.sheet-main > div:nth-child(3),
+.sheet-grid > div {
+  flex: 1 1 0;
+  width: auto;
 }
 .sheet-main > .has-ico {
   flex-direction: row;
@@ -765,11 +778,8 @@ label.lbl {
   flex-direction: column;
   gap: 2px;
   min-width: 0;
+  flex: 1;
 }
-.sheet-main > div:first-child { width: 220px; }
-.sheet-main > div:nth-child(2),
-.sheet-main > div:nth-child(3) { width: 168px; }
-.sheet-grid > div { width: 160px; }
 .sheet-line {
   width: 100%;
   height: 1px;
