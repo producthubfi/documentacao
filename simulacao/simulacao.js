@@ -190,6 +190,11 @@
     syncModes();
     syncButton();
     if (location.hash !== "#" + screen) history.replaceState(null, "", "#" + screen);
+    if (screen === "a4" || screen === "a5") {
+      requestAnimationFrame(function () {
+        results.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
   }
 
   function fillExample() {
