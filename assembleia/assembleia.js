@@ -6,6 +6,14 @@
   var sheetOpen = false;
   var confirmOpen = false;
   var histOpen = false;
+  var adjustOpen = false;
+  var adjustConfirmOpen = false;
+  var adjustMsOpen = false;
+  var adjustTried = false;
+  var adjusted = false;
+  var publishedBefore = ["2211", "3307"];
+  var adjustCotas = ["2211", "4954"];
+  var adjustMotivo = "";
   var filters = {
     grupo: "Todos",
     admin: "Todas",
@@ -220,7 +228,8 @@
     );
   }
 
-  function publishedCard() {
+  function publishedCard(opts) {
+    opts = opts || {};
     var tags = selected
       .map(function (id) {
         return (
@@ -232,6 +241,19 @@
         );
       })
       .join("");
+    var histBtn = adjusted
+      ? btn("Ver histórico de alterações", {
+          variant: "hf-btn--ghost",
+          foot: true,
+          icon: "icon-history.svg",
+          extra: "data-scroll-adjust-hist",
+        })
+      : btn("Ver histórico de alterações", {
+          variant: "hf-btn--ghost",
+          foot: true,
+          icon: "icon-history.svg",
+          toast: "Ainda não há ajustes neste resultado.",
+        });
     return (
       '<div class="card card--published">' +
       '<div class="card-header"><h2>Resultado publicado</h2>' +
@@ -247,18 +269,295 @@
         variant: "hf-btn--ghost",
         foot: true,
         icon: "icon-pencil.svg",
-        toast: "Ajuste ilustrativo neste protótipo.",
+        extra: "data-open-adjust",
       }) +
-      btn("Ver histórico de alterações", {
-        variant: "hf-btn--ghost",
-        foot: true,
-        icon: "icon-history.svg",
-        toast: "Histórico ilustrativo neste protótipo.",
-      }) +
+      histBtn +
       "</div></div>" +
       '<div class="published-aside">' +
       impactSummary({ published: true, boxed: true }) +
       "</div></div></div>"
+    );
+  }
+
+  function adjustDiffLines() {
+    var added = adjustCotas.filter(function (id) {
+      return publishedBefore.indexOf(id) < 0;
+    });
+    var removed = publishedBefore.filter(function (id) {
+      return adjustCotas.indexOf(id) < 0;
+    });
+    var same = adjustCotas.filter(function (id) {
+      return publishedBefore.indexOf(id) >= 0;
+    });
+    var lines = "";
+    added.forEach(function (id) {
+      lines +=
+        '<p class="adjust-diff__add">+ Cota ' + id + " passa a Contemplada</p>";
+    });
+    removed.forEach(function (id) {
+      lines +=
+        '<p class="adjust-diff__rem">- Cota ' + id + " deixa de ser contemplada</p>";
+    });
+    lines +=
+      '<p class="adjust-diff__note">Publicado: cotas ' +
+      publishedBefore.join(" e ") +
+      (same.length
+        ? ". A cota " + same.join(" e ") + " não muda."
+        : ".") +
+      "</p>";
+    return lines;
+  }
+
+  function adjustMultiselect() {
+    var chips = adjustCotas
+      .map(function (id) {
+        return (
+          '<span class="chip">Cota ' +
+          id +
+          '<button type="button" class="chip__x" data-remove-adjust="' +
+          id +
+          '" aria-label="Remover cota ' +
+          id +
+          '"><img src="' +
+          ASM +
+          'icon-x-gray.svg" alt="" width="12" height="12"></button></span>'
+        );
+      })
+      .join("");
+    return (
+      '<div class="ms ms--wide' +
+      (adjustMsOpen ? " is-open" : "") +
+      '" data-adjust-ms>' +
+      '<p class="ms-label">Cotas contempladas *</p>' +
+      '<div class="ms-box" role="combobox" tabindex="0" data-adjust-ms-toggle aria-expanded="' +
+      (adjustMsOpen ? "true" : "false") +
+      '">' +
+      (adjustCotas.length
+        ? '<span class="chips">' + chips + "</span>"
+        : '<span class="placeholder">Selecione as cotas contempladas</span>') +
+      '<span class="ms-chevron" aria-hidden="true"><img src="' +
+      ICO +
+      'select-chevron.svg" alt=""></span></div>' +
+      (adjustMsOpen
+        ? '<div class="ms-dd" role="listbox" aria-label="Cotas do grupo">' +
+          COTAS.map(function (c) {
+            var on = adjustCotas.indexOf(c.id) >= 0;
+            return (
+              '<button class="ms-opt' +
+              (on ? " is-on" : "") +
+              '" type="button" role="option" aria-selected="' +
+              (on ? "true" : "false") +
+              '" data-toggle-adjust="' +
+              c.id +
+              '"><span class="ms-check" aria-hidden="true">' +
+              (on
+                ? '<img src="' + ICO + 'select-check.svg" alt="" width="10" height="8">'
+                : "") +
+              '</span><span class="ms-opt__main"><strong>Cota ' +
+              c.id +
+              "</strong><span>" +
+              c.cliente +
+              ' · Grupo 1054</span></span><span class="ms-opt__side"><strong>' +
+              c.credito +
+              "</strong><span>" +
+              (c.lances || "") +
+              "</span></span></button>"
+            );
+          }).join("") +
+          "</div>"
+        : "") +
+      '<div class="adjust-diff">' +
+      adjustDiffLines() +
+      "</div></div>"
+    );
+  }
+
+  function adjustModalHtml() {
+    var motivoInvalid = adjustTried && !String(adjustMotivo || "").trim();
+    var canReview =
+      adjustCotas.length > 0 && String(adjustMotivo || "").trim().length > 0;
+    return (
+      '<div class="overlay" id="adjust-modal">' +
+      '<div class="dialog dialog--adjust" role="dialog" aria-modal="true" aria-labelledby="adjust-title">' +
+      '<div class="dialog-top"><div class="dialog-titles"><h2 id="adjust-title">Ajustar resultado da assembleia</h2>' +
+      "<p>Altere a lista de cotas contempladas. Os lances são recalculados pela mesma regra da publicação.</p></div>" +
+      '<button class="x" type="button" data-close-adjust aria-label="Fechar"><img src="' +
+      ASM +
+      'icon-x-gray.svg" alt="" width="16" height="16"></button></div>' +
+      '<div class="adjust-warn"><img src="' +
+      ASM +
+      'icon-alert.svg" alt="" width="16" height="16"><span>O ajuste altera cotas e lances já publicados e fica registrado com seu nome, data e motivo.</span></div>' +
+      adjustMultiselect() +
+      '<label class="adjust-motivo' +
+      (motivoInvalid ? " is-invalid" : "") +
+      '"><span class="ms-label">Motivo do ajuste *</span>' +
+      '<textarea data-adjust-motivo placeholder="Descreva por que o resultado precisa mudar" rows="3">' +
+      (adjustMotivo || "") +
+      "</textarea>" +
+      (motivoInvalid
+        ? '<span class="adjust-motivo__err">Informe o motivo para continuar</span>'
+        : "") +
+      "</label>" +
+      '<div class="dialog-actions">' +
+      btn("Cancelar", { variant: "hf-btn--ghost", foot: true, extra: "data-close-adjust" }) +
+      btn("Revisar ajuste", {
+        variant: "hf-btn--primary",
+        foot: true,
+        icon: "icon-arrow-right.svg",
+        extra: "data-review-adjust" + (canReview ? "" : " aria-disabled=\"true\""),
+      }) +
+      "</div></div></div>"
+    );
+  }
+
+  function confirmAdjustHtml() {
+    var clients = {
+      "2211": "Mauricio Lima CPF",
+      "4954": "Mauricio Lima CPF",
+      "3307": "Raniele Karolina",
+      "4001": "Sem lance nesta assembleia",
+    };
+    var ids = [];
+    publishedBefore.concat(adjustCotas).forEach(function (id) {
+      if (ids.indexOf(id) < 0) ids.push(id);
+    });
+    var rows = ids
+      .map(function (id) {
+        var beforeOn = publishedBefore.indexOf(id) >= 0;
+        var afterOn = adjustCotas.indexOf(id) >= 0;
+        var beforeBadge = beforeOn
+          ? '<span class="hf-badge asm-badge hf-badge--published">Contemplada</span>'
+          : '<span class="hf-badge asm-badge hf-badge--secondary">Mantém o status</span>';
+        var afterBadge = afterOn
+          ? '<span class="hf-badge asm-badge hf-badge--published">Contemplada</span>'
+          : '<span class="hf-badge asm-badge hf-badge--secondary">Mantém o status</span>';
+        return (
+          '<div class="adjust-diff-row">' +
+          '<div class="adjust-diff-row__who"><strong>Cota ' +
+          id +
+          "</strong><span>" +
+          (clients[id] || "") +
+          "</span></div>" +
+          '<div class="adjust-diff-row__before">' +
+          beforeBadge +
+          '</div><img src="' +
+          ASM +
+          'icon-arrow-right.svg" alt="" width="16" height="16">' +
+          '<div class="adjust-diff-row__after">' +
+          afterBadge +
+          "</div></div>"
+        );
+      })
+      .join("");
+    return (
+      '<div class="overlay" id="adjust-confirm">' +
+      '<div class="dialog dialog--adjust-confirm" role="dialog" aria-modal="true" aria-labelledby="adjust-confirm-title">' +
+      '<div class="dialog-top"><div class="dialog-titles"><h2 id="adjust-confirm-title">Confirmar ajuste do resultado</h2>' +
+      "<p>O que muda ao confirmar</p></div>" +
+      '<button class="x" type="button" data-close-adjust-confirm aria-label="Fechar"><img src="' +
+      ASM +
+      'icon-x-gray.svg" alt="" width="16" height="16"></button></div>' +
+      '<div class="adjust-diff-table"><div class="adjust-diff-table__head"><span>Cota e cliente</span><span>Antes</span><span></span><span>Depois</span></div>' +
+      rows +
+      "</div>" +
+      '<p class="adjust-confirm-motivo"><strong>Motivo informado</strong><span>Motivo: ' +
+      (adjustMotivo || "") +
+      "</span></p>" +
+      '<div class="dialog-actions">' +
+      btn("Voltar", { variant: "hf-btn--ghost", foot: true, extra: "data-back-adjust" }) +
+      btn("Confirmar ajuste", {
+        variant: "hf-btn--primary",
+        foot: true,
+        icon: "icon-send.svg",
+        extra: "data-confirm-adjust",
+      }) +
+      "</div></div></div>"
+    );
+  }
+
+  function adjustHistorySection() {
+    if (!adjusted) return "";
+    return (
+      '<div class="adjust-hist" id="adjust-hist">' +
+      '<div class="section-head"><h3>Histórico de alterações</h3></div>' +
+      '<article class="adjust-hist__card">' +
+      '<div class="adjust-hist__top"><strong>Ajuste</strong>' +
+      '<span class="hf-badge asm-badge hf-badge--info">Publicação</span></div>' +
+      "<p>Cota 4954 passou para Contemplada. Cota 3307 deixou de ser contemplada. Motivo: " +
+      (adjustMotivo ||
+        "Cota 4954 foi contemplada por sorteio e a 3307 entrou por engano.") +
+      "</p>" +
+      "<span>Lucas Augusto · 25/10/2026 às 17:10</span></article></div>"
+    );
+  }
+
+  function publishedPage(opts) {
+    opts = opts || {};
+    var toastHtml = "";
+    if (opts.toast === "published") {
+      toastHtml =
+        '<div class="asm-toast" id="pub-toast" role="status">' +
+        '<img src="' +
+        ASM +
+        'icon-circle-check.svg" alt="" width="20" height="20">' +
+        '<div class="asm-toast__text"><strong>Resultado publicado</strong><span>2 cotas contempladas e 4 lances atualizados.</span></div>' +
+        '<button type="button" class="asm-toast__x" data-close-toast aria-label="Fechar"><img src="' +
+        ASM +
+        'icon-x-gray.svg" alt="" width="14" height="14"></button></div>';
+    } else if (opts.toast === "adjusted") {
+      toastHtml =
+        '<div class="asm-toast" id="pub-toast" role="status">' +
+        '<img src="' +
+        ASM +
+        'icon-circle-check.svg" alt="" width="20" height="20">' +
+        '<div class="asm-toast__text"><strong>Resultado ajustado</strong><span>Cotas e lances atualizados com o novo resultado.</span></div>' +
+        '<button type="button" class="asm-toast__x" data-close-toast aria-label="Fechar"><img src="' +
+        ASM +
+        'icon-x-gray.svg" alt="" width="14" height="14"></button></div>';
+    }
+    var next =
+      opts.hideNext
+        ? ""
+        : '<div class="next-step"><p>Confira a cota contemplada na ficha do cliente Mauricio Lima.</p>' +
+          btn("Abrir ficha do cliente", {
+            variant: "hf-btn--primary",
+            foot: true,
+            icon: "icon-arrow-right.svg",
+            go: "a7",
+          }) +
+          "</div>";
+    return (
+      shell(
+        detailHead() +
+          '<button class="back" type="button" data-go="a1">' +
+          ico("left") +
+          "Voltar para Assembleias</button>" +
+          '<div class="meta">' +
+          badge("publicada") +
+          '<span class="meta-item">' +
+          ico("calendar") +
+          "Assembleia em 25/10/2026</span>" +
+          '<span class="meta-item">' +
+          ico("layers") +
+          "Turn2C · CNP Consórcio</span>" +
+          '<span class="meta-item">' +
+          ico("users") +
+          "3 cotas com lance</span>" +
+          '<span class="meta-item">' +
+          ico("wallet") +
+          "4 lances · R$ 240.000,00</span></div>" +
+          publishedCard(opts) +
+          adjustHistorySection() +
+          '<div class="section-head"><h3>Cotas da assembleia</h3>' +
+          badge("cotas") +
+          "</div>" +
+          cotasAssembleiaTable() +
+          '<div class="section-head"><h3>Lances desta assembleia</h3>' +
+          badge("atualizados") +
+          "</div>" +
+          lancesTable("done") +
+          next
+      ) + toastHtml
     );
   }
 
@@ -380,12 +679,12 @@
 
   function tabs(active) {
     var items = [
-      ["Dashboard", ASM + "tab-dashboard.svg"],
-      ["Clientes", ASM + "tab-users.svg"],
-      ["Grupos", ASM + "tab-layers.svg"],
-      ["Cotas", ASM + "tab-wallet.svg"],
-      ["Assembleias", ASM + "tab-calendar.svg"],
-      ["Lembretes", ASM + "tab-bell.svg"],
+      ["Dashboard", ASM + "tab-dashboard.svg", null],
+      ["Clientes", ASM + "tab-users.svg", "a7"],
+      ["Grupos", ASM + "tab-layers.svg", null],
+      ["Cotas", ASM + "tab-wallet.svg", "d3"],
+      ["Assembleias", ASM + "tab-calendar.svg", "a1"],
+      ["Lembretes", ASM + "tab-bell.svg", null],
     ];
     return (
       '<div class="hf-tabs asm-tabs" data-tabs role="tablist">' +
@@ -394,12 +693,16 @@
           var on = it[0] === active;
           var src = on ? ASM + "tab-icon.svg" : it[1];
           if (on && it[0] === "Assembleias") src = ASM + "tab-calendar.svg";
+          if (on && it[0] === "Cotas") src = ASM + "tab-wallet.svg";
+          var jump = it[2] ? ' data-go="' + it[2] + '"' : "";
           return (
             '<button class="hf-tab' +
             (on ? " is-active" : "") +
             '" type="button" role="tab" aria-selected="' +
             (on ? "true" : "false") +
-            '"><span class="hf-tab__ico"><img src="' +
+            '"' +
+            jump +
+            '><span class="hf-tab__ico"><img src="' +
             src +
             '" alt=""></span>' +
             it[0] +
@@ -530,10 +833,13 @@
 
   function cotasAssembleiaTable() {
     var rowsData = [
-      { cliente: "Mauricio Lima CPF", doc: "11354446410", cota: "2211", lances: "2 lances", valor: "R$ 120.000,00", st: "contcota", go: "a7" },
-      { cliente: "Mauricio Lima CPF", doc: "11354446410", cota: "4954", lances: "1 lance", valor: "R$ 60.000,00", st: "mantem" },
-      { cliente: "Raniele Karolina", doc: "13062079470", cota: "3307", lances: "1 lance", valor: "R$ 60.000,00", st: "contcota", go: "a7" },
-    ];
+      { cliente: "Mauricio Lima CPF", doc: "11354446410", cota: "2211", lances: "2 lances", valor: "R$ 120.000,00", go: "a7" },
+      { cliente: "Mauricio Lima CPF", doc: "11354446410", cota: "4954", lances: "1 lance", valor: "R$ 60.000,00" },
+      { cliente: "Raniele Karolina", doc: "13062079470", cota: "3307", lances: "1 lance", valor: "R$ 60.000,00", go: "a7" },
+    ].map(function (r) {
+      r.st = selected.indexOf(r.cota) >= 0 ? "contcota" : "mantem";
+      return r;
+    });
     var head =
       '<span class="asm-col-grupo">Cliente</span>' +
       '<span class="asm-col-cota">Cota</span>' +
@@ -765,55 +1071,126 @@
   function a6() {
     confirmOpen = false;
     sheetOpen = false;
-    selected = ["2211", "3307"];
-    return (
-      shell(
-        detailHead() +
-          '<button class="back" type="button" data-go="a1">' +
-          ico("left") +
-          "Voltar para Assembleias</button>" +
-          '<div class="meta">' +
-          badge("publicada") +
-          '<span class="meta-item">' +
-          ico("calendar") +
-          "Assembleia em 25/10/2026</span>" +
-          '<span class="meta-item">' +
-          ico("layers") +
-          "Turn2C · CNP Consórcio</span>" +
-          '<span class="meta-item">' +
-          ico("users") +
-          "3 cotas com lance</span>" +
-          '<span class="meta-item">' +
-          ico("wallet") +
-          "4 lances · R$ 240.000,00</span>" +
+    adjustOpen = false;
+    adjustConfirmOpen = false;
+    if (!adjusted) selected = ["2211", "3307"];
+    return publishedPage({ toast: "published" });
+  }
+
+  function beginAdjust() {
+    publishedBefore = selected.slice();
+    adjustCotas = ["2211", "4954"];
+    adjustMotivo = "";
+    adjustTried = true;
+    adjustMsOpen = false;
+    adjustOpen = true;
+    adjustConfirmOpen = false;
+  }
+
+  function c1() {
+    adjustOpen = false;
+    adjustConfirmOpen = false;
+    if (!adjusted) selected = ["2211", "3307"];
+    return publishedPage({ hideNext: false });
+  }
+
+  function c2() {
+    if (!adjustOpen) beginAdjust();
+    adjustOpen = true;
+    adjustConfirmOpen = false;
+    selected = publishedBefore.slice();
+    return publishedPage({ hideNext: true }) + adjustModalHtml();
+  }
+
+  function c3() {
+    adjustOpen = false;
+    adjustConfirmOpen = true;
+    selected = publishedBefore.slice();
+    return publishedPage({ hideNext: true }) + confirmAdjustHtml();
+  }
+
+  function c4() {
+    adjustOpen = false;
+    adjustConfirmOpen = false;
+    adjusted = true;
+    selected = adjustCotas.slice();
+    if (!adjustMotivo) {
+      adjustMotivo =
+        "Cota 4954 foi contemplada por sorteio e a 3307 entrou por engano.";
+    }
+    return publishedPage({ toast: "adjusted", hideNext: false });
+  }
+
+  function d1() {
+    if (!adjusted) selected = ["2211", "3307"];
+    return publishedPage({ hideNext: false });
+  }
+
+  function d2() {
+    histOpen = true;
+    return d1() + historicoModalHtml();
+  }
+
+  function d3() {
+    var rows = [
+      { cota: "2211", cliente: "Mauricio Lima CPF", doc: "11354446410", grupo: "1054", admin: "Turn2C", credito: "R$ 120.000,00", cont: true },
+      { cota: "4954", cliente: "Mauricio Lima CPF", doc: "11354446410", grupo: "1054", admin: "Turn2C", credito: "R$ 60.000,00", cont: selected.indexOf("4954") >= 0 },
+      { cota: "3307", cliente: "Raniele Karolina", doc: "13062079470", grupo: "1054", admin: "Turn2C", credito: "R$ 60.000,00", cont: selected.indexOf("3307") >= 0 },
+      { cota: "1188", cliente: "Ana Souza", doc: "02988733400", grupo: "9001", admin: "Embracon", credito: "R$ 80.000,00", cont: false },
+    ]
+      .map(function (r) {
+        var contBadge = r.cont
+          ? '<span class="hf-badge asm-badge hf-badge--published"><span class="hf-badge__ico"><img src="' +
+            ASM +
+            'icon-trophy.svg" alt=""></span>Contemplada</span>'
+          : '<span class="hf-badge asm-badge hf-badge--secondary">Não contemplada</span>';
+        return (
+          '<div class="asm-list__row' +
+          (r.cont ? " is-highlight" : "") +
+          '">' +
+          '<div class="asm-col-grupo"><div class="cell-stack"><button class="linkish cell-name" type="button" data-go="a7">' +
+          r.cliente +
+          "</button><span>" +
+          r.doc +
+          "</span></div></div>" +
+          '<div class="asm-col-cota"><strong>' +
+          r.cota +
+          "</strong></div>" +
+          '<div class="asm-col-tipo">' +
+          r.grupo +
           "</div>" +
-          publishedCard() +
-          '<div class="section-head"><h3>Cotas da assembleia</h3>' +
-          badge("cotas") +
+          '<div class="asm-col-vlance">' +
+          r.admin +
           "</div>" +
-          cotasAssembleiaTable() +
-          '<div class="section-head"><h3>Lances desta assembleia</h3>' +
-          badge("atualizados") +
-          "</div>" +
-          lancesTable("done") +
-          '<div class="next-step">' +
-          "<p>Confira a cota contemplada na ficha do cliente Mauricio Lima.</p>" +
-          btn("Abrir ficha do cliente", {
-            variant: "hf-btn--primary",
-            foot: true,
-            icon: "icon-arrow-right.svg",
-            go: "a7",
-          }) +
-          "</div>"
-      ) +
-      '<div class="asm-toast" id="pub-toast" role="status">' +
-      '<img src="' +
-      ASM +
-      'icon-circle-check.svg" alt="" width="20" height="20">' +
-      '<div class="asm-toast__text"><strong>Resultado publicado</strong><span>2 cotas contempladas e 4 lances atualizados.</span></div>' +
-      '<button type="button" class="asm-toast__x" data-close-toast aria-label="Fechar"><img src="' +
-      ASM +
-      'icon-x-gray.svg" alt="" width="14" height="14"></button></div>'
+          '<div class="asm-col-reg">' +
+          r.credito +
+          '</div><div class="asm-col-comp"><button class="linkish" type="button" data-open-hist>Histórico de lances <img src="' +
+          ASM +
+          'icon-eye.svg" alt="" width="14" height="14"></button></div>' +
+          '<div class="asm-col-status-lg">' +
+          contBadge +
+          "</div></div>"
+        );
+      })
+      .join("");
+    var head =
+      '<span class="asm-col-grupo">Cliente</span>' +
+      '<span class="asm-col-cota">Cota</span>' +
+      '<span class="asm-col-tipo">Grupo</span>' +
+      '<span class="asm-col-vlance">Administradora</span>' +
+      '<span class="asm-col-reg">Crédito</span>' +
+      '<span class="asm-col-comp">Consulta</span>' +
+      '<span class="asm-col-status-lg">Status</span>';
+    return shell(
+      '<div class="crumb">Gestão de Consórcio <span>/</span> <b>Cotas</b></div>' +
+        '<div class="page-head"><h1>Cotas</h1><p>Status das cotas a partir do resultado publicado</p></div>' +
+        tabs("Cotas") +
+        '<div class="filters">' +
+        searchField("Buscar por cota ou cliente...") +
+        selectField("grupo", "Grupo", "Todos", ["Todos", "1054", "9001"]) +
+        selectField("status", "Status", "Todas", ["Todas", "Contemplada", "Não contemplada"]) +
+        "</div>" +
+        listTable(head, rows)
     );
   }
 
@@ -1125,17 +1502,50 @@
         event.stopPropagation();
       });
     }
+    var motivo = document.querySelector("[data-adjust-motivo]");
+    if (motivo) {
+      motivo.addEventListener("click", function (event) {
+        event.stopPropagation();
+      });
+      motivo.addEventListener("input", function () {
+        adjustMotivo = motivo.value;
+      });
+    }
   }
 
   function paint() {
     sheetOpen = screen === "a3";
     confirmOpen = screen === "a5";
-    histOpen = screen === "a8";
-    var map = { a1: a1, a2: a2, a3: a3, a4: a4, a5: a5, a6: a6, a7: a7, a8: a8 };
+    histOpen = screen === "a8" || screen === "d2";
+    adjustOpen = screen === "c2";
+    adjustConfirmOpen = screen === "c3";
+    var map = {
+      a1: a1,
+      a2: a2,
+      a3: a3,
+      a4: a4,
+      a5: a5,
+      a6: a6,
+      a7: a7,
+      a8: a8,
+      c1: c1,
+      c2: c2,
+      c3: c3,
+      c4: c4,
+      d1: d1,
+      d2: d2,
+      d3: d3,
+    };
     document.getElementById("app").innerHTML = (map[screen] || a1)();
     document.querySelectorAll(".proto button").forEach(function (b) {
       var jump = b.getAttribute("data-jump");
-      b.classList.toggle("is-on", jump === screen || (jump === "a7" && screen === "a8"));
+      b.classList.toggle(
+        "is-on",
+        jump === screen ||
+          (jump === "a7" && screen === "a8") ||
+          (jump === "d1" && screen === "d2") ||
+          (jump === "c1" && (screen === "c2" || screen === "c3"))
+      );
     });
     if (location.hash !== "#" + screen) history.replaceState(null, "", "#" + screen);
     wireAll();
@@ -1164,12 +1574,28 @@
   document.addEventListener("click", function (e) {
     closeSelects(null);
     if (screen === "a3" && !e.target.closest("[data-ms]")) closeMsDropdown();
+    if (screen === "c2" && adjustMsOpen && !e.target.closest("[data-adjust-ms]")) {
+      adjustMsOpen = false;
+      paint();
+    }
   });
 
   document.addEventListener("keydown", function (event) {
     if (event.key === "Escape") {
       closeSelects(null);
       closeMsDropdown();
+      if (screen === "c3") {
+        go("c2");
+        return;
+      }
+      if (screen === "c2" || adjustOpen) {
+        go("c1");
+        return;
+      }
+      if (screen === "d2") {
+        go("d1");
+        return;
+      }
       if (screen === "a8" || histOpen) {
         go("a7");
         return;
@@ -1195,10 +1621,20 @@
     var closeConf = e.target.closest("[data-close-confirm]");
     var openHist = e.target.closest("[data-open-hist]");
     var closeHist = e.target.closest("[data-close-hist]");
+    var openAdjust = e.target.closest("[data-open-adjust]");
+    var closeAdjust = e.target.closest("[data-close-adjust]");
+    var reviewAdjust = e.target.closest("[data-review-adjust]");
+    var backAdjust = e.target.closest("[data-back-adjust]");
+    var confirmAdjust = e.target.closest("[data-confirm-adjust]");
+    var closeAdjustConfirm = e.target.closest("[data-close-adjust-confirm]");
+    var toggleAdjust = e.target.closest("[data-toggle-adjust]");
+    var removeAdjust = e.target.closest("[data-remove-adjust]");
+    var adjustMsToggle = e.target.closest("[data-adjust-ms-toggle]");
+    var scrollAdjustHist = e.target.closest("[data-scroll-adjust-hist]");
     var closeToast = e.target.closest("[data-close-toast]");
     var tip = e.target.closest("[data-toast]");
 
-    if (e.target.closest("[data-ms]")) e.stopPropagation();
+    if (e.target.closest("[data-ms]") || e.target.closest("[data-adjust-ms]")) e.stopPropagation();
 
     if (closeToast) {
       var toastEl = document.getElementById("pub-toast");
@@ -1206,12 +1642,77 @@
       return;
     }
 
+    if (scrollAdjustHist) {
+      var histEl = document.getElementById("adjust-hist");
+      if (histEl) histEl.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+
     if (e.target.id === "hist-modal" || closeHist) {
-      go("a7");
+      go(screen === "d2" || screen === "d1" || screen === "d3" ? "d1" : "a7");
       return;
     }
     if (openHist) {
-      go("a8");
+      go(screen === "d1" || screen === "d3" || screen === "c1" || screen === "c4" || screen === "a6"
+        ? "d2"
+        : "a8");
+      return;
+    }
+
+    if (openAdjust) {
+      beginAdjust();
+      go("c2");
+      return;
+    }
+    if (e.target.id === "adjust-modal" || closeAdjust) {
+      go(adjusted ? "c4" : "c1");
+      return;
+    }
+    if (reviewAdjust) {
+      adjustTried = true;
+      adjustMotivo = (document.querySelector("[data-adjust-motivo]") || {}).value || "";
+      if (!String(adjustMotivo).trim()) {
+        paint();
+        return;
+      }
+      go("c3");
+      return;
+    }
+    if (backAdjust || closeAdjustConfirm || e.target.id === "adjust-confirm") {
+      go("c2");
+      return;
+    }
+    if (confirmAdjust) {
+      selected = adjustCotas.slice();
+      adjusted = true;
+      go("c4");
+      return;
+    }
+    if (removeAdjust) {
+      e.stopPropagation();
+      var ridAdj = removeAdjust.getAttribute("data-remove-adjust");
+      adjustCotas = adjustCotas.filter(function (x) {
+        return x !== ridAdj;
+      });
+      paint();
+      return;
+    }
+    if (toggleAdjust) {
+      e.stopPropagation();
+      var aid = toggleAdjust.getAttribute("data-toggle-adjust");
+      if (adjustCotas.indexOf(aid) >= 0) {
+        adjustCotas = adjustCotas.filter(function (x) {
+          return x !== aid;
+        });
+      } else adjustCotas = adjustCotas.concat([aid]);
+      paint();
+      return;
+    }
+    if (adjustMsToggle) {
+      e.stopPropagation();
+      if (e.target.closest("[data-remove-adjust]")) return;
+      adjustMsOpen = !adjustMsOpen;
+      paint();
       return;
     }
 
@@ -1263,27 +1764,71 @@
     if (tip) toast(tip.getAttribute("data-toast"));
   });
 
+  var SCREENS = [
+    "a1",
+    "a2",
+    "a3",
+    "a4",
+    "a5",
+    "a6",
+    "a7",
+    "a8",
+    "c1",
+    "c2",
+    "c3",
+    "c4",
+    "d1",
+    "d2",
+    "d3",
+  ];
+
+  function prepareScreen(next) {
+    if (next === "a6") {
+      adjusted = false;
+      selected = ["2211", "3307"];
+    }
+    if (next === "c1" || next === "c2" || next === "c3") {
+      adjusted = false;
+      selected = ["2211", "3307"];
+    }
+    if (next === "c2" || next === "c3") beginAdjust();
+    if (next === "c4") {
+      adjusted = true;
+      selected = ["2211", "4954"];
+      adjustCotas = ["2211", "4954"];
+      publishedBefore = ["2211", "3307"];
+      if (!adjustMotivo) {
+        adjustMotivo =
+          "Cota 4954 foi contemplada por sorteio e a 3307 entrou por engano.";
+      }
+    }
+    if (next === "d1" || next === "d2" || next === "d3") {
+      if (!adjusted) selected = ["2211", "3307"];
+    }
+    if (next === "a3" || next === "a4" || next === "a5") {
+      selected = ["2211", "3307"];
+      adjusted = false;
+    }
+    if (next === "a2") selected = [];
+  }
+
   document.querySelectorAll(".proto button").forEach(function (b) {
     b.addEventListener("click", function () {
-      if (b.getAttribute("data-jump") === "a3" || b.getAttribute("data-jump") === "a4" || b.getAttribute("data-jump") === "a5" || b.getAttribute("data-jump") === "a6") {
-        selected = ["2211", "3307"];
-      }
-      if (b.getAttribute("data-jump") === "a2") selected = [];
-      go(b.getAttribute("data-jump"));
+      var next = b.getAttribute("data-jump");
+      prepareScreen(next);
+      go(next);
     });
   });
 
   window.addEventListener("hashchange", function () {
     var next = (location.hash || "#a1").slice(1);
-    if (["a1", "a2", "a3", "a4", "a5", "a6", "a7", "a8"].indexOf(next) === -1) return;
-    if (next === "a3" || next === "a4" || next === "a5" || next === "a6") selected = ["2211", "3307"];
-    if (next === "a2") selected = [];
+    if (SCREENS.indexOf(next) === -1) return;
+    prepareScreen(next);
     go(next);
   });
 
   var start = (location.hash || "#a1").slice(1);
-  if (["a1", "a2", "a3", "a4", "a5", "a6", "a7", "a8"].indexOf(start) === -1) start = "a1";
-  if (start === "a3" || start === "a4" || start === "a5" || start === "a6") selected = ["2211", "3307"];
-  if (start === "a2") selected = [];
+  if (SCREENS.indexOf(start) === -1) start = "a1";
+  prepareScreen(start);
   go(start);
 })();
