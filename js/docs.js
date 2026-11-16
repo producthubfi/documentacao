@@ -160,6 +160,13 @@
       icon: "calculator",
       keys: "simulacao v3 simulação accordion detalhes linhas compactas",
     },
+    {
+      href: "assembleia/",
+      slug: "assembleia",
+      label: "Assembleia",
+      icon: "calendar-check",
+      keys: "assembleia consórcio consorcio resultado cotas lances publicar contemplada",
+    },
     { href: "wiki.html", label: "Central de ajuda", icon: "book-open" },
     { href: "extensao/", label: "Extensão · Itaú", icon: "puzzle" },
     { href: "extensao/spec.html", label: "Spec · 5 bancos", icon: "list-checks" },
