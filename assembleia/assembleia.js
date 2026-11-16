@@ -13,19 +13,19 @@
   };
 
   var GROUPS = [
-    { id: "1054", name: "Grupo 1054", admin: "Turn2C · CNP Consórcio", date: "25/10/2026", when: "Em 4 dias", cotas: "2 cotas", lances: "4 lances", valor: "R$ 240.000,00", status: "pendente", action: "publish" },
-    { id: "0882", name: "Grupo 0882", admin: "Turn2C · Embracon", date: "25/10/2026", when: "Em 4 dias", cotas: "3 cotas", lances: "5 lances", valor: "R$ 310.000,00", status: "pendente", action: "publish" },
-    { id: "2201", name: "Grupo 2201", admin: "Hubfi · Porto Seguro", date: "25/10/2026", when: "Em 4 dias", cotas: "1 cota", lances: "2 lances", valor: "R$ 80.000,00", status: "pendente", action: "publish" },
-    { id: "0910", name: "Grupo 0910", admin: "Turn2C · CNP Consórcio", date: "18/10/2026", when: "Há 3 dias", cotas: "1 cota", lances: "2 lances", valor: "R$ 120.000,00", status: "publicada", action: "view" },
-    { id: "1503", name: "Grupo 1503", admin: "Turn2C · CNP Consórcio", date: "11/10/2026", when: "Há 10 dias", cotas: "4 cotas", lances: "6 lances", valor: "R$ 450.000,00", status: "publicada", action: "view" },
-    { id: "0330", name: "Grupo 0330", admin: "Embracon · Direto", date: "04/10/2026", when: "Há 17 dias", cotas: "0 cota", lances: "0 lance", valor: "R$ 0,00", status: "sem", action: "details" },
+    { id: "1054", name: "Grupo 1054", admin: "Turn2C · CNP Consórcio", date: "25/10/2026", when: "Em 4 dias", soon: true, cotas: "2 cotas", lances: "4 lances", valor: "R$ 240.000,00", status: "pendente", action: "publish" },
+    { id: "9001", name: "Grupo 9001", admin: "Turn2C · Embracon", date: "25/10/2026", when: "Em 4 dias", soon: true, cotas: "3 cotas", lances: "5 lances", valor: "R$ 310.000,00", status: "pendente", action: "publish" },
+    { id: "0101", name: "Grupo 0101", admin: "Consórcio Maggi · Ademicon", date: "25/10/2026", when: "Em 4 dias", soon: true, cotas: "1 cota", lances: "2 lances", valor: "R$ 80.000,00", status: "pendente", action: "publish" },
+    { id: "1053", name: "Grupo 1053", admin: "Turn2C · CNP Consórcio", date: "16/10/2026", when: "Há 5 dias", cotas: "1 cota", lances: "2 lances", valor: "R$ 120.000,00", status: "publicada", action: "view" },
+    { id: "1051", name: "Grupo 1051", admin: "Turn2C · CNP Consórcio", date: "15/10/2026", when: "Há 6 dias", cotas: "4 cotas", lances: "6 lances", valor: "R$ 450.000,00", status: "publicada", action: "view" },
+    { id: "1010", name: "Grupo 1010", admin: "Embracon · Embracon", date: "15/10/2026", when: "Há 6 dias", cotas: "0 cota", lances: "0 lance", valor: "R$ 0,00", status: "sem", action: "details" },
   ];
 
   var LANCES = [
-    { cliente: "Mauricio Lima", doc: "113.544.464-10", cota: "2211", tipo: "Lance fixo", valor: "R$ 60.000,00", data: "27/09/2026" },
-    { cliente: "Mauricio Lima", doc: "113.544.464-10", cota: "2211", tipo: "Lance fixo", valor: "R$ 60.000,00", data: "24/09/2026" },
-    { cliente: "Ana Paula Souza", doc: "298.112.003-55", cota: "0884", tipo: "Lance fixo", valor: "R$ 55.000,00", data: "22/09/2026" },
-    { cliente: "Carlos Mendes", doc: "041.887.220-19", cota: "3102", tipo: "Lance livre", valor: "R$ 65.000,00", data: "20/09/2026" },
+    { cliente: "Mauricio Lima CPF", doc: "11354446410", cota: "2211", tipo: "Lance fixo", valor: "R$ 60.000,00", data: "27/09/2026" },
+    { cliente: "Mauricio Lima CPF", doc: "11354446410", cota: "2211", tipo: "Lance fixo", valor: "R$ 60.000,00", data: "24/09/2026" },
+    { cliente: "Ana Paula Souza CPF", doc: "29811200355", cota: "0884", tipo: "Lance fixo", valor: "R$ 55.000,00", data: "22/09/2026" },
+    { cliente: "Carlos Mendes CPF", doc: "04188722019", cota: "3102", tipo: "Lance livre", valor: "R$ 65.000,00", data: "20/09/2026" },
   ];
 
   var COTAS = [
@@ -42,8 +42,8 @@
   ];
 
   var SELECTS = {
-    grupo: ["Todos", "Grupo 1054", "Grupo 0882", "Grupo 2201", "Grupo 0910", "Grupo 1503", "Grupo 0330"],
-    admin: ["Todas", "Turn2C · CNP Consórcio", "Turn2C · Embracon", "Hubfi · Porto Seguro", "Embracon · Direto"],
+    grupo: ["Todos", "Grupo 1054", "Grupo 9001", "Grupo 0101", "Grupo 1053", "Grupo 1051", "Grupo 1010"],
+    admin: ["Todas", "Turn2C · CNP Consórcio", "Turn2C · Embracon", "Consórcio Maggi · Ademicon", "Embracon · Embracon"],
     status: ["Todos", "Pendente", "Publicada", "Sem lances"],
     periodo: ["Próx. 7 dias", "Próx. 30 dias", "Últimos 30 dias", "Últimos 90 dias", "Todo o período"],
   };
@@ -69,22 +69,54 @@
     );
   }
 
-  function badge(status) {
-    if (status === "pendente") return '<span class="status status--warn">Pendente</span>';
-    if (status === "publicada") return '<span class="status status--ok">Publicada</span>';
-    if (status === "sem") return '<span class="status status--neutral">Sem lances</span>';
-    if (status === "aguarda") return '<span class="status status--warn">Aguardando assembleia</span>';
-    if (status === "sera") return '<span class="status status--ok">Será contemplado</span>';
-    if (status === "nao") return '<span class="status status--neutral">Não contemplado nesta assembleia</span>';
-    if (status === "cont") return '<span class="status status--ok">Contemplado</span>';
-    if (status === "sub") return '<span class="status status--neutral">Substituído</span>';
-    return '<span class="status status--neutral">' + status + "</span>";
+  function badge(status, withIcon) {
+    var type = "secondary";
+    var label = status;
+    if (status === "pendente") {
+      type = "alert";
+      label = "Pendente";
+    } else if (status === "publicada") {
+      type = "published";
+      label = "Publicada";
+    } else if (status === "sem") {
+      type = "secondary";
+      label = "Sem lances";
+    } else if (status === "aguarda") {
+      type = "alert";
+      label = "Aguardando assembleia";
+    } else if (status === "sera") {
+      type = "published";
+      label = "Será contemplado";
+      withIcon = true;
+    } else if (status === "nao") {
+      type = "secondary";
+      label = "Não contemplado";
+    } else if (status === "cont") {
+      type = "published";
+      label = "Contemplado";
+      withIcon = true;
+    } else if (status === "sub") {
+      type = "secondary";
+      label = "Substituído";
+    } else if (status === "lances") {
+      type = "alert";
+      label = "4 lances aguardando";
+    } else if (status === "atualizados") {
+      type = "published";
+      label = "4 lances atualizados";
+    }
+    var ico =
+      withIcon && type === "published"
+        ? '<span class="hf-badge__ico" aria-hidden="true"><img src="' + ASM + 'icon-trophy.svg" alt=""></span>'
+        : "";
+    return '<span class="hf-badge asm-badge hf-badge--' + type + '">' + ico + label + "</span>";
   }
 
   function btn(label, opts) {
     opts = opts || {};
     var cls = "hf-btn " + (opts.variant || "hf-btn--primary");
     if (opts.size) cls += " " + opts.size;
+    if (opts.action) cls += " asm-btn-action";
     var attrs = ' class="' + cls + '" type="button"';
     if (opts.go) attrs += ' data-go="' + opts.go + '"';
     if (opts.toast) attrs += ' data-toast="' + opts.toast + '"';
@@ -95,16 +127,25 @@
 
   function actionBtn(g) {
     if (g.action === "publish") {
-      return btn("Publicar resultado", { variant: "hf-btn--ink", size: "hf-btn--sm", go: "a2", extra: 'data-group="' + g.id + '"' });
+      return btn("Publicar resultado", {
+        variant: "hf-btn--dark",
+        action: true,
+        go: "a2",
+        extra: 'data-group="' + g.id + '"',
+      });
     }
     if (g.action === "view") {
       return btn("Ver resultado", {
         variant: "hf-btn--ghost",
-        size: "hf-btn--sm",
+        action: true,
         toast: "Resultado já publicado. Abra pelo grupo 1054 no fluxo feliz.",
       });
     }
-    return btn("Ver detalhes", { variant: "hf-btn--ghost", size: "hf-btn--sm", toast: "Sem lances neste grupo." });
+    return btn("Ver detalhes", {
+      variant: "hf-btn--ghost",
+      action: true,
+      toast: "Sem lances neste grupo.",
+    });
   }
 
   function searchField(placeholder) {
@@ -227,44 +268,56 @@
     );
   }
 
-  function tableWrap(head, rows) {
+  function listTable(headCols, rowsHtml) {
     return (
-      '<div class="table-wrap"><div class="table-scroll"><table class="asm-table"><thead><tr>' +
-      head +
-      "</tr></thead><tbody>" +
-      rows +
-      "</tbody></table></div></div>"
+      '<div class="table-wrap"><div class="asm-list">' +
+      '<div class="asm-list__head">' +
+      headCols +
+      "</div>" +
+      rowsHtml +
+      "</div></div>"
     );
   }
 
   function a1() {
     var head =
-      "<th>Grupo</th><th>Data da assembleia</th><th>Cotas com lance</th><th>Lances aguardando</th><th>Valor dos lances</th><th>Status</th><th>Ações</th>";
+      '<span class="asm-col-grupo">Grupo</span>' +
+      '<span class="asm-col-data">Data da assembleia</span>' +
+      '<span class="asm-col-cotas">Cotas com lance</span>' +
+      '<span class="asm-col-lances">Lances aguardando</span>' +
+      '<span class="asm-col-valor">Valor dos lances</span>' +
+      '<span class="asm-col-status">Status</span>' +
+      '<span class="asm-col-acoes">Ações</span>';
     var rows = GROUPS.map(function (g) {
       return (
-        "<tr>" +
-        '<td><div class="cell-stack"><strong>' +
+        '<div class="asm-list__row">' +
+        '<div class="asm-col-grupo"><div class="cell-stack"><strong>' +
         g.name +
         "</strong><span>" +
         g.admin +
-        "</span></div></td>" +
-        '<td><div class="cell-stack"><strong>' +
+        "</span></div></div>" +
+        '<div class="asm-col-data"><div class="cell-stack"><strong>' +
         g.date +
-        "</strong><span>" +
+        '</strong><span class="' +
+        (g.soon ? "when-soon" : "when-past") +
+        '">' +
         g.when +
-        "</span></div></td>" +
-        "<td>" +
+        "</span></div></div>" +
+        '<div class="asm-col-cotas">' +
         g.cotas +
-        "</td><td>" +
+        "</div>" +
+        '<div class="asm-col-lances">' +
         g.lances +
-        "</td><td>" +
+        "</div>" +
+        '<div class="asm-col-valor">' +
         g.valor +
-        "</td>" +
-        "<td>" +
+        "</div>" +
+        '<div class="asm-col-status">' +
         badge(g.status) +
-        "</td><td>" +
+        "</div>" +
+        '<div class="asm-col-acoes">' +
         actionBtn(g) +
-        "</td></tr>"
+        "</div></div>"
       );
     }).join("");
 
@@ -293,7 +346,7 @@
         selectField("status", "Status", filters.status, SELECTS.status) +
         selectField("periodo", "Período", filters.periodo, SELECTS.periodo) +
         "</div>" +
-        tableWrap(head, rows)
+        listTable(head, rows)
     );
   }
 
@@ -308,31 +361,45 @@
       .join("");
 
     var head =
-      "<th>Cliente</th><th>Cota</th><th>Tipo de lance</th><th>Valor do lance</th><th>Registrado em</th><th>Comprovante</th><th>Status</th>";
+      '<span class="asm-col-grupo">Cliente</span>' +
+      '<span class="asm-col-cota">Cota</span>' +
+      '<span class="asm-col-tipo">Tipo de lance</span>' +
+      '<span class="asm-col-vlance">Valor do lance</span>' +
+      '<span class="asm-col-reg">Registrado em</span>' +
+      '<span class="asm-col-comp">Comprovante</span>' +
+      '<span class="asm-col-status-lg">Status</span>';
     var rows = LANCES.map(function (l) {
       var st = "aguarda";
       if (lancesStatusMode === "preview") st = selected.indexOf(l.cota) >= 0 ? "sera" : "nao";
       if (lancesStatusMode === "done") st = selected.indexOf(l.cota) >= 0 ? "cont" : "nao";
+      var highlight = st === "sera" || st === "cont" ? " is-highlight" : "";
       return (
-        "<tr>" +
-        '<td><div class="cell-stack"><strong>' +
+        '<div class="asm-list__row' +
+        highlight +
+        '">' +
+        '<div class="asm-col-grupo"><div class="cell-stack"><strong>' +
         l.cliente +
         "</strong><span>" +
         l.doc +
-        "</span></div></td>" +
-        "<td>" +
+        "</span></div></div>" +
+        '<div class="asm-col-cota"><strong>' +
         l.cota +
-        "</td><td>" +
+        "</strong></div>" +
+        '<div class="asm-col-tipo">' +
         l.tipo +
-        "</td><td>" +
+        "</div>" +
+        '<div class="asm-col-vlance">' +
         l.valor +
-        "</td><td>" +
+        "</div>" +
+        '<div class="asm-col-reg">' +
         l.data +
-        "</td>" +
-        '<td><button class="linkish" type="button" data-toast="Comprovante ilustrativo.">Ver comprovante</button></td>' +
-        "<td>" +
+        "</div>" +
+        '<div class="asm-col-comp"><button class="linkish" type="button" data-toast="Comprovante ilustrativo.">Ver comprovante <img src="' +
+        ASM +
+        'icon-eye.svg" alt="" width="14" height="14"></button></div>' +
+        '<div class="asm-col-status-lg">' +
         badge(st) +
-        "</td></tr>"
+        "</div></div>"
       );
     }).join("");
 
@@ -367,8 +434,10 @@
       "</button></div>" +
       (extraCard || "") +
       "</div>" +
-      '<div class="section-head"><h3>Lances aguardando esta assembleia</h3><span class="status status--warn">4 lances aguardando</span></div>' +
-      tableWrap(head, rows)
+      '<div class="section-head"><h3>Lances aguardando esta assembleia</h3>' +
+      badge(screen === "a6" ? "atualizados" : "lances") +
+      "</div>" +
+      listTable(head, rows)
     );
   }
 
@@ -491,21 +560,27 @@
   }
 
   function a8() {
-    var head = "<th>Registrado em</th><th>Tipo</th><th>Valor</th><th>Assembleia</th><th>Status</th>";
+    var head =
+      '<span class="asm-col-data">Registrado em</span>' +
+      '<span class="asm-col-tipo">Tipo</span>' +
+      '<span class="asm-col-vlance">Valor</span>' +
+      '<span class="asm-col-reg">Assembleia</span>' +
+      '<span class="asm-col-status-lg">Status</span>';
     var rows = HIST.map(function (h) {
       var st = h.status === "Contemplado" ? "cont" : h.status === "Substituído" ? "sub" : "nao";
       return (
-        "<tr><td>" +
+        '<div class="asm-list__row">' +
+        '<div class="asm-col-data">' +
         h.data +
-        "</td><td>" +
+        '</div><div class="asm-col-tipo">' +
         h.tipo +
-        "</td><td>" +
+        '</div><div class="asm-col-vlance">' +
         h.valor +
-        "</td><td>" +
+        '</div><div class="asm-col-reg">' +
         h.assembleia +
-        "</td><td>" +
+        '</div><div class="asm-col-status-lg">' +
         badge(st) +
-        "</td></tr>"
+        "</div></div>"
       );
     }).join("");
     return shell(
@@ -514,7 +589,7 @@
         ico("left") +
         "Voltar para ficha</button>" +
         '<div class="page-head"><h1>Histórico de lances</h1><p>Cota 2211 · Grupo 1054 · Mauricio Lima</p></div>' +
-        tableWrap(head, rows) +
+        listTable(head, rows) +
         '<div class="foot"><p class="foot-copy">Fluxo feliz concluído: da lista até o histórico da cota contemplada.</p>' +
         '<div class="foot-actions">' +
         btn("Voltar ao início", { variant: "hf-btn--primary", go: "a1" }) +

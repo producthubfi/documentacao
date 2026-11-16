@@ -297,60 +297,129 @@ html, body {
   opacity: 0.7;
 }
 
+/* Tabela A1 — Figma 2521:37274: colunas 198/150/120/140/140/110/164, gap 12, pad 16 */
 .table-wrap {
   width: 100%;
   border: 1px solid var(--border-default);
   border-radius: 8px;
-  overflow: visible;
+  overflow-x: auto;
   background: #fff;
 }
-.table-scroll { overflow-x: auto; border-radius: 8px; }
-.asm-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-}
-.asm-table th,
-.asm-table td {
+.asm-list { width: 100%; min-width: 1126px; }
+.asm-list__head,
+.asm-list__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   padding: 0 16px;
-  text-align: left;
-  vertical-align: middle;
+  box-sizing: border-box;
   border-bottom: 1px solid var(--border-default);
 }
-.asm-table th {
+.asm-list__head {
   height: 48px;
+  background: #fafafa;
+  font-size: 14px;
   font-weight: 500;
   color: var(--text-secondary);
-  background: #fafafa;
 }
-.asm-table td { height: 64px; }
-.asm-table tbody tr:last-child td { border-bottom: 0; }
-.asm-table tbody tr:hover td { background: var(--background-subtle); }
+.asm-list__row {
+  height: 64px;
+  background: #fff;
+}
+.asm-list__row:last-child { border-bottom: 0; }
+.asm-list__row:hover { background: var(--background-subtle); }
+.asm-list__row.is-highlight { background: rgba(13, 175, 159, 0.06); }
+.asm-list__row.is-highlight:hover { background: rgba(13, 175, 159, 0.09); }
+
+.asm-col-grupo { flex: 1 0 0; min-width: 0; width: 198px; }
+.asm-col-data { flex: 0 0 150px; width: 150px; }
+.asm-col-cotas { flex: 0 0 120px; width: 120px; }
+.asm-col-lances { flex: 0 0 140px; width: 140px; }
+.asm-col-valor { flex: 0 0 140px; width: 140px; }
+.asm-col-status { flex: 0 0 110px; width: 110px; }
+.asm-col-acoes { flex: 0 0 164px; width: 164px; }
+
+.asm-col-cota { flex: 0 0 80px; width: 80px; }
+.asm-col-tipo,
+.asm-col-vlance,
+.asm-col-reg { flex: 0 0 130px; width: 130px; }
+.asm-col-comp { flex: 0 0 150px; width: 150px; }
+.asm-col-status-lg { flex: 0 0 190px; width: 190px; }
+
 .cell-stack { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.cell-stack strong { font-size: 14px; font-weight: 600; }
-.cell-stack span { color: var(--text-tertiary); font-size: 12px; }
-
-.status {
-  display: inline-flex;
-  align-items: center;
-  height: 26px;
-  padding: 0 10px;
-  border-radius: 999px;
-  font-size: 12px;
+.cell-stack strong {
+  font-size: 14px;
   font-weight: 600;
-  white-space: nowrap;
+  line-height: 20px;
+  color: var(--text-primary);
 }
-.status--warn { background: #fff8db; color: #a87404; }
-.status--ok { background: #e5f7f2; color: #00a395; }
-.status--neutral { background: #f3f4f4; color: var(--text-secondary); }
-.status--info { background: #eef2ff; color: #4338ca; }
+.cell-stack span {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: #6b7280;
+}
+.cell-stack .when-soon { color: #ef4343; }
+.cell-stack .when-past { color: #6b7280; }
 
-.hf-btn--ink {
-  background: #191a1a;
-  border-color: transparent;
-  color: #fff;
+/* Badges — cores exatas do Figma (Pendente amarelo, Publicada verde, Sem lances cinza) */
+.asm-badge.hf-badge {
+  border: 1px solid transparent;
+  font-weight: 500;
 }
-.hf-btn--ink:hover:not(:disabled) { background: #2a2b2b; color: #fff; }
+.asm-badge.hf-badge--alert {
+  background: #fefce8;
+  border-color: rgba(250, 204, 21, 0.5);
+  color: #a16207;
+}
+.asm-badge.hf-badge--published {
+  background: #f0fdf4;
+  border-color: rgba(74, 222, 128, 0.8);
+  color: #16a34a;
+}
+.asm-badge.hf-badge--secondary {
+  background: #f5f5f5;
+  border-color: #e3e3e3;
+  color: #4b5563;
+}
+.asm-badge .hf-badge__ico {
+  width: 12px;
+  height: 12px;
+}
+.asm-badge .hf-badge__ico img {
+  position: static;
+  inset: auto;
+  width: 12px;
+  height: 12px;
+}
+
+/* Botões de ação da tabela — Figma 164×32 */
+.asm-btn-action.hf-btn {
+  width: 164px;
+  height: 32px;
+  padding: 0 12px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 14px;
+  border-radius: 8px;
+}
+.asm-btn-action.hf-btn--dark {
+  background: #191a1a;
+  color: #31c9b7;
+  border-color: transparent;
+}
+.asm-btn-action.hf-btn--dark:hover:not(:disabled) {
+  background: #2a2b2b;
+  color: #31c9b7;
+}
+.asm-btn-action.hf-btn--ghost {
+  background: #fff;
+  border-color: #e3e3e3;
+  color: #191a1a;
+}
+.asm-btn-action.hf-btn--ghost:hover:not(:disabled) {
+  background: var(--background-subtle);
+}
 
 .back {
   display: inline-flex;
@@ -630,13 +699,15 @@ html, body {
   gap: 4px;
   border: 0;
   background: none;
-  color: var(--primary-hover);
+  color: var(--primary-default);
   font: inherit;
   font-size: 14px;
   font-weight: 500;
+  line-height: 20px;
   padding: 0;
   cursor: pointer;
 }
+.linkish img { display: block; width: 14px; height: 14px; }
 
 .toast {
   position: fixed;
