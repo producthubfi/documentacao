@@ -182,9 +182,7 @@
       '<div class="impact-stat impact-stat--ok"><p class="impact-stat__n">' +
       contemplados +
       '</p><p class="impact-stat__l">Lances contemplados</p></div>' +
-      '<div class="impact-stat ' +
-      (opts.published ? "impact-stat--muted" : "impact-stat--info") +
-      '"><p class="impact-stat__n">' +
+      '<div class="impact-stat impact-stat--info"><p class="impact-stat__n">' +
       nao +
       '</p><p class="impact-stat__l">Lances não contemplados</p></div>' +
       "</div>" +
@@ -218,7 +216,7 @@
       '<p class="lead">Publicado por Lucas Augusto em 25/10/2026 às 16:42. O resultado não pode ser republicado por cima.</p></div>' +
       '<div class="published-row">' +
       '<div class="published-left">' +
-      '<p class="ms-label">Cotas contempladas</p>' +
+      '<p class="published-kicker">Cotas contempladas</p>' +
       '<div class="published-tags">' +
       tags +
       "</div>" +
@@ -236,8 +234,9 @@
         toast: "Histórico ilustrativo neste protótipo.",
       }) +
       "</div></div>" +
+      '<div class="published-aside">' +
       impactSummary({ published: true, boxed: true }) +
-      "</div></div>"
+      "</div></div></div>"
     );
   }
 

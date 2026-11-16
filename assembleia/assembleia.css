@@ -481,8 +481,17 @@ html, body {
   margin-bottom: 24px;
   overflow: visible;
 }
-.card--published { padding: 17px; }
-.card-header { margin-bottom: 16px; max-width: 540px; }
+.card--published {
+  padding: 16px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.card--published .card-header {
+  margin-bottom: 0;
+  max-width: none;
+}
 .card h2 { margin: 0; font-size: 16px; font-weight: 600; line-height: 24px; }
 .card .lead {
   margin: 2px 0 0;
@@ -491,47 +500,56 @@ html, body {
   color: rgba(25, 26, 26, 0.7);
 }
 .published-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(280px, 560px) minmax(320px, 1fr);
   gap: 24px;
-  align-items: flex-start;
+  align-items: stretch;
   width: 100%;
 }
 .published-left {
-  flex: 1 1 560px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   min-width: 0;
-  max-width: 560px;
+}
+.published-kicker {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  color: #191a1a;
 }
 .published-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin: 12px 0 16px;
+  margin: 0;
 }
 .published-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  margin: 0;
 }
-.card--published .impact-summary {
-  flex: 0 0 510px;
-  width: 510px;
-  max-width: 100%;
-  margin-top: 0;
+.published-aside {
+  min-width: 0;
+  display: flex;
+}
+.card--published .impact-summary,
+.published-aside .impact-summary {
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: none;
+  margin: 0;
   padding: 16px;
+  gap: 16px;
   border: 1px solid #e3e3e3;
-  border-radius: 8px;
+  border-radius: 10px;
+  background: #fff;
   box-sizing: border-box;
 }
 .impact-summary--boxed {
-  background: #fafafa;
-}
-@media (max-width: 1200px) {
-  .published-row { flex-direction: column; }
-  .published-left { max-width: none; }
-  .card--published .impact-summary {
-    flex: none;
-    width: 100%;
-  }
+  background: #fff;
 }
 
 /* Multiselect — Figma 2521:40056 + dropdown 2521:39433 */
