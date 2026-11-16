@@ -581,12 +581,23 @@ html, body {
   color: rgba(25, 26, 26, 0.7);
 }
 .ms-chevron {
+  position: relative;
   margin-left: auto;
   flex: none;
-  display: block;
   width: 16px;
   height: 16px;
+  overflow: hidden;
   align-self: center;
+  pointer-events: none;
+}
+.ms-chevron img {
+  position: absolute;
+  left: 2px;
+  top: 4.5px;
+  width: 12px;
+  height: 7px;
+  max-width: none;
+  display: block;
 }
 .chips {
   display: flex;

@@ -639,9 +639,9 @@
       (selected.length
         ? '<span class="chips">' + chips + "</span>"
         : '<span class="placeholder">Selecione as cotas contempladas</span>') +
-      '<img class="ms-chevron" src="' +
+      '<span class="ms-chevron" aria-hidden="true"><img src="' +
       ICO +
-      'select-chevron.svg" alt="" width="16" height="16">' +
+      'select-chevron.svg" alt=""></span>' +
       "</div>" +
       (sheetOpen ? multiselectDropdown() : "") +
       '<p class="ms-help">Apenas cotas cadastradas no grupo 1054</p>' +
