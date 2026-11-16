@@ -389,6 +389,11 @@ html, body {
   border-color: #e3e3e3;
   color: #4b5563;
 }
+.asm-badge.hf-badge--info {
+  background: #eff6ff;
+  border-color: rgba(59, 130, 246, 0.45);
+  color: #2563eb;
+}
 .asm-badge .hf-badge__ico {
   width: 12px;
   height: 12px;
@@ -756,6 +761,10 @@ html, body {
   background: rgba(59, 130, 246, 0.06);
   border: 1px solid rgba(59, 130, 246, 0.3);
 }
+.impact-stat--muted {
+  background: #f5f5f5;
+  border: 1px solid #e3e3e3;
+}
 .impact-stat__n {
   margin: 0;
   font-size: 24px;
@@ -787,9 +796,11 @@ html, body {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin: 8px 0 12px;
+  margin: 24px 0 12px;
 }
-.section-head h3 { margin: 0; font-size: 16px; font-weight: 600; }
+.section-head:first-of-type { margin-top: 8px; }
+.section-head h3 { margin: 0; font-size: 16px; font-weight: 600; line-height: 24px; }
+.table-wrap + .section-head { margin-top: 24px; }
 
 .foot {
   display: flex;
@@ -1170,6 +1181,12 @@ html, body {
   padding: 0;
   cursor: pointer;
 }
+.linkish.cell-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: left;
+}
+.linkish.cell-name:hover { color: var(--primary-default); }
 .linkish img { display: block; width: 14px; height: 14px; }
 
 .toast {

@@ -91,10 +91,20 @@
     } else if (status === "nao") {
       type = "secondary";
       label = "Não contemplado";
+    } else if (status === "nao-blue") {
+      type = "info";
+      label = "Não contemplado";
     } else if (status === "cont") {
       type = "published";
       label = "Contemplado";
       withIcon = true;
+    } else if (status === "contcota") {
+      type = "published";
+      label = "Contemplada";
+      withIcon = true;
+    } else if (status === "mantem") {
+      type = "secondary";
+      label = "Mantém o status";
     } else if (status === "sub") {
       type = "secondary";
       label = "Substituído";
@@ -104,6 +114,9 @@
     } else if (status === "atualizados") {
       type = "published";
       label = "4 lances atualizados";
+    } else if (status === "cotas") {
+      type = "published";
+      label = "3 cotas com lance";
     }
     var ico =
       withIcon && type === "published"
@@ -169,7 +182,9 @@
       '<div class="impact-stat impact-stat--ok"><p class="impact-stat__n">' +
       contemplados +
       '</p><p class="impact-stat__l">Lances contemplados</p></div>' +
-      '<div class="impact-stat impact-stat--info"><p class="impact-stat__n">' +
+      '<div class="impact-stat ' +
+      (opts.published ? "impact-stat--muted" : "impact-stat--info") +
+      '"><p class="impact-stat__n">' +
       nao +
       '</p><p class="impact-stat__l">Lances não contemplados</p></div>' +
       "</div>" +
@@ -280,7 +295,7 @@
       return btn("Ver resultado", {
         variant: "hf-btn--ghost",
         action: true,
-        toast: "Resultado já publicado. Abra pelo grupo 1054 no fluxo feliz.",
+        go: "a6",
       });
     }
     return btn("Ver detalhes", {
@@ -492,6 +507,59 @@
     );
   }
 
+  function cotasAssembleiaTable() {
+    var rowsData = [
+      { cliente: "Mauricio Lima CPF", doc: "11354446410", cota: "2211", lances: "2 lances", valor: "R$ 120.000,00", st: "contcota", go: "a7" },
+      { cliente: "Mauricio Lima CPF", doc: "11354446410", cota: "4954", lances: "1 lance", valor: "R$ 60.000,00", st: "mantem" },
+      { cliente: "Raniele Karolina", doc: "13062079470", cota: "3307", lances: "1 lance", valor: "R$ 60.000,00", st: "contcota", go: "a7" },
+    ];
+    var head =
+      '<span class="asm-col-grupo">Cliente</span>' +
+      '<span class="asm-col-cota">Cota</span>' +
+      '<span class="asm-col-tipo">Lances</span>' +
+      '<span class="asm-col-vlance">Valor dos lances</span>' +
+      '<span class="asm-col-reg">Assembleia</span>' +
+      '<span class="asm-col-comp">Consulta</span>' +
+      '<span class="asm-col-status-lg">Status da cota</span>';
+    var rows = rowsData
+      .map(function (r) {
+        var name = r.go
+          ? '<button class="linkish cell-name" type="button" data-go="' + r.go + '">' + r.cliente + "</button>"
+          : "<strong>" + r.cliente + "</strong>";
+        var histGo = r.st === "contcota" ? ' data-go="a8"' : ' data-toast="Histórico ilustrativo neste protótipo."';
+        return (
+          '<div class="asm-list__row' +
+          (r.st === "contcota" ? " is-highlight" : "") +
+          '">' +
+          '<div class="asm-col-grupo"><div class="cell-stack">' +
+          name +
+          "<span>" +
+          r.doc +
+          "</span></div></div>" +
+          '<div class="asm-col-cota"><strong>' +
+          r.cota +
+          "</strong></div>" +
+          '<div class="asm-col-tipo">' +
+          r.lances +
+          "</div>" +
+          '<div class="asm-col-vlance">' +
+          r.valor +
+          "</div>" +
+          '<div class="asm-col-reg">25/10/2026</div>' +
+          '<div class="asm-col-comp"><button class="linkish" type="button"' +
+          histGo +
+          '>Histórico de lances <img src="' +
+          ASM +
+          'icon-eye.svg" alt="" width="14" height="14"></button></div>' +
+          '<div class="asm-col-status-lg">' +
+          badge(r.st) +
+          "</div></div>"
+        );
+      })
+      .join("");
+    return listTable(head, rows);
+  }
+
   function lancesTable(lancesStatusMode) {
     var head =
       '<span class="asm-col-grupo">Cliente</span>' +
@@ -504,7 +572,7 @@
     var rows = LANCES.map(function (l) {
       var st = "aguarda";
       if (lancesStatusMode === "preview") st = selected.indexOf(l.cota) >= 0 ? "sera" : "nao";
-      if (lancesStatusMode === "done") st = selected.indexOf(l.cota) >= 0 ? "cont" : "nao";
+      if (lancesStatusMode === "done") st = selected.indexOf(l.cota) >= 0 ? "cont" : "nao-blue";
       var highlight = st === "sera" || st === "cont" ? " is-highlight" : "";
       return (
         '<div class="asm-list__row' +
@@ -673,6 +741,7 @@
   function a6() {
     confirmOpen = false;
     sheetOpen = false;
+    selected = ["2211", "3307"];
     return (
       shell(
         detailHead() +
@@ -695,19 +764,14 @@
           "4 lances · R$ 240.000,00</span>" +
           "</div>" +
           publishedCard() +
+          '<div class="section-head"><h3>Cotas da assembleia</h3>' +
+          badge("cotas") +
+          "</div>" +
+          cotasAssembleiaTable() +
           '<div class="section-head"><h3>Lances desta assembleia</h3>' +
           badge("atualizados") +
           "</div>" +
-          lancesTable("done") +
-          '<div class="next-step">' +
-          '<p>Próximo passo no fluxo feliz: abrir a ficha do cliente contemplado.</p>' +
-          btn("Abrir ficha do cliente", {
-            variant: "hf-btn--primary",
-            foot: true,
-            icon: "icon-arrow-right.svg",
-            go: "a7",
-          }) +
-          "</div>"
+          lancesTable("done")
       ) +
       '<div class="asm-toast" id="pub-toast" role="status">' +
       '<img src="' +
