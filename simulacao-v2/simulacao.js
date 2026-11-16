@@ -119,6 +119,16 @@
       '<div><p class="k">' + k + '</p><p class="v">' + v + '</p></div></div>';
   }
 
+  function field(k, v, opts) {
+    opts = opts || {};
+    var ico = opts.icon
+      ? '<span class="m-ico"><img src="assets/' + opts.icon + '.svg" alt=""></span>'
+      : "";
+    var vClass = "v" + (opts.lg ? " lg" : "") + (opts.hot ? " hot" : "");
+    return '<div' + (opts.icon ? ' class="has-ico"' : "") + ">" + ico +
+      '<div><p class="k">' + k + '</p><p class="' + vClass + '">' + v + "</p></div></div>";
+  }
+
   function bankBy(id) {
     return BANKS.filter(function (b) { return b.id === id; })[0];
   }
@@ -130,10 +140,10 @@
       '<span class="tag ' + b.tag + '">' + b.tagText + '</span></div>' +
       '<button class="btn ghost sm details" type="button" data-details="' + b.id + '">Ver detalhes <img src="assets/a3423.svg" alt=""></button></div>' +
       '<div class="row-metrics">' +
-        '<div><p class="k">Valor máximo do imóvel</p><p class="v lg">' + b.imóvel + '</p></div>' +
-        '<div><p class="k">' + b.entradaLabel + '</p><p class="v' + (warn ? " hot" : "") + '">' + b.entrada + '</p></div>' +
-        '<div><p class="k">Valor financiado</p><p class="v">' + b.financiado + '</p></div>' +
-        '<div><p class="k">Primeira parcela</p><p class="v">' + b.p1 + '</p></div>' +
+        field("Valor máximo do imóvel", b.imóvel, { lg: true }) +
+        field(b.entradaLabel, b.entrada, { icon: "wallet", hot: warn }) +
+        field("Valor financiado", b.financiado, { icon: "landmark" }) +
+        field("Primeira parcela", b.p1) +
       '</div></article>';
   }
 
@@ -147,9 +157,9 @@
         '<button class="sheet-x" type="button" data-close aria-label="Fechar">✕</button>' +
       '</div>' +
       '<div class="sheet-main">' +
-        '<div><p class="k">Valor máximo do imóvel</p><p class="v lg">' + b.imóvel + '</p></div>' +
-        '<div><p class="k">' + b.entradaLabel + '</p><p class="v' + (b.tag === "warn" ? " hot" : "") + '">' + b.entrada + '</p></div>' +
-        '<div><p class="k">Valor financiado</p><p class="v">' + b.financiado + '</p></div>' +
+        field("Valor máximo do imóvel", b.imóvel, { lg: true }) +
+        field(b.entradaLabel, b.entrada, { icon: "wallet", hot: b.tag === "warn" }) +
+        field("Valor financiado", b.financiado, { icon: "landmark" }) +
       '</div>' +
       '<div class="sheet-line" aria-hidden="true"></div>' +
       '<h3>Parcelas · SAC</h3>' +

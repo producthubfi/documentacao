@@ -119,6 +119,16 @@
       '<div><p class="k">' + k + '</p><p class="v">' + v + '</p></div></div>';
   }
 
+  function field(k, v, opts) {
+    opts = opts || {};
+    var ico = opts.icon
+      ? '<span class="m-ico"><img src="assets/' + opts.icon + '.svg" alt=""></span>'
+      : "";
+    var vClass = "v" + (opts.lg ? " lg" : "") + (opts.hot ? " hot" : "");
+    return '<div' + (opts.icon ? ' class="has-ico"' : "") + ">" + ico +
+      '<div><p class="k">' + k + '</p><p class="' + vClass + '">' + v + "</p></div></div>";
+  }
+
   var openId = "";
 
   function bankBy(id) {
@@ -128,14 +138,14 @@
   function detailBlock(b) {
     return '<div class="row-more">' +
       '<h3>Parcelas · SAC</h3><div class="row-metrics">' +
-        '<div><p class="k">Primeira parcela</p><p class="v">' + b.p1 + '</p></div>' +
-        '<div><p class="k">Última parcela</p><p class="v">' + b.p2 + '</p></div>' +
-        '<div><p class="k">Modelo de amortização</p><p class="v">SAC</p></div>' +
+        field("Primeira parcela", b.p1) +
+        field("Última parcela", b.p2) +
+        field("Modelo de amortização", "SAC") +
       '</div>' +
       '<h3>Taxas e prazo</h3><div class="row-metrics">' +
-        '<div><p class="k">Taxa (a.a.)</p><p class="v">' + b.taxa + '</p></div>' +
-        '<div><p class="k">CET (a.a.)</p><p class="v">' + b.cet + '</p></div>' +
-        '<div><p class="k">Prazo</p><p class="v">' + b.prazo + '</p></div>' +
+        field("Taxa (a.a.)", b.taxa) +
+        field("CET (a.a.)", b.cet) +
+        field("Prazo", b.prazo) +
       '</div></div>';
   }
 
@@ -152,10 +162,10 @@
       '<span class="tag ' + b.tag + '">' + b.tagText + '</span></div>' +
       '<button class="btn ghost sm details" type="button" data-toggle="' + b.id + '" aria-expanded="' + (open ? "true" : "false") + '">' + detailsLabel(open) + '</button></div>' +
       '<div class="row-metrics">' +
-        '<div><p class="k">Valor máximo do imóvel</p><p class="v lg">' + b.imóvel + '</p></div>' +
-        '<div><p class="k">' + b.entradaLabel + '</p><p class="v' + (warn ? " hot" : "") + '">' + b.entrada + '</p></div>' +
-        '<div><p class="k">Valor financiado</p><p class="v">' + b.financiado + '</p></div>' +
-        '<div><p class="k">Primeira parcela</p><p class="v">' + b.p1 + '</p></div>' +
+        field("Valor máximo do imóvel", b.imóvel, { lg: true }) +
+        field(b.entradaLabel, b.entrada, { icon: "wallet", hot: warn }) +
+        field("Valor financiado", b.financiado, { icon: "landmark" }) +
+        field("Primeira parcela", b.p1) +
       '</div>' +
       '<div class="row-panel" aria-hidden="' + (open ? "false" : "true") + '"><div class="row-panel-inner">' + detailBlock(b) + '</div></div>' +
       '</article>';
