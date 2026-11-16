@@ -740,6 +740,127 @@ html, body {
   padding: 8px 12px;
 }
 .ms-dd__search img { flex: none; opacity: 0.55; }
+.ms-empty {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 4px;
+  padding: 16px;
+  border-radius: 8px;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  box-sizing: border-box;
+}
+.ms-empty img { flex: none; margin-top: 2px; }
+.ms-empty div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.ms-empty strong {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  color: #191a1a;
+}
+.ms-empty span {
+  font-size: 12px;
+  line-height: 16px;
+  color: rgba(25, 26, 26, 0.7);
+}
+.dialog--comp,
+.dialog--cota {
+  width: 520px;
+  max-width: min(520px, calc(100vw - 48px));
+}
+.comp-preview {
+  width: 100%;
+  padding: 16px;
+  border-radius: 8px;
+  background: #f7f7f7;
+  box-sizing: border-box;
+}
+.comp-preview__sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 180px;
+  padding: 20px;
+  border-radius: 8px;
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  box-sizing: border-box;
+}
+.comp-preview__sheet strong {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 21px;
+}
+.comp-preview__sheet span {
+  font-size: 13px;
+  line-height: 18px;
+  color: rgba(25, 26, 26, 0.7);
+}
+.cota-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+}
+.cota-grid > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  background: #fff;
+  box-sizing: border-box;
+}
+.cota-grid span:first-child {
+  font-size: 12px;
+  line-height: 16px;
+  color: rgba(25, 26, 26, 0.7);
+}
+.cota-grid strong {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+}
+.edit-cota-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+.edit-cota-fields label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.edit-cota-fields span {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: #191a1a;
+}
+.edit-cota-fields input,
+.edit-cota-fields textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e3e3e3;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 14px;
+  line-height: 20px;
+  color: #191a1a;
+  box-sizing: border-box;
+}
+.edit-cota-fields input[readonly] {
+  background: #f7f7f7;
+  color: rgba(25, 26, 26, 0.7);
+}
 .ms-dd__search input {
   flex: 1;
   min-width: 0;

@@ -14,6 +14,7 @@
   var publishedBefore = ["2211", "3307"];
   var adjustCotas = ["2211", "4954"];
   var adjustMotivo = "";
+  var overlay = null;
   var filters = {
     grupo: "Todos",
     admin: "Todas",
@@ -519,6 +520,16 @@
         '<button type="button" class="asm-toast__x" data-close-toast aria-label="Fechar"><img src="' +
         ASM +
         'icon-x-gray.svg" alt="" width="14" height="14"></button></div>';
+    } else if (opts.toast === "published-empty") {
+      toastHtml =
+        '<div class="asm-toast" id="pub-toast" role="status">' +
+        '<img src="' +
+        ASM +
+        'icon-circle-check.svg" alt="" width="20" height="20">' +
+        '<div class="asm-toast__text"><strong>Resultado publicado</strong><span>Nenhuma cota contemplada. 4 lances atualizados para Não contemplado.</span></div>' +
+        '<button type="button" class="asm-toast__x" data-close-toast aria-label="Fechar"><img src="' +
+        ASM +
+        'icon-x-gray.svg" alt="" width="14" height="14"></button></div>';
     } else if (opts.toast === "adjusted") {
       toastHtml =
         '<div class="asm-toast" id="pub-toast" role="status">' +
@@ -576,44 +587,134 @@
     );
   }
 
-  function multiselectDropdown() {
+  function multiselectDropdown(opts) {
+    opts = opts || {};
+    var emptySearch = !!opts.emptySearch;
+    var searchVal = emptySearch ? "9999" : "";
+    var optionsHtml = emptySearch
+      ? '<div class="ms-empty" role="status">' +
+        '<img src="' +
+        ASM +
+        'icon-alert.svg" alt="" width="20" height="20">' +
+        "<div><strong>Nenhuma cota encontrada no grupo 1054</strong>" +
+        "<span>Só é possível contemplar cotas já cadastradas neste grupo. Confira o número ou cadastre a cota antes de publicar.</span></div></div>"
+      : COTAS.map(function (c) {
+          var on = selected.indexOf(c.id) >= 0;
+          return (
+            '<button class="ms-opt' +
+            (on ? " is-on" : "") +
+            '" type="button" role="option" aria-selected="' +
+            (on ? "true" : "false") +
+            '" data-toggle-cota="' +
+            c.id +
+            '" data-ms-label="Cota ' +
+            c.id +
+            " " +
+            c.cliente +
+            '">' +
+            '<span class="ms-check" aria-hidden="true">' +
+            (on ? '<img src="' + ICO + 'select-check.svg" alt="" width="10" height="8">' : "") +
+            "</span>" +
+            '<span class="ms-opt__main"><strong>Cota ' +
+            c.id +
+            "</strong><span>" +
+            c.cliente +
+            " · Grupo 1054</span></span>" +
+            '<span class="ms-opt__side"><strong>' +
+            c.credito +
+            "</strong><span>" +
+            (c.lances || "") +
+            "</span></span></button>"
+          );
+        }).join("");
     return (
       '<div class="ms-dd" role="listbox" aria-label="Cotas do grupo">' +
       '<div class="ms-dd__search"><img src="' +
       ICO +
-      'search.svg" alt="" width="16" height="16"><input type="search" placeholder="Buscar cota ou cliente..." data-ms-search aria-label="Buscar cota ou cliente"></div>' +
-      COTAS.map(function (c) {
-        var on = selected.indexOf(c.id) >= 0;
-        return (
-          '<button class="ms-opt' +
-          (on ? " is-on" : "") +
-          '" type="button" role="option" aria-selected="' +
-          (on ? "true" : "false") +
-          '" data-toggle-cota="' +
-          c.id +
-          '" data-ms-label="Cota ' +
-          c.id +
-          " " +
-          c.cliente +
-          '">' +
-          '<span class="ms-check" aria-hidden="true">' +
-          (on ? '<img src="' + ICO + 'select-check.svg" alt="" width="10" height="8">' : "") +
-          "</span>" +
-          '<span class="ms-opt__main"><strong>Cota ' +
-          c.id +
-          "</strong><span>" +
-          c.cliente +
-          " · Grupo 1054</span></span>" +
-          '<span class="ms-opt__side"><strong>' +
-          c.credito +
-          "</strong><span>" +
-          (c.lances || "") +
-          "</span></span></button>"
-        );
-      }).join("") +
+      'search.svg" alt="" width="16" height="16"><input type="search" placeholder="Buscar cota ou cliente..." data-ms-search aria-label="Buscar cota ou cliente" value="' +
+      searchVal +
+      '"></div>' +
+      optionsHtml +
       '<div class="ms-dd__foot"><span>' +
       selected.length +
       ' cotas selecionadas</span><button type="button" class="ms-dd__clear" data-clear-cotas>Limpar seleção</button></div></div>'
+    );
+  }
+
+  function comprovanteModalHtml() {
+    return (
+      '<div class="overlay" id="comp-modal">' +
+      '<div class="dialog dialog--comp" role="dialog" aria-modal="true" aria-labelledby="comp-title">' +
+      '<div class="dialog-top"><div class="dialog-titles"><h2 id="comp-title">Comprovante do lance</h2>' +
+      "<p>Cota 2211 · Mauricio Lima CPF · Registrado em 24/09/2026</p></div>" +
+      '<button class="x" type="button" data-close-comp aria-label="Fechar"><img src="' +
+      ASM +
+      'icon-x-gray.svg" alt="" width="16" height="16"></button></div>' +
+      '<div class="comp-preview"><div class="comp-preview__sheet">' +
+      "<strong>Mauricio de Lima Coutinho Junior</strong>" +
+      "<span>Grupo 1054 · Cota 2211</span>" +
+      "<span>Lance fixo · R$ 60.000,00 (30,00%)</span>" +
+      "<span>Arquivo: Mauricio-1054-2211.pdf</span></div></div>" +
+      '<div class="dialog-actions">' +
+      btn("Fechar", { variant: "hf-btn--ghost", foot: true, extra: "data-close-comp" }) +
+      btn("Baixar PDF", { variant: "hf-btn--primary", foot: true, toast: "Download ilustrativo neste protótipo." }) +
+      "</div></div></div>"
+    );
+  }
+
+  function cotaModalHtml() {
+    var cont = selected.indexOf("2211") >= 0;
+    return (
+      '<div class="overlay" id="cota-modal">' +
+      '<div class="dialog dialog--cota" role="dialog" aria-modal="true" aria-labelledby="cota-title">' +
+      '<div class="dialog-top"><div class="dialog-titles"><h2 id="cota-title">Cota 2211</h2>' +
+      "<p>Mauricio Lima CPF · Grupo 1054 · Turn2C</p></div>" +
+      '<button class="x" type="button" data-close-cota aria-label="Fechar"><img src="' +
+      ASM +
+      'icon-x-gray.svg" alt="" width="16" height="16"></button></div>' +
+      '<div class="cota-grid">' +
+      '<div><span>Crédito</span><strong>R$ 120.000,00</strong></div>' +
+      "<div><span>Status</span>" +
+      (cont
+        ? '<span class="hf-badge asm-badge hf-badge--published">Contemplada</span>'
+        : '<span class="hf-badge asm-badge hf-badge--secondary">Ativa</span>') +
+      "</div>" +
+      "<div><span>Lances nesta assembleia</span><strong>2</strong></div>" +
+      "<div><span>Total em lances</span><strong>R$ 120.000,00</strong></div></div>" +
+      '<div class="dialog-actions">' +
+      btn("Ver histórico de lances", {
+        variant: "hf-btn--ghost",
+        foot: true,
+        icon: "icon-history.svg",
+        extra: "data-open-hist",
+      }) +
+      btn("Fechar", { variant: "hf-btn--primary", foot: true, extra: "data-close-cota" }) +
+      "</div></div></div>"
+    );
+  }
+
+  function editCotaModalHtml() {
+    return (
+      '<div class="overlay" id="edit-cota-modal">' +
+      '<div class="dialog dialog--cota" role="dialog" aria-modal="true" aria-labelledby="edit-cota-title">' +
+      '<div class="dialog-top"><div class="dialog-titles"><h2 id="edit-cota-title">Editar cota 2211</h2>' +
+      "<p>Dados cadastrais da cota. O desfecho de assembleia continua sendo alterado só por Ajustar resultado.</p></div>" +
+      '<button class="x" type="button" data-close-edit-cota aria-label="Fechar"><img src="' +
+      ASM +
+      'icon-x-gray.svg" alt="" width="16" height="16"></button></div>' +
+      '<div class="edit-cota-fields">' +
+      '<label><span>Número da cota</span><input type="text" value="2211" readonly></label>' +
+      '<label><span>Grupo</span><input type="text" value="1054" readonly></label>' +
+      '<label><span>Crédito</span><input type="text" value="R$ 120.000,00"></label>' +
+      '<label><span>Observação</span><textarea rows="3" placeholder="Opcional">Cota ativa no grupo 1054</textarea></label></div>' +
+      '<div class="dialog-actions">' +
+      btn("Cancelar", { variant: "hf-btn--ghost", foot: true, extra: "data-close-edit-cota" }) +
+      btn("Salvar alterações", {
+        variant: "hf-btn--primary",
+        foot: true,
+        extra: "data-save-edit-cota",
+      }) +
+      "</div></div></div>"
     );
   }
 
@@ -636,7 +737,7 @@
     return btn("Ver detalhes", {
       variant: "hf-btn--ghost",
       action: true,
-      toast: "Sem lances neste grupo.",
+      toast: "Este grupo não tem lances aguardando assembleia.",
     });
   }
 
@@ -940,7 +1041,7 @@
         '<div class="asm-col-reg">' +
         l.data +
         "</div>" +
-        '<div class="asm-col-comp"><button class="linkish" type="button" data-toast="Comprovante ilustrativo.">Ver comprovante <img src="' +
+        '<div class="asm-col-comp"><button class="linkish" type="button" data-open-comp>Ver comprovante <img src="' +
         ASM +
         'icon-eye.svg" alt="" width="14" height="14"></button></div>' +
         '<div class="asm-col-status-lg">' +
@@ -951,7 +1052,8 @@
     return listTable(head, rows);
   }
 
-  function detailChrome(extraCard, lancesStatusMode) {
+  function detailChrome(extraCard, lancesStatusMode, opts) {
+    opts = opts || {};
     var chips = selected
       .map(function (id) {
         return (
@@ -988,7 +1090,7 @@
       ICO +
       'select-chevron.svg" alt=""></span>' +
       "</div>" +
-      (sheetOpen ? multiselectDropdown() : "") +
+      (sheetOpen ? multiselectDropdown({ emptySearch: !!opts.emptySearch }) : "") +
       '<p class="ms-help">Apenas cotas cadastradas no grupo 1054</p>' +
       "</div>" +
       (extraCard || "") +
@@ -1041,9 +1143,9 @@
       detailHead() +
         detailChrome("", "wait") +
         footBar(
-          "Selecione as cotas contempladas para liberar a publicação do resultado.",
+          "Selecione as cotas contempladas ou publique sem contempladas, se essa for a decisão oficial.",
           btn("Cancelar", { variant: "hf-btn--ghost", foot: true, go: "a1" }) +
-            publishBtn({ disabled: true })
+            publishBtn({ go: "b1" })
         )
     );
   }
@@ -1057,8 +1159,7 @@
           "Selecione as cotas contempladas para liberar a publicação do resultado.",
           btn("Cancelar", { variant: "hf-btn--ghost", foot: true, go: "a1" }) +
             publishBtn({
-              disabled: !selected.length,
-              go: selected.length ? "a4" : undefined,
+              go: selected.length ? "a4" : "b1",
             })
         )
     );
@@ -1081,6 +1182,48 @@
     confirmOpen = true;
     sheetOpen = false;
     return a4() + confirmHtml();
+  }
+
+  function a9() {
+    sheetOpen = true;
+    if (!selected.length) selected = ["2211", "3307"];
+    return shell(
+      detailHead() +
+        detailChrome("", "wait", { emptySearch: true }) +
+        footBar(
+          "Só cotas cadastradas no grupo entram no resultado. Ajuste a busca ou cadastre a cota antes de publicar.",
+          btn("Cancelar", { variant: "hf-btn--ghost", foot: true, go: "a1" }) +
+            publishBtn({ go: selected.length ? "a4" : "b1" })
+        )
+    );
+  }
+
+  function b1() {
+    selected = [];
+    sheetOpen = false;
+    adjusted = false;
+    return shell(
+      detailHead() +
+        detailChrome(impactSummary(), "preview") +
+        footBar(
+          "Nenhuma cota contemplada. Todos os lances desta assembleia passam para Não contemplado.",
+          btn("Cancelar", { variant: "hf-btn--ghost", foot: true, go: "a1" }) +
+            publishBtn({ extra: 'data-confirm-empty="1"' })
+        )
+    );
+  }
+
+  function b2() {
+    return b1() + confirmEmptyHtml();
+  }
+
+  function b3() {
+    selected = [];
+    adjusted = false;
+    return publishedPage({
+      toast: "published-empty",
+      hideNext: true,
+    });
   }
 
   function a6() {
@@ -1229,13 +1372,13 @@
           '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button>' +
           (r.menu
             ? '<div class="row-menu__dd" role="menu">' +
-              '<button type="button" role="menuitem" data-toast="Cota ilustrativa neste protótipo."><img src="' +
+              '<button type="button" role="menuitem" data-open-cota><img src="' +
               ASM +
               'icon-eye.svg" alt="" width="14" height="14">Ver cota</button>' +
               '<button type="button" role="menuitem" class="is-on" data-open-hist><img src="' +
               ASM +
               'icon-history.svg" alt="" width="14" height="14">Histórico de lances</button>' +
-              '<button type="button" role="menuitem" data-toast="Edição ilustrativa neste protótipo."><img src="' +
+              '<button type="button" role="menuitem" data-open-edit-cota><img src="' +
               ASM +
               'icon-pencil.svg" alt="" width="14" height="14">Editar cota</button></div>'
             : "") +
@@ -1334,7 +1477,7 @@
         " por Mauricio Lima</p>" +
         '<div class="hist-card__file"><span>' +
         h.arquivo +
-        '</span><button class="hf-btn hf-btn--ghost hist-card__comp" type="button" data-toast="Comprovante ilustrativo."><img src="' +
+        '</span><button class="hf-btn hf-btn--ghost hist-card__comp" type="button" data-open-comp><img src="' +
         ASM +
         'icon-eye.svg" alt="" width="16" height="16">Ver comprovante</button></div>' +
         '<div class="hist-card__status">' +
@@ -1412,6 +1555,34 @@
       '<div class="dialog-actions">' +
       btn("Cancelar", { variant: "hf-btn--ghost", foot: true, extra: "data-close-confirm" }) +
       publishBtn({ go: "a6" }) +
+      "</div></div></div>"
+    );
+  }
+
+  function confirmEmptyHtml() {
+    return (
+      '<div class="overlay" id="confirm-empty">' +
+      '<div class="dialog" role="dialog" aria-modal="true" aria-labelledby="confirm-empty-title">' +
+      '<div class="dialog-top">' +
+      '<div class="dialog-titles"><h2 id="confirm-empty-title">Publicar sem cotas contempladas?</h2>' +
+      "<p>Grupo 1054 · Assembleia de 25/10/2026</p></div>" +
+      '<button class="x" type="button" data-close-confirm-empty aria-label="Fechar"><img src="' +
+      ASM +
+      'icon-x-gray.svg" alt="" width="16" height="16"></button></div>' +
+      '<div class="dialog-body">' +
+      '<div class="dialog-item"><img src="' +
+      ASM +
+      'icon-alert.svg" alt="" width="18" height="18"><p>Nenhuma cota será marcada como Contemplada nesta publicação.</p></div>' +
+      '<div class="dialog-item"><img src="' +
+      ASM +
+      'icon-circle-check.svg" alt="" width="18" height="18"><p>Os 4 lances aguardando esta assembleia passam para Não contemplado.</p></div>' +
+      '<div class="dialog-item"><img src="' +
+      ASM +
+      'icon-alert.svg" alt="" width="18" height="18"><p>Depois de publicado, o resultado não é republicado por cima. Correções entram por Ajustar resultado.</p></div>' +
+      "</div>" +
+      '<div class="dialog-actions">' +
+      btn("Cancelar", { variant: "hf-btn--ghost", foot: true, extra: "data-close-confirm-empty" }) +
+      publishBtn({ go: "b3" }) +
       "</div></div></div>"
     );
   }
@@ -1506,16 +1677,24 @@
     document.querySelectorAll("[data-select]").forEach(wireSelect);
     var msSearch = document.querySelector("[data-ms-search]");
     if (msSearch) {
-      msSearch.addEventListener("input", function () {
-        var q = msSearch.value.toLowerCase();
-        document.querySelectorAll(".ms-opt").forEach(function (opt) {
+      function refreshMsEmpty() {
+        var q = msSearch.value.toLowerCase().trim();
+        var opts = document.querySelectorAll(".ms-opt");
+        var visible = 0;
+        opts.forEach(function (opt) {
           var text = (opt.getAttribute("data-ms-label") || "").toLowerCase();
-          opt.hidden = !!(q && text.indexOf(q) === -1);
+          var hide = !!(q && text.indexOf(q) === -1);
+          opt.hidden = hide;
+          if (!hide) visible += 1;
         });
-      });
+        var empty = document.querySelector(".ms-empty");
+        if (empty && opts.length) empty.hidden = visible > 0 || !q;
+      }
+      msSearch.addEventListener("input", refreshMsEmpty);
       msSearch.addEventListener("click", function (event) {
         event.stopPropagation();
       });
+      if (msSearch.value) refreshMsEmpty();
     }
     var motivo = document.querySelector("[data-adjust-motivo]");
     if (motivo) {
@@ -1529,8 +1708,8 @@
   }
 
   function paint() {
-    sheetOpen = screen === "a3";
-    confirmOpen = screen === "a5";
+    sheetOpen = screen === "a3" || screen === "a9";
+    confirmOpen = screen === "a5" || screen === "b2";
     histOpen = screen === "a8" || screen === "d2";
     adjustOpen = screen === "c2";
     adjustConfirmOpen = screen === "c3";
@@ -1543,6 +1722,10 @@
       a6: a6,
       a7: a7,
       a8: a8,
+      a9: a9,
+      b1: b1,
+      b2: b2,
+      b3: b3,
       c1: c1,
       c2: c2,
       c3: c3,
@@ -1551,7 +1734,11 @@
       d2: d2,
       d3: d3,
     };
-    document.getElementById("app").innerHTML = (map[screen] || a1)();
+    var html = (map[screen] || a1)();
+    if (overlay === "comp") html += comprovanteModalHtml();
+    if (overlay === "cota") html += cotaModalHtml();
+    if (overlay === "edit") html += editCotaModalHtml();
+    document.getElementById("app").innerHTML = html;
     document.querySelectorAll(".proto button").forEach(function (b) {
       var jump = b.getAttribute("data-jump");
       b.classList.toggle(
@@ -1559,7 +1746,8 @@
         jump === screen ||
           (jump === "a7" && screen === "a8") ||
           (jump === "d1" && screen === "d2") ||
-          (jump === "c1" && (screen === "c2" || screen === "c3"))
+          (jump === "c1" && (screen === "c2" || screen === "c3")) ||
+          (jump === "b1" && screen === "b2")
       );
     });
     if (location.hash !== "#" + screen) history.replaceState(null, "", "#" + screen);
@@ -1568,6 +1756,13 @@
 
   function go(next) {
     screen = next;
+    if (
+      ["a1", "a2", "a3", "a4", "a5", "a6", "a9", "b1", "b2", "b3", "c1", "c2", "c3", "c4", "d1", "d3"].indexOf(
+        next
+      ) >= 0
+    ) {
+      overlay = null;
+    }
     paint();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -1583,12 +1778,16 @@
   }
 
   function closeMsDropdown() {
+    if (screen === "a9") {
+      go(selected.length ? "a4" : "a2");
+      return;
+    }
     if (screen === "a3") go(selected.length ? "a4" : "a2");
   }
 
   document.addEventListener("click", function (e) {
     closeSelects(null);
-    if (screen === "a3" && !e.target.closest("[data-ms]")) closeMsDropdown();
+    if ((screen === "a3" || screen === "a9") && !e.target.closest("[data-ms]")) closeMsDropdown();
     if (screen === "c2" && adjustMsOpen && !e.target.closest("[data-adjust-ms]")) {
       adjustMsOpen = false;
       paint();
@@ -1598,7 +1797,16 @@
   document.addEventListener("keydown", function (event) {
     if (event.key === "Escape") {
       closeSelects(null);
+      if (overlay) {
+        overlay = null;
+        paint();
+        return;
+      }
       closeMsDropdown();
+      if (screen === "b2") {
+        go("b1");
+        return;
+      }
       if (screen === "c3") {
         go("c2");
         return;
@@ -1647,6 +1855,15 @@
     var adjustMsToggle = e.target.closest("[data-adjust-ms-toggle]");
     var scrollAdjustHist = e.target.closest("[data-scroll-adjust-hist]");
     var closeToast = e.target.closest("[data-close-toast]");
+    var openComp = e.target.closest("[data-open-comp]");
+    var closeComp = e.target.closest("[data-close-comp]");
+    var openCota = e.target.closest("[data-open-cota]");
+    var closeCota = e.target.closest("[data-close-cota]");
+    var openEditCota = e.target.closest("[data-open-edit-cota]");
+    var closeEditCota = e.target.closest("[data-close-edit-cota]");
+    var saveEditCota = e.target.closest("[data-save-edit-cota]");
+    var confirmEmpty = e.target.closest("[data-confirm-empty]");
+    var closeConfirmEmpty = e.target.closest("[data-close-confirm-empty]");
     var tip = e.target.closest("[data-toast]");
 
     if (e.target.closest("[data-ms]") || e.target.closest("[data-adjust-ms]")) e.stopPropagation();
@@ -1663,14 +1880,63 @@
       return;
     }
 
+    if (e.target.id === "comp-modal" || closeComp) {
+      overlay = null;
+      paint();
+      return;
+    }
+    if (openComp) {
+      overlay = "comp";
+      paint();
+      return;
+    }
+    if (e.target.id === "cota-modal" || closeCota) {
+      overlay = null;
+      paint();
+      return;
+    }
+    if (openCota) {
+      overlay = "cota";
+      paint();
+      return;
+    }
+    if (e.target.id === "edit-cota-modal" || closeEditCota) {
+      overlay = null;
+      paint();
+      return;
+    }
+    if (openEditCota) {
+      overlay = "edit";
+      paint();
+      return;
+    }
+    if (saveEditCota) {
+      overlay = null;
+      paint();
+      toast("Alterações da cota salvas neste protótipo.");
+      return;
+    }
+
     if (e.target.id === "hist-modal" || closeHist) {
       go(screen === "d2" || screen === "d1" || screen === "d3" ? "d1" : "a7");
       return;
     }
     if (openHist) {
-      go(screen === "d1" || screen === "d3" || screen === "c1" || screen === "c4" || screen === "a6"
-        ? "d2"
-        : "a8");
+      overlay = null;
+      go(
+        screen === "d1" || screen === "d3" || screen === "c1" || screen === "c4" || screen === "a6" || screen === "b3"
+          ? "d2"
+          : "a8"
+      );
+      return;
+    }
+
+    if (confirmEmpty) {
+      go("b2");
+      return;
+    }
+    if (e.target.id === "confirm-empty" || closeConfirmEmpty) {
+      go("b1");
       return;
     }
 
@@ -1757,19 +2023,19 @@
         return x !== id;
       });
       else selected = selected.concat([id]);
-      if (screen !== "a3") screen = "a3";
+      if (screen !== "a3" && screen !== "a9") screen = "a3";
       paint();
       return;
     }
     if (msToggle) {
       e.stopPropagation();
       if (e.target.closest("[data-remove-cota]")) return;
-      if (screen === "a3") go(selected.length ? "a4" : "a2");
+      if (screen === "a3" || screen === "a9") go(selected.length ? "a4" : "a2");
       else go("a3");
       return;
     }
     if (conf) {
-      go("a5");
+      go(selected.length ? "a5" : "b2");
       return;
     }
     if (jump) {
@@ -1788,6 +2054,10 @@
     "a6",
     "a7",
     "a8",
+    "a9",
+    "b1",
+    "b2",
+    "b3",
     "c1",
     "c2",
     "c3",
@@ -1798,9 +2068,18 @@
   ];
 
   function prepareScreen(next) {
+    overlay = null;
     if (next === "a6") {
       adjusted = false;
       selected = ["2211", "3307"];
+    }
+    if (next === "a9") {
+      adjusted = false;
+      selected = ["2211", "3307"];
+    }
+    if (next === "b1" || next === "b2" || next === "b3") {
+      adjusted = false;
+      selected = [];
     }
     if (next === "c1" || next === "c2" || next === "c3") {
       adjusted = false;
