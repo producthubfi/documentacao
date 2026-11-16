@@ -462,10 +462,6 @@ img { display: block; max-width: none; }
   border-radius: 8px;
   background: var(--canvas);
 }
-.shell[data-mode="cliente"] .form {
-  width: 320px;
-  flex-basis: 320px;
-}
 .fields { display: flex; flex-direction: column; gap: 16px; }
 label.lbl {
   display: block;
