@@ -142,10 +142,10 @@
   function rowHtml(b) {
     var warn = b.tag === "warn";
     var open = openId === b.id;
-    return '<article class="row' + (warn ? " is-warn" : "") + (open ? " is-open" : "") + '" data-bank="' + b.id + '">' +
-      '<div class="row-top"><div class="who"><img class="logo" src="' + b.logo + '" alt=""><span class="name">' + b.name + '</span>' +
+    return '<article class="row' + (open ? " is-open" : "") + '" data-bank="' + b.id + '">' +
+      '<div class="row-top"><div class="who"><span class="bank-logo"><img src="' + b.logo + '" alt=""></span><span class="name">' + b.name + '</span>' +
       '<span class="tag ' + b.tag + '">' + b.tagText + '</span></div>' +
-      '<button class="btn ghost sm" type="button" data-toggle="' + b.id + '">' + (open ? "Recolher" : "Expandir") + '</button></div>' +
+      '<button class="btn ghost sm details" type="button" data-toggle="' + b.id + '">' + (open ? "Recolher" : "Expandir") + '</button></div>' +
       '<div class="row-metrics">' +
         '<div><p class="k">Valor máximo do imóvel</p><p class="v lg">' + b.imóvel + '</p></div>' +
         '<div><p class="k">' + b.entradaLabel + '</p><p class="v' + (warn ? " hot" : "") + '">' + b.entrada + '</p></div>' +

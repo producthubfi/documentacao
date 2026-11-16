@@ -125,10 +125,10 @@
 
   function rowHtml(b) {
     var warn = b.tag === "warn";
-    return '<article class="row' + (warn ? " is-warn" : "") + '" data-bank="' + b.id + '">' +
-      '<div class="row-top"><div class="who"><img class="logo" src="' + b.logo + '" alt=""><span class="name">' + b.name + '</span>' +
+    return '<article class="row" data-bank="' + b.id + '">' +
+      '<div class="row-top"><div class="who"><span class="bank-logo"><img src="' + b.logo + '" alt=""></span><span class="name">' + b.name + '</span>' +
       '<span class="tag ' + b.tag + '">' + b.tagText + '</span></div>' +
-      '<button class="btn ghost sm" type="button" data-details="' + b.id + '">Ver detalhes ›</button></div>' +
+      '<button class="btn ghost sm details" type="button" data-details="' + b.id + '">Ver detalhes <img src="assets/a3423.svg" alt=""></button></div>' +
       '<div class="row-metrics">' +
         '<div><p class="k">Valor máximo do imóvel</p><p class="v lg">' + b.imóvel + '</p></div>' +
         '<div><p class="k">' + b.entradaLabel + '</p><p class="v' + (warn ? " hot" : "") + '">' + b.entrada + '</p></div>' +
@@ -139,7 +139,7 @@
 
   function modalHtml(b) {
     return '<div class="sheet" role="dialog" aria-modal="true" aria-label="Detalhes de ' + b.name + '">' +
-      '<div class="sheet-top"><div class="who"><img class="logo" src="' + b.logo + '" alt=""><span class="name">' + b.name + '</span>' +
+      '<div class="sheet-top"><div class="who"><span class="bank-logo"><img src="' + b.logo + '" alt=""></span><span class="name">' + b.name + '</span>' +
       '<span class="tag ' + b.tag + '">' + b.tagText + '</span></div>' +
       '<button class="sheet-x" type="button" data-close aria-label="Fechar">×</button></div>' +
       '<div class="sheet-main">' +
