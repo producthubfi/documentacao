@@ -1,8 +1,16 @@
 (function () {
+  var ICO = "../assets/icons/";
+  var ASM = "assets/";
   var screen = "a1";
   var selected = ["2211", "0884"];
   var sheetOpen = false;
   var confirmOpen = false;
+  var filters = {
+    grupo: "Todos",
+    admin: "Todas",
+    status: "Todos",
+    periodo: "Próx. 30 dias",
+  };
 
   var GROUPS = [
     { id: "1054", name: "Grupo 1054", admin: "Turn2C · CNP Consórcio", date: "25/10/2026", when: "Em 4 dias", cotas: "2 cotas", lances: "4 lances", valor: "R$ 240.000,00", status: "pendente", action: "publish" },
@@ -10,28 +18,35 @@
     { id: "2201", name: "Grupo 2201", admin: "Hubfi · Porto Seguro", date: "25/10/2026", when: "Em 4 dias", cotas: "1 cota", lances: "2 lances", valor: "R$ 80.000,00", status: "pendente", action: "publish" },
     { id: "0910", name: "Grupo 0910", admin: "Turn2C · CNP Consórcio", date: "18/10/2026", when: "Há 3 dias", cotas: "1 cota", lances: "2 lances", valor: "R$ 120.000,00", status: "publicada", action: "view" },
     { id: "1503", name: "Grupo 1503", admin: "Turn2C · CNP Consórcio", date: "11/10/2026", when: "Há 10 dias", cotas: "4 cotas", lances: "6 lances", valor: "R$ 450.000,00", status: "publicada", action: "view" },
-    { id: "0330", name: "Grupo 0330", admin: "Embracon · Direto", date: "04/10/2026", when: "Há 17 dias", cotas: "0 cota", lances: "0 lance", valor: "R$ 0,00", status: "sem", action: "details" }
+    { id: "0330", name: "Grupo 0330", admin: "Embracon · Direto", date: "04/10/2026", when: "Há 17 dias", cotas: "0 cota", lances: "0 lance", valor: "R$ 0,00", status: "sem", action: "details" },
   ];
 
   var LANCES = [
     { cliente: "Mauricio Lima", doc: "113.544.464-10", cota: "2211", tipo: "Lance fixo", valor: "R$ 60.000,00", data: "27/09/2026" },
     { cliente: "Mauricio Lima", doc: "113.544.464-10", cota: "2211", tipo: "Lance fixo", valor: "R$ 60.000,00", data: "24/09/2026" },
     { cliente: "Ana Paula Souza", doc: "298.112.003-55", cota: "0884", tipo: "Lance fixo", valor: "R$ 55.000,00", data: "22/09/2026" },
-    { cliente: "Carlos Mendes", doc: "041.887.220-19", cota: "3102", tipo: "Lance livre", valor: "R$ 65.000,00", data: "20/09/2026" }
+    { cliente: "Carlos Mendes", doc: "041.887.220-19", cota: "3102", tipo: "Lance livre", valor: "R$ 65.000,00", data: "20/09/2026" },
   ];
 
   var COTAS = [
     { id: "2211", cliente: "Mauricio Lima", credito: "R$ 180.000,00", lances: "2 lances" },
     { id: "0884", cliente: "Ana Paula Souza", credito: "R$ 150.000,00", lances: "1 lance" },
     { id: "3102", cliente: "Carlos Mendes", credito: "R$ 200.000,00", lances: "1 lance" },
-    { id: "4410", cliente: "Fernanda Dias", credito: "R$ 120.000,00", lances: "0 lance" }
+    { id: "4410", cliente: "Fernanda Dias", credito: "R$ 120.000,00", lances: "0 lance" },
   ];
 
   var HIST = [
     { data: "27/09/2026", tipo: "Lance fixo", valor: "R$ 60.000,00", status: "Contemplado", assembleia: "25/10/2026" },
     { data: "24/09/2026", tipo: "Lance fixo", valor: "R$ 60.000,00", status: "Substituído", assembleia: "25/10/2026" },
-    { data: "12/08/2026", tipo: "Lance livre", valor: "R$ 40.000,00", status: "Não contemplado", assembleia: "20/08/2026" }
+    { data: "12/08/2026", tipo: "Lance livre", valor: "R$ 40.000,00", status: "Não contemplado", assembleia: "20/08/2026" },
   ];
+
+  var SELECTS = {
+    grupo: ["Todos", "Grupo 1054", "Grupo 0882", "Grupo 2201", "Grupo 0910", "Grupo 1503", "Grupo 0330"],
+    admin: ["Todas", "Turn2C · CNP Consórcio", "Turn2C · Embracon", "Hubfi · Porto Seguro", "Embracon · Direto"],
+    status: ["Todos", "Pendente", "Publicada", "Sem lances"],
+    periodo: ["Próx. 7 dias", "Próx. 30 dias", "Últimos 30 dias", "Últimos 90 dias", "Todo o período"],
+  };
 
   function ico(name) {
     var paths = {
@@ -41,184 +56,377 @@
       wallet: '<path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8"/><path d="M18 12h.01"/>',
       calendar: '<path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="m9 16 2 2 4-4"/>',
       bell: '<path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/>',
-      search: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
-      chevron: '<path d="m6 9 6 6 6-6"/>',
       hash: '<line x1="4" x2="20" y1="9" y2="9"/><line x1="4" x2="20" y1="15" y2="15"/><line x1="10" x2="8" y1="3" y2="21"/><line x1="16" x2="14" y1="3" y2="21"/>',
       clock: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
       left: '<path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>',
-      check: '<path d="M20 6 9 17l-5-5"/>'
+      check: '<path d="M20 6 9 17l-5-5"/>',
+      chevron: '<path d="m6 9 6 6 6-6"/>',
     };
-    return '<svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (paths[name] || "") + "</svg>";
+    return (
+      '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      (paths[name] || "") +
+      "</svg>"
+    );
   }
 
   function badge(status) {
-    if (status === "pendente") return '<span class="badge warn">Pendente</span>';
-    if (status === "publicada") return '<span class="badge ok">Publicada</span>';
-    if (status === "sem") return '<span class="badge neutral">Sem lances</span>';
-    if (status === "aguarda") return '<span class="badge warn">Aguardando assembleia</span>';
-    if (status === "sera") return '<span class="badge ok">Será contemplado</span>';
-    if (status === "nao") return '<span class="badge neutral">Não contemplado nesta assembleia</span>';
-    if (status === "cont") return '<span class="badge ok">Contemplado</span>';
-    if (status === "sub") return '<span class="badge neutral">Substituído</span>';
-    return '<span class="badge neutral">' + status + "</span>";
+    if (status === "pendente") return '<span class="status status--warn">Pendente</span>';
+    if (status === "publicada") return '<span class="status status--ok">Publicada</span>';
+    if (status === "sem") return '<span class="status status--neutral">Sem lances</span>';
+    if (status === "aguarda") return '<span class="status status--warn">Aguardando assembleia</span>';
+    if (status === "sera") return '<span class="status status--ok">Será contemplado</span>';
+    if (status === "nao") return '<span class="status status--neutral">Não contemplado nesta assembleia</span>';
+    if (status === "cont") return '<span class="status status--ok">Contemplado</span>';
+    if (status === "sub") return '<span class="status status--neutral">Substituído</span>';
+    return '<span class="status status--neutral">' + status + "</span>";
+  }
+
+  function btn(label, opts) {
+    opts = opts || {};
+    var cls = "hf-btn " + (opts.variant || "hf-btn--primary");
+    if (opts.size) cls += " " + opts.size;
+    var attrs = ' class="' + cls + '" type="button"';
+    if (opts.go) attrs += ' data-go="' + opts.go + '"';
+    if (opts.toast) attrs += ' data-toast="' + opts.toast + '"';
+    if (opts.extra) attrs += " " + opts.extra;
+    if (opts.disabled) attrs += " disabled";
+    return "<button" + attrs + ">" + label + "</button>";
   }
 
   function actionBtn(g) {
-    if (g.action === "publish") return '<button class="btn dark sm" type="button" data-go="a2" data-group="' + g.id + '">Publicar resultado</button>';
-    if (g.action === "view") return '<button class="btn ghost sm" type="button" data-toast="Resultado já publicado. Abra pelo grupo 1054 no fluxo feliz.">Ver resultado</button>';
-    return '<button class="btn ghost sm" type="button" data-toast="Sem lances neste grupo.">Ver detalhes</button>';
+    if (g.action === "publish") {
+      return btn("Publicar resultado", { variant: "hf-btn--ink", size: "hf-btn--sm", go: "a2", extra: 'data-group="' + g.id + '"' });
+    }
+    if (g.action === "view") {
+      return btn("Ver resultado", {
+        variant: "hf-btn--ghost",
+        size: "hf-btn--sm",
+        toast: "Resultado já publicado. Abra pelo grupo 1054 no fluxo feliz.",
+      });
+    }
+    return btn("Ver detalhes", { variant: "hf-btn--ghost", size: "hf-btn--sm", toast: "Sem lances neste grupo." });
   }
 
-  function shell(inner, opts) {
-    opts = opts || {};
-    return '<aside class="sidebar">' +
-      '<div class="side-pad"><div class="logo"><img src="assets/04b4c.svg" alt="hubfi" width="109" height="27"></div>' +
-      '<button class="ctx" type="button"><span class="ctx-ico">TE</span><span class="ctx-copy"><span class="ctx-k">Contexto da Empresa</span><span class="ctx-v">Todas as empresas</span></span><img src="assets/517ff.svg" alt="" width="16" height="16"></button></div>' +
-      '<div class="group-label">Rotina</div><div class="nav-list">' +
-      '<button class="nav-btn" type="button">' + ico("dash") + 'Dashboard</button>' +
-      '<button class="nav-btn" type="button">' + ico("users") + 'Clientes</button>' +
-      '</div><div class="group-label">Gestão</div><div class="nav-list">' +
-      '<button class="nav-btn is-on" type="button">' + ico("layers") + 'Gestão de Consórcio</button>' +
-      '</div><div class="group-label">Administração interna</div><div class="nav-list">' +
-      '<button class="nav-btn" type="button">' + ico("users") + 'Usuários</button>' +
-      '<button class="nav-btn" type="button">' + ico("layers") + 'Backoffice</button>' +
-      '</div>' +
-      '<button class="user" type="button"><span class="avatar">LA</span><span class="user-copy"><b>Lucas Augusto</b><span>lucasaugusto@hubfi.com.br</span></span></button>' +
-      '</aside><main class="page">' + inner + "</main>";
+  function searchField(placeholder) {
+    return (
+      '<label class="hf-search"><span class="hf-search__icon" aria-hidden="true"><img src="' +
+      ICO +
+      'search.svg" width="14" height="14" alt=""></span><input class="hf-search__field" type="search" placeholder="' +
+      placeholder +
+      '"></label>'
+    );
+  }
+
+  function selectItem(label, active) {
+    return (
+      '<div class="hf-select-menu__item' +
+      (active ? " is-active" : "") +
+      '" role="option" tabindex="-1" data-label="' +
+      label +
+      '" aria-selected="' +
+      (active ? "true" : "false") +
+      '">' +
+      label +
+      "</div>"
+    );
+  }
+
+  function selectField(id, label, value, options) {
+    var items = options
+      .map(function (opt) {
+        return selectItem(opt, opt === value);
+      })
+      .join("");
+    return (
+      '<div class="hf-field hf-field--select" data-select data-select-id="' +
+      id +
+      '" data-select-type="default">' +
+      '<div class="hf-field__header"><span class="hf-field__label">' +
+      label +
+      "</span></div>" +
+      '<button class="hf-field__control" type="button" role="combobox" aria-haspopup="listbox" aria-expanded="false">' +
+      '<span class="hf-field__value">' +
+      value +
+      '</span><span class="hf-field__chevron"><img src="' +
+      ICO +
+      'select-chevron.svg" alt=""></span></button>' +
+      '<div class="hf-select-menu" role="listbox">' +
+      '<div class="hf-select-menu__search">' +
+      searchField("Buscar...") +
+      "</div>" +
+      items +
+      "</div></div>"
+    );
   }
 
   function tabs(active) {
     var items = [
-      ["dash", "Dashboard"],
-      ["users", "Clientes"],
-      ["layers", "Grupos"],
-      ["wallet", "Cotas"],
-      ["calendar", "Assembleias"],
-      ["bell", "Lembretes"]
+      ["Dashboard", ASM + "tab-dashboard.svg"],
+      ["Clientes", ASM + "tab-users.svg"],
+      ["Grupos", ASM + "tab-layers.svg"],
+      ["Cotas", ASM + "tab-wallet.svg"],
+      ["Assembleias", ASM + "tab-calendar.svg"],
+      ["Lembretes", ASM + "tab-bell.svg"],
     ];
-    return '<div class="tabs">' + items.map(function (it) {
-      var on = it[1] === active ? " is-on" : "";
-      return '<button class="tab' + on + '" type="button">' + ico(it[0]) + it[1] + "</button>";
-    }).join("") + "</div>";
+    return (
+      '<div class="hf-tabs asm-tabs" data-tabs role="tablist">' +
+      items
+        .map(function (it) {
+          var on = it[0] === active;
+          var src = on ? ASM + "tab-icon.svg" : it[1];
+          if (on && it[0] === "Assembleias") src = ASM + "tab-calendar.svg";
+          return (
+            '<button class="hf-tab' +
+            (on ? " is-active" : "") +
+            '" type="button" role="tab" aria-selected="' +
+            (on ? "true" : "false") +
+            '"><span class="hf-tab__ico"><img src="' +
+            src +
+            '" alt=""></span>' +
+            it[0] +
+            "</button>"
+          );
+        })
+        .join("") +
+      "</div>"
+    );
+  }
+
+  function shell(inner) {
+    return (
+      '<aside class="sidebar">' +
+      '<div class="side-pad"><div class="logo"><img src="' +
+      ASM +
+      '04b4c.svg" alt="hubfi" width="109" height="27"></div>' +
+      '<button class="ctx" type="button"><span class="ctx-ico">TE</span><span class="ctx-copy"><span class="ctx-k">Contexto da Empresa</span><span class="ctx-v">Todas as empresas</span></span><img src="' +
+      ASM +
+      '517ff.svg" alt="" width="16" height="16"></button></div>' +
+      '<div class="group-label">Rotina</div><div class="nav-list">' +
+      '<button class="nav-btn" type="button">' +
+      ico("dash") +
+      "Dashboard</button>" +
+      '<button class="nav-btn" type="button">' +
+      ico("users") +
+      "Clientes</button>" +
+      '</div><div class="group-label">Gestão</div><div class="nav-list">' +
+      '<button class="nav-btn is-on" type="button">' +
+      ico("layers") +
+      "Gestão de Consórcio</button>" +
+      '</div><div class="group-label">Administração interna</div><div class="nav-list">' +
+      '<button class="nav-btn" type="button">' +
+      ico("users") +
+      "Usuários</button>" +
+      '<button class="nav-btn" type="button">' +
+      ico("layers") +
+      "Backoffice</button>" +
+      "</div>" +
+      '<button class="user" type="button"><span class="avatar">LA</span><span class="user-copy"><b>Lucas Augusto</b><span>lucasaugusto@hubfi.com.br</span></span></button>' +
+      '</aside><main class="page">' +
+      inner +
+      "</main>"
+    );
+  }
+
+  function tableWrap(head, rows) {
+    return (
+      '<div class="table-wrap"><div class="table-scroll"><table class="asm-table"><thead><tr>' +
+      head +
+      "</tr></thead><tbody>" +
+      rows +
+      "</tbody></table></div></div>"
+    );
   }
 
   function a1() {
+    var head =
+      "<th>Grupo</th><th>Data da assembleia</th><th>Cotas com lance</th><th>Lances aguardando</th><th>Valor dos lances</th><th>Status</th><th>Ações</th>";
+    var rows = GROUPS.map(function (g) {
+      return (
+        "<tr>" +
+        '<td><div class="cell-stack"><strong>' +
+        g.name +
+        "</strong><span>" +
+        g.admin +
+        "</span></div></td>" +
+        '<td><div class="cell-stack"><strong>' +
+        g.date +
+        "</strong><span>" +
+        g.when +
+        "</span></div></td>" +
+        "<td>" +
+        g.cotas +
+        "</td><td>" +
+        g.lances +
+        "</td><td>" +
+        g.valor +
+        "</td>" +
+        "<td>" +
+        badge(g.status) +
+        "</td><td>" +
+        actionBtn(g) +
+        "</td></tr>"
+      );
+    }).join("");
+
     return shell(
       '<div class="crumb">Gestão de Consórcio <span>/</span> <b>Assembleias</b></div>' +
-      '<div class="page-head"><h1>Assembleias</h1><p>Publique o resultado oficial uma vez e atualize cotas e lances juntos</p></div>' +
-      tabs("Assembleias") +
-      '<div class="kpis">' +
-        '<div class="kpi"><div class="kpi-top"><p class="label">Assembleias pendentes</p><span class="kpi-ico">' + ico("hash") + '</span></div><p class="value">3</p></div>' +
-        '<div class="kpi"><div class="kpi-top"><p class="label">Lances aguardando resultado</p><span class="kpi-ico">' + ico("wallet") + '</span></div><p class="value">11</p></div>' +
-        '<div class="kpi"><div class="kpi-top"><p class="label">Próxima assembleia</p><span class="kpi-ico warn">' + ico("calendar") + '</span></div><p class="value" style="font-size:22px">25/10/2026</p></div>' +
-        '<div class="kpi"><div class="kpi-top"><p class="label">Publicadas no mês</p><span class="kpi-ico hot">' + ico("clock") + '</span></div><p class="value">4</p></div>' +
-      '</div>' +
-      '<div class="filters">' +
-        '<div class="search">' + ico("search") + '<span>Buscar por grupo ou administradora...</span></div>' +
-        '<div class="field"><label>Grupo</label><div class="control">Todos ' + ico("chevron") + '</div></div>' +
-        '<div class="field"><label>Administradora</label><div class="control">Todas ' + ico("chevron") + '</div></div>' +
-        '<div class="field"><label>Status</label><div class="control">Todos ' + ico("chevron") + '</div></div>' +
-        '<div class="field"><label>Período</label><div class="control">Próx. 30 dias ' + ico("chevron") + '</div></div>' +
-      '</div>' +
-      '<div class="table">' +
-        '<div class="thead cols-list"><span>Grupo</span><span>Data da assembleia</span><span>Cotas com lance</span><span>Lances aguardando</span><span>Valor dos lances</span><span>Status</span><span>Ações</span></div>' +
-        GROUPS.map(function (g) {
-          return '<div class="tr cols-list">' +
-            '<div class="cell-stack"><strong>' + g.name + '</strong><span>' + g.admin + '</span></div>' +
-            '<div class="cell-stack"><strong>' + g.date + '</strong><span>' + g.when + '</span></div>' +
-            '<span>' + g.cotas + '</span><span>' + g.lances + '</span><span>' + g.valor + '</span>' +
-            badge(g.status) + actionBtn(g) +
-          '</div>';
-        }).join("") +
-      '</div>'
+        '<div class="page-head"><h1>Assembleias</h1><p>Publique o resultado oficial uma vez e atualize cotas e lances juntos</p></div>' +
+        tabs("Assembleias") +
+        '<div class="kpis">' +
+        '<div class="kpi"><div class="kpi-top"><p class="label">Assembleias pendentes</p><span class="kpi-ico">' +
+        ico("hash") +
+        '</span></div><p class="value">3</p></div>' +
+        '<div class="kpi"><div class="kpi-top"><p class="label">Lances aguardando resultado</p><span class="kpi-ico">' +
+        ico("wallet") +
+        '</span></div><p class="value">11</p></div>' +
+        '<div class="kpi"><div class="kpi-top"><p class="label">Próxima assembleia</p><span class="kpi-ico warn">' +
+        ico("calendar") +
+        '</span></div><p class="value" style="font-size:22px">25/10/2026</p></div>' +
+        '<div class="kpi"><div class="kpi-top"><p class="label">Publicadas no mês</p><span class="kpi-ico hot">' +
+        ico("clock") +
+        '</span></div><p class="value">4</p></div>' +
+        "</div>" +
+        '<div class="filters">' +
+        searchField("Buscar por grupo ou administradora...") +
+        selectField("grupo", "Grupo", filters.grupo, SELECTS.grupo) +
+        selectField("admin", "Administradora", filters.admin, SELECTS.admin) +
+        selectField("status", "Status", filters.status, SELECTS.status) +
+        selectField("periodo", "Período", filters.periodo, SELECTS.periodo) +
+        "</div>" +
+        tableWrap(head, rows)
     );
   }
 
   function detailChrome(extraCard, lancesStatusMode) {
-    var chips = selected.map(function (id) {
-      var c = COTAS.filter(function (x) { return x.id === id; })[0];
-      return '<span class="chip">Cota ' + id + (c ? " · " + c.cliente.split(" ")[0] : "") + "</span>";
+    var chips = selected
+      .map(function (id) {
+        var c = COTAS.filter(function (x) {
+          return x.id === id;
+        })[0];
+        return '<span class="chip">Cota ' + id + (c ? " · " + c.cliente.split(" ")[0] : "") + "</span>";
+      })
+      .join("");
+
+    var head =
+      "<th>Cliente</th><th>Cota</th><th>Tipo de lance</th><th>Valor do lance</th><th>Registrado em</th><th>Comprovante</th><th>Status</th>";
+    var rows = LANCES.map(function (l) {
+      var st = "aguarda";
+      if (lancesStatusMode === "preview") st = selected.indexOf(l.cota) >= 0 ? "sera" : "nao";
+      if (lancesStatusMode === "done") st = selected.indexOf(l.cota) >= 0 ? "cont" : "nao";
+      return (
+        "<tr>" +
+        '<td><div class="cell-stack"><strong>' +
+        l.cliente +
+        "</strong><span>" +
+        l.doc +
+        "</span></div></td>" +
+        "<td>" +
+        l.cota +
+        "</td><td>" +
+        l.tipo +
+        "</td><td>" +
+        l.valor +
+        "</td><td>" +
+        l.data +
+        "</td>" +
+        '<td><button class="linkish" type="button" data-toast="Comprovante ilustrativo.">Ver comprovante</button></td>' +
+        "<td>" +
+        badge(st) +
+        "</td></tr>"
+      );
     }).join("");
-    return '<button class="back" type="button" data-go="a1">' + ico("left") + 'Voltar para Assembleias</button>' +
-      '<div class="meta">' + badge(screen === "a6" ? "publicada" : "pendente") +
-        '<span class="meta-item">' + ico("calendar") + 'Assembleia em 25/10/2026</span>' +
-        '<span class="meta-item">' + ico("layers") + 'Turn2C · CNP Consórcio</span>' +
-        '<span class="meta-item">' + ico("users") + '3 cotas com lance</span>' +
-        '<span class="meta-item">' + ico("wallet") + '4 lances · R$ 240.000,00</span>' +
-      '</div>' +
+
+    return (
+      '<button class="back" type="button" data-go="a1">' +
+      ico("left") +
+      "Voltar para Assembleias</button>" +
+      '<div class="meta">' +
+      badge(screen === "a6" ? "publicada" : "pendente") +
+      '<span class="meta-item">' +
+      ico("calendar") +
+      "Assembleia em 25/10/2026</span>" +
+      '<span class="meta-item">' +
+      ico("layers") +
+      "Turn2C · CNP Consórcio</span>" +
+      '<span class="meta-item">' +
+      ico("users") +
+      "3 cotas com lance</span>" +
+      '<span class="meta-item">' +
+      ico("wallet") +
+      "4 lances · R$ 240.000,00</span>" +
+      "</div>" +
       '<div class="card">' +
-        '<h2>Resultado oficial</h2>' +
-        '<p class="lead">Informe as cotas do grupo contempladas nesta assembleia. Os lances dessas cotas serão marcados como contemplados.</p>' +
-        '<div class="ms"><p class="ms-label">Cotas contempladas</p>' +
-          '<button class="ms-box' + (sheetOpen ? " is-open" : "") + '" type="button" data-sheet="1">' +
-            (selected.length ? '<span class="chips">' + chips + "</span>" : '<span class="placeholder">Selecione as cotas contempladas</span>') +
-            ico("chevron") +
-          '</button></div>' +
-        (extraCard || "") +
-      '</div>' +
-      '<div class="section-head"><h3>Lances aguardando esta assembleia</h3><span class="badge warn">4 lances aguardando</span></div>' +
-      '<div class="table">' +
-        '<div class="thead cols-lances"><span>Cliente</span><span>Cota</span><span>Tipo de lance</span><span>Valor do lance</span><span>Registrado em</span><span>Comprovante</span><span>Status</span></div>' +
-        LANCES.map(function (l) {
-          var st = "aguarda";
-          if (lancesStatusMode === "preview") st = selected.indexOf(l.cota) >= 0 ? "sera" : "nao";
-          if (lancesStatusMode === "done") st = selected.indexOf(l.cota) >= 0 ? "cont" : "nao";
-          return '<div class="tr cols-lances">' +
-            '<div class="cell-stack"><strong>' + l.cliente + '</strong><span>' + l.doc + '</span></div>' +
-            '<span>' + l.cota + '</span><span>' + l.tipo + '</span><span>' + l.valor + '</span><span>' + l.data + '</span>' +
-            '<button class="linkish" type="button" data-toast="Comprovante ilustrativo.">Ver comprovante</button>' +
-            badge(st) +
-          '</div>';
-        }).join("") +
-      '</div>';
+      "<h2>Resultado oficial</h2>" +
+      '<p class="lead">Informe as cotas do grupo contempladas nesta assembleia. Os lances dessas cotas serão marcados como contemplados.</p>' +
+      '<div class="ms"><p class="ms-label">Cotas contempladas</p>' +
+      '<button class="ms-box' +
+      (sheetOpen ? " is-open" : "") +
+      '" type="button" data-sheet="1">' +
+      (selected.length ? '<span class="chips">' + chips + "</span>" : '<span class="placeholder">Selecione as cotas contempladas</span>') +
+      ico("chevron") +
+      "</button></div>" +
+      (extraCard || "") +
+      "</div>" +
+      '<div class="section-head"><h3>Lances aguardando esta assembleia</h3><span class="status status--warn">4 lances aguardando</span></div>' +
+      tableWrap(head, rows)
+    );
   }
 
   function a2() {
     return shell(
       '<div class="crumb">Gestão de Consórcio <span>/</span> Assembleias <span>/</span> <b>Grupo 1054</b></div>' +
-      '<div class="page-head"><h1>Grupo 1054</h1><p>Resultado oficial da assembleia de 25/10/2026</p></div>' +
-      detailChrome("", "wait") +
-      '<div class="foot"><p class="foot-copy">Selecione as cotas contempladas para liberar a publicação do resultado.</p>' +
-      '<div class="foot-actions"><button class="btn ghost" type="button" data-go="a1">Cancelar</button>' +
-      '<button class="btn primary" type="button" disabled>Publicar resultado</button></div></div>'
+        '<div class="page-head"><h1>Grupo 1054</h1><p>Resultado oficial da assembleia de 25/10/2026</p></div>' +
+        detailChrome("", "wait") +
+        '<div class="foot"><p class="foot-copy">Selecione as cotas contempladas para liberar a publicação do resultado.</p>' +
+        '<div class="foot-actions">' +
+        btn("Cancelar", { variant: "hf-btn--ghost", go: "a1" }) +
+        btn("Publicar resultado", { variant: "hf-btn--primary", disabled: true }) +
+        "</div></div>"
     );
   }
 
   function a3() {
     sheetOpen = true;
-    return shell(
-      '<div class="crumb">Gestão de Consórcio <span>/</span> Assembleias <span>/</span> <b>Grupo 1054</b></div>' +
-      '<div class="page-head"><h1>Grupo 1054</h1><p>Resultado oficial da assembleia de 25/10/2026</p></div>' +
-      detailChrome("", "wait") +
-      '<div class="foot"><p class="foot-copy">Selecione as cotas contempladas para liberar a publicação do resultado.</p>' +
-      '<div class="foot-actions"><button class="btn ghost" type="button" data-go="a1">Cancelar</button>' +
-      '<button class="btn primary" type="button" data-apply-sheet>Publicar resultado</button></div></div>'
-    ) + sheetHtml();
+    return (
+      shell(
+        '<div class="crumb">Gestão de Consórcio <span>/</span> Assembleias <span>/</span> <b>Grupo 1054</b></div>' +
+          '<div class="page-head"><h1>Grupo 1054</h1><p>Resultado oficial da assembleia de 25/10/2026</p></div>' +
+          detailChrome("", "wait") +
+          '<div class="foot"><p class="foot-copy">Selecione as cotas contempladas para liberar a publicação do resultado.</p>' +
+          '<div class="foot-actions">' +
+          btn("Cancelar", { variant: "hf-btn--ghost", go: "a1" }) +
+          btn("Publicar resultado", { variant: "hf-btn--primary", extra: "data-apply-sheet" }) +
+          "</div></div>"
+      ) + sheetHtml()
+    );
   }
 
   function a4() {
     sheetOpen = false;
     var impact =
       '<div class="impact">' +
-        '<div class="impact-item"><p class="k">Cotas contempladas</p><p class="v">' + selected.length + '</p></div>' +
-        '<div class="impact-item"><p class="k">Lances contemplados</p><p class="v">3</p></div>' +
-        '<div class="impact-item"><p class="k">Lances não contemplados</p><p class="v">1</p></div>' +
-      '</div>';
+      '<div class="impact-item"><p class="k">Cotas contempladas</p><p class="v">' +
+      selected.length +
+      "</p></div>" +
+      '<div class="impact-item"><p class="k">Lances contemplados</p><p class="v">3</p></div>' +
+      '<div class="impact-item"><p class="k">Lances não contemplados</p><p class="v">1</p></div>' +
+      "</div>";
     return shell(
       '<div class="crumb">Gestão de Consórcio <span>/</span> Assembleias <span>/</span> <b>Grupo 1054</b></div>' +
-      '<div class="page-head"><h1>Grupo 1054</h1><p>Resultado oficial da assembleia de 25/10/2026</p></div>' +
-      detailChrome(impact, "preview") +
-      '<div class="foot"><p class="foot-copy">Ao publicar, as cotas selecionadas e os lances vinculados mudam de status juntos.</p>' +
-      '<div class="foot-actions"><button class="btn ghost" type="button" data-go="a1">Cancelar</button>' +
-      '<button class="btn primary" type="button" data-confirm="1">Publicar resultado</button></div></div>'
+        '<div class="page-head"><h1>Grupo 1054</h1><p>Resultado oficial da assembleia de 25/10/2026</p></div>' +
+        detailChrome(impact, "preview") +
+        '<div class="foot"><p class="foot-copy">Ao publicar, as cotas selecionadas e os lances vinculados mudam de status juntos.</p>' +
+        '<div class="foot-actions">' +
+        btn("Cancelar", { variant: "hf-btn--ghost", go: "a1" }) +
+        btn("Publicar resultado", { variant: "hf-btn--primary", extra: 'data-confirm="1"' }) +
+        "</div></div>"
     );
   }
 
   function a5() {
     confirmOpen = true;
     sheetOpen = false;
-    var html = a4();
-    return html + confirmHtml();
+    return a4() + confirmHtml();
   }
 
   function a6() {
@@ -226,108 +434,243 @@
     sheetOpen = false;
     var impact =
       '<div class="impact">' +
-        '<div class="impact-item"><p class="k">Cotas contempladas</p><p class="v">' + selected.length + '</p></div>' +
-        '<div class="impact-item"><p class="k">Lances contemplados</p><p class="v">3</p></div>' +
-        '<div class="impact-item"><p class="k">Lances não contemplados</p><p class="v">1</p></div>' +
-      '</div>';
+      '<div class="impact-item"><p class="k">Cotas contempladas</p><p class="v">' +
+      selected.length +
+      "</p></div>" +
+      '<div class="impact-item"><p class="k">Lances contemplados</p><p class="v">3</p></div>' +
+      '<div class="impact-item"><p class="k">Lances não contemplados</p><p class="v">1</p></div>' +
+      "</div>";
     return shell(
       '<div class="crumb">Gestão de Consórcio <span>/</span> Assembleias <span>/</span> <b>Grupo 1054</b></div>' +
-      '<div class="alert">' + ico("check") + '<span>Resultado publicado em 16/11/2026 às 10:12. Cotas e lances foram atualizados.</span></div>' +
-      '<div class="page-head"><h1>Grupo 1054</h1><p>Resultado oficial da assembleia de 25/10/2026</p></div>' +
-      detailChrome(impact, "done") +
-      '<div class="foot"><p class="foot-copy">Abra a ficha do cliente contemplado para ver a cota atualizada.</p>' +
-      '<div class="foot-actions"><button class="btn ghost" type="button" data-go="a1">Voltar para lista</button>' +
-      '<button class="btn primary" type="button" data-go="a7">Abrir ficha do cliente</button></div></div>'
+        '<div class="alert">' +
+        ico("check") +
+        "<span>Resultado publicado em 16/11/2026 às 10:12. Cotas e lances foram atualizados.</span></div>" +
+        '<div class="page-head"><h1>Grupo 1054</h1><p>Resultado oficial da assembleia de 25/10/2026</p></div>' +
+        detailChrome(impact, "done") +
+        '<div class="foot"><p class="foot-copy">Abra a ficha do cliente contemplado para ver a cota atualizada.</p>' +
+        '<div class="foot-actions">' +
+        btn("Voltar para lista", { variant: "hf-btn--ghost", go: "a1" }) +
+        btn("Abrir ficha do cliente", { variant: "hf-btn--primary", go: "a7" }) +
+        "</div></div>"
     );
   }
 
   function a7() {
     return shell(
       '<div class="crumb">Gestão de Consórcio <span>/</span> Clientes <span>/</span> <b>Mauricio Lima</b></div>' +
-      '<button class="back" type="button" data-go="a6">' + ico("left") + 'Voltar para resultado</button>' +
-      '<div class="page-head"><h1>Mauricio Lima</h1><p>Ficha do cliente com a cota contemplada nesta assembleia</p></div>' +
-      '<div class="profile">' +
+        '<button class="back" type="button" data-go="a6">' +
+        ico("left") +
+        "Voltar para resultado</button>" +
+        '<div class="page-head"><h1>Mauricio Lima</h1><p>Ficha do cliente com a cota contemplada nesta assembleia</p></div>' +
+        '<div class="profile">' +
         '<div class="profile-card">' +
-          '<p class="name">Mauricio Lima</p><p class="sub">CPF 113.544.464-10</p>' +
-          '<div class="kv">' +
-            '<div class="kv-row"><span>Telefone</span><b>(11) 98888-2211</b></div>' +
-            '<div class="kv-row"><span>E-mail</span><b>mauricio@email.com</b></div>' +
-            '<div class="kv-row"><span>Grupo</span><b>1054</b></div>' +
-            '<div class="kv-row"><span>Cota</span><b>2211</b></div>' +
-            '<div class="kv-row"><span>Status da cota</span><b>Contemplada</b></div>' +
-          '</div>' +
-        '</div>' +
-        '<div>' +
-          '<div class="alert">' + ico("check") + '<span>Cota 2211 contemplada na assembleia de 25/10/2026 por lance fixo de R$ 60.000,00.</span></div>' +
-          '<div class="card">' +
-            '<h2>Cota 2211</h2>' +
-            '<p class="lead">Crédito de R$ 180.000,00 · Turn2C · CNP Consórcio</p>' +
-            '<div class="impact" style="margin-top:16px">' +
-              '<div class="impact-item"><p class="k">Forma de contemplação</p><p class="v" style="font-size:15px">Lance fixo</p></div>' +
-              '<div class="impact-item"><p class="k">Valor do lance</p><p class="v" style="font-size:15px">R$ 60.000,00</p></div>' +
-              '<div class="impact-item"><p class="k">Assembleia</p><p class="v" style="font-size:15px">25/10/2026</p></div>' +
-            '</div>' +
-            '<div style="margin-top:16px"><button class="btn ghost" type="button" data-go="a8">Ver histórico de lances</button></div>' +
-          '</div>' +
-        '</div>' +
-      '</div>'
+        '<p class="name">Mauricio Lima</p><p class="sub">CPF 113.544.464-10</p>' +
+        '<div class="kv">' +
+        '<div class="kv-row"><span>Telefone</span><b>(11) 98888-2211</b></div>' +
+        '<div class="kv-row"><span>E-mail</span><b>mauricio@email.com</b></div>' +
+        '<div class="kv-row"><span>Grupo</span><b>1054</b></div>' +
+        '<div class="kv-row"><span>Cota</span><b>2211</b></div>' +
+        '<div class="kv-row"><span>Status da cota</span><b>Contemplada</b></div>' +
+        "</div></div>" +
+        "<div>" +
+        '<div class="alert">' +
+        ico("check") +
+        "<span>Cota 2211 contemplada na assembleia de 25/10/2026 por lance fixo de R$ 60.000,00.</span></div>" +
+        '<div class="card">' +
+        "<h2>Cota 2211</h2>" +
+        '<p class="lead">Crédito de R$ 180.000,00 · Turn2C · CNP Consórcio</p>' +
+        '<div class="impact" style="margin-top:16px">' +
+        '<div class="impact-item"><p class="k">Forma de contemplação</p><p class="v" style="font-size:15px">Lance fixo</p></div>' +
+        '<div class="impact-item"><p class="k">Valor do lance</p><p class="v" style="font-size:15px">R$ 60.000,00</p></div>' +
+        '<div class="impact-item"><p class="k">Assembleia</p><p class="v" style="font-size:15px">25/10/2026</p></div>' +
+        "</div>" +
+        '<div style="margin-top:16px">' +
+        btn("Ver histórico de lances", { variant: "hf-btn--ghost", go: "a8" }) +
+        "</div></div></div></div>"
     );
   }
 
   function a8() {
+    var head = "<th>Registrado em</th><th>Tipo</th><th>Valor</th><th>Assembleia</th><th>Status</th>";
+    var rows = HIST.map(function (h) {
+      var st = h.status === "Contemplado" ? "cont" : h.status === "Substituído" ? "sub" : "nao";
+      return (
+        "<tr><td>" +
+        h.data +
+        "</td><td>" +
+        h.tipo +
+        "</td><td>" +
+        h.valor +
+        "</td><td>" +
+        h.assembleia +
+        "</td><td>" +
+        badge(st) +
+        "</td></tr>"
+      );
+    }).join("");
     return shell(
       '<div class="crumb">Gestão de Consórcio <span>/</span> Clientes <span>/</span> Mauricio Lima <span>/</span> <b>Histórico de lances</b></div>' +
-      '<button class="back" type="button" data-go="a7">' + ico("left") + 'Voltar para ficha</button>' +
-      '<div class="page-head"><h1>Histórico de lances</h1><p>Cota 2211 · Grupo 1054 · Mauricio Lima</p></div>' +
-      '<div class="table">' +
-        '<div class="thead cols-hist"><span>Registrado em</span><span>Tipo</span><span>Valor</span><span>Assembleia</span><span>Status</span></div>' +
-        HIST.map(function (h) {
-          var st = h.status === "Contemplado" ? "cont" : h.status === "Substituído" ? "sub" : "nao";
-          return '<div class="tr cols-hist"><span>' + h.data + '</span><span>' + h.tipo + '</span><span>' + h.valor + '</span><span>' + h.assembleia + '</span>' + badge(st) + '</div>';
-        }).join("") +
-      '</div>' +
-      '<div class="foot"><p class="foot-copy">Fluxo feliz concluído: da lista até o histórico da cota contemplada.</p>' +
-      '<div class="foot-actions"><button class="btn primary" type="button" data-go="a1">Voltar ao início</button></div></div>'
+        '<button class="back" type="button" data-go="a7">' +
+        ico("left") +
+        "Voltar para ficha</button>" +
+        '<div class="page-head"><h1>Histórico de lances</h1><p>Cota 2211 · Grupo 1054 · Mauricio Lima</p></div>' +
+        tableWrap(head, rows) +
+        '<div class="foot"><p class="foot-copy">Fluxo feliz concluído: da lista até o histórico da cota contemplada.</p>' +
+        '<div class="foot-actions">' +
+        btn("Voltar ao início", { variant: "hf-btn--primary", go: "a1" }) +
+        "</div></div>"
     );
   }
 
   function sheetHtml() {
-    return '<div class="overlay" id="sheet">' +
+    return (
+      '<div class="overlay" id="sheet">' +
       '<div class="sheet" role="dialog" aria-modal="true" aria-label="Selecionar cotas">' +
-        '<div class="sheet-top"><div><h2>Selecionar cotas contempladas</h2><p>Marque as cotas do Grupo 1054 contempladas nesta assembleia.</p></div>' +
-        '<button class="x" type="button" data-close-sheet aria-label="Fechar">✕</button></div>' +
-        '<div class="sheet-search">' + ico("search") + '<input type="search" placeholder="Buscar cota ou cliente..." aria-label="Buscar cota ou cliente"></div>' +
-        COTAS.map(function (c) {
-          var on = selected.indexOf(c.id) >= 0;
-          return '<button class="opt' + (on ? " is-on" : "") + '" type="button" data-toggle-cota="' + c.id + '">' +
-            '<span class="check">' + (on ? "✓" : "") + '</span>' +
-            '<span class="opt-copy"><strong>Cota ' + c.id + ' · ' + c.cliente + '</strong><span>' + c.credito + ' · ' + c.lances + '</span></span>' +
-          '</button>';
-        }).join("") +
-        '<div class="sheet-foot"><span class="muted">' + selected.length + ' cotas selecionadas</span>' +
-        '<button class="btn primary" type="button" data-apply-sheet>Aplicar seleção</button></div>' +
-      '</div></div>';
+      '<div class="sheet-top"><div><h2>Selecionar cotas contempladas</h2><p>Marque as cotas do Grupo 1054 contempladas nesta assembleia.</p></div>' +
+      '<button class="x" type="button" data-close-sheet aria-label="Fechar">✕</button></div>' +
+      searchField("Buscar cota ou cliente...") +
+      COTAS.map(function (c) {
+        var on = selected.indexOf(c.id) >= 0;
+        return (
+          '<button class="opt' +
+          (on ? " is-on" : "") +
+          '" type="button" data-toggle-cota="' +
+          c.id +
+          '">' +
+          '<span class="check">' +
+          (on ? "✓" : "") +
+          "</span>" +
+          '<span class="opt-copy"><strong>Cota ' +
+          c.id +
+          " · " +
+          c.cliente +
+          "</strong><span>" +
+          c.credito +
+          " · " +
+          c.lances +
+          "</span></span></button>"
+        );
+      }).join("") +
+      '<div class="sheet-foot"><span style="color:var(--text-tertiary);font-size:13px">' +
+      selected.length +
+      " cotas selecionadas</span>" +
+      btn("Aplicar seleção", { variant: "hf-btn--primary", extra: "data-apply-sheet" }) +
+      "</div></div></div>"
+    );
   }
 
   function confirmHtml() {
-    return '<div class="overlay" id="confirm">' +
+    return (
+      '<div class="overlay" id="confirm">' +
       '<div class="dialog" role="dialog" aria-modal="true" aria-label="Confirmar publicação">' +
-        '<div class="dialog-top"><div><h2>Confirmar publicação do resultado</h2><p>Essa ação atualiza cotas e lances ao mesmo tempo.</p></div>' +
-        '<button class="x" type="button" data-close-confirm aria-label="Fechar">✕</button></div>' +
-        '<div class="dialog-body">' +
-          '<p>Você está publicando o resultado oficial da assembleia do <b>Grupo 1054</b> em <b>25/10/2026</b>.</p>' +
-          '<ul class="dialog-list">' +
-            '<li>' + selected.length + ' cotas serão marcadas como contempladas</li>' +
-            '<li>3 lances serão marcados como contemplados</li>' +
-            '<li>1 lance permanecerá como não contemplado nesta assembleia</li>' +
-          '</ul>' +
-          '<p>Depois de publicar, o status da assembleia muda para Publicada.</p>' +
-        '</div>' +
-        '<div class="dialog-actions">' +
-          '<button class="btn ghost" type="button" data-close-confirm>Cancelar</button>' +
-          '<button class="btn primary" type="button" data-go="a6">Confirmar publicação</button>' +
-        '</div>' +
-      '</div></div>';
+      '<div class="dialog-top"><div><h2>Confirmar publicação do resultado</h2><p>Essa ação atualiza cotas e lances ao mesmo tempo.</p></div>' +
+      '<button class="x" type="button" data-close-confirm aria-label="Fechar">✕</button></div>' +
+      '<div class="dialog-body">' +
+      "<p>Você está publicando o resultado oficial da assembleia do <b>Grupo 1054</b> em <b>25/10/2026</b>.</p>" +
+      '<ul class="dialog-list">' +
+      "<li>" +
+      selected.length +
+      " cotas serão marcadas como contempladas</li>" +
+      "<li>3 lances serão marcados como contemplados</li>" +
+      "<li>1 lance permanecerá como não contemplado nesta assembleia</li>" +
+      "</ul>" +
+      "<p>Depois de publicar, o status da assembleia muda para Publicada.</p>" +
+      "</div>" +
+      '<div class="dialog-actions">' +
+      btn("Cancelar", { variant: "hf-btn--ghost", extra: "data-close-confirm" }) +
+      btn("Confirmar publicação", { variant: "hf-btn--primary", go: "a6" }) +
+      "</div></div></div>"
+    );
+  }
+
+  function closeSelects(except) {
+    document.querySelectorAll("[data-select].is-open").forEach(function (field) {
+      if (field === except) return;
+      field.classList.remove("is-open");
+      var trigger = field.querySelector(".hf-field__control");
+      if (trigger) trigger.setAttribute("aria-expanded", "false");
+    });
+  }
+
+  function wireSelect(field) {
+    var trigger = field.querySelector(".hf-field__control");
+    var value = field.querySelector(".hf-field__value");
+    var menu = field.querySelector(".hf-select-menu");
+    if (!trigger || !menu || !value) return;
+    var items = Array.prototype.slice.call(menu.querySelectorAll(".hf-select-menu__item"));
+    var search = menu.querySelector(".hf-search__field");
+    var id = field.getAttribute("data-select-id");
+
+    function itemLabel(item) {
+      return item.getAttribute("data-label") || item.textContent.trim();
+    }
+
+    function open() {
+      closeSelects(field);
+      menu.style.top = trigger.offsetTop + trigger.offsetHeight + 4 + "px";
+      field.classList.add("is-open");
+      trigger.setAttribute("aria-expanded", "true");
+      if (search) {
+        search.value = "";
+        items.forEach(function (item) {
+          item.hidden = false;
+        });
+        search.focus();
+      }
+    }
+
+    function close(refocus) {
+      field.classList.remove("is-open");
+      trigger.setAttribute("aria-expanded", "false");
+      if (refocus) trigger.focus();
+    }
+
+    function choose(item) {
+      items.forEach(function (other) {
+        other.classList.remove("is-active");
+        other.setAttribute("aria-selected", "false");
+      });
+      item.classList.add("is-active");
+      item.setAttribute("aria-selected", "true");
+      var text = itemLabel(item);
+      value.textContent = text;
+      if (id && filters[id] !== undefined) filters[id] = text;
+      close(true);
+    }
+
+    trigger.addEventListener("click", function (event) {
+      event.stopPropagation();
+      if (field.classList.contains("is-open")) close(false);
+      else open();
+    });
+
+    menu.addEventListener("click", function (event) {
+      event.stopPropagation();
+    });
+
+    if (search) {
+      search.addEventListener("click", function (event) {
+        event.stopPropagation();
+      });
+      search.addEventListener("input", function () {
+        var q = search.value.toLowerCase();
+        items.forEach(function (item) {
+          var text = itemLabel(item).toLowerCase();
+          item.hidden = !!(q && text.indexOf(q) === -1);
+        });
+      });
+    }
+
+    items.forEach(function (item) {
+      item.addEventListener("click", function (event) {
+        event.stopPropagation();
+        choose(item);
+      });
+    });
+  }
+
+  function wireAll() {
+    document.querySelectorAll("[data-select]").forEach(wireSelect);
   }
 
   function paint() {
@@ -339,6 +682,7 @@
       b.classList.toggle("is-on", b.getAttribute("data-jump") === screen);
     });
     if (location.hash !== "#" + screen) history.replaceState(null, "", "#" + screen);
+    wireAll();
   }
 
   function go(next) {
@@ -352,8 +696,18 @@
     el.textContent = msg;
     el.classList.add("is-on");
     clearTimeout(toast._t);
-    toast._t = setTimeout(function () { el.classList.remove("is-on"); }, 2600);
+    toast._t = setTimeout(function () {
+      el.classList.remove("is-on");
+    }, 2600);
   }
+
+  document.addEventListener("click", function () {
+    closeSelects(null);
+  });
+
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") closeSelects(null);
+  });
 
   document.getElementById("app").addEventListener("click", function (e) {
     var jump = e.target.closest("[data-go]");
@@ -375,7 +729,9 @@
     }
     if (toggle) {
       var id = toggle.getAttribute("data-toggle-cota");
-      if (selected.indexOf(id) >= 0) selected = selected.filter(function (x) { return x !== id; });
+      if (selected.indexOf(id) >= 0) selected = selected.filter(function (x) {
+        return x !== id;
+      });
       else selected = selected.concat([id]);
       paint();
       return;
